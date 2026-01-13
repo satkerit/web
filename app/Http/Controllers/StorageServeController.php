@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Controller untuk serve file dari storage
@@ -19,11 +20,17 @@ class StorageServeController extends Controller
         
         // Validasi path tidak kosong
         if (empty($path)) {
+            Log::warning('StorageServe: Empty path requested');
             abort(404);
         }
 
         // Cek file exists
         if (!Storage::disk('public')->exists($path)) {
+            Log::warning('StorageServe: File not found', [
+                'path' => $path,
+                'full_path' => Storage::disk('public')->path($path),
+                'storage_path' => storage_path('app/public'),
+            ]);
             abort(404);
         }
 
@@ -31,6 +38,7 @@ class StorageServeController extends Controller
         
         // Pastikan ini file, bukan directory
         if (is_dir($fullPath)) {
+            Log::warning('StorageServe: Path is directory', ['path' => $path]);
             abort(404);
         }
 

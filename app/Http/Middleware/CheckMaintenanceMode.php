@@ -14,8 +14,8 @@ class CheckMaintenanceMode
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip maintenance check for admin routes
-        if ($request->is('admin/*') || $request->is('admin') || $request->is('login') || $request->is('logout')) {
+        // Skip maintenance check for admin routes and storage
+        if ($request->is('admin/*') || $request->is('admin') || $request->is('login') || $request->is('logout') || $request->is('storage/*')) {
             return $next($request);
         }
 

@@ -16,6 +16,7 @@ class BlockSuspiciousRequests
      * Routes to exclude from suspicious pattern checking
      */
     protected array $excludedRoutes = [
+        'storage/*',
         'login',
         'logout',
         'register',

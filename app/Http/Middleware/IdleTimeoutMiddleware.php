@@ -22,8 +22,8 @@ class IdleTimeoutMiddleware
             return $next($request);
         }
 
-        // Skip for download routes to avoid interfering with file downloads
-        if (str_contains($request->getPathInfo(), '/download/')) {
+        // Skip for storage and download routes
+        if ($request->is('storage/*') || str_contains($request->getPathInfo(), '/download/')) {
             return $next($request);
         }
 

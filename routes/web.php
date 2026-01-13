@@ -5,12 +5,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\StorageServeController;
-
-// Route untuk serve file storage (solusi shared hosting)
-Route::get('/storage/{path}', [StorageServeController::class, 'serve'])
-    ->where('path', '.*')
-    ->name('storage.serve');
 
 // Public Routes with general rate limiting
 Route::middleware(['throttle:120,1'])->group(function () {

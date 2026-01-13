@@ -11,8 +11,8 @@ class LogVisitor
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Only log for web routes, not API or admin
-        if (!$request->is('admin/*') && !$request->is('api/*') && !$request->is('livewire/*')) {
+        // Only log for web routes, not API, admin, or storage
+        if (!$request->is('admin/*') && !$request->is('api/*') && !$request->is('livewire/*') && !$request->is('storage/*')) {
             try {
                 VisitorLog::logVisit();
             } catch (\Exception $e) {
