@@ -24,7 +24,14 @@ class CheckMaintenanceMode
             return $next($request);
         }
 
-        $settings = SiteSetting::getSettings();
+        // Get fresh settings from database (bypass cache untuk memastikan data terbaru)
+        $settings = SiteSetting::first();
+        
+        // Jika tidak ada settings, lewati maintenance check
+        if (!$settings) {
+            return $next($request);
+        }
+
         $clientIp = $request->ip();
         $path = $request->path();
 
@@ -34,16 +41,23 @@ class CheckMaintenanceMode
         }
 
         // Check global maintenance mode first
-        if (SiteSetting::isMaintenanceMode()) {
-            return response()->view('errors.503', [
-                'message' => $settings->maintenance_message,
-                'endTime' => $settings->maintenance_end_time,
-            ], 503);
+        if ($settings->maintenance_mode) {
+            // Check if maintenance end time has passed
+            if ($settings->maintenance_end_time && $settings->maintenance_end_time->isPast()) {
+                $settings->update(['maintenance_mode' => false]);
+                SiteSetting::clearCache();
+            } else {
+                return response()->view('errors.503', [
+                    'message' => $settings->maintenance_message,
+                    'endTime' => $settings->maintenance_end_time,
+                ], 503);
+            }
         }
 
         // Check partial/page-specific maintenance
-        if (SiteSetting::isPageUnderMaintenance($path)) {
-            $pageKey = SiteSetting::getPageKeyFromPath($path);
+        $maintenancePages = $settings->maintenance_pages ?? [];
+        if (!empty($maintenancePages) && $this->isPathUnderMaintenance($path, $maintenancePages)) {
+            $pageKey = $this->getPageKeyFromPath($path, $maintenancePages);
             $message = $pageKey
                 ? $settings->getPageMaintenanceMessage($pageKey)
                 : 'Halaman ini sedang dalam pemeliharaan.';
@@ -56,5 +70,78 @@ class CheckMaintenanceMode
         }
 
         return $next($request);
+    }
+
+    /**
+     * Check if path is under maintenance
+     */
+    protected function isPathUnderMaintenance(string $path, array $maintenancePages): bool
+    {
+        $availablePages = SiteSetting::getAvailablePages();
+
+        foreach ($maintenancePages as $pageKey) {
+            if (!isset($availablePages[$pageKey])) {
+                continue;
+            }
+
+            $page = $availablePages[$pageKey];
+            $pattern = $page['pattern'];
+
+            // Exact match for home
+            if ($pattern === '/' && ($path === '/' || $path === '')) {
+                return true;
+            }
+
+            // Pattern match with wildcard
+            if (str_ends_with($pattern, '*')) {
+                $prefix = rtrim($pattern, '/*');
+                if (str_starts_with(ltrim($path, '/'), $prefix)) {
+                    return true;
+                }
+            } else {
+                // Exact match
+                $cleanPath = ltrim($path, '/');
+                if ($cleanPath === $pattern) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get page key from path
+     */
+    protected function getPageKeyFromPath(string $path, array $maintenancePages): ?string
+    {
+        $availablePages = SiteSetting::getAvailablePages();
+
+        foreach ($maintenancePages as $pageKey) {
+            if (!isset($availablePages[$pageKey])) {
+                continue;
+            }
+
+            $page = $availablePages[$pageKey];
+            $pattern = $page['pattern'];
+
+            if ($pattern === '/' && ($path === '/' || $path === '')) {
+                return $pageKey;
+            }
+
+            if (str_ends_with($pattern, '*')) {
+                $prefix = rtrim($pattern, '/*');
+                if (str_starts_with(ltrim($path, '/'), $prefix)) {
+                    return $pageKey;
+                }
+            } else {
+                $cleanPath = ltrim($path, '/');
+                if ($cleanPath === $pattern) {
+                    return $pageKey;
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -33,6 +33,12 @@ class SettingController extends Controller
         ]);
 
         $validated['maintenance_mode'] = $request->boolean('maintenance_mode');
+        
+        // Pastikan maintenance_pages selalu array (kosong jika tidak ada yang dipilih)
+        $validated['maintenance_pages'] = $request->input('maintenance_pages', []);
+
+        // Clear cache SEBELUM update agar data fresh
+        SiteSetting::clearCache();
 
         $settings = SiteSetting::first();
         if ($settings) {
@@ -41,6 +47,7 @@ class SettingController extends Controller
             SiteSetting::create($validated);
         }
 
+        // Clear cache SETELAH update juga untuk memastikan
         SiteSetting::clearCache();
 
         return redirect()->route('admin.settings.maintenance')->with('success', 'Pengaturan maintenance berhasil diperbarui.');

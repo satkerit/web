@@ -92,8 +92,22 @@ class SiteSetting extends Model
             return self::first() ?? self::create([
                 'maintenance_mode' => false,
                 'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
+                'maintenance_pages' => [],
             ]);
         });
+    }
+
+    /**
+     * Get fresh settings without cache
+     */
+    public static function getFreshSettings(): self
+    {
+        self::clearCache();
+        return self::first() ?? self::create([
+            'maintenance_mode' => false,
+            'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
+            'maintenance_pages' => [],
+        ]);
     }
 
     public function getAllowedIpsArray(): array
@@ -226,10 +240,18 @@ class SiteSetting extends Model
     public static function clearCache(): void
     {
         Cache::forget('site_settings');
+        // Force clear jika menggunakan file/database cache
+        Cache::flush(); // Uncomment jika perlu clear semua cache
     }
 
     protected static function booted(): void
     {
-        static::saved(fn() => self::clearCache());
+        static::saved(function () {
+            self::clearCache();
+        });
+        
+        static::updated(function () {
+            self::clearCache();
+        });
     }
 }
