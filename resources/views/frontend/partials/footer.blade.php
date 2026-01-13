@@ -16,7 +16,9 @@
                 <div class="sm:col-span-2 lg:col-span-1">
                     <div class="mb-4 sm:mb-6">
                         @if($company?->logo)
-                        <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="h-14 sm:h-16 lg:h-20 w-auto">
+                        <div class="inline-block bg-white rounded-xl p-3 shadow-md">
+                            <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto">
+                        </div>
                         @else
                         <div class="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                             <span class="text-white font-bold text-xl sm:text-2xl">B</span>

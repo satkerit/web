@@ -14,7 +14,9 @@
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
                 @if($company?->logo)
-                <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name ?? 'Logo' }}" class="h-12 w-auto group-hover:scale-105 transition-all duration-300">
+                <div class="bg-white rounded-xl p-2 shadow-md group-hover:shadow-lg transition-all duration-300">
+                    <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name ?? 'Logo' }}" class="h-10 w-auto group-hover:scale-105 transition-all duration-300">
+                </div>
                 @else
                 <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/30 transition-all duration-300 group-hover:scale-105">
                     <span class="text-white font-bold text-lg">B</span>
