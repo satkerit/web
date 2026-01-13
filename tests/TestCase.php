@@ -1,0 +1,58 @@
+<?php
+
+namespace Tests;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase
+{
+    use RefreshDatabase;
+
+    /**
+     * Create an admin user.
+     */
+    protected function createAdmin(): User
+    {
+        return User::factory()->create([
+            'role' => 'admin',
+            'is_active' => true,
+        ]);
+    }
+
+    /**
+     * Create a super admin user.
+     */
+    protected function createSuperAdmin(): User
+    {
+        return User::factory()->create([
+            'role' => 'super_admin',
+            'is_active' => true,
+        ]);
+    }
+
+    /**
+     * Create an editor user.
+     */
+    protected function createEditor(): User
+    {
+        return User::factory()->create([
+            'role' => 'editor',
+            'is_active' => true,
+        ]);
+    }
+
+    /**
+     * Disable security middleware for testing.
+     */
+    protected function withoutSecurityMiddleware(): static
+    {
+        return $this->withoutMiddleware([
+            \App\Http\Middleware\BlockSuspiciousRequests::class,
+            \App\Http\Middleware\CheckMaintenanceMode::class,
+            \App\Http\Middleware\LogVisitor::class,
+            \App\Http\Middleware\OptimizeResponse::class,
+        ]);
+    }
+}

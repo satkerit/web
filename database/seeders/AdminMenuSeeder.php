@@ -1,0 +1,72 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\AdminMenu;
+use App\Models\AdminMenuPermission;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+class AdminMenuSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $menus = [
+            // Dashboard
+            ['key' => 'dashboard', 'name' => 'Dashboard', 'route' => 'admin.dashboard', 'section' => null, 'order' => 1],
+
+            // Konten
+            ['key' => 'hero-slides', 'name' => 'Slides', 'route' => 'admin.hero-slides.index', 'section' => 'Konten', 'order' => 10],
+            ['key' => 'news', 'name' => 'Berita', 'route' => 'admin.news.index', 'section' => 'Konten', 'order' => 11],
+            ['key' => 'products', 'name' => 'Produk', 'route' => 'admin.products.index', 'section' => 'Konten', 'order' => 12],
+            ['key' => 'auctions', 'name' => 'Lelang', 'route' => 'admin.auctions.index', 'section' => 'Konten', 'order' => 13],
+            ['key' => 'reports', 'name' => 'Laporan', 'route' => 'admin.reports.index', 'section' => 'Konten', 'order' => 14],
+
+            // Perusahaan
+            ['key' => 'company-info', 'name' => 'Profil Perusahaan', 'route' => 'admin.company-info.edit', 'section' => 'Perusahaan', 'order' => 20],
+            ['key' => 'board-members', 'name' => 'Manajemen', 'route' => 'admin.board-members.index', 'section' => 'Perusahaan', 'order' => 21],
+            ['key' => 'offices', 'name' => 'Kantor', 'route' => 'admin.offices.index', 'section' => 'Perusahaan', 'order' => 22],
+            ['key' => 'careers', 'name' => 'Karir', 'route' => 'admin.careers.index', 'section' => 'Perusahaan', 'order' => 23],
+
+            // Layanan
+            ['key' => 'customer-complaints', 'name' => 'Pengaduan Nasabah', 'route' => 'admin.customer-complaints.index', 'section' => 'Layanan', 'order' => 30],
+            ['key' => 'complaints', 'name' => 'Whistleblowing', 'route' => 'admin.complaints.index', 'section' => 'Layanan', 'order' => 31],
+
+            // Sistem
+            ['key' => 'storage', 'name' => 'File Manager', 'route' => 'admin.storage.index', 'section' => 'Sistem', 'order' => 40],
+            ['key' => 'database-backup', 'name' => 'Backup Database', 'route' => 'admin.database-backup.index', 'section' => 'Sistem', 'order' => 41],
+            ['key' => 'settings', 'name' => 'Pengaturan', 'route' => 'admin.settings.maintenance', 'section' => 'Sistem', 'order' => 42],
+            ['key' => 'email-settings', 'name' => 'Email / SMTP', 'route' => 'admin.settings.email', 'section' => 'Sistem', 'order' => 43],
+            ['key' => 'financing-config', 'name' => 'Simulasi Pembiayaan', 'route' => 'admin.financing-config.index', 'section' => 'Sistem', 'order' => 44],
+            ['key' => 'audit-trails', 'name' => 'Log Aktivitas', 'route' => 'admin.audit-trails.index', 'section' => 'Sistem', 'order' => 45],
+            ['key' => 'visitor-stats', 'name' => 'Statistik Pengunjung', 'route' => 'admin.visitor-stats.index', 'section' => 'Sistem', 'order' => 46],
+            ['key' => 'menu-permissions', 'name' => 'Hak Akses Menu', 'route' => 'admin.menu-permissions.index', 'section' => 'Sistem', 'order' => 47],
+            ['key' => 'roles', 'name' => 'Manajemen Role', 'route' => 'admin.roles.index', 'section' => 'Sistem', 'order' => 48],
+            ['key' => 'users', 'name' => 'Pengguna', 'route' => 'admin.users.index', 'section' => 'Sistem', 'order' => 50],
+        ];
+
+        // Default permissions per role
+        $defaultPermissions = [
+            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
+            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
+            'editor' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'careers'],
+        ];
+
+        foreach ($menus as $menuData) {
+            $menu = AdminMenu::updateOrCreate(
+                ['key' => $menuData['key']],
+                $menuData
+            );
+
+            // Create permissions for each role
+            foreach (User::getRoles() as $role => $roleName) {
+                AdminMenuPermission::updateOrCreate(
+                    ['admin_menu_id' => $menu->id, 'role' => $role],
+                    ['can_access' => in_array($menuData['key'], $defaultPermissions[$role] ?? [])]
+                );
+            }
+        }
+
+        AdminMenu::clearCache();
+    }
+}

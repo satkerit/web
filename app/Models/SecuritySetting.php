@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Models;
+
+use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+
+class SecuritySetting extends Model
+{
+    use Auditable;
+
+    protected static function getAuditModelName(): string
+    {
+        return 'Pengaturan Keamanan';
+    }
+
+    protected static function getAuditIdentifier(Model $model): string
+    {
+        return 'Security Settings';
+    }
+
+    protected $fillable = [
+        'rate_limit_web',
+        'rate_limit_admin',
+        'rate_limit_login',
+        'rate_limit_password_reset',
+        'rate_limit_download',
+        'block_threshold',
+        'block_duration_hours',
+        'ip_whitelist',
+        'ip_blacklist',
+        'enable_suspicious_blocking',
+        'enable_rate_limiting',
+        'log_security_events',
+    ];
+
+    protected $casts = [
+        'enable_suspicious_blocking' => 'boolean',
+        'enable_rate_limiting' => 'boolean',
+        'log_security_events' => 'boolean',
+    ];
+
+    public static function getSettings(): self
+    {
+        return Cache::remember('security_settings', 3600, function () {
+            return self::first() ?? self::create([]);
+        });
+    }
+
+    public function getWhitelistArray(): array
+    {
+        return array_filter(array_map('trim', explode("\n", $this->ip_whitelist ?? '')));
+    }
+
+    public function getBlacklistArray(): array
+    {
+        return array_filter(array_map('trim', explode("\n", $this->ip_blacklist ?? '')));
+    }
+
+    public static function clearCache(): void
+    {
+        Cache::forget('security_settings');
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(fn() => self::clearCache());
+    }
+}
