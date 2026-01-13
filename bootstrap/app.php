@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'throttle.custom' => \App\Http\Middleware\RateLimitRequests::class,
             'security.block' => \App\Http\Middleware\BlockSuspiciousRequests::class,
             'admin.ddos' => \App\Http\Middleware\AdminDdosProtection::class,
+            'ddos' => \App\Http\Middleware\DdosProtection::class,
             'menu.permission' => \App\Http\Middleware\CheckMenuPermission::class,
             'idle.timeout' => \App\Http\Middleware\IdleTimeoutMiddleware::class,
         ]);
@@ -29,8 +30,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Security headers for all responses
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
-        // Web middleware group - security check runs after session is started
+        // Web middleware group - DDoS protection runs first
         $middleware->web(append: [
+            \App\Http\Middleware\DdosProtection::class,
             \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\BlockSuspiciousRequests::class,
             \App\Http\Middleware\IdleTimeoutMiddleware::class,

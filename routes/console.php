@@ -13,3 +13,10 @@ Schedule::command('sessions:clean-expired')
     ->hourly()
     ->withoutOverlapping()
     ->runInBackground();
+
+// Schedule blocked IPs cleanup to run daily
+Schedule::command('security:cleanup-blocked-ips')
+    ->daily()
+    ->at('03:00')
+    ->withoutOverlapping()
+    ->runInBackground();
