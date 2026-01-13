@@ -8,6 +8,7 @@ use App\Traits\AuthorizesAdminActions;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CompanyInfoController extends Controller
 {
@@ -71,9 +72,11 @@ class CompanyInfoController extends Controller
 
         $company = CompanyInfo::first();
 
-        // Handle image uploads
-        $validated['logo'] = $this->handleImageUpload($request, 'logo', 'company', $company?->logo);
-        $validated['logo_footer'] = $this->handleImageUpload($request, 'logo_footer', 'company', $company?->logo_footer);
+        // Handle logo uploads WITHOUT optimization to preserve transparency
+        $validated['logo'] = $this->handleLogoUpload($request, 'logo', 'company', $company?->logo);
+        $validated['logo_footer'] = $this->handleLogoUpload($request, 'logo_footer', 'company', $company?->logo_footer);
+        
+        // Handle other image uploads with optimization
         $validated['favicon'] = $this->handleImageUpload($request, 'favicon', 'company', $company?->favicon);
         $validated['organization_structure'] = $this->handleImageUpload($request, 'organization_structure', 'company', $company?->organization_structure);
 
@@ -84,5 +87,40 @@ class CompanyInfoController extends Controller
         }
 
         return redirect()->route('admin.company-info.edit')->with('success', 'Informasi perusahaan berhasil diperbarui.');
+    }
+
+    /**
+     * Handle logo upload WITHOUT optimization to preserve PNG transparency
+     */
+    protected function handleLogoUpload(Request $request, string $fieldName, string $storagePath, ?string $oldPath = null): ?string
+    {
+        $fromStorageField = $fieldName . '_from_storage';
+
+        // Check if image is selected from storage
+        if ($request->filled($fromStorageField)) {
+            $storageSrc = $request->input($fromStorageField);
+
+            if (Storage::disk('public')->exists($storageSrc)) {
+                if ($oldPath && $oldPath !== $storageSrc) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                return $storageSrc;
+            }
+        }
+
+        // Check if new file is uploaded
+        if ($request->hasFile($fieldName)) {
+            $file = $request->file($fieldName);
+
+            // Delete old file if exists
+            if ($oldPath) {
+                Storage::disk('public')->delete($oldPath);
+            }
+
+            // Store WITHOUT optimization to preserve transparency
+            return $file->store($storagePath, 'public');
+        }
+
+        return $oldPath;
     }
 }

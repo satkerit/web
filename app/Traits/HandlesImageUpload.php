@@ -121,8 +121,8 @@ trait HandlesImageUpload
             // Create resized image
             $resized = imagecreatetruecolor($newWidth, $newHeight);
 
-            // Preserve transparency for PNG
-            if ($extension === 'png') {
+            // Preserve transparency for PNG and WebP
+            if ($extension === 'png' || $extension === 'webp') {
                 imagealphablending($resized, false);
                 imagesavealpha($resized, true);
                 $transparent = imagecolorallocatealpha($resized, 0, 0, 0, 127);
@@ -132,6 +132,12 @@ trait HandlesImageUpload
             imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
             imagedestroy($image);
             $image = $resized;
+        } else {
+            // Even if not resizing, preserve transparency for PNG
+            if ($extension === 'png') {
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+            }
         }
 
         // Output to string
