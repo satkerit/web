@@ -49,8 +49,8 @@
                     name="logo_footer"
                     label="Logo Footer"
                     :value="$company->logo_footer ?? null"
-                    hint="Logo untuk footer (disarankan PNG transparan). Format: PNG, SVG (maks 2MB)"
-                    previewClass="h-16 bg-gray-800 p-2 rounded"
+                    hint="Logo untuk footer. Format: JPG, PNG, WEBP, SVG (maks 2MB)"
+                    previewClass="h-16"
                 />
                 <x-admin.image-picker
                     name="favicon"
@@ -60,6 +60,24 @@
                     hint="Format: ICO, PNG, JPG (maks 512KB)"
                     previewClass="h-8"
                 />
+            </div>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="hidden" name="logo_footer_remove_bg" value="0">
+                        <input type="checkbox" name="logo_footer_remove_bg" value="1" {{ old('logo_footer_remove_bg', $company->logo_footer_remove_bg ?? false) ? 'checked' : '' }} class="w-5 h-5 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500 focus:ring-2">
+                        <span class="ml-3 text-sm font-medium text-gray-700">Hapus background putih pada logo footer</span>
+                    </label>
+                    <p class="mt-1 text-xs text-gray-500 ml-8">Aktifkan jika logo memiliki background putih yang ingin dihilangkan</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Transparansi Logo Footer</label>
+                    <div class="flex items-center gap-3">
+                        <input type="range" name="logo_footer_opacity" min="0" max="100" value="{{ old('logo_footer_opacity', $company->logo_footer_opacity ?? 100) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600" oninput="document.getElementById('opacity-value').textContent = this.value + '%'">
+                        <span id="opacity-value" class="text-sm font-medium text-gray-700 w-12">{{ old('logo_footer_opacity', $company->logo_footer_opacity ?? 100) }}%</span>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">Atur tingkat transparansi logo (0% = transparan penuh, 100% = tidak transparan)</p>
+                </div>
             </div>
         </x-admin.card>
 

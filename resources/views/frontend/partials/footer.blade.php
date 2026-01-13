@@ -17,9 +17,12 @@
                     <div class="mb-4 sm:mb-6">
                         <a href="{{ route('home') }}" class="inline-block transition-transform duration-300 hover:scale-105">
                             @if($company?->logo_footer)
-                            <img src="{{ Storage::url($company->logo_footer) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto" style="background: transparent !important;">
+                            @php
+                                $opacity = ($company->logo_footer_opacity ?? 100) / 100;
+                            @endphp
+                            <img src="{{ Storage::url($company->logo_footer) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto {{ $company->logo_footer_remove_bg ? 'logo-remove-bg' : '' }}" style="opacity: {{ $opacity }};">
                             @elseif($company?->logo)
-                            <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto" style="background: transparent !important;">
+                            <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto">
                             @else
                             <div class="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <span class="text-white font-bold text-xl sm:text-2xl">B</span>

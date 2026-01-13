@@ -408,3 +408,16 @@ img[loading="lazy"] {
         background-position: -200% 0;
     }
 }
+
+/* ========================================
+   LOGO REMOVE BACKGROUND
+   ======================================== */
+.logo-remove-bg {
+    mix-blend-mode: screen;
+    filter: brightness(1.1) contrast(1.1);
+}
+
+/* Alternative method using multiply for dark backgrounds */
+.logo-remove-bg-dark {
+    mix-blend-mode: multiply;
+}

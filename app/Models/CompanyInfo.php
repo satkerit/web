@@ -24,6 +24,8 @@ class CompanyInfo extends Model
         'tagline',
         'logo',
         'logo_footer',
+        'logo_footer_remove_bg',
+        'logo_footer_opacity',
         'favicon',
         'address',
         'phone',
@@ -69,7 +71,9 @@ class CompanyInfo extends Model
         'stat_cash_offices' => 'integer',
         'stat_mobile_cash_offices' => 'integer',
         'legacy_visitor_count' => 'integer',
-        'operational_hours' => 'array'
+        'operational_hours' => 'array',
+        'logo_footer_remove_bg' => 'boolean',
+        'logo_footer_opacity' => 'integer'
     ];
 
     /**
