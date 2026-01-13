@@ -37,13 +37,20 @@
 
         {{-- Logo & Favicon --}}
         <x-admin.card title="Logo & Favicon">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <x-admin.image-picker
                     name="logo"
-                    label="Logo"
+                    label="Logo Header"
                     :value="$company->logo ?? null"
-                    hint="Format: JPG, PNG, WEBP, SVG (maks 2MB)"
+                    hint="Logo untuk header/navbar. Format: JPG, PNG, WEBP, SVG (maks 2MB)"
                     previewClass="h-16"
+                />
+                <x-admin.image-picker
+                    name="logo_footer"
+                    label="Logo Footer"
+                    :value="$company->logo_footer ?? null"
+                    hint="Logo untuk footer (disarankan PNG transparan). Format: PNG, SVG (maks 2MB)"
+                    previewClass="h-16 bg-gray-800 p-2 rounded"
                 />
                 <x-admin.image-picker
                     name="favicon"

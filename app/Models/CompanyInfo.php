@@ -23,6 +23,7 @@ class CompanyInfo extends Model
         'name',
         'tagline',
         'logo',
+        'logo_footer',
         'favicon',
         'address',
         'phone',

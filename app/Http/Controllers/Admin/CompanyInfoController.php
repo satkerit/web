@@ -29,6 +29,7 @@ class CompanyInfoController extends Controller
             'name' => 'required|string|max:255',
             'tagline' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'logo_footer' => 'nullable|image|mimes:png,svg,webp|max:2048',
             'favicon' => 'nullable|file|mimes:ico,png,jpg,jpeg|max:512',
             'address' => 'nullable|string',
             'phone' => 'nullable|string|max:50',
@@ -70,6 +71,7 @@ class CompanyInfoController extends Controller
 
         // Handle image uploads
         $validated['logo'] = $this->handleImageUpload($request, 'logo', 'company', $company?->logo);
+        $validated['logo_footer'] = $this->handleImageUpload($request, 'logo_footer', 'company', $company?->logo_footer);
         $validated['favicon'] = $this->handleImageUpload($request, 'favicon', 'company', $company?->favicon);
         $validated['organization_structure'] = $this->handleImageUpload($request, 'organization_structure', 'company', $company?->organization_structure);
 
