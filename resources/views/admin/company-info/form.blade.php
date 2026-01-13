@@ -111,6 +111,15 @@
             </div>
         </x-admin.card>
 
+        {{-- Sejarah Perusahaan --}}
+        <x-admin.card title="Sejarah Perusahaan">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Sejarah</label>
+                <textarea name="history" rows="8" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm" placeholder="Tuliskan sejarah perusahaan...">{{ old('history', $company->history ?? '') }}</textarea>
+                <p class="mt-1 text-xs text-gray-500">Ceritakan perjalanan dan sejarah perusahaan. Akan ditampilkan di halaman Profil Perusahaan.</p>
+            </div>
+        </x-admin.card>
+
         {{-- Struktur Organisasi --}}
         <x-admin.card title="Struktur Organisasi">
             <x-admin.image-picker
