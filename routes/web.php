@@ -62,7 +62,12 @@ Route::middleware(['throttle:120,1'])->group(function () {
     Route::view('/hubungi-kami', 'frontend.pages.contact')->name('contact');
     Route::view('/whistleblowing', 'frontend.pages.whistleblowing')->name('whistleblowing');
     Route::view('/pengaduan-nasabah', 'frontend.pages.pengaduan-nasabah')->name('pengaduan-nasabah');
-    Route::view('/download-logo', 'frontend.pages.download-logo')->name('download-logo');
+    
+    // Download Logo
+    Route::get('/download-logo', [App\Http\Controllers\LogoDownloadController::class, 'index'])->name('download-logo');
+    Route::get('/download-logo/{format}', [App\Http\Controllers\LogoDownloadController::class, 'download'])
+        ->name('download-logo.download')
+        ->middleware('throttle:10,1'); // Max 10 downloads per minute
 
     // Financing Simulation
     Route::view('/simulasi-pembiayaan', 'frontend.pages.financing-simulation')->name('financing-simulation');
