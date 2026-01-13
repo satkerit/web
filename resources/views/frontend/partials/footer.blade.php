@@ -19,10 +19,14 @@
                             @if($company?->logo_footer)
                             @php
                                 $opacity = ($company->logo_footer_opacity ?? 100) / 100;
+                                $logoClasses = 'h-12 sm:h-14 lg:h-16 w-auto logo-no-bg';
+                                if ($company->logo_footer_remove_bg) {
+                                    $logoClasses .= ' logo-remove-bg';
+                                }
                             @endphp
-                            <img src="{{ Storage::url($company->logo_footer) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto {{ $company->logo_footer_remove_bg ? 'logo-remove-bg' : '' }}" style="opacity: {{ $opacity }};">
+                            <img src="{{ Storage::url($company->logo_footer) }}" alt="{{ $company->name }}" class="{{ $logoClasses }}" style="opacity: {{ $opacity }};">
                             @elseif($company?->logo)
-                            <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto">
+                            <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="h-12 sm:h-14 lg:h-16 w-auto logo-no-bg">
                             @else
                             <div class="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <span class="text-white font-bold text-xl sm:text-2xl">B</span>

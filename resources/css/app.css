@@ -387,10 +387,16 @@ img.img-error {
 }
 
 /* Lazy image with blur placeholder */
-img[loading="lazy"] {
+img[loading="lazy"]:not(.logo-no-bg) {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+/* Logo without background - for header and footer logos */
+.logo-no-bg {
+    background: transparent !important;
+    background-color: transparent !important;
 }
 
 /* Skeleton loading for images */
