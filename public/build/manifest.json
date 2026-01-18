@@ -46,7 +46,7 @@
     ]
   },
   "resources/css/admin.css": {
-    "file": "assets/css/admin-BNV6SIyh.css",
+    "file": "assets/css/admin-tKTZhTLj.css",
     "src": "resources/css/admin.css",
     "isEntry": true,
     "name": "admin",
@@ -55,7 +55,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/css/app-DL6faOfa.css",
+    "file": "assets/css/app-EdzVD9d2.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",

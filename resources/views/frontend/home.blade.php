@@ -19,7 +19,7 @@
     @endif
     @endpush
     @endif
-    
+
     <!-- Hero Slider - Multiple Transition Effects -->
     @if($heroSlides->count() > 0)
     @php
@@ -32,8 +32,8 @@
             ];
         })->toJson();
     @endphp
-    <section class="py-4 sm:py-6 md:py-8 bg-gray-50">
-        <div class="max-w-6xl mx-auto px-2 sm:px-4">
+    <section class="py-12 md:py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div x-data="{
                 active: 0,
                 total: {{ $heroSlides->count() }},
@@ -116,38 +116,38 @@
                             <picture>
                                 {{-- WebP sources for better compression --}}
                                 @if(isset($webpImages['mobile']))
-                                <source media="(max-width: 640px)" 
+                                <source media="(max-width: 640px)"
                                         srcset="{{ Storage::url($webpImages['mobile']) }}"
                                         type="image/webp">
                                 @endif
                                 @if(isset($webpImages['tablet']))
-                                <source media="(max-width: 1024px)" 
+                                <source media="(max-width: 1024px)"
                                         srcset="{{ Storage::url($webpImages['tablet']) }}"
                                         type="image/webp">
                                 @endif
                                 @if(isset($webpImages['desktop']))
-                                <source media="(min-width: 1025px)" 
+                                <source media="(min-width: 1025px)"
                                         srcset="{{ Storage::url($webpImages['desktop']) }}"
                                         type="image/webp">
                                 @endif
-                                
+
                                 {{-- JPEG fallback sources --}}
                                 @if(isset($responsiveImages['mobile']))
-                                <source media="(max-width: 640px)" 
+                                <source media="(max-width: 640px)"
                                         srcset="{{ Storage::url($responsiveImages['mobile']) }}"
                                         type="image/jpeg">
                                 @endif
                                 @if(isset($responsiveImages['tablet']))
-                                <source media="(max-width: 1024px)" 
+                                <source media="(max-width: 1024px)"
                                         srcset="{{ Storage::url($responsiveImages['tablet']) }}"
                                         type="image/jpeg">
                                 @endif
                                 @if(isset($responsiveImages['desktop']))
-                                <source media="(min-width: 1025px)" 
+                                <source media="(min-width: 1025px)"
                                         srcset="{{ Storage::url($responsiveImages['desktop']) }}"
                                         type="image/jpeg">
                                 @endif
-                                
+
                                 {{-- Final fallback image --}}
                                 <img src="{{ Storage::url($compressedImage) }}"
                                      alt="{{ $slide->title }}"
@@ -538,7 +538,7 @@
             <!-- Section Header -->
             <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
                 <div>
-                    <div class="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-semibold mb-4">
+                    <div class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
                         </svg>
@@ -547,9 +547,9 @@
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Informasi Terkini</h2>
                 </div>
                 <a href="{{ route('news.index') }}"
-                   class="mt-4 md:mt-0 inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 group transition-colors">
+                   class="mt-4 md:mt-0 inline-flex items-center text-primary-600 font-bold hover:text-primary-700 group transition-colors">
                     Lihat Semua Berita
-                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
                 </a>
@@ -558,20 +558,30 @@
             <!-- News Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($news as $index => $item)
-                <article class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-indigo-200 hover:-translate-y-2">
+                <article class="group bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200 hover:-translate-y-1">
                     <!-- News Image -->
-                    <div class="relative h-48 overflow-hidden bg-gray-100">
+                    <div class="relative h-56 overflow-hidden bg-gray-100">
                         @if($item->featured_image)
                         <img src="{{ asset('storage/' . $item->featured_image) }}"
                              alt="{{ $item->title }}"
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                              loading="lazy">
                         @else
-                        <div class="w-full h-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+                        <div class="w-full h-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
                             <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
                             </svg>
                         </div>
+                        @endif
+
+                        <!-- Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                        <!-- Category -->
+                        @if($item->category)
+                        <span class="absolute top-4 left-4 px-3 py-1 bg-primary-500 text-white text-xs font-bold rounded-lg shadow-lg">
+                            {{ $item->category }}
+                        </span>
                         @endif
                     </div>
 
@@ -583,16 +593,16 @@
                             </svg>
                             {{ $item->published_at->format('d M Y') }}
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors line-clamp-2">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2 h-[3.5rem]">
                             {{ $item->title }}
                         </h3>
-                        <p class="text-gray-600 mb-4 line-clamp-2">
+                        <p class="text-gray-600 mb-4 line-clamp-2 text-sm">
                             {{ $item->excerpt }}
                         </p>
                         <a href="{{ route('news.show', $item->slug) }}"
-                           class="inline-flex items-center text-indigo-600 font-semibold group/link hover:text-indigo-700 transition-colors">
+                           class="inline-flex items-center text-primary-600 font-bold group/link hover:text-primary-700 transition-colors">
                             Baca Selengkapnya
-                            <svg class="w-5 h-5 ml-2 group-hover/link:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 ml-2 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                             </svg>
                         </a>
