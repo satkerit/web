@@ -63,20 +63,4 @@ class ProductController extends Controller
 
         return view('frontend.pages.products.show', compact('product'));
     }
-
-    public function showNews(string $slug)
-    {
-        $news = News::with('images')
-            ->where('slug', $slug)
-            ->where('is_published', true)
-            ->firstOrFail();
-
-        return view('frontend.pages.news.show', compact('news'));
-    }
-
-    public function showAuction(string $slug)
-    {
-        $auction = Auction::where('slug', $slug)->firstOrFail();
-        return view('frontend.pages.auctions.show', compact('auction'));
-    }
 }

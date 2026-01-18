@@ -31,16 +31,16 @@ Route::middleware(['throttle:120,1'])->group(function () {
         Route::get('/detail/{slug}', [ProductController::class, 'show'])->name('show');
     });
 
-    // Auction Routes - Livewire
+    // Auction Routes
     Route::prefix('lelang')->name('auctions.')->group(function () {
-        Route::get('/', App\Livewire\Frontend\Auctions\Index::class)->name('index');
-        Route::get('/{slug}', [ProductController::class, 'showAuction'])->name('show');
+        Route::get('/', [App\Http\Controllers\AuctionController::class, 'index'])->name('index');
+        Route::get('/{slug}', [App\Http\Controllers\AuctionController::class, 'show'])->name('show');
     });
 
-    // News Routes - Livewire
+    // News Routes
     Route::prefix('berita')->name('news.')->group(function () {
-        Route::get('/', App\Livewire\Frontend\News\Index::class)->name('index');
-        Route::get('/{slug}', [ProductController::class, 'showNews'])->name('show');
+        Route::get('/', [App\Http\Controllers\NewsController::class, 'index'])->name('index');
+        Route::get('/{slug}', [App\Http\Controllers\NewsController::class, 'show'])->name('show');
     });
 
     // Report Routes
@@ -62,7 +62,7 @@ Route::middleware(['throttle:120,1'])->group(function () {
     Route::view('/hubungi-kami', 'frontend.pages.contact')->name('contact');
     Route::view('/whistleblowing', 'frontend.pages.whistleblowing')->name('whistleblowing');
     Route::view('/pengaduan-nasabah', 'frontend.pages.pengaduan-nasabah')->name('pengaduan-nasabah');
-    
+
     // Download Logo
     Route::get('/download-logo', [App\Http\Controllers\LogoDownloadController::class, 'index'])->name('download-logo');
     Route::get('/download-logo/{format}', [App\Http\Controllers\LogoDownloadController::class, 'download'])

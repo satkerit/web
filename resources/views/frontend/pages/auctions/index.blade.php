@@ -1,4 +1,6 @@
-<div>
+<x-frontend-layout>
+    <x-slot:title>Lelang Agunan - {{ config('app.name') }}</x-slot:title>
+
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-br from-primary-700 via-primary-500 to-primary-600 py-16 md:py-20">
         <div class="absolute inset-0 bg-black/20"></div>
@@ -19,70 +21,65 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Search & Filter Card -->
             <div class="mb-8 bg-white rounded-xl shadow-sm p-4 md:p-6">
-                <div class="flex flex-col lg:flex-row gap-4">
+                <form method="GET" class="flex flex-col lg:flex-row gap-4">
                     <div class="flex-1">
                         <div class="relative">
                             <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
-                            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari berdasarkan judul atau lokasi..." class="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900 placeholder-gray-400">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari berdasarkan judul atau lokasi..." class="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900 placeholder-gray-400">
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <select wire:model.live="statusFilter" class="px-5 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-700 min-w-[160px]">
+                        <select name="status" class="px-5 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-700 min-w-[160px]">
                             <option value="">Semua Status</option>
-                            <option value="upcoming">Akan Datang</option>
-                            <option value="ongoing">Berlangsung</option>
-                            <option value="sold">Terjual</option>
-                            <option value="closed">Selesai</option>
+                            <option value="upcoming" {{ request('status') == 'upcoming' ? 'selected' : '' }}>Akan Datang</option>
+                            <option value="ongoing" {{ request('status') == 'ongoing' ? 'selected' : '' }}>Berlangsung</option>
+                            <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Terjual</option>
+                            <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Selesai</option>
                         </select>
-                        <select wire:model.live="assetType" class="px-5 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-700 min-w-[160px]">
+                        <select name="type" class="px-5 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-700 min-w-[160px]">
                             <option value="">Semua Jenis</option>
                             @foreach(\App\Models\Auction::$assetTypes as $key => $label)
-                                <option value="{{ $key }}">{{ $label }}</option>
+                                <option value="{{ $key }}" {{ request('type') == $key ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
+                        <button type="submit" class="px-6 py-4 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-colors">
+                            Cari
+                        </button>
                     </div>
-                </div>
+                </form>
 
                 <!-- Active Filters -->
-                @if($search || $statusFilter || $assetType)
+                @if(request('search') || request('status') || request('type'))
                 <div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-gray-100">
                     <span class="text-sm text-gray-500">Filter aktif:</span>
-                    @if($search)
+                    @if(request('search'))
                         <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                            "{{ $search }}"
-                            <button wire:click="$set('search', '')" class="hover:text-emerald-900">&times;</button>
+                            "{{ request('search') }}"
                         </span>
                     @endif
-                    @if($statusFilter)
+                    @if(request('status'))
                         <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                            {{ \App\Models\Auction::$statusLabels[$statusFilter] ?? $statusFilter }}
-                            <button wire:click="$set('statusFilter', '')" class="hover:text-emerald-900">&times;</button>
+                            {{ \App\Models\Auction::$statusLabels[request('status')] ?? request('status') }}
                         </span>
                     @endif
-                    @if($assetType)
+                    @if(request('type'))
                         <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                            {{ \App\Models\Auction::$assetTypes[$assetType] ?? $assetType }}
-                            <button wire:click="$set('assetType', '')" class="hover:text-emerald-900">&times;</button>
+                            {{ \App\Models\Auction::$assetTypes[request('type')] ?? request('type') }}
                         </span>
                     @endif
+                    <a href="{{ route('auctions.index') }}" class="text-sm text-gray-500 hover:text-gray-700 underline">
+                        Reset semua
+                    </a>
                 </div>
                 @endif
             </div>
 
-            <!-- Loading State -->
-            <div wire:loading.flex class="justify-center py-16">
-                <div class="flex flex-col items-center gap-4 text-primary-600">
-                    <div class="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
-                    <span class="font-semibold text-lg">Memuat data lelang...</span>
-                </div>
-            </div>
-
             <!-- Auctions Grid -->
-            <div wire:loading.remove class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($auctions as $auction)
-                <article class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 hover:-translate-y-1" wire:key="auction-{{ $auction->id }}">
+                <article class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 hover:-translate-y-1">
                     <!-- Image Container -->
                     <div class="relative h-64 overflow-hidden">
                         @if($auction->images && count($auction->images) > 0)
@@ -225,12 +222,12 @@
                         </div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-3">Tidak Ada Lelang Ditemukan</h3>
                         <p class="text-gray-500 max-w-md mx-auto mb-6">Belum ada lelang yang sesuai dengan pencarian Anda.</p>
-                        <button wire:click="$set('search', ''); $set('statusFilter', ''); $set('assetType', '')" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors">
+                        <a href="{{ route('auctions.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                             </svg>
                             Reset Filter
-                        </button>
+                        </a>
                     </div>
                 </div>
                 @endforelse
@@ -258,4 +255,4 @@
             </a>
         </div>
     </section>
-</div>
+</x-frontend-layout>

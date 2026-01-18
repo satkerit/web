@@ -1,4 +1,6 @@
-<div>
+<x-frontend-layout>
+    <x-slot:title>Berita & Artikel - {{ config('app.name') }}</x-slot:title>
+
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-br from-primary-700 via-primary-500 to-primary-600 py-16 md:py-20">
         <div class="absolute inset-0 bg-black/20"></div>
@@ -19,46 +21,55 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Search & Filter Card -->
             <div class="mb-8 bg-white rounded-xl shadow-sm p-4 md:p-6">
-                <div class="flex flex-col md:flex-row gap-4">
+                <form method="GET" class="flex flex-col md:flex-row gap-4">
                     <div class="flex-1">
                         <div class="relative">
-                            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                            <input type="text" wire:model.live.debounce.300ms="search"
-                                placeholder="Cari berita berdasarkan judul..."
-                                class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari berita berdasarkan judul..." class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     <div class="w-full md:w-48">
-                        <select wire:model.live="category"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+                        <select name="category" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
                             <option value="">Semua Kategori</option>
                             @foreach($categories as $cat)
-                                <option value="{{ $cat }}">{{ $cat }}</option>
+                                <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                             @endforeach
                         </select>
                     </div>
-                </div>
-            </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full md:w-auto px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors">
+                            Cari
+                        </button>
+                    </div>
+                </form>
 
-            <!-- Loading State -->
-            <div wire:loading.flex class="justify-center py-12">
-                <div class="flex items-center gap-3 text-primary-600">
-                    <svg class="animate-spin w-6 h-6" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span class="font-medium">Memuat berita...</span>
+                <!-- Active Filters -->
+                @if(request('search') || request('category'))
+                <div class="flex flex-wrap items-center gap-2 pt-4 mt-4 border-t border-gray-100">
+                    <span class="text-sm text-gray-500">Filter aktif:</span>
+                    @if(request('search'))
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
+                            "{{ request('search') }}"
+                        </span>
+                    @endif
+                    @if(request('category'))
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
+                            {{ request('category') }}
+                        </span>
+                    @endif
+                    <a href="{{ route('news.index') }}" class="text-sm text-gray-500 hover:text-gray-700 underline">
+                        Reset semua
+                    </a>
                 </div>
+                @endif
             </div>
 
             <!-- News Grid -->
-            <div wire:loading.remove class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($news as $item)
-                <article class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200" wire:key="news-{{ $item->id }}">
+                <article class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200">
                     <!-- Image -->
                     <div class="relative h-56 overflow-hidden">
                         @if($item->featured_image)
@@ -131,4 +142,4 @@
             @endif
         </div>
     </section>
-</div>
+</x-frontend-layout>
