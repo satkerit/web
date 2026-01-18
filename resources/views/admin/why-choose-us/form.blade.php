@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', isset($item) ? 'Edit Item' : 'Tambah Item')
+@section('title', $item->exists ? 'Edit Item' : 'Tambah Item')
 
 @section('content')
 <x-admin.page-header
-    :title="isset($item) ? 'Edit Item' : 'Tambah Item'"
-    :subtitle="isset($item) ? 'Edit data keunggulan' : 'Tambahkan data keunggulan baru'"
+    :title="$item->exists ? 'Edit Item' : 'Tambah Item'"
+    :subtitle="$item->exists ? 'Edit data keunggulan' : 'Tambahkan data keunggulan baru'"
 >
     <x-slot:actions>
         <x-admin.button href="{{ route('admin.why-choose-us.index') }}" variant="secondary" icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>'>
@@ -15,9 +15,9 @@
 </x-admin.page-header>
 
 <x-admin.card>
-    <form action="{{ isset($item) ? route('admin.why-choose-us.update', $item) : route('admin.why-choose-us.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ $item->exists ? route('admin.why-choose-us.update', $item) : route('admin.why-choose-us.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
-        @if(isset($item))
+        @if($item->exists)
             @method('PUT')
         @endif
 
@@ -61,7 +61,7 @@
 
         <div class="flex justify-end pt-6 border-t border-gray-100">
             <x-admin.button type="submit">
-                {{ isset($item) ? 'Simpan Perubahan' : 'Simpan Data' }}
+                {{ $item->exists ? 'Simpan Perubahan' : 'Simpan Data' }}
             </x-admin.button>
         </div>
     </form>

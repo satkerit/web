@@ -24,7 +24,11 @@ class WhyChooseUsController extends Controller
     public function create()
     {
         $themes = WhyChooseUs::getThemes();
-        return view('admin.why-choose-us.form', compact('themes'));
+        // Pass empty model with defaults to prevent undefined variable error in view
+        $item = new WhyChooseUs();
+        $item->is_active = true;
+
+        return view('admin.why-choose-us.form', compact('themes', 'item'));
     }
 
     public function store(Request $request)
