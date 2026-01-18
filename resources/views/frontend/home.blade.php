@@ -463,6 +463,24 @@
 
                     <!-- Features List -->
                     <div class="space-y-6">
+                        @forelse($whyChooseUs as $index => $item)
+                        <div class="flex items-start group fade-in-section" style="animation-delay: {{ $index * 100 }}ms">
+                            <div class="w-12 h-12 {{ $item->bg_class }} rounded-xl flex items-center justify-center mr-4 flex-shrink-0 {{ $item->hover_bg_class }} group-hover:scale-110 transition-all duration-300 shadow-sm">
+                                @if($item->icon)
+                                <img src="{{ Storage::url($item->icon) }}" class="w-6 h-6 object-contain transition-all duration-300 filter group-hover:brightness-0 group-hover:invert" alt="{{ $item->title }}">
+                                @else
+                                <svg class="w-6 h-6 {{ $item->text_class }} group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                @endif
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1 text-lg">{{ $item->title }}</h4>
+                                <p class="text-gray-600 leading-relaxed">{{ $item->description }}</p>
+                            </div>
+                        </div>
+                        @empty
+                        <!-- Default content if no dynamic data -->
                         <div class="flex items-start group fade-in-section">
                             <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-emerald-500 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6 text-emerald-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -474,7 +492,6 @@
                                 <p class="text-gray-600">Seluruh produk dan layanan kami telah disetujui oleh Dewan Pengawas Syariah</p>
                             </div>
                         </div>
-
                         <div class="flex items-start group fade-in-section delay-100">
                             <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -486,7 +503,6 @@
                                 <p class="text-gray-600">Diawasi oleh OJK dan dijamin oleh LPS untuk keamanan dana Anda</p>
                             </div>
                         </div>
-
                         <div class="flex items-start group fade-in-section delay-200">
                             <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-amber-500 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6 text-amber-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -498,6 +514,7 @@
                                 <p class="text-gray-600">Layanan yang efisien dengan proses yang transparan dan mudah dipahami</p>
                             </div>
                         </div>
+                        @endforelse
                     </div>
                 </div>
 

@@ -80,6 +80,7 @@ class AdminMenu extends Model
         $menuPermissionMap = [
             'dashboard' => 'dashboard.view',
             'hero-slides' => 'settings.hero',
+            'why-choose-us' => 'settings.hero',
             'news' => 'news.view',
             'products' => 'products.view',
             'auctions' => 'auctions.view',

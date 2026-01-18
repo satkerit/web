@@ -9,10 +9,10 @@ class HomeController extends Controller
     public function index()
     {
         $heroSlides = CacheService::getHeroSlides(5);
-        
+
         // Preload first hero image for better performance
         $firstHeroImage = $heroSlides->first()?->image;
-        
+
         return view('frontend.home', [
             'companyInfo' => CacheService::getCompanyInfo(),
             'heroSlides' => $heroSlides,
@@ -20,6 +20,7 @@ class HomeController extends Controller
             'products' => CacheService::getHomeProducts(6),
             'news' => CacheService::getHomeNews(3),
             'auctions' => CacheService::getHomeAuctions(3),
+            'whyChooseUs' => CacheService::getWhyChooseUs(),
         ]);
     }
 }

@@ -96,6 +96,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::post('hero-slides/reorder', [App\Http\Controllers\Admin\HeroSlideController::class, 'reorder'])->name('hero-slides.reorder');
     Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class);
 
+    // Why Choose Us Management
+    Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class);
+
     // Offices Management
     Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class);
 

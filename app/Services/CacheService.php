@@ -11,6 +11,8 @@ use App\Models\Office;
 use App\Models\BoardMember;
 use App\Models\Report;
 use App\Models\KasKeliling;
+use App\Models\KasKeliling;
+use App\Models\WhyChooseUs;
 use Illuminate\Support\Facades\Cache;
 
 class CacheService
@@ -185,6 +187,20 @@ class CacheService
                         ->where('schedule_date', '>=', now()->toDateString())
                         ->orderBy('schedule_date');
                 }])
+                ->get()
+        );
+    }
+
+    /**
+     * Get Why Choose Us items
+     */
+    public static function getWhyChooseUs()
+    {
+        return Cache::remember(
+            'why_choose_us_items',
+            self::CACHE_MEDIUM,
+            fn() => WhyChooseUs::where('is_active', true)
+                ->orderBy('sort_order')
                 ->get()
         );
     }
