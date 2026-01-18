@@ -36,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('cleanHtml', function ($expression) {
             return "<?php echo \App\Helpers\HtmlSanitizer::clean($expression); ?>";
         });
+
+        // @compressedImage($path, $quality) - Get compressed image URL
+        Blade::directive('compressedImage', function ($expression) {
+            return "<?php echo \Illuminate\Support\Facades\Storage::url(\App\Services\ImageCompressionService::compressForWeb($expression)); ?>";
+        });
     }
 
     /**

@@ -1,7 +1,22 @@
 <x-frontend-layout>
     @if($firstHeroImage)
     @push('head')
-    <link rel="preload" as="image" href="{{ Storage::url($firstHeroImage) }}" fetchpriority="high">
+    @php
+        $compressedFirstImage = \App\Services\ImageCompressionService::compressForWeb($firstHeroImage, 70, 1920);
+        $responsiveFirst = \App\Services\ImageCompressionService::generateResponsiveSizes($firstHeroImage);
+        $webpFirst = \App\Services\WebPConverterService::generateResponsiveWebP($firstHeroImage);
+        $mainWebPFirst = \App\Services\WebPConverterService::convertToWebP($firstHeroImage, 75);
+    @endphp
+    {{-- Preload WebP for modern browsers --}}
+    @if($mainWebPFirst)
+    <link rel="preload" as="image" href="{{ Storage::url($mainWebPFirst) }}" fetchpriority="high" type="image/webp">
+    @endif
+    {{-- Fallback preload for older browsers --}}
+    <link rel="preload" as="image" href="{{ Storage::url($compressedFirstImage) }}" fetchpriority="high" type="image/jpeg">
+    {{-- Mobile WebP preload --}}
+    @if(isset($webpFirst['mobile']))
+    <link rel="preload" as="image" href="{{ Storage::url($webpFirst['mobile']) }}" media="(max-width: 640px)" type="image/webp">
+    @endif
     @endpush
     @endif
     
@@ -92,14 +107,59 @@
                              :class="getTransitionClasses({{ $index }})"
                              :style="getTransitionStyle({{ $index }})">
                             @if($slide->image)
-                            <img src="{{ Storage::url($slide->image) }}"
-                                 alt="{{ $slide->title }}"
-                                 class="w-full h-full object-cover object-center hero-slide-img"
-                                 loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                                 decoding="{{ $index === 0 ? 'sync' : 'async' }}"
-                                 @if($index === 0)
-                                 fetchpriority="high"
-                                 @endif>
+                            @php
+                                $compressedImage = \App\Services\ImageCompressionService::compressForWeb($slide->image, 70, 1920);
+                                $responsiveImages = \App\Services\ImageCompressionService::generateResponsiveSizes($slide->image);
+                                $webpImages = \App\Services\WebPConverterService::generateResponsiveWebP($slide->image);
+                                $mainWebP = \App\Services\WebPConverterService::convertToWebP($slide->image, 75);
+                            @endphp
+                            <picture>
+                                {{-- WebP sources for better compression --}}
+                                @if(isset($webpImages['mobile']))
+                                <source media="(max-width: 640px)" 
+                                        srcset="{{ Storage::url($webpImages['mobile']) }}"
+                                        type="image/webp">
+                                @endif
+                                @if(isset($webpImages['tablet']))
+                                <source media="(max-width: 1024px)" 
+                                        srcset="{{ Storage::url($webpImages['tablet']) }}"
+                                        type="image/webp">
+                                @endif
+                                @if(isset($webpImages['desktop']))
+                                <source media="(min-width: 1025px)" 
+                                        srcset="{{ Storage::url($webpImages['desktop']) }}"
+                                        type="image/webp">
+                                @endif
+                                
+                                {{-- JPEG fallback sources --}}
+                                @if(isset($responsiveImages['mobile']))
+                                <source media="(max-width: 640px)" 
+                                        srcset="{{ Storage::url($responsiveImages['mobile']) }}"
+                                        type="image/jpeg">
+                                @endif
+                                @if(isset($responsiveImages['tablet']))
+                                <source media="(max-width: 1024px)" 
+                                        srcset="{{ Storage::url($responsiveImages['tablet']) }}"
+                                        type="image/jpeg">
+                                @endif
+                                @if(isset($responsiveImages['desktop']))
+                                <source media="(min-width: 1025px)" 
+                                        srcset="{{ Storage::url($responsiveImages['desktop']) }}"
+                                        type="image/jpeg">
+                                @endif
+                                
+                                {{-- Final fallback image --}}
+                                <img src="{{ Storage::url($compressedImage) }}"
+                                     alt="{{ $slide->title }}"
+                                     class="w-full h-full object-cover object-center hero-slide-img"
+                                     loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                     decoding="{{ $index === 0 ? 'sync' : 'async' }}"
+                                     @if($index === 0)
+                                     fetchpriority="high"
+                                     @endif
+                                     width="1920"
+                                     height="800">
+                            </picture>
                             @else
                             <div class="w-full h-full bg-gradient-to-br from-primary-500 via-primary-600 to-emerald-600 flex items-center justify-center">
                                 <span class="text-white text-lg sm:text-xl font-medium px-4 text-center">{{ $slide->title ?? 'Slide ' . ($index + 1) }}</span>

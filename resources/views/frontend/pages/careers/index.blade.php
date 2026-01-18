@@ -2,7 +2,7 @@
     <x-slot:title>Karir - {{ config('app.name') }}</x-slot:title>
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 py-16 md:py-20">
+    <section class="relative bg-gradient-to-br from-primary-700 via-primary-500 to-primary-600 py-16 md:py-20">
         <div class="absolute inset-0 bg-black/20"></div>
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
@@ -27,13 +27,13 @@
                             <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari lowongan berdasarkan judul, departemen, atau lokasi..." class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari lowongan berdasarkan judul, departemen, atau lokasi..." class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Pekerjaan</label>
-                            <select name="type" class="w-full rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                            <select name="type" class="w-full rounded-lg border-gray-300 text-sm focus:border-primary-500 focus:ring-primary-500">
                                 <option value="">Semua Tipe</option>
                                 <option value="full_time" {{ request('type') == 'full_time' ? 'selected' : '' }}>Full Time</option>
                                 <option value="part_time" {{ request('type') == 'part_time' ? 'selected' : '' }}>Part Time</option>
@@ -44,7 +44,7 @@
                         @if($departments->count() > 0)
                         <div class="flex-1">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Departemen</label>
-                            <select name="department" class="w-full rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                            <select name="department" class="w-full rounded-lg border-gray-300 text-sm focus:border-primary-500 focus:ring-primary-500">
                                 <option value="">Semua Departemen</option>
                                 @foreach($departments as $dept)
                                     <option value="{{ $dept }}" {{ request('department') == $dept ? 'selected' : '' }}>{{ $dept }}</option>
@@ -53,7 +53,7 @@
                         </div>
                         @endif
                         <div class="flex items-end">
-                            <button type="submit" class="w-full md:w-auto px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors">
+                            <button type="submit" class="w-full md:w-auto px-6 py-2.5 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors">
                                 Cari
                             </button>
                         </div>
@@ -62,7 +62,7 @@
                     <div class="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-100">
                         <span class="text-sm text-gray-500">Filter aktif:</span>
                         @if(request('search'))
-                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-700 text-sm rounded-full">
+                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
                                 "{{ request('search') }}"
                             </span>
                         @endif
@@ -70,12 +70,12 @@
                             @php
                                 $typeLabels = ['full_time' => 'Full Time', 'part_time' => 'Part Time', 'contract' => 'Kontrak', 'internship' => 'Magang'];
                             @endphp
-                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-700 text-sm rounded-full">
+                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
                                 {{ $typeLabels[request('type')] ?? request('type') }}
                             </span>
                         @endif
                         @if(request('department'))
-                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-700 text-sm rounded-full">
+                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
                                 {{ request('department') }}
                             </span>
                         @endif
@@ -95,7 +95,7 @@
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div class="flex-1">
                                     <div class="flex flex-wrap items-center gap-2 mb-2">
-                                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">
+                                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-700">
                                             {{ $career->employment_type_label }}
                                         </span>
                                         @if($career->deadline)
@@ -135,7 +135,7 @@
                                     <p class="mt-3 text-gray-600 line-clamp-2">{{ Str::limit(strip_tags($career->description), 150) }}</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <a href="{{ route('careers.show', $career->slug) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors">
+                                    <a href="{{ route('careers.show', $career->slug) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors">
                                         Lihat Detail
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

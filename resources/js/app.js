@@ -4,56 +4,47 @@
  */
 
 import "./bootstrap";
-
-// Alpine.js - Core functionality
-import Alpine from "alpinejs";
 import collapse from "@alpinejs/collapse";
 
-// Initialize Alpine only if not already provided by Livewire
-if (!window.Alpine) {
-    window.Alpine = Alpine;
-}
+// Connect to Alpine instance injected by Livewire
+document.addEventListener("alpine:init", () => {
+    // Register plugins
+    window.Alpine.plugin(collapse);
 
-window.Alpine.plugin(collapse);
+    // Register repeaterField component for dynamic form fields
+    window.Alpine.data("repeaterField", (initialData = []) => ({
+        items: [],
 
-// Register repeaterField component for dynamic form fields
-window.Alpine.data("repeaterField", (initialData = []) => ({
-    items: [],
+        init() {
+            const data = Array.isArray(initialData) ? initialData : [];
+            this.items = data.map((value) => ({
+                value: value || "",
+                id:
+                    crypto.randomUUID?.() ||
+                    Math.random().toString(36).slice(2, 11),
+            }));
 
-    init() {
-        const data = Array.isArray(initialData) ? initialData : [];
-        this.items = data.map((value) => ({
-            value: value || "",
-            id:
-                crypto.randomUUID?.() ||
-                Math.random().toString(36).slice(2, 11),
-        }));
+            if (this.items.length === 0) {
+                this.addItem();
+            }
+        },
 
-        if (this.items.length === 0) {
-            this.addItem();
-        }
-    },
+        addItem() {
+            this.items.push({
+                value: "",
+                id:
+                    crypto.randomUUID?.() ||
+                    Math.random().toString(36).slice(2, 11),
+            });
+        },
 
-    addItem() {
-        this.items.push({
-            value: "",
-            id:
-                crypto.randomUUID?.() ||
-                Math.random().toString(36).slice(2, 11),
-        });
-    },
-
-    removeItem(index) {
-        if (this.items.length > 1) {
-            this.items.splice(index, 1);
-        }
-    },
-}));
-
-// Start Alpine only if not already started by Livewire
-if (!window.Alpine._started) {
-    window.Alpine.start();
-}
+        removeItem(index) {
+            if (this.items.length > 1) {
+                this.items.splice(index, 1);
+            }
+        },
+    }));
+});
 
 // Lazy load SweetAlert2 only when needed
 let SwalPromise = null;
@@ -72,7 +63,7 @@ window.Swal = new Proxy(
                 return Swal[prop](...args);
             };
         },
-    }
+    },
 );
 
 // Lazy load Swiper only when hero slider exists
@@ -123,12 +114,12 @@ const initHeroSlider = async () => {
             slideChangeTransitionStart() {
                 const content =
                     this.slides[this.activeIndex]?.querySelector(
-                        ".slide-content"
+                        ".slide-content",
                     );
                 if (content) {
                     content.classList.remove("animate-in");
                     requestAnimationFrame(() =>
-                        content.classList.add("animate-in")
+                        content.classList.add("animate-in"),
                     );
                 }
             },
@@ -157,7 +148,7 @@ const initProgressiveImages = () => {
                 img.classList.remove("img-loading");
                 img.classList.add("loaded");
             },
-            { once: true }
+            { once: true },
         );
 
         img.addEventListener(
@@ -166,7 +157,7 @@ const initProgressiveImages = () => {
                 img.classList.remove("img-loading");
                 img.classList.add("img-error");
             },
-            { once: true }
+            { once: true },
         );
     });
 };
@@ -174,7 +165,7 @@ const initProgressiveImages = () => {
 // Optimized Intersection Observer for scroll animations
 const initScrollAnimations = () => {
     const animatedElements = document.querySelectorAll(
-        ".fade-in-section, .slide-in-left, .slide-in-right, .scale-in, .stats-counter, .reveal-on-scroll"
+        ".fade-in-section, .slide-in-left, .slide-in-right, .scale-in, .stats-counter, .reveal-on-scroll",
     );
 
     if (!animatedElements.length) return;
@@ -201,7 +192,7 @@ const initScrollAnimations = () => {
                 observer.unobserve(el);
             });
         },
-        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
     );
 
     animatedElements.forEach((el) => {
@@ -272,7 +263,7 @@ const initParallax = () => {
                 ticking = true;
             }
         },
-        { passive: true }
+        { passive: true },
     );
 };
 
