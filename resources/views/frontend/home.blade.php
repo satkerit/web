@@ -1,4 +1,10 @@
 <x-frontend-layout>
+    @if($firstHeroImage)
+    @push('head')
+    <link rel="preload" as="image" href="{{ Storage::url($firstHeroImage) }}" fetchpriority="high">
+    @endpush
+    @endif
+    
     <!-- Hero Slider - Multiple Transition Effects -->
     @if($heroSlides->count() > 0)
     @php
@@ -17,19 +23,14 @@
                 active: 0,
                 total: {{ $heroSlides->count() }},
                 autoplay: null,
-                slides: {{ $slidesData }},
-                direction: 'next',
                 isAnimating: false,
-                getCurrentTransition() {
-                    return this.slides[this.active] || { transitionType: 'fade', transitionDuration: 500 };
-                },
-                getSlideTransition(index) {
-                    return this.slides[index] || { transitionType: 'fade', transitionDuration: 500 };
+                direction: 'next',
+                transitions: {{ $slidesData }},
+                init() {
+                    this.startAutoplay();
                 },
                 startAutoplay() {
-                    this.autoplay = setInterval(() => {
-                        this.next();
-                    }, 5000);
+                    this.autoplay = setInterval(() => this.next(), 5000);
                 },
                 stopAutoplay() {
                     if (this.autoplay) clearInterval(this.autoplay);
@@ -39,36 +40,22 @@
                     this.direction = index > this.active ? 'next' : 'prev';
                     this.isAnimating = true;
                     this.active = index;
-                    const duration = this.getSlideTransition(index).transitionDuration;
+                    const duration = this.transitions[index]?.transitionDuration || 500;
                     setTimeout(() => { this.isAnimating = false; }, duration);
                     this.stopAutoplay();
                     this.startAutoplay();
                 },
                 next() {
                     if (this.isAnimating) return;
-                    this.direction = 'next';
-                    this.isAnimating = true;
-                    const nextIndex = (this.active + 1) % this.total;
-                    this.active = nextIndex;
-                    const duration = this.getSlideTransition(nextIndex).transitionDuration;
-                    setTimeout(() => { this.isAnimating = false; }, duration);
-                    this.stopAutoplay();
-                    this.startAutoplay();
+                    this.goTo((this.active + 1) % this.total);
                 },
                 prev() {
                     if (this.isAnimating) return;
-                    this.direction = 'prev';
-                    this.isAnimating = true;
-                    const prevIndex = this.active === 0 ? this.total - 1 : this.active - 1;
-                    this.active = prevIndex;
-                    const duration = this.getSlideTransition(prevIndex).transitionDuration;
-                    setTimeout(() => { this.isAnimating = false; }, duration);
-                    this.stopAutoplay();
-                    this.startAutoplay();
+                    this.goTo((this.active - 1 + this.total) % this.total);
                 },
                 getTransitionClasses(index) {
                     const isActive = this.active === index;
-                    const type = this.getSlideTransition(index).transitionType;
+                    const type = this.transitions[index]?.transitionType || 'fade';
 
                     if (type === 'fade') {
                         return isActive ? 'opacity-100 z-10' : 'opacity-0 z-0';
@@ -91,21 +78,14 @@
                     return isActive ? 'opacity-100 z-10' : 'opacity-0 z-0';
                 },
                 getTransitionStyle(index) {
-                    const duration = this.getSlideTransition(index).transitionDuration;
+                    const duration = this.transitions[index]?.transitionDuration || 500;
                     return 'transition-duration: ' + duration + 'ms';
-                },
-                needsPerspective() {
-                    return this.slides.some(s => s.transitionType === 'flip' || s.transitionType === 'cube');
-                },
-                init() {
-                    this.startAutoplay();
                 }
             }" class="relative">
                 <!-- Slider Container -->
                 <div class="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden group">
                     <!-- Aspect ratio wrapper -->
                     <div class="relative w-full aspect-[16/9] sm:aspect-[18/9] md:aspect-[21/9] lg:aspect-[2.5/1]"
-                         :class="{ 'perspective-[1000px]': needsPerspective() }"
                          style="transform-style: preserve-3d;">
                         @foreach($heroSlides as $index => $slide)
                         <div class="absolute inset-0 w-full h-full transition-all ease-out"
@@ -114,7 +94,12 @@
                             @if($slide->image)
                             <img src="{{ Storage::url($slide->image) }}"
                                  alt="{{ $slide->title }}"
-                                 class="w-full h-full object-cover object-center">
+                                 class="w-full h-full object-cover object-center hero-slide-img"
+                                 loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                 decoding="{{ $index === 0 ? 'sync' : 'async' }}"
+                                 @if($index === 0)
+                                 fetchpriority="high"
+                                 @endif>
                             @else
                             <div class="w-full h-full bg-gradient-to-br from-primary-500 via-primary-600 to-emerald-600 flex items-center justify-center">
                                 <span class="text-white text-lg sm:text-xl font-medium px-4 text-center">{{ $slide->title ?? 'Slide ' . ($index + 1) }}</span>

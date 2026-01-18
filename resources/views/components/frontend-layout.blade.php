@@ -89,7 +89,20 @@
             position: relative;
             z-index: 9999;
         }
+
+        /* Hero Slider Performance Optimizations */
+        .hero-slide-img {
+            will-change: opacity;
+            content-visibility: auto;
+        }
+        
+        /* Reduce paint on transitions */
+        [x-data] {
+            contain: layout style paint;
+        }
     </style>
+    
+    @stack('head')
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800">
     <!-- Header -->

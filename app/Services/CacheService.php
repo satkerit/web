@@ -40,7 +40,19 @@ class CacheService
             HeroSlide::where('is_active', true)
                 ->orderBy('order_position')
                 ->limit($limit)
-                ->get()
+                ->get([
+                    'id',
+                    'title',
+                    'subtitle',
+                    'image',
+                    'link_url',
+                    'link_text',
+                    'transition_type',
+                    'transition_duration',
+                    'show_title',
+                    'show_subtitle',
+                    'show_button'
+                ])
         );
     }
 
