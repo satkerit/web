@@ -2,6 +2,7 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    App\Providers\ViewServiceProvider::class,
     App\Providers\MailConfigServiceProvider::class,
+    App\Providers\StorageServiceProvider::class,
+    App\Providers\ViewServiceProvider::class,
 ];
