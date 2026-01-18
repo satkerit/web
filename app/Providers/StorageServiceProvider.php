@@ -36,18 +36,17 @@ class StorageServiceProvider extends ServiceProvider
         $env = config('app.env');
         $appUrl = config('app.url');
 
-        // Set storage URL based on environment
-        if ($env === 'production') {
-            // Production: Use APP_URL from .env
-            $storageUrl = rtrim($appUrl, '/') . '/storage';
-        } else {
-            // Local/Development: Use APP_URL from .env
-            $storageUrl = rtrim($appUrl, '/') . '/storage';
-        }
+        // Default storage URL
+        $storageUrl = rtrim($appUrl, '/') . '/storage';
 
         // Override storage URL if STORAGE_URL is set in .env
         if (env('STORAGE_URL')) {
             $storageUrl = env('STORAGE_URL');
+        } 
+        // Production: Check if using subdirectory (e.g., /dev/)
+        elseif ($env === 'production' && env('PRODUCTION_SUBDIR')) {
+            $subdir = trim(env('PRODUCTION_SUBDIR'), '/');
+            $storageUrl = rtrim($appUrl, '/') . '/' . $subdir . '/storage';
         }
 
         // Set the storage URL

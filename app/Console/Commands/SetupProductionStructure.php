@@ -14,6 +14,7 @@ class SetupProductionStructure extends Command
      */
     protected $signature = 'production:setup 
                             {--public-path= : Path to public_html folder}
+                            {--subdir= : Subdirectory in public_html (e.g., dev)}
                             {--check : Only check current setup without making changes}';
 
     /**
@@ -42,6 +43,13 @@ class SetupProductionStructure extends Command
         // Get paths
         $laravelRoot = base_path();
         $publicPath = $this->option('public-path') ?: $this->ask('Enter path to public_html folder', '/home/user/public_html');
+        $subdir = $this->option('subdir') ?: $this->ask('Enter subdirectory in public_html (leave empty if none)', 'dev');
+
+        // Build full public path
+        $fullPublicPath = $publicPath;
+        if ($subdir) {
+            $fullPublicPath = rtrim($publicPath, '/') . '/' . trim($subdir, '/');
+        }
 
         if (!File::isDirectory($publicPath)) {
             $this->error("Directory not found: {$publicPath}");
@@ -50,6 +58,10 @@ class SetupProductionStructure extends Command
 
         $this->info("Laravel Root: {$laravelRoot}");
         $this->info("Public HTML: {$publicPath}");
+        if ($subdir) {
+            $this->info("Subdirectory: {$subdir}");
+            $this->info("Full Path: {$fullPublicPath}");
+        }
         $this->newLine();
 
         if (!$this->confirm('Continue with setup?', true)) {
@@ -59,15 +71,15 @@ class SetupProductionStructure extends Command
 
         // Step 1: Copy public files
         $this->info('Step 1: Copying public files...');
-        $this->copyPublicFiles($laravelRoot . '/public', $publicPath);
+        $this->copyPublicFiles($laravelRoot . '/public', $fullPublicPath);
 
         // Step 2: Update index.php
         $this->info('Step 2: Updating index.php paths...');
-        $this->updateIndexPaths($publicPath, $laravelRoot);
+        $this->updateIndexPaths($fullPublicPath, $laravelRoot);
 
         // Step 3: Create storage symlink
         $this->info('Step 3: Creating storage symlink...');
-        $this->createStorageLink($publicPath, $laravelRoot);
+        $this->createStorageLink($fullPublicPath, $laravelRoot);
 
         // Step 4: Set permissions
         $this->info('Step 4: Setting permissions...');
@@ -75,13 +87,13 @@ class SetupProductionStructure extends Command
 
         // Step 5: Update .env
         $this->info('Step 5: Updating .env configuration...');
-        $this->updateEnvFile($laravelRoot);
+        $this->updateEnvFile($laravelRoot, $subdir);
 
         $this->newLine();
         $this->info('✓ Production setup completed successfully!');
         $this->newLine();
 
-        $this->displayNextSteps($publicPath);
+        $this->displayNextSteps($fullPublicPath, $subdir);
 
         return 0;
     }
@@ -272,7 +284,7 @@ class SetupProductionStructure extends Command
     /**
      * Update .env file
      */
-    protected function updateEnvFile($laravelRoot)
+    protected function updateEnvFile($laravelRoot, $subdir = null)
     {
         $envPath = $laravelRoot . '/.env';
         
@@ -287,15 +299,25 @@ class SetupProductionStructure extends Command
         if (!str_contains($content, 'STORAGE_PUBLIC_PATH')) {
             $storagePath = $laravelRoot . '/storage/app/public';
             $content .= "\n# Production Storage Path\nSTORAGE_PUBLIC_PATH={$storagePath}\n";
-            File::put($envPath, $content);
-            $this->info('✓ .env updated with STORAGE_PUBLIC_PATH');
         }
+
+        // Add PRODUCTION_SUBDIR if subdirectory is used
+        if ($subdir) {
+            if (!str_contains($content, 'PRODUCTION_SUBDIR')) {
+                $content .= "\n# Production Subdirectory\nPRODUCTION_SUBDIR={$subdir}\n";
+            } else {
+                $content = preg_replace('/^PRODUCTION_SUBDIR=.*/m', "PRODUCTION_SUBDIR={$subdir}", $content);
+            }
+        }
+
+        File::put($envPath, $content);
+        $this->info('✓ .env updated');
     }
 
     /**
      * Display next steps
      */
-    protected function displayNextSteps($publicPath)
+    protected function displayNextSteps($publicPath, $subdir = null)
     {
         $this->warn('Next Steps:');
         $this->line('1. Update your web server document root to: ' . $publicPath);
@@ -303,9 +325,20 @@ class SetupProductionStructure extends Command
         $this->line('   - APP_ENV=production');
         $this->line('   - APP_DEBUG=false');
         $this->line('   - APP_URL=https://yourdomain.com');
+        if ($subdir) {
+            $this->line('   - PRODUCTION_SUBDIR=' . $subdir);
+        }
         $this->line('3. Run: php artisan config:cache');
         $this->line('4. Run: php artisan route:cache');
         $this->line('5. Run: php artisan view:cache');
+        $this->newLine();
+        
+        if ($subdir) {
+            $this->info("Storage URL will be: https://yourdomain.com/{$subdir}/storage");
+        } else {
+            $this->info('Storage URL will be: https://yourdomain.com/storage');
+        }
+        
         $this->newLine();
         $this->info('For more information, see DEPLOYMENT.md');
     }
