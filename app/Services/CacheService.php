@@ -11,7 +11,6 @@ use App\Models\Office;
 use App\Models\BoardMember;
 use App\Models\Report;
 use App\Models\KasKeliling;
-use App\Models\KasKeliling;
 use App\Models\WhyChooseUs;
 use Illuminate\Support\Facades\Cache;
 
