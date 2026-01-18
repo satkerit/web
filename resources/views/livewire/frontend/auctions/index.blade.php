@@ -1,44 +1,24 @@
 <div>
     <!-- Hero Section -->
-    <section class="relative pt-32 pb-28 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-primary-700 via-primary-500 to-primary-600">
-            <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.15&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal-300/20 rounded-full blur-3xl"></div>
+    <section class="relative bg-gradient-to-br from-primary-700 via-primary-500 to-primary-600 py-16 md:py-20">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
         </div>
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center px-5 py-2.5 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-semibold mb-8 shadow-lg">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                Lelang Aset Agunan
-            </div>
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                Informasi <span class="text-primary-200">Lelang</span>
-            </h1>
-            <p class="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-                Temukan peluang investasi menarik melalui lelang aset dengan harga terbaik dan proses yang transparan
-            </p>
-
-            <!-- Quick Stats -->
-            <div class="flex flex-wrap justify-center gap-6 mt-10">
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4 text-white">
-                    <p class="text-3xl font-bold">{{ \App\Models\Auction::whereIn('status', ['upcoming', 'ongoing'])->count() }}</p>
-                    <p class="text-sm text-white/80">Lelang Aktif</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4 text-white">
-                    <p class="text-3xl font-bold">{{ \App\Models\Auction::where('status', 'sold')->count() }}</p>
-                    <p class="text-sm text-white/80">Sudah Terjual</p>
-                </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">Lelang Agunan</h1>
+                <p class="text-lg text-white/90 max-w-2xl mx-auto">Temukan peluang investasi menarik melalui lelang aset dengan harga terbaik dan proses yang transparan</p>
             </div>
         </div>
     </section>
 
     <!-- Main Content -->
-    <section class="py-12 -mt-16">
+    <section class="py-12 md:py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Search & Filter Card -->
-            <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 mb-12 border border-gray-100">
+            <div class="mb-8 bg-white rounded-xl shadow-sm p-4 md:p-6">
                 <div class="flex flex-col lg:flex-row gap-4">
                     <div class="flex-1">
                         <div class="relative">
