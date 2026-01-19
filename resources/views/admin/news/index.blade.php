@@ -45,7 +45,7 @@
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <div class="flex items-start gap-3 mb-3">
                     @if($item->featured_image)
-                        <img src="{{ Storage::url($item->featured_image) }}" alt="" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+                        <img src="{{ \App\Helpers\StorageHelper::url($item->featured_image) }}" alt="" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
                     @else
                         <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                             <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,7 +92,7 @@
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-3">
                             @if($item->featured_image)
-                                <img src="{{ Storage::url($item->featured_image) }}" alt="" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
+                                <img src="{{ \App\Helpers\StorageHelper::url($item->featured_image) }}" alt="" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
                             @else
                                 <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                                     <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

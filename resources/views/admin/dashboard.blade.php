@@ -153,7 +153,7 @@
                 @forelse(\App\Models\News::latest()->take(5)->get() as $news)
                     <div class="px-6 py-4 flex items-center gap-4 hover:bg-slate-50/50 transition-colors">
                         @if($news->featured_image)
-                            <img src="{{ Storage::url($news->featured_image) }}" alt="" class="w-12 h-12 rounded-lg object-cover ring-1 ring-slate-200">
+                            <img src="{{ \App\Helpers\StorageHelper::url($news->featured_image) }}" alt="" class="w-12 h-12 rounded-lg object-cover ring-1 ring-slate-200">
                         @else
                             <div class="w-12 h-12 rounded-lg bg-slate-50 ring-1 ring-slate-200 flex items-center justify-center flex-shrink-0">
                                 <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
