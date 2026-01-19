@@ -19,7 +19,7 @@
                 @foreach($members as $member)
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition w-full sm:w-80">
                     @if($member->photo)
-                    <img src="{{ Storage::url($member->photo) }}" alt="{{ $member->name }}" class="w-full h-64 object-cover object-top">
+                    <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" alt="{{ $member->name }}" class="w-full h-64 object-cover object-top">
                     @else
                     <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
                         <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

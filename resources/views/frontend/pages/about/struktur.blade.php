@@ -31,8 +31,8 @@
                 <!-- Organization Structure Image -->
                 <div class="p-6 md:p-10">
                     <div class="relative rounded-2xl overflow-hidden bg-gray-50">
-                        <img
-                            src="{{ Storage::url($companyInfo->organization_structure) }}"
+                            <img
+                            src="{{ \App\Helpers\StorageHelper::url($companyInfo->organization_structure) }}"
                             alt="Struktur Organisasi {{ $companyInfo->name ?? 'BPRS Bangka Belitung' }}"
                             class="w-full h-auto"
                             loading="lazy"
@@ -41,7 +41,7 @@
 
                     <!-- Zoom/Fullscreen Button -->
                     <div class="mt-6 flex justify-center">
-                        <a href="{{ Storage::url($companyInfo->organization_structure) }}"
+                        <a href="{{ \App\Helpers\StorageHelper::url($companyInfo->organization_structure) }}"
                            target="_blank"
                            class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:scale-105 transition-all duration-300">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

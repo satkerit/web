@@ -37,7 +37,7 @@
                     <!-- Photo -->
                     @if($office->photo)
                     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <img src="{{ Storage::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-80 object-cover">
+                        <img src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-80 object-cover">
                     </div>
                     @endif
 
@@ -229,7 +229,7 @@
                                 <div class="flex items-center">
                                     <div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
                                         @if($other->photo)
-                                        <img src="{{ Storage::url($other->photo) }}" alt="{{ $other->name }}" class="w-full h-full object-cover">
+                                        <img src="{{ \App\Helpers\StorageHelper::url($other->photo) }}" alt="{{ $other->name }}" class="w-full h-full object-cover">
                                         @else
                                         <div class="w-full h-full flex items-center justify-center">
                                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

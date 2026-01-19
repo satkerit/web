@@ -75,7 +75,7 @@
                         <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 group">
                             @if($product->image)
                                 <div class="aspect-video overflow-hidden">
-                                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 </div>
                             @else
                                 <div class="aspect-video bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
@@ -145,7 +145,7 @@
                 <div class="bg-white">
                     @if($selectedProduct->image)
                         <div class="aspect-video">
-                            <img src="{{ Storage::url($selectedProduct->image) }}" alt="{{ $selectedProduct->name }}" class="w-full h-full object-cover">
+                            <img src="{{ \App\Helpers\StorageHelper::url($selectedProduct->image) }}" alt="{{ $selectedProduct->name }}" class="w-full h-full object-cover">
                         </div>
                     @endif
                     <div class="p-6">

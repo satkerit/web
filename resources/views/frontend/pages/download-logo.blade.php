@@ -19,7 +19,7 @@
                     <!-- Logo Preview -->
                     <div class="text-center mb-8">
                         <div class="w-64 h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl mx-auto flex items-center justify-center mb-6 p-8 border border-gray-200">
-                            <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name ?? 'Logo' }}" class="max-w-full max-h-full object-contain">
+                            <img src="{{ \App\Helpers\StorageHelper::url($company->logo) }}" alt="{{ $company->name ?? 'Logo' }}" class="max-w-full max-h-full object-contain">
                         </div>
                         <h2 class="text-2xl font-bold text-gray-900">Logo {{ $company->name ?? 'BPRS Bangka Belitung' }}</h2>
                         <p class="text-gray-500 mt-2">Format tersedia: {{ strtoupper($logoExtension) }}</p>

@@ -9,13 +9,13 @@
     @endphp
     {{-- Preload WebP for modern browsers --}}
     @if($mainWebPFirst)
-    <link rel="preload" as="image" href="{{ Storage::url($mainWebPFirst) }}" fetchpriority="high" type="image/webp">
+    <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($mainWebPFirst) }}" fetchpriority="high" type="image/webp">
     @endif
     {{-- Fallback preload for older browsers --}}
-    <link rel="preload" as="image" href="{{ Storage::url($compressedFirstImage) }}" fetchpriority="high" type="image/jpeg">
+    <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($compressedFirstImage) }}" fetchpriority="high" type="image/jpeg">
     {{-- Mobile WebP preload --}}
     @if(isset($webpFirst['mobile']))
-    <link rel="preload" as="image" href="{{ Storage::url($webpFirst['mobile']) }}" media="(max-width: 640px)" type="image/webp">
+    <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($webpFirst['mobile']) }}" media="(max-width: 640px)" type="image/webp">
     @endif
     @endpush
     @endif
@@ -117,39 +117,39 @@
                                 {{-- WebP sources for better compression --}}
                                 @if(isset($webpImages['mobile']))
                                 <source media="(max-width: 640px)"
-                                        srcset="{{ Storage::url($webpImages['mobile']) }}"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($webpImages['mobile']) }}"
                                         type="image/webp">
                                 @endif
                                 @if(isset($webpImages['tablet']))
                                 <source media="(max-width: 1024px)"
-                                        srcset="{{ Storage::url($webpImages['tablet']) }}"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($webpImages['tablet']) }}"
                                         type="image/webp">
                                 @endif
                                 @if(isset($webpImages['desktop']))
                                 <source media="(min-width: 1025px)"
-                                        srcset="{{ Storage::url($webpImages['desktop']) }}"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($webpImages['desktop']) }}"
                                         type="image/webp">
                                 @endif
 
                                 {{-- JPEG fallback sources --}}
                                 @if(isset($responsiveImages['mobile']))
                                 <source media="(max-width: 640px)"
-                                        srcset="{{ Storage::url($responsiveImages['mobile']) }}"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($responsiveImages['mobile']) }}"
                                         type="image/jpeg">
                                 @endif
                                 @if(isset($responsiveImages['tablet']))
                                 <source media="(max-width: 1024px)"
-                                        srcset="{{ Storage::url($responsiveImages['tablet']) }}"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($responsiveImages['tablet']) }}"
                                         type="image/jpeg">
                                 @endif
                                 @if(isset($responsiveImages['desktop']))
                                 <source media="(min-width: 1025px)"
-                                        srcset="{{ Storage::url($responsiveImages['desktop']) }}"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($responsiveImages['desktop']) }}"
                                         type="image/jpeg">
                                 @endif
 
                                 {{-- Final fallback image --}}
-                                <img src="{{ Storage::url($compressedImage) }}"
+                                <img src="{{ \App\Helpers\StorageHelper::url($compressedImage) }}"
                                      alt="{{ $slide->title }}"
                                      class="w-full h-full object-cover object-center hero-slide-img"
                                      loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
@@ -395,7 +395,7 @@
                     <!-- Product Image -->
                     <div class="relative aspect-[4/3] overflow-hidden">
                         @if($product->image)
-                        <img src="{{ Storage::url($product->image) }}"
+                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
                              alt="{{ $product->name }}"
                              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105">
                         @else
@@ -467,7 +467,7 @@
                         <div class="flex items-start group fade-in-section" style="animation-delay: {{ $index * 100 }}ms">
                             <div class="w-12 h-12 {{ $item->bg_class }} rounded-xl flex items-center justify-center mr-4 flex-shrink-0 {{ $item->hover_bg_class }} group-hover:scale-110 transition-all duration-300 shadow-sm">
                                 @if($item->icon)
-                                <img src="{{ Storage::url($item->icon) }}" class="w-6 h-6 object-contain transition-all duration-300 filter group-hover:brightness-0 group-hover:invert" alt="{{ $item->title }}">
+                                <img src="{{ \App\Helpers\StorageHelper::url($item->icon) }}" class="w-6 h-6 object-contain transition-all duration-300 filter group-hover:brightness-0 group-hover:invert" alt="{{ $item->title }}">
                                 @else
                                 <svg class="w-6 h-6 {{ $item->text_class }} group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -663,7 +663,7 @@
                     <!-- Auction Image -->
                     <div class="relative h-48 overflow-hidden">
                         @if($auction->images && count($auction->images) > 0)
-                        <img src="{{ Storage::url($auction->images[0]) }}"
+                        <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}"
                              alt="{{ $auction->title }}"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         @else

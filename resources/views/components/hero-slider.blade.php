@@ -34,48 +34,48 @@
                     <picture class="hero-slider">
                         @if(isset($slide['images']['desktop_large']))
                             <source media="(min-width: 1920px)"
-                                    srcset="{{ Storage::url($slide['images']['desktop_large']['webp']) }}"
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['desktop_large']['webp']) }}"
                                     type="image/webp">
                             <source media="(min-width: 1920px)"
-                                    srcset="{{ Storage::url($slide['images']['desktop_large']['jpg']) }}">
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['desktop_large']['jpg']) }}">
                         @endif
 
                         @if(isset($slide['images']['desktop_medium']))
                             <source media="(min-width: 1440px)"
-                                    srcset="{{ Storage::url($slide['images']['desktop_medium']['webp']) }}"
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['desktop_medium']['webp']) }}"
                                     type="image/webp">
                             <source media="(min-width: 1440px)"
-                                    srcset="{{ Storage::url($slide['images']['desktop_medium']['jpg']) }}">
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['desktop_medium']['jpg']) }}">
                         @endif
 
                         @if(isset($slide['images']['desktop_small']))
                             <source media="(min-width: 1024px)"
-                                    srcset="{{ Storage::url($slide['images']['desktop_small']['webp']) }}"
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['desktop_small']['webp']) }}"
                                     type="image/webp">
                             <source media="(min-width: 1024px)"
-                                    srcset="{{ Storage::url($slide['images']['desktop_small']['jpg']) }}">
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['desktop_small']['jpg']) }}">
                         @endif
 
                         @if(isset($slide['images']['tablet']))
                             <source media="(min-width: 768px)"
-                                    srcset="{{ Storage::url($slide['images']['tablet']['webp']) }}"
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['tablet']['webp']) }}"
                                     type="image/webp">
                             <source media="(min-width: 768px)"
-                                    srcset="{{ Storage::url($slide['images']['tablet']['jpg']) }}">
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['tablet']['jpg']) }}">
                         @endif
 
                         @if(isset($slide['images']['mobile_large']))
                             <source media="(min-width: 480px)"
-                                    srcset="{{ Storage::url($slide['images']['mobile_large']['webp']) }}"
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['mobile_large']['webp']) }}"
                                     type="image/webp">
                             <source media="(min-width: 480px)"
-                                    srcset="{{ Storage::url($slide['images']['mobile_large']['jpg']) }}">
+                                    srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['mobile_large']['jpg']) }}">
                         @endif
 
                         @if(isset($slide['images']['mobile_small']))
-                            <source srcset="{{ Storage::url($slide['images']['mobile_small']['webp']) }}"
+                            <source srcset="{{ \App\Helpers\StorageHelper::url($slide['images']['mobile_small']['webp']) }}"
                                     type="image/webp">
-                            <img src="{{ Storage::url($slide['images']['mobile_small']['jpg']) }}"
+                            <img src="{{ \App\Helpers\StorageHelper::url($slide['images']['mobile_small']['jpg']) }}"
                                  alt="{{ $slide['title'] ?? 'Hero Slide' }}"
                                  loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
                         @endif

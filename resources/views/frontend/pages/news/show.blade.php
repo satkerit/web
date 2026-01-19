@@ -45,8 +45,8 @@
             <!-- Image Slideshow -->
             @php
                 $slides = collect([]);
-                if($news->featured_image) $slides->push(Storage::url($news->featured_image));
-                foreach($news->images as $img) $slides->push(Storage::url($img->image_path));
+                if($news->featured_image) $slides->push(\App\Helpers\StorageHelper::url($news->featured_image));
+                foreach($news->images as $img) $slides->push(\App\Helpers\StorageHelper::url($img->image_path));
             @endphp
 
             @if($slides->count() > 0)

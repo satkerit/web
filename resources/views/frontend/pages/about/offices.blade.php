@@ -41,7 +41,7 @@
                 <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all group">
                     <div class="relative h-48 overflow-hidden">
                         @if($office->photo)
-                        <img src="{{ Storage::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <img src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         @else
                         <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                             <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -28,7 +28,7 @@
                     @if($product->image)
                     <div class="w-full max-w-[800px] mx-auto mb-6">
                         <div class="relative w-full aspect-[4/3] sm:aspect-[4/3] md:aspect-[4/3] lg:aspect-[4/3] overflow-hidden rounded-xl shadow-lg">
-                            <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                            <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-105">
                         </div>
                     </div>
                     @endif

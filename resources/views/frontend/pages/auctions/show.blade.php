@@ -126,7 +126,7 @@
                         <div class="p-3 md:p-4 bg-gray-50 flex gap-2 md:gap-3 justify-start overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                             @foreach($auction->images as $index => $image)
                             <button @click="activeImage = {{ $index }}" :class="activeImage === {{ $index }} ? 'ring-2 ring-primary-500 ring-offset-2' : 'opacity-60 hover:opacity-100'" class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all">
-                                <img src="{{ Storage::url($image) }}" class="w-full h-full object-cover" loading="lazy">
+                                <img src="{{ \App\Helpers\StorageHelper::url($image) }}" class="w-full h-full object-cover" loading="lazy">
                             </button>
                             @endforeach
                         </div>
@@ -244,7 +244,7 @@
                         </h2>
                         <div class="grid gap-3">
                             @foreach($auction->documents as $doc)
-                            <a href="{{ Storage::url($doc['path'] ?? $doc) }}" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-primary-50 transition-colors group">
+                            <a href="{{ \App\Helpers\StorageHelper::url($doc['path'] ?? $doc) }}" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-primary-50 transition-colors group">
                                 <svg class="w-8 h-8 md:w-10 md:h-10 text-red-500 mr-3 md:mr-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg>
                                 <span class="text-gray-700 group-hover:text-primary-600 font-medium flex-1 text-sm md:text-base truncate">{{ $doc['name'] ?? basename($doc['path'] ?? $doc) }}</span>
                                 <svg class="w-5 h-5 text-gray-400 group-hover:text-primary-500 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>

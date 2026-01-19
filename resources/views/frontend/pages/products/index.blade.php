@@ -43,7 +43,7 @@
                 <div class="group bg-white rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200 hover:-translate-y-1" x-intersect="$el.classList.add('animate-scale-in')" style="animation-delay: {{ $index * 100 }}ms">
                     <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
                         @if($product->image)
-                        <img src="{{ Storage::url($product->image) }}"
+                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
                              alt="{{ $product->name }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                              loading="lazy">

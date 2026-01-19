@@ -22,7 +22,7 @@
     // Determine the image source
     $imageSrc = $src;
     if ($storagePath && !$src) {
-        $imageSrc = Storage::url($storagePath);
+        $imageSrc = \App\Helpers\StorageHelper::url($storagePath);
     }
 
     $hasImage = !empty($imageSrc);

@@ -22,7 +22,7 @@
              loading="{{ $loading }}"
              {{ $attributes }}>
     @else
-        <img src="{{ Storage::url($model->image) }}"
+        <img src="{{ \App\Helpers\StorageHelper::url($model->image) }}"
              alt="{{ $alt }}"
              class="{{ $class }}"
              loading="{{ $loading }}"

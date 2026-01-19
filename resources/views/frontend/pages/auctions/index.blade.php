@@ -83,7 +83,7 @@
                     <!-- Image Container -->
                     <div class="relative h-64 overflow-hidden">
                         @if($auction->images && count($auction->images) > 0)
-                            <img src="{{ Storage::url($auction->images[0]) }}" alt="{{ $auction->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
+                            <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}" alt="{{ $auction->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
                         @else
                             <div class="w-full h-full bg-gradient-to-br from-primary-400 via-primary-300 to-primary-500 flex items-center justify-center">
                                 <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
