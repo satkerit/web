@@ -49,8 +49,12 @@ class NewsController extends Controller
         $this->authorizeCreate('news.create');
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:news,slug',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string|max:160',
+            'tags' => 'nullable|string|max:255',
+            'author' => 'nullable|string|max:100',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'category' => 'required|string|max:100',
             'is_published' => 'nullable',
@@ -59,8 +63,10 @@ class NewsController extends Controller
             'slide_images' => 'nullable|array|max:3',
         ], [
             'title.required' => 'Judul berita wajib diisi.',
+            'slug.unique' => 'Slug URL sudah digunakan, silakan gunakan yang lain.',
             'content.required' => 'Konten berita wajib diisi.',
             'category.required' => 'Kategori wajib dipilih.',
+            'meta_description.max' => 'Meta description maksimal 160 karakter.',
             'featured_image.image' => 'File harus berupa gambar.',
             'featured_image.max' => 'Ukuran gambar maksimal 2MB.',
             'slide_images.max' => 'Maksimal 3 foto slide diperbolehkan.',
@@ -68,7 +74,7 @@ class NewsController extends Controller
 
         try {
             $validated['author_id'] = auth()->id();
-            $validated['author'] = auth()->user()->name;
+            $validated['author'] = $validated['author'] ?: auth()->user()->name;
             $validated['is_published'] = $request->boolean('is_published');
 
             $validated['featured_image'] = $this->handleImageUpload($request, 'featured_image', 'news');
@@ -111,8 +117,12 @@ class NewsController extends Controller
         $this->authorizeEdit('news.edit');
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:news,slug,' . $news->id,
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string|max:160',
+            'tags' => 'nullable|string|max:255',
+            'author' => 'nullable|string|max:100',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'category' => 'required|string|max:100',
             'is_published' => 'nullable',
@@ -121,14 +131,17 @@ class NewsController extends Controller
             'slide_images' => 'nullable|array|max:3',
         ], [
             'title.required' => 'Judul berita wajib diisi.',
+            'slug.unique' => 'Slug URL sudah digunakan, silakan gunakan yang lain.',
             'content.required' => 'Konten berita wajib diisi.',
             'category.required' => 'Kategori wajib dipilih.',
+            'meta_description.max' => 'Meta description maksimal 160 karakter.',
             'featured_image.image' => 'File harus berupa gambar.',
             'featured_image.max' => 'Ukuran gambar maksimal 2MB.',
             'slide_images.max' => 'Maksimal 3 foto slide diperbolehkan.',
         ]);
 
         try {
+            $validated['author'] = $validated['author'] ?: $news->author;
             $validated['is_published'] = $request->boolean('is_published');
 
             $validated['featured_image'] = $this->handleImageUpload($request, 'featured_image', 'news', $news->featured_image);

@@ -149,6 +149,28 @@
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Slug URL <span class="text-gray-400">(Otomatis dari judul)</span>
+                        </label>
+                        <input type="text" name="slug" value="{{ old('slug', $news->slug ?? '') }}" 
+                               class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-base bg-gray-50"
+                               placeholder="akan-dibuat-otomatis-dari-judul" readonly>
+                        <p class="mt-2 text-sm text-gray-500">URL slug akan dibuat otomatis dari judul berita</p>
+                        @error('slug')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Penulis
+                        </label>
+                        <input type="text" name="author" value="{{ old('author', $news->author ?? auth()->user()->name) }}" 
+                               class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-base"
+                               placeholder="Nama penulis berita">
+                        <p class="mt-2 text-sm text-gray-500">Kosongkan untuk menggunakan nama Anda: {{ auth()->user()->name }}</p>
+                        @error('author')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
                             Ringkasan <span class="text-gray-400">(Opsional)</span>
                         </label>
                         <textarea name="excerpt" rows="3" 
@@ -168,6 +190,37 @@
                     </label>
                     <textarea name="content" id="summernote">{{ old('content', $news->content ?? '') }}</textarea>
                     @error('content')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
+                </div>
+            </x-admin.card>
+
+            <!-- SEO Settings -->
+            <x-admin.card title="Pengaturan SEO" subtitle="Optimasi untuk mesin pencari" icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>'>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Meta Description <span class="text-gray-400">(Opsional)</span>
+                        </label>
+                        <textarea name="meta_description" rows="3" 
+                                  class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-base"
+                                  placeholder="Deskripsi singkat untuk hasil pencarian Google (150-160 karakter)..."
+                                  maxlength="160">{{ old('meta_description', $news->meta_description ?? '') }}</textarea>
+                        <div class="flex justify-between mt-2">
+                            <p class="text-sm text-gray-500">Deskripsi yang akan muncul di hasil pencarian</p>
+                            <span class="text-xs text-gray-400" id="meta-counter">0/160</span>
+                        </div>
+                        @error('meta_description')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Tags <span class="text-gray-400">(Opsional)</span>
+                        </label>
+                        <input type="text" name="tags" value="{{ old('tags', $news->tags ?? '') }}" 
+                               class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-base"
+                               placeholder="tag1, tag2, tag3">
+                        <p class="mt-2 text-sm text-gray-500">Pisahkan dengan koma untuk multiple tags</p>
+                        @error('tags')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
                 </div>
             </x-admin.card>
         </div>
@@ -355,7 +408,40 @@ jQuery(function($) {
             }
         }
     });
+
+    // Auto-generate slug from title
+    $('input[name="title"]').on('input', function() {
+        const title = $(this).val();
+        const slug = generateSlug(title);
+        $('input[name="slug"]').val(slug);
+    });
+
+    // Meta description character counter
+    $('textarea[name="meta_description"]').on('input', function() {
+        const length = $(this).val().length;
+        $('#meta-counter').text(length + '/160');
+        
+        if (length > 160) {
+            $('#meta-counter').addClass('text-red-500').removeClass('text-gray-400');
+        } else if (length > 140) {
+            $('#meta-counter').addClass('text-yellow-500').removeClass('text-gray-400 text-red-500');
+        } else {
+            $('#meta-counter').addClass('text-gray-400').removeClass('text-red-500 text-yellow-500');
+        }
+    });
+
+    // Initialize counter on page load
+    const initialLength = $('textarea[name="meta_description"]').val().length;
+    $('#meta-counter').text(initialLength + '/160');
 });
+
+function generateSlug(text) {
+    return text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special characters
+        .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+        .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+}
 
 function previewFeaturedImage(input) {
     if (input.files && input.files[0]) {
