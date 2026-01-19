@@ -36,30 +36,4 @@ return [
         'storage_target' => storage_path('app/public'),
     ],
     
-    /*
-    |--------------------------------------------------------------------------
-    | Storage URL Helper
-    |--------------------------------------------------------------------------
-    |
-    | Helper function to generate correct storage URLs based on environment
-    |
-    */
-    
-    'url_generator' => function ($path) {
-        if (empty($path)) {
-            return '';
-        }
-        
-        // Remove leading slash if present
-        $path = ltrim($path, '/');
-        
-        // Get base storage URL
-        $baseUrl = config('storage-production.production_paths.storage_url');
-        
-        // Ensure base URL doesn't end with slash
-        $baseUrl = rtrim($baseUrl, '/');
-        
-        return $baseUrl . '/' . $path;
-    },
-    
 ];
