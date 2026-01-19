@@ -150,7 +150,7 @@
                 <!-- Pagination -->
                 @if($careers->hasPages())
                     <div class="mt-8">
-                        {{ $careers->links() }}
+                        {{ $careers->appends(request()->query())->links('pagination.custom') }}
                     </div>
                 @endif
             @else

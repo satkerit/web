@@ -46,7 +46,7 @@
     ]
   },
   "resources/css/admin.css": {
-    "file": "assets/css/admin-DWpqp3am.css",
+    "file": "assets/css/admin-gW9rX-dc.css",
     "src": "resources/css/admin.css",
     "isEntry": true,
     "name": "admin",
@@ -55,12 +55,21 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/css/app-DZnLOf5z.css",
+    "file": "assets/css/app-kyzHicMo.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
     "names": [
       "app.css"
+    ]
+  },
+  "resources/css/frontend-fixes.css": {
+    "file": "assets/css/frontend-fixes-C_iL4o7N.css",
+    "src": "resources/css/frontend-fixes.css",
+    "isEntry": true,
+    "name": "frontend-fixes",
+    "names": [
+      "frontend-fixes.css"
     ]
   },
   "resources/js/admin.js": {
@@ -97,6 +106,12 @@
     "file": "assets/js/idle-timeout-DKuE8Gke.js",
     "name": "idle-timeout",
     "src": "resources/js/idle-timeout.js",
+    "isEntry": true
+  },
+  "resources/js/pagination-fix.js": {
+    "file": "assets/js/pagination-fix-ouy7_fxl.js",
+    "name": "pagination-fix",
+    "src": "resources/js/pagination-fix.js",
     "isEntry": true
   },
   "resources/js/quill-editor.js": {

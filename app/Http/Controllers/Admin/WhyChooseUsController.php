@@ -62,6 +62,7 @@ class WhyChooseUsController extends Controller
     {
         $themes = WhyChooseUs::getThemes();
         $item = $whyChooseUs; // Alias for consistency if needed
+        
         return view('admin.why-choose-us.form', compact('item', 'themes'));
     }
 

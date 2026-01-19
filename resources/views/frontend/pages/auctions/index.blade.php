@@ -236,7 +236,7 @@
             <!-- Pagination -->
             @if($auctions->hasPages())
             <div class="mt-12">
-                {{ $auctions->links() }}
+                {{ $auctions->appends(request()->query())->links('pagination.custom') }}
             </div>
             @endif
         </div>

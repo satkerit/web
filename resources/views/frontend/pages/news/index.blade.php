@@ -137,7 +137,7 @@
             <!-- Pagination -->
             @if($news->hasPages())
             <div class="mt-10">
-                {{ $news->links() }}
+                {{ $news->appends(request()->query())->links('pagination.custom') }}
             </div>
             @endif
         </div>
