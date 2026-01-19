@@ -8,7 +8,7 @@
 
     @php $company = \App\Models\CompanyInfo::getInfo(); @endphp
     @if($company?->favicon)
-    <link rel="icon" href="{{ Storage::url($company->favicon) }}" type="image/x-icon">
+    <link rel="icon" href="{{ \App\Helpers\StorageHelper::url($company->favicon) }}" type="image/x-icon">
     @endif
 
     <link rel="preconnect" href="https://fonts.bunny.net">

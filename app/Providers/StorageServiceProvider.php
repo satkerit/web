@@ -21,60 +21,25 @@ class StorageServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Auto-configure storage URL based on environment
-        $this->configureStorageUrl();
+        // Configure storage URL for production
+        if ($this->app->environment('production')) {
+            $this->configureProductionStorage();
+        }
+    }
+    
+    /**
+     * Configure storage for production environment
+     */
+    protected function configureProductionStorage(): void
+    {
+        // Override storage URL if custom URL is set
+        if ($customUrl = config('storage-production.production_paths.storage_url')) {
+            config(['filesystems.disks.public.url' => $customUrl]);
+        }
         
-        // Configure storage path for production
-        $this->configureStoragePath();
-    }
-
-    /**
-     * Configure storage URL based on environment
-     */
-    protected function configureStorageUrl(): void
-    {
-        $env = config('app.env');
-        $appUrl = config('app.url');
-
-        // Default storage URL
-        $storageUrl = rtrim($appUrl, '/') . '/storage';
-
-        // Override storage URL if STORAGE_URL is set in .env
-        if (env('STORAGE_URL')) {
-            $storageUrl = env('STORAGE_URL');
-        } 
-        // Production: Check if using subdirectory (e.g., /dev/)
-        elseif ($env === 'production' && env('PRODUCTION_SUBDIR')) {
-            $subdir = trim(env('PRODUCTION_SUBDIR'), '/');
-            $storageUrl = rtrim($appUrl, '/') . '/' . $subdir . '/storage';
-        }
-
-        // Set the storage URL
-        config(['filesystems.disks.public.url' => $storageUrl]);
-
-        // Force HTTPS in production if APP_URL uses https
-        if ($env === 'production' && str_starts_with($appUrl, 'https://')) {
-            URL::forceScheme('https');
-        }
-    }
-
-    /**
-     * Configure storage path for production (when root is outside public_html)
-     */
-    protected function configureStoragePath(): void
-    {
-        $env = config('app.env');
-
-        // In production, if storage symlink path is different
-        if ($env === 'production') {
-            // Check if custom storage path is defined
-            $customStoragePath = env('STORAGE_PUBLIC_PATH');
-            
-            if ($customStoragePath && is_dir($customStoragePath)) {
-                // Override storage public path
-                config(['filesystems.disks.public.root' => $customStoragePath]);
-            }
+        // Override storage path if custom path is set
+        if ($customPath = config('storage-production.production_paths.public_storage_path')) {
+            // This is handled by the symlink, no need to override the root path
         }
     }
 }
-

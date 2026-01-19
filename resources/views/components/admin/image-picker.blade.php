@@ -9,16 +9,11 @@
 ])
 
 @php
-    use Illuminate\Support\Facades\Storage;
+    use App\Helpers\StorageHelper;
     $inputId = 'input_' . $name;
     $previewUrl = '';
     if ($value) {
-        // Check if value is already a full URL
-        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
-            $previewUrl = $value;
-        } else {
-            $previewUrl = Storage::disk('public')->url($value);
-        }
+        $previewUrl = StorageHelper::url($value);
     }
 @endphp
 
