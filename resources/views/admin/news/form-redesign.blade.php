@@ -490,8 +490,8 @@
 
 .note-editable {
     padding: 1.5rem !important;
-    min-height: 500px !important;
-    max-height: 800px !important;
+    min-height: 700px !important;
+    max-height: 1200px !important;
     overflow-y: auto !important;
     font-size: 1rem !important;
     line-height: 1.75 !important;
@@ -695,6 +695,7 @@
 
 .note-editor.fullscreen .note-editable {
     min-height: calc(100vh - 200px) !important;
+    max-height: none !important;
 }
 
 /* Loading state */
@@ -815,8 +816,8 @@
     }
     
     .note-editable {
-        min-height: 400px !important;
-        max-height: 600px !important;
+        min-height: 500px !important;
+        max-height: 800px !important;
     }
     
     .note-editor {
@@ -843,8 +844,8 @@
     }
     
     .note-editable {
-        min-height: 300px !important;
-        max-height: 500px !important;
+        min-height: 400px !important;
+        max-height: 700px !important;
         padding: 1rem !important;
     }
     
@@ -1182,9 +1183,9 @@ jQuery(function($) {
     $('#summernote').summernote({
         placeholder: 'Tulis konten berita di sini...',
         tabsize: 2,
-        height: 600,
-        minHeight: 400,
-        maxHeight: 1000,
+        height: 800,
+        minHeight: 600,
+        maxHeight: 1500,
         focus: false,
         width: '100%',
         disableResizeEditor: false,
@@ -1359,6 +1360,13 @@ jQuery(function($) {
 
     // Input change tracking for progress
     $('input, select, textarea').on('change input', updateProgress);
+    
+    // Make functions globally accessible
+    window.generateSlug = generateSlug;
+    window.previewFeaturedImage = previewFeaturedImage;
+    window.previewSlideImages = previewSlideImages;
+    window.updateWordCount = updateWordCount;
+    window.showNotification = showNotification;
 });
 
 function generateSlug(text) {
@@ -1395,7 +1403,9 @@ function previewSlideImages(input) {
     if (input.files && input.files.length > 0) {
         console.log('Slide images selected:', input.files.length);
         // Show notification
-        showNotification(input.files.length + ' gambar dipilih untuk galeri', 'success');
+        if (typeof showNotification === 'function') {
+            showNotification(input.files.length + ' gambar dipilih untuk galeri', 'success');
+        }
     }
 }
 
