@@ -3,12 +3,12 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class StorageHelper
 {
     /**
-     * Get the correct storage URL for production environment
+     * Get the correct storage URL based on environment
      * 
      * @param string|null $path
      * @return string
@@ -27,15 +27,29 @@ class StorageHelper
             return $path;
         }
         
-        // For production environment with custom storage path
-        if (App::environment('production') && config('storage-production.production_paths.storage_url')) {
-            $baseUrl = config('storage-production.production_paths.storage_url');
-            $baseUrl = rtrim($baseUrl, '/');
-            return $baseUrl . '/' . $path;
+        // Use Laravel's Storage facade which automatically handles environment
+        return Storage::disk('public')->url($path);
+    }
+    
+    /**
+     * Get asset URL (for public assets like CSS, JS)
+     * 
+     * @param string $path
+     * @return string
+     */
+    public static function asset(string $path): string
+    {
+        $path = ltrim($path, '/');
+        
+        // In production with custom public path
+        if (config('app.env') === 'production' && config('app.public_path')) {
+            $baseUrl = rtrim(config('app.url'), '/');
+            $publicPath = trim(config('app.public_path'), '/');
+            return $publicPath ? "{$baseUrl}/{$publicPath}/{$path}" : "{$baseUrl}/{$path}";
         }
         
-        // Default Laravel storage URL
-        return Storage::disk('public')->url($path);
+        // Default asset helper
+        return asset($path);
     }
     
     /**
@@ -90,34 +104,71 @@ class StorageHelper
     }
     
     /**
-     * Create storage symlink for production
+     * Get storage path (physical path on disk)
      * 
+     * @param string|null $path
+     * @return string
+     */
+    public static function path(?string $path = ''): string
+    {
+        $path = ltrim($path, '/');
+        return Storage::disk('public')->path($path);
+    }
+    
+    /**
+     * Store file to storage
+     * 
+     * @param \Illuminate\Http\UploadedFile $file
+     * @param string $directory
+     * @param string|null $name
+     * @return string|false
+     */
+    public static function store($file, string $directory, ?string $name = null)
+    {
+        try {
+            if ($name) {
+                return $file->storeAs($directory, $name, 'public');
+            }
+            return $file->store($directory, 'public');
+        } catch (\Exception $e) {
+            Log::error('Storage error: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Delete file from storage
+     * 
+     * @param string|null $path
      * @return bool
      */
-    public static function createProductionSymlink(): bool
+    public static function delete(?string $path): bool
     {
-        if (!App::environment('production')) {
+        if (empty($path) || !self::exists($path)) {
             return false;
         }
         
-        $target = config('storage-production.production_paths.storage_target');
-        $link = config('storage-production.production_paths.public_storage_path');
-        
-        if (!$target || !$link) {
+        try {
+            return Storage::disk('public')->delete($path);
+        } catch (\Exception $e) {
+            Log::error('Storage delete error: ' . $e->getMessage());
             return false;
         }
-        
-        // Create target directory if it doesn't exist
-        if (!is_dir($target)) {
-            mkdir($target, 0755, true);
-        }
-        
-        // Remove existing symlink if it exists
-        if (is_link($link)) {
-            unlink($link);
-        }
-        
-        // Create new symlink
-        return symlink($target, $link);
+    }
+    
+    /**
+     * Get storage configuration info
+     * 
+     * @return array
+     */
+    public static function getConfig(): array
+    {
+        return [
+            'environment' => config('app.env'),
+            'storage_root' => config('filesystems.disks.public.root'),
+            'storage_url' => config('filesystems.disks.public.url'),
+            'public_path' => config('app.public_path'),
+            'is_production' => config('app.env') === 'production',
+        ];
     }
 }

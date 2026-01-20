@@ -40,8 +40,16 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => env('STORAGE_PUBLIC_PATH', storage_path('app/public')),
+            // Root path: where files are physically stored
+            // Development: storage/app/public
+            // Production: can be custom path or storage/app/public
+            'root' => env('STORAGE_ROOT_PATH', storage_path('app/public')),
+            
+            // URL: how to access files via web
+            // Development: http://localhost/storage
+            // Production: https://yourdomain.com/dev/storage (if index.php in public_html/dev/)
             'url' => env('STORAGE_URL', env('APP_URL').'/storage'),
+            
             'visibility' => 'public',
             'serve' => true,
             'throw' => false,

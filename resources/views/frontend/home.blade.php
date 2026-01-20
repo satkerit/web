@@ -579,7 +579,7 @@
                     <!-- News Image -->
                     <div class="relative h-56 overflow-hidden bg-gray-100">
                         @if($item->featured_image)
-                        <img src="{{ asset('storage/' . $item->featured_image) }}"
+                        <img src="{{ storage_url($item->featured_image) }}"
                              alt="{{ $item->title }}"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                              loading="lazy">

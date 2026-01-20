@@ -41,6 +41,16 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('compressedImage', function ($expression) {
             return "<?php echo \Illuminate\Support\Facades\Storage::url(\App\Services\ImageCompressionService::compressForWeb($expression)); ?>";
         });
+        
+        // @storageUrl($path) - Get storage URL (works in both dev and production)
+        Blade::directive('storageUrl', function ($expression) {
+            return "<?php echo \App\Helpers\StorageHelper::url($expression); ?>";
+        });
+        
+        // @assetUrl($path) - Get asset URL (for CSS, JS, images in public folder)
+        Blade::directive('assetUrl', function ($expression) {
+            return "<?php echo \App\Helpers\StorageHelper::asset($expression); ?>";
+        });
     }
 
     /**
