@@ -1240,7 +1240,7 @@ jQuery(function($) {
                 // Set initial content if editing
                 @if(isset($news) && $news->content)
                 try {
-                    const initialContent = {!! json_encode($news->content, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) !!};
+                    const initialContent = @json($news->content);
                     $('#summernote').summernote('code', initialContent);
                 } catch(e) {
                     console.error('Error setting initial content:', e);
