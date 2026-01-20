@@ -21,7 +21,10 @@
         "@alpinejs/collapse": "^3.15.3",
         "alpinejs": "^3.4.2",
         "axios": "^1.11.0",
+        "jquery": "^4.0.0",
         "quill": "^2.0.2",
+        "select2": "^4.1.0-rc.0",
+        "summernote": "^0.9.1",
         "sweetalert2": "^11.26.17",
         "swiper": "^11.0.5"
     }

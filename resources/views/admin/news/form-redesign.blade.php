@@ -1239,7 +1239,12 @@ jQuery(function($) {
                 console.log('Summernote initialized successfully');
                 // Set initial content if editing
                 @if(isset($news) && $news->content)
-                $('#summernote').summernote('code', {!! json_encode($news->content) !!});
+                try {
+                    const initialContent = {!! json_encode($news->content, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) !!};
+                    $('#summernote').summernote('code', initialContent);
+                } catch(e) {
+                    console.error('Error setting initial content:', e);
+                }
                 @endif
             },
             onChange: function(contents, $editable) {
@@ -1513,7 +1518,8 @@ function autoSave() {
         };
         
         // Save to localStorage
-        localStorage.setItem('news_draft_{{ isset($news) ? $news->id : "new" }}', JSON.stringify(formData));
+        const draftKey = 'news_draft_' + '{{ isset($news) ? $news->id : "new" }}';
+        localStorage.setItem(draftKey, JSON.stringify(formData));
         console.log('Draft auto-saved at ' + new Date().toLocaleTimeString());
         
         // Show notification (optional)
@@ -1523,7 +1529,7 @@ function autoSave() {
 
 // Load draft from localStorage
 function loadDraft() {
-    const draftKey = 'news_draft_{{ isset($news) ? $news->id : "new" }}';
+    const draftKey = 'news_draft_' + '{{ isset($news) ? $news->id : "new" }}';
     const draft = localStorage.getItem(draftKey);
     
     if (draft && confirm('Ditemukan draft yang tersimpan. Muat draft?')) {
@@ -1552,7 +1558,7 @@ function loadDraft() {
 
 // Clear draft from localStorage
 function clearDraft() {
-    const draftKey = 'news_draft_{{ isset($news) ? $news->id : "new" }}';
+    const draftKey = 'news_draft_' + '{{ isset($news) ? $news->id : "new" }}';
     localStorage.removeItem(draftKey);
 }
 
