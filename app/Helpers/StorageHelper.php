@@ -9,6 +9,7 @@ class StorageHelper
 {
     /**
      * Get the correct storage URL based on environment
+     * Works automatically in both development and production
      * 
      * @param string|null $path
      * @return string
@@ -27,12 +28,19 @@ class StorageHelper
             return $path;
         }
         
+        // Remove 'storage/' prefix if present (avoid double storage in URL)
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, 8);
+        }
+        
         // Use Laravel's Storage facade which automatically handles environment
+        // This will use the STORAGE_URL from .env
         return Storage::disk('public')->url($path);
     }
     
     /**
      * Get asset URL (for public assets like CSS, JS)
+     * Works automatically in both development and production
      * 
      * @param string $path
      * @return string
@@ -41,14 +49,8 @@ class StorageHelper
     {
         $path = ltrim($path, '/');
         
-        // In production with custom public path
-        if (config('app.env') === 'production' && config('app.public_path')) {
-            $baseUrl = rtrim(config('app.url'), '/');
-            $publicPath = trim(config('app.public_path'), '/');
-            return $publicPath ? "{$baseUrl}/{$publicPath}/{$path}" : "{$baseUrl}/{$path}";
-        }
-        
-        // Default asset helper
+        // Use standard Laravel asset() helper
+        // It automatically uses APP_URL from .env
         return asset($path);
     }
     
@@ -163,12 +165,91 @@ class StorageHelper
      */
     public static function getConfig(): array
     {
+        $storageMode = env('STORAGE_MODE', 'development');
+        $links = config('filesystems.links');
+        
         return [
+            'mode' => $storageMode,
             'environment' => config('app.env'),
             'storage_root' => config('filesystems.disks.public.root'),
             'storage_url' => config('filesystems.disks.public.url'),
-            'public_path' => config('app.public_path'),
-            'is_production' => config('app.env') === 'production',
+            'production_public_path' => env('PRODUCTION_PUBLIC_PATH'),
+            'symlink_from' => array_keys($links)[0] ?? null,
+            'symlink_to' => array_values($links)[0] ?? null,
+            'is_production' => $storageMode === 'production',
         ];
+    }
+    
+    /**
+     * Verify storage link is working
+     * 
+     * @return array
+     */
+    public static function verifyStorageLink(): array
+    {
+        $config = self::getConfig();
+        $linkFrom = $config['symlink_from'];
+        $linkTo = $config['symlink_to'];
+        
+        $result = [
+            'link_exists' => false,
+            'link_valid' => false,
+            'target_exists' => false,
+            'link_path' => $linkFrom,
+            'target_path' => $linkTo,
+            'message' => '',
+        ];
+        
+        // Check if target directory exists
+        if ($linkTo && is_dir($linkTo)) {
+            $result['target_exists'] = true;
+        } else {
+            $result['message'] = 'Target directory does not exist';
+            return $result;
+        }
+        
+        // Check if link exists
+        if ($linkFrom && (file_exists($linkFrom) || is_link($linkFrom))) {
+            $result['link_exists'] = true;
+            
+            // Check if it's a valid symlink
+            if (is_link($linkFrom)) {
+                $actualTarget = readlink($linkFrom);
+                // Normalize paths for comparison
+                $normalizedActual = str_replace('\\', '/', realpath($actualTarget) ?: $actualTarget);
+                $normalizedExpected = str_replace('\\', '/', realpath($linkTo) ?: $linkTo);
+                
+                if ($normalizedActual === $normalizedExpected) {
+                    $result['link_valid'] = true;
+                    $result['message'] = 'Storage link is working correctly';
+                } else {
+                    $result['message'] = "Link points to wrong location: {$actualTarget}";
+                }
+            } else {
+                // Not a symlink, but file exists - could be junction on Windows or regular directory
+                // Check by comparing real paths
+                $linkRealPath = realpath($linkFrom);
+                $targetRealPath = realpath($linkTo);
+                
+                // Normalize paths for comparison
+                $linkNormalized = $linkRealPath ? strtolower(str_replace('\\', '/', $linkRealPath)) : '';
+                $targetNormalized = $targetRealPath ? strtolower(str_replace('\\', '/', $targetRealPath)) : '';
+                
+                if ($linkNormalized && $targetNormalized && $linkNormalized === $targetNormalized) {
+                    $result['link_valid'] = true;
+                    if (PHP_OS_FAMILY === 'Windows') {
+                        $result['message'] = 'Storage link is working correctly (Windows junction)';
+                    } else {
+                        $result['message'] = 'Storage link is working correctly';
+                    }
+                } else {
+                    $result['message'] = 'Path exists but is not a symbolic link';
+                }
+            }
+        } else {
+            $result['message'] = 'Storage link does not exist. Run: php artisan storage:link-auto';
+        }
+        
+        return $result;
     }
 }

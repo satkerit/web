@@ -157,7 +157,7 @@
                     @if(isset($auction) && $auction->images)
                         <div class="grid grid-cols-2 gap-2">
                             @foreach($auction->images as $image)
-                                <img src="{{ Storage::url($image) }}" alt="" class="w-full h-20 object-cover rounded-lg">
+                                <img src="{{ \App\Helpers\StorageHelper::url($image) }}" alt="" class="w-full h-20 object-cover rounded-lg">
                             @endforeach
                         </div>
                     @endif

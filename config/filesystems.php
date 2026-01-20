@@ -41,13 +41,11 @@ return [
         'public' => [
             'driver' => 'local',
             // Root path: where files are physically stored
-            // Development: storage/app/public
-            // Production: can be custom path or storage/app/public
-            'root' => env('STORAGE_ROOT_PATH', storage_path('app/public')),
+            // Always use storage/app/public (symlink will handle the rest)
+            'root' => storage_path('app/public'),
             
             // URL: how to access files via web
-            // Development: http://localhost/storage
-            // Production: https://yourdomain.com/dev/storage (if index.php in public_html/dev/)
+            // Automatically configured based on STORAGE_URL env variable
             'url' => env('STORAGE_URL', env('APP_URL').'/storage'),
             
             'visibility' => 'public',
@@ -80,10 +78,30 @@ return [
     | `storage:link` Artisan command is executed. The array keys should be
     | the locations of the links and the values should be their targets.
     |
+    | This configuration is dynamically adjusted based on STORAGE_MODE:
+    | - development: public/storage -> storage/app/public
+    | - production: public_html/storage -> app/storage/app/public
+    |
     */
 
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
+    'links' => (function() {
+        $storageMode = env('STORAGE_MODE', 'development');
+        
+        if ($storageMode === 'production') {
+            // Production: link from public_html to app/storage/app/public
+            $publicPath = env('PRODUCTION_PUBLIC_PATH');
+            
+            if ($publicPath && is_dir($publicPath)) {
+                return [
+                    $publicPath . '/storage' => storage_path('app/public'),
+                ];
+            }
+        }
+        
+        // Development: standard Laravel structure
+        return [
+            public_path('storage') => storage_path('app/public'),
+        ];
+    })(),
 
 ];

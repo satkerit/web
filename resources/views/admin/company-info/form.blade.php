@@ -133,7 +133,7 @@
             <div class="mt-4 p-3 bg-gray-50 rounded-lg">
                 <p class="text-sm text-gray-600">
                     <span class="font-medium">File saat ini:</span>
-                    <a href="{{ Storage::url($company->organization_structure) }}" target="_blank" class="text-emerald-600 hover:underline ml-1">
+                    <a href="{{ \App\Helpers\StorageHelper::url($company->organization_structure) }}" target="_blank" class="text-emerald-600 hover:underline ml-1">
                         Lihat gambar →
                     </a>
                 </p>

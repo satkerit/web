@@ -24,7 +24,7 @@
                             </svg>
                         </div>
                         @if($slide->image)
-                            <img src="{{ Storage::url($slide->image) }}" alt="" class="w-20 h-14 object-cover rounded-lg flex-shrink-0">
+                            <img src="{{ \App\Helpers\StorageHelper::url($slide->image) }}" alt="" class="w-20 h-14 object-cover rounded-lg flex-shrink-0">
                         @else
                             <div class="w-20 h-14 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@
                     </div>
                     <div class="flex-shrink-0">
                         @if($slide->image)
-                            <img src="{{ Storage::url($slide->image) }}" alt="" class="w-32 h-20 object-cover rounded-lg">
+                            <img src="{{ \App\Helpers\StorageHelper::url($slide->image) }}" alt="" class="w-32 h-20 object-cover rounded-lg">
                         @else
                             <div class="w-32 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

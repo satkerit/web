@@ -243,7 +243,7 @@
             <x-admin.card>
                 <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl mb-4">
                     @if($product->image)
-                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-16 h-16 rounded-xl object-cover ring-1 ring-slate-200">
+                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-16 h-16 rounded-xl object-cover ring-1 ring-slate-200">
                     @else
                         <div class="w-16 h-16 rounded-xl bg-slate-200 flex items-center justify-center">
                             <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

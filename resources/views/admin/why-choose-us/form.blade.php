@@ -76,7 +76,7 @@
                 </label>
                 @if($item->exists && $item->icon)
                     <div class="mb-3">
-                        <img src="{{ Storage::url($item->icon) }}" alt="Current icon" class="w-16 h-16 object-contain bg-gray-50 rounded-lg p-2 border border-gray-200">
+                        <img src="{{ \App\Helpers\StorageHelper::url($item->icon) }}" alt="Current icon" class="w-16 h-16 object-contain bg-gray-50 rounded-lg p-2 border border-gray-200">
                         <p class="text-xs text-gray-500 mt-1">Icon saat ini</p>
                     </div>
                 @endif

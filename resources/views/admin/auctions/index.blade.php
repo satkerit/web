@@ -93,7 +93,7 @@
                 {{-- Image --}}
                 <div class="relative h-48 bg-slate-100">
                     @if($auction->images && count($auction->images) > 0)
-                        <img src="{{ Storage::url($auction->images[0]) }}" alt="{{ $auction->title }}" class="w-full h-full object-cover">
+                        <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}" alt="{{ $auction->title }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-100 to-orange-100">
                             <svg class="w-16 h-16 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@
                         <div class="flex items-center gap-4">
                             <div class="relative flex-shrink-0">
                                 @if($auction->images && count($auction->images) > 0)
-                                    <img src="{{ Storage::url($auction->images[0]) }}" alt="" class="w-16 h-16 rounded-xl object-cover ring-1 ring-slate-200">
+                                    <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}" alt="" class="w-16 h-16 rounded-xl object-cover ring-1 ring-slate-200">
                                 @else
                                     <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center ring-1 ring-slate-200">
                                         <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

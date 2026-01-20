@@ -117,7 +117,7 @@
                     @if(isset($report) && $report->file_path)
                         <div class="p-3 bg-gray-50 rounded-lg">
                             <p class="text-sm text-gray-600">File saat ini:</p>
-                            <a href="{{ Storage::url($report->file_path) }}" target="_blank" class="text-sm text-emerald-600 hover:underline">
+                            <a href="{{ \App\Helpers\StorageHelper::url($report->file_path) }}" target="_blank" class="text-sm text-emerald-600 hover:underline">
                                 📄 Lihat File ({{ number_format($report->file_size / 1024 / 1024, 2) }} MB)
                             </a>
                         </div>

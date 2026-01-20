@@ -19,7 +19,7 @@
                 <div class="flex items-center gap-4">
                     <div class="flex-shrink-0">
                         @if($item->icon)
-                            <img src="{{ Storage::url($item->icon) }}" alt="" class="w-16 h-16 object-contain rounded-lg bg-gray-50 p-2">
+                            <img src="{{ \App\Helpers\StorageHelper::url($item->icon) }}" alt="" class="w-16 h-16 object-contain rounded-lg bg-gray-50 p-2">
                         @else
                             <div class="w-16 h-16 bg-{{ $item->color_theme ?? 'primary' }}-100 rounded-lg flex items-center justify-center">
                                 <span class="text-xs text-{{ $item->color_theme ?? 'primary' }}-600 font-bold">No Icon</span>

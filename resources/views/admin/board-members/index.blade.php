@@ -39,7 +39,7 @@
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <div class="flex items-center gap-3 mb-3">
                     @if($member->photo)
-                        <img src="{{ Storage::url($member->photo) }}" alt="" class="w-14 h-14 rounded-full object-cover flex-shrink-0">
+                        <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" alt="" class="w-14 h-14 rounded-full object-cover flex-shrink-0">
                     @else
                         <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
                             <span class="text-emerald-600 font-semibold text-lg">{{ strtoupper(substr($member->name, 0, 2)) }}</span>
@@ -89,7 +89,7 @@
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-3">
                             @if($member->photo)
-                                <img src="{{ Storage::url($member->photo) }}" alt="" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
+                                <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" alt="" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
                             @else
                                 <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
                                     <span class="text-emerald-600 font-semibold">{{ strtoupper(substr($member->name, 0, 2)) }}</span>

@@ -6,66 +6,66 @@ Website company profile yang dibangun dengan Laravel 12 dan Tailwind CSS untuk B
 
 ### Frontend
 
--   **Responsive Design** - Tampilan yang optimal di semua perangkat
--   **Modern UI/UX** - Desain yang interaktif dan sesuai tren terkini
--   **Navigasi yang Jelas** - Struktur menu yang mudah dipahami
--   **Kecepatan Optimal** - Optimasi performa untuk loading yang cepat
--   **Keamanan Terjamin** - Implementasi best practices keamanan web
+- **Responsive Design** - Tampilan yang optimal di semua perangkat
+- **Modern UI/UX** - Desain yang interaktif dan sesuai tren terkini
+- **Navigasi yang Jelas** - Struktur menu yang mudah dipahami
+- **Kecepatan Optimal** - Optimasi performa untuk loading yang cepat
+- **Keamanan Terjamin** - Implementasi best practices keamanan web
 
 ### Halaman Frontend
 
--   **Home Page** dengan hero slider, produk unggulan, berita, dan lelang
--   **Pengurus**
-    -   Dewan Komisaris (biografi, foto, jabatan)
-    -   Dewan Direksi (biografi, foto, jabatan)
-    -   Dewan Pengawas Syariah (biografi, foto, jabatan)
--   **Tentang Kami**
-    -   Tentang Perusahaan (sejarah, visi & misi)
-    -   Struktur Organisasi (bagan dengan foto dan jabatan)
-    -   Kantor (informasi detail kantor beserta foto)
--   **Produk & Layanan**
-    -   Simpanan Syariah (detail produk simpanan)
-    -   Pembiayaan Syariah (detail produk pembiayaan)
-    -   Kas Keliling (informasi layanan kas keliling)
--   **Lelang** (informasi aset/jaminan yang dilelang)
--   **Informasi Umum**
-    -   Laporan Keuangan Publikasi
-    -   Laporan Tata Kelola
-    -   Laporan Tahunan
-    -   Laporan Tahunan Berkelanjutan
-    -   Download Logo
--   **Karir** (informasi lowongan pekerjaan)
--   **Hubungi Kami** (form kontak dan informasi)
--   **Whistleblowing System**
+- **Home Page** dengan hero slider, produk unggulan, berita, dan lelang
+- **Pengurus**
+    - Dewan Komisaris (biografi, foto, jabatan)
+    - Dewan Direksi (biografi, foto, jabatan)
+    - Dewan Pengawas Syariah (biografi, foto, jabatan)
+- **Tentang Kami**
+    - Tentang Perusahaan (sejarah, visi & misi)
+    - Struktur Organisasi (bagan dengan foto dan jabatan)
+    - Kantor (informasi detail kantor beserta foto)
+- **Produk & Layanan**
+    - Simpanan Syariah (detail produk simpanan)
+    - Pembiayaan Syariah (detail produk pembiayaan)
+    - Kas Keliling (informasi layanan kas keliling)
+- **Lelang** (informasi aset/jaminan yang dilelang)
+- **Informasi Umum**
+    - Laporan Keuangan Publikasi
+    - Laporan Tata Kelola
+    - Laporan Tahunan
+    - Laporan Tahunan Berkelanjutan
+    - Download Logo
+- **Karir** (informasi lowongan pekerjaan)
+- **Hubungi Kami** (form kontak dan informasi)
+- **Whistleblowing System**
 
 ### Backend/Admin Features
 
--   **Manajemen Pengurus** (CRUD Dewan Komisaris, Direksi, Pengawas Syariah)
--   **Manajemen Informasi Perusahaan** (update data perusahaan, struktur organisasi, kantor)
--   **Manajemen Produk & Layanan** (CRUD produk simpanan dan pembiayaan)
--   **Manajemen Kas Keliling** (update informasi kas keliling)
--   **Manajemen Berita/Informasi** (CRUD artikel dan berita)
--   **Manajemen Laporan** (upload laporan keuangan, tata kelola, tahunan)
--   **Manajemen Lelang** (CRUD informasi lelang)
--   **Setting Perusahaan** (alamat, email, logo, telepon, dll)
--   **Manajemen Hero Slider** (gambar slideshow homepage)
+- **Manajemen Pengurus** (CRUD Dewan Komisaris, Direksi, Pengawas Syariah)
+- **Manajemen Informasi Perusahaan** (update data perusahaan, struktur organisasi, kantor)
+- **Manajemen Produk & Layanan** (CRUD produk simpanan dan pembiayaan)
+- **Manajemen Kas Keliling** (update informasi kas keliling)
+- **Manajemen Berita/Informasi** (CRUD artikel dan berita)
+- **Manajemen Laporan** (upload laporan keuangan, tata kelola, tahunan)
+- **Manajemen Lelang** (CRUD informasi lelang)
+- **Setting Perusahaan** (alamat, email, logo, telepon, dll)
+- **Manajemen Hero Slider** (gambar slideshow homepage)
 
 ## 🛠 Teknologi yang Digunakan
 
--   **Framework**: Laravel 12
--   **CSS Framework**: Tailwind CSS 4.0
--   **Database**: MySQL
--   **Server**: Apache
--   **JavaScript**: Alpine.js, Swiper.js
--   **PHP**: 8.2+
+- **Framework**: Laravel 12
+- **CSS Framework**: Tailwind CSS 4.0
+- **Database**: MySQL
+- **Server**: Apache
+- **JavaScript**: Alpine.js, Swiper.js
+- **PHP**: 8.2+
 
 ## 📋 Persyaratan Sistem
 
--   PHP >= 8.2
--   Composer
--   Node.js & NPM
--   MySQL
--   Apache/Nginx
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL
+- Apache/Nginx
 
 ## 🚀 Instalasi
 
@@ -118,8 +118,17 @@ Website company profile yang dibangun dengan Laravel 12 dan Tailwind CSS untuk B
 7. **Storage Link**
 
     ```bash
+    # Development (automatic)
+    php artisan storage:link-auto
+
+    # Or use Laravel's built-in command
     php artisan storage:link
+
+    # Test storage configuration
+    php artisan storage:test
     ```
+
+    **Note:** Untuk production dengan struktur terpisah (app/ dan public_html/), lihat [Storage Configuration Guide](STORAGE_SETUP.md).
 
 8. **Run Development Server**
     ```bash
@@ -130,54 +139,67 @@ Website company profile yang dibangun dengan Laravel 12 dan Tailwind CSS untuk B
 
 ### Tabel Utama
 
--   `company_infos` - Informasi perusahaan
--   `board_members` - Data pengurus (komisaris, direksi, pengawas syariah)
--   `products` - Produk simpanan dan pembiayaan syariah
--   `offices` - Informasi kantor
--   `news` - Berita dan informasi
--   `auctions` - Data lelang
--   `reports` - Laporan-laporan perusahaan
--   `hero_slides` - Gambar slider homepage
--   `kas_keliling` - Informasi kas keliling
+- `company_infos` - Informasi perusahaan
+- `board_members` - Data pengurus (komisaris, direksi, pengawas syariah)
+- `products` - Produk simpanan dan pembiayaan syariah
+- `offices` - Informasi kantor
+- `news` - Berita dan informasi
+- `auctions` - Data lelang
+- `reports` - Laporan-laporan perusahaan
+- `hero_slides` - Gambar slider homepage
+- `kas_keliling` - Informasi kas keliling
 
 ## 🎨 Fitur UI/UX
 
--   **Responsive Design** - Mobile-first approach
--   **Modern Animations** - Smooth transitions dan hover effects
--   **Interactive Elements** - Dropdown menus, modals, sliders
--   **Professional Color Scheme** - Emerald green sebagai warna utama
--   **Typography** - Font Inter untuk keterbacaan optimal
--   **Loading Optimization** - Lazy loading dan image optimization
+- **Responsive Design** - Mobile-first approach
+- **Modern Animations** - Smooth transitions dan hover effects
+- **Interactive Elements** - Dropdown menus, modals, sliders
+- **Professional Color Scheme** - Emerald green sebagai warna utama
+- **Typography** - Font Inter untuk keterbacaan optimal
+- **Loading Optimization** - Lazy loading dan image optimization
 
 ## 🔒 Keamanan
 
--   **CSRF Protection** - Laravel built-in CSRF protection
--   **Input Validation** - Server-side validation untuk semua input
--   **SQL Injection Prevention** - Eloquent ORM protection
--   **XSS Protection** - Output escaping dan sanitization
--   **File Upload Security** - Validasi tipe dan ukuran file
+- **CSRF Protection** - Laravel built-in CSRF protection
+- **Input Validation** - Server-side validation untuk semua input
+- **SQL Injection Prevention** - Eloquent ORM protection
+- **XSS Protection** - Output escaping dan sanitization
+- **File Upload Security** - Validasi tipe dan ukuran file
 
 ## 📱 Responsive Breakpoints
 
--   **Mobile**: < 768px
--   **Tablet**: 768px - 1024px
--   **Desktop**: > 1024px
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
 
 ## 🚀 Performance Optimization
 
--   **Asset Minification** - CSS dan JS terkompresi
--   **Image Optimization** - WebP format support
--   **Caching Strategy** - Database dan view caching
--   **CDN Ready** - Asset delivery optimization
+- **Asset Minification** - CSS dan JS terkompresi
+- **Image Optimization** - WebP format support
+- **Caching Strategy** - Database dan view caching
+- **CDN Ready** - Asset delivery optimization
 
 ## 📊 SEO Features
 
--   **Meta Tags** - Dynamic title dan description
--   **Structured Data** - Schema.org markup
--   **Sitemap** - XML sitemap generation
--   **Clean URLs** - SEO-friendly URL structure
+- **Meta Tags** - Dynamic title dan description
+- **Structured Data** - Schema.org markup
+- **Sitemap** - XML sitemap generation
+- **Clean URLs** - SEO-friendly URL structure
 
 ## 🔧 Kustomisasi
+
+### Storage Configuration
+
+Project ini mendukung dua mode storage:
+
+1. **Development Mode** - Standard Laravel structure
+2. **Production Mode** - Separated app/ and public_html/ structure
+
+Untuk setup lengkap, lihat dokumentasi:
+
+- [Storage Setup Guide](STORAGE_SETUP.md) - Panduan lengkap
+- [Quick Start Guide](STORAGE_QUICK_START.md) - Setup 5 menit
+- [Deployment Checklist](DEPLOYMENT_CHECKLIST.md) - Checklist deployment
 
 ### Mengubah Warna Tema
 
@@ -201,9 +223,9 @@ Edit file `resources/css/app.css` dan sesuaikan variabel warna:
 
 Semua konten website bersifat dinamis dan dapat dikelola melalui:
 
--   Database seeding untuk data awal
--   Admin panel (akan dikembangkan)
--   API endpoints untuk integrasi
+- Database seeding untuk data awal
+- Admin panel (akan dikembangkan)
+- API endpoints untuk integrasi
 
 ## 🤝 Kontribusi
 
@@ -221,19 +243,19 @@ Project ini menggunakan lisensi MIT. Lihat file `LICENSE` untuk detail.
 
 Untuk pertanyaan atau dukungan teknis, silakan hubungi:
 
--   Email: developer@bprsyariah.co.id
--   Phone: (021) 1234-5678
+- Email: developer@bprsyariah.co.id
+- Phone: (021) 1234-5678
 
 ## 🔄 Changelog
 
 ### Version 1.0.0 (2024-12-27)
 
--   Initial release
--   Complete frontend structure
--   Database schema implementation
--   Basic CRUD operations
--   Responsive design implementation
--   SEO optimization
+- Initial release
+- Complete frontend structure
+- Database schema implementation
+- Basic CRUD operations
+- Responsive design implementation
+- SEO optimization
 
 ---
 

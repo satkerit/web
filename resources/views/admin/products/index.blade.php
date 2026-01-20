@@ -56,7 +56,7 @@
                 {{-- Product Image --}}
                 <div class="relative h-40 bg-slate-100">
                     @if($product->image)
-                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-full h-full object-cover">
+                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center">
                             <svg class="w-16 h-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,7 +146,7 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-4">
                             @if($product->image)
-                                <img src="{{ Storage::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-slate-100 ring-1 ring-slate-200">
+                                <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 bg-slate-100 ring-1 ring-slate-200">
                             @else
                                 <div class="w-14 h-14 rounded-xl bg-slate-100 ring-1 ring-slate-200 flex items-center justify-center flex-shrink-0">
                                     <svg class="w-7 h-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -35,7 +35,7 @@
                 {{-- Product Image --}}
                 <div class="flex-shrink-0">
                     @if($product->image)
-                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-full sm:w-48 h-48 rounded-xl object-cover ring-1 ring-slate-200">
+                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-full sm:w-48 h-48 rounded-xl object-cover ring-1 ring-slate-200">
                     @else
                         <div class="w-full sm:w-48 h-48 rounded-xl bg-slate-100 flex items-center justify-center ring-1 ring-slate-200">
                             <svg class="w-16 h-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,7 +181,7 @@
         @if($product->image)
             <x-admin.card title="Gambar">
                 <div class="space-y-3">
-                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-full rounded-lg object-cover ring-1 ring-slate-200">
+                    <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}" alt="{{ $product->image_alt ?? $product->name }}" class="w-full rounded-lg object-cover ring-1 ring-slate-200">
                     @if($product->image_alt)
                         <p class="text-xs text-slate-500">
                             <span class="font-medium">Alt Text:</span> {{ $product->image_alt }}
