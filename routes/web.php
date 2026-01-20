@@ -203,6 +203,10 @@ Route::get('/test-news-form', function () {
     }
 });
 
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
+});
+
 // Session Management Routes
 Route::middleware(['auth'])->group(function () {
     Route::post('/extend-session', [App\Http\Controllers\SessionController::class, 'extend'])->name('session.extend');
