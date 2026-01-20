@@ -271,7 +271,7 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous"></script>
 <script>
     const ctx = document.getElementById('visitorChart').getContext('2d');
     new Chart(ctx, {

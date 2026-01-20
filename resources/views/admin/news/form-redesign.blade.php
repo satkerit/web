@@ -3,8 +3,8 @@
 @section('title', isset($news) ? 'Edit Berita' : 'Tambah Berita Baru')
 
 @push('styles')
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" crossorigin="anonymous">
 <style>
 /* Modern Form Styling */
 .form-container {
@@ -1106,7 +1106,7 @@
                                 @foreach($news->images as $image)
                                 <div class="gallery-item">
                                     <img src="{{ \App\Helpers\StorageHelper::url($image->image_path) }}" alt="Gallery Image">
-                                    <button type="button" class="gallery-remove" onclick="if(confirm('Hapus gambar ini?')) document.getElementById('delete-image-{{ $image->id }}').submit();">
+                                    <button type="button" class="gallery-remove" onclick="if(confirm(&quot;Hapus gambar ini?&quot;)) document.getElementById('delete-image-{{ $image->id }}').submit();">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
@@ -1194,9 +1194,9 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" crossorigin="anonymous"></script>
 <script>
 jQuery(function($) {
     // Initialize Summernote
@@ -1435,10 +1435,9 @@ function previewFeaturedImage(input) {
                 uploadArea.innerHTML = '<div class="image-preview">' +
                     '<img src="' + e.target.result + '" alt="Featured Image Preview" id="featured-preview">' +
                     '<div class="image-overlay">' +
-                        '<button type="button" class="btn btn-secondary" onclick="document.getElementById(\'featured_image\').click(); return false;">' +
+                        '<button type="button" class="btn btn-secondary" onclick="document.getElementById(\'featured_image\').click()">' +
                             '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
-                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>' +
-                            '</svg>' +
+                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>' +
                             'Ganti Gambar' +
                         '</button>' +
                     '</div>' +
