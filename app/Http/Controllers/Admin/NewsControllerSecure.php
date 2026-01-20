@@ -25,7 +25,7 @@ class NewsControllerSecure extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorizeAdminAction('news.index');
+        $this->authorizeView('news.view');
 
         $query = News::with(['images', 'user'])
             ->orderBy('created_at', 'desc');
@@ -65,7 +65,7 @@ class NewsControllerSecure extends Controller
      */
     public function create()
     {
-        $this->authorizeAdminAction('news.create');
+        $this->authorizeCreate('news.create');
         
         return view('admin.news.form-redesign');
     }
@@ -75,7 +75,7 @@ class NewsControllerSecure extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorizeAdminAction('news.store');
+        $this->authorizeCreate('news.create');
 
         $validator = $this->validateNewsData($request);
         
@@ -126,7 +126,7 @@ class NewsControllerSecure extends Controller
      */
     public function show(News $news)
     {
-        $this->authorizeAdminAction('news.show');
+        $this->authorizeView('news.view');
         
         $news->load(['images', 'user']);
         
@@ -138,7 +138,7 @@ class NewsControllerSecure extends Controller
      */
     public function edit(News $news)
     {
-        $this->authorizeAdminAction('news.edit');
+        $this->authorizeEdit('news.edit');
         
         $news->load('images');
         
@@ -150,7 +150,7 @@ class NewsControllerSecure extends Controller
      */
     public function update(Request $request, News $news)
     {
-        $this->authorizeAdminAction('news.update');
+        $this->authorizeEdit('news.edit');
 
         $validator = $this->validateNewsData($request, $news->id);
         
@@ -206,7 +206,7 @@ class NewsControllerSecure extends Controller
      */
     public function destroy(News $news)
     {
-        $this->authorizeAdminAction('news.destroy');
+        $this->authorizeDelete('news.delete');
 
         try {
             DB::beginTransaction();
@@ -243,7 +243,7 @@ class NewsControllerSecure extends Controller
      */
     public function destroyImage(NewsImage $image)
     {
-        $this->authorizeAdminAction('news.update');
+        $this->authorizeEdit('news.edit');
 
         try {
             Storage::disk('public')->delete($image->image_path);
@@ -333,8 +333,8 @@ class NewsControllerSecure extends Controller
             $data['author'] = auth()->user()->name;
         }
 
-        // Set user_id
-        $data['user_id'] = auth()->id();
+        // Set author_id (not user_id)
+        $data['author_id'] = auth()->id();
 
         // Handle published_at
         if (empty($data['published_at'])) {
@@ -361,14 +361,15 @@ class NewsControllerSecure extends Controller
         }
 
         $imagesToProcess = array_slice($images, 0, $remainingSlots);
+        $currentOrder = $news->images()->max('order') ?? -1;
 
         foreach ($imagesToProcess as $image) {
-            $imagePath = $this->handleImageUpload($image, 'news', 'gallery');
+            $imagePath = $this->handleImageUpload($image, 'news/slides', 'gallery');
             
             NewsImage::create([
                 'news_id' => $news->id,
                 'image_path' => $imagePath,
-                'alt_text' => $news->title . ' - Gallery Image'
+                'order' => ++$currentOrder
             ]);
         }
     }

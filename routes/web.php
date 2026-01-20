@@ -189,6 +189,19 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 // Authentication Routes with strict rate limiting
 require __DIR__ . '/auth.php';
 
+// Test route for news form (temporary)
+Route::get('/test-news-form', function () {
+    try {
+        return view('admin.news.form-redesign');
+    } catch (Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ], 500);
+    }
+});
+
 // Session Management Routes
 Route::middleware(['auth'])->group(function () {
     Route::post('/extend-session', [App\Http\Controllers\SessionController::class, 'extend'])->name('session.extend');

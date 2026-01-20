@@ -157,17 +157,22 @@
             </div>
 
             <!-- Tags (if available) -->
-            @if($news->tags && count($news->tags) > 0)
+            @if($news->tags)
+            @php
+                $tags = is_string($news->tags) ? array_filter(array_map('trim', explode(',', $news->tags))) : [];
+            @endphp
+            @if(count($tags) > 0)
             <div class="mt-8 pt-6 border-t border-gray-100">
                 <h3 class="text-sm font-semibold text-gray-900 mb-3">Tags</h3>
                 <div class="flex flex-wrap gap-2">
-                    @foreach($news->tags as $tag)
+                    @foreach($tags as $tag)
                     <span class="px-3 py-1.5 bg-primary-50 text-primary-700 text-sm font-medium rounded-lg">
                         #{{ $tag }}
                     </span>
                     @endforeach
                 </div>
             </div>
+            @endif
             @endif
 
             <!-- Share -->
