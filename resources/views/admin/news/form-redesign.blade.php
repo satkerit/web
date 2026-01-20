@@ -10,16 +10,17 @@
 .form-container {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    padding: 2rem 0;
+    padding: 2rem 1rem;
 }
 
 .form-card {
     background: white;
     border-radius: 20px;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
+    overflow: visible;
     margin: 0 auto;
-    max-width: 1400px;
+    max-width: 1600px;
+    width: 100%;
 }
 
 .form-header {
@@ -62,12 +63,21 @@
 }
 
 .form-section {
-    padding: 2rem;
+    padding: 2.5rem 3rem;
     border-bottom: 1px solid #f0f0f0;
 }
 
 .form-section:last-child {
     border-bottom: none;
+}
+
+/* Full width content section */
+.form-section.content-section {
+    padding: 2.5rem 2rem;
+}
+
+.form-section.content-section .form-group {
+    max-width: 100%;
 }
 
 .section-title {
@@ -440,10 +450,31 @@
 
 .note-editable {
     padding: 1.5rem !important;
-    min-height: 300px !important;
+    min-height: 500px !important;
+    max-height: 800px !important;
+    overflow-y: auto !important;
     font-size: 1rem !important;
     line-height: 1.75 !important;
     color: #374151 !important;
+}
+
+/* Custom scrollbar for editor */
+.note-editable::-webkit-scrollbar {
+    width: 10px;
+}
+
+.note-editable::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.note-editable::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 5px;
+}
+
+.note-editable::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
 }
 
 .note-editable:focus {
@@ -720,10 +751,15 @@
     .form-card {
         margin: 0;
         border-radius: 12px;
+        max-width: 100%;
     }
     
     .form-section {
         padding: 1.5rem;
+    }
+    
+    .form-section.content-section {
+        padding: 1.5rem 1rem;
     }
     
     .form-actions {
@@ -734,6 +770,11 @@
     .btn {
         width: 100%;
         justify-content: center;
+    }
+    
+    .note-editable {
+        min-height: 400px !important;
+        max-height: 600px !important;
     }
 }
 
@@ -746,8 +787,18 @@
         padding: 1rem;
     }
     
+    .form-section.content-section {
+        padding: 1rem 0.5rem;
+    }
+    
     .gallery-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .note-editable {
+        min-height: 300px !important;
+        max-height: 500px !important;
+        padding: 1rem !important;
     }
 }
 </style>
@@ -873,7 +924,7 @@
                 </div>
 
                 <!-- Content Section -->
-                <div class="form-section">
+                <div class="form-section content-section">
                     <h2 class="section-title">
                         <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -1076,9 +1127,9 @@ jQuery(function($) {
     $('#summernote').summernote({
         placeholder: 'Tulis konten berita di sini...',
         tabsize: 2,
-        height: 450,
-        minHeight: 300,
-        maxHeight: 800,
+        height: 600,
+        minHeight: 400,
+        maxHeight: 1000,
         focus: false,
         toolbar: [
             ['style', ['style']],
@@ -1146,27 +1197,48 @@ jQuery(function($) {
         data.append('image', file);
         data.append('_token', '{{ csrf_token() }}');
 
+        // Show loading indicator
+        const loadingHtml = '<div class="text-center py-4"><div class="spinner inline-block"></div><p class="mt-2 text-sm text-gray-600">Mengupload gambar...</p></div>';
+        $('#summernote').summernote('insertNode', $(loadingHtml)[0]);
+
         $.ajax({
-            url: '{{ route("admin.storage.upload") }}',
+            url: '{{ route("admin.storage.upload-editor-image") }}',
             method: 'POST',
             data: data,
             processData: false,
             contentType: false,
             success: function(response) {
+                // Remove loading indicator
+                $('.note-editable .spinner').closest('div').remove();
+                
                 if (response.success && response.url) {
                     // Insert image into editor
                     $('#summernote').summernote('insertImage', response.url, function($image) {
                         $image.css('max-width', '100%');
                         $image.css('height', 'auto');
                         $image.addClass('img-fluid');
+                        $image.attr('alt', response.filename || 'Uploaded image');
                     });
+                    
+                    showNotification('Gambar berhasil diupload', 'success');
                 } else {
-                    alert('Gagal mengupload gambar: ' + (response.message || 'Unknown error'));
+                    showNotification('Gagal mengupload gambar: ' + (response.message || 'Unknown error'), 'error');
                 }
             },
             error: function(xhr) {
+                // Remove loading indicator
+                $('.note-editable .spinner').closest('div').remove();
+                
                 console.error('Upload error:', xhr);
-                alert('Gagal mengupload gambar. Silakan coba lagi.');
+                let errorMsg = 'Gagal mengupload gambar.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                } else if (xhr.status === 413) {
+                    errorMsg = 'Ukuran file terlalu besar. Maksimal 5MB.';
+                } else if (xhr.status === 422) {
+                    errorMsg = 'Format file tidak valid. Gunakan JPG, PNG, GIF, atau WebP.';
+                }
+                showNotification(errorMsg, 'error');
             }
         });
     }

@@ -142,6 +142,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::prefix('storage')->name('storage.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\StorageController::class, 'index'])->name('index');
         Route::post('/upload', [App\Http\Controllers\Admin\StorageController::class, 'upload'])->name('upload');
+        Route::post('/upload-editor-image', [App\Http\Controllers\Admin\StorageController::class, 'uploadEditorImage'])->name('upload-editor-image');
         Route::post('/create-folder', [App\Http\Controllers\Admin\StorageController::class, 'createFolder'])->name('create-folder');
         Route::delete('/delete', [App\Http\Controllers\Admin\StorageController::class, 'delete'])->name('delete');
         Route::get('/download', [App\Http\Controllers\Admin\StorageController::class, 'download'])->name('download');

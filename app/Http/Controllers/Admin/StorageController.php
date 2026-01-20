@@ -327,4 +327,83 @@ class StorageController extends Controller
 
         return $items;
     }
+
+    /**
+     * Upload image from WYSIWYG editor (Summernote)
+     * Returns JSON response with image URL
+     */
+    public function uploadEditorImage(Request $request)
+    {
+        try {
+            // Validate request
+            $validator = \Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpeg,jpg,png,gif,webp|max:5120', // Max 5MB
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ], 422);
+            }
+
+            if (!$request->hasFile('image')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No image file provided'
+                ], 400);
+            }
+
+            $file = $request->file('image');
+            
+            // Check if file is valid
+            if (!$file->isValid()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid file upload'
+                ], 400);
+            }
+
+            $path = 'news/editor-images';
+            
+            // Create directory if not exists
+            if (!Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->makeDirectory($path);
+            }
+            
+            // Generate unique filename
+            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+            
+            // Store file
+            $storedPath = $file->storeAs($path, $filename, 'public');
+            
+            if (!$storedPath) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to store file'
+                ], 500);
+            }
+            
+            // Get full URL
+            $url = asset('storage/' . $storedPath);
+
+            return response()->json([
+                'success' => true,
+                'url' => $url,
+                'path' => $storedPath,
+                'filename' => $filename
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Editor image upload error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload image: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
+
