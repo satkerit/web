@@ -23,6 +23,10 @@
     width: 100%;
 }
 
+.form-card form {
+    width: 100%;
+}
+
 .form-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -60,6 +64,11 @@
 
 .form-body {
     padding: 0;
+    width: 100%;
+}
+
+.form-body > .form-section {
+    width: 100%;
 }
 
 .form-section {
@@ -78,6 +87,14 @@
 
 .form-section.content-section .form-group {
     max-width: 100%;
+    width: 100%;
+}
+
+.form-section.content-section .note-editor,
+.form-section.content-section .note-editing-area,
+.form-section.content-section .note-editable {
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 .section-title {
@@ -120,6 +137,25 @@
 
 .form-group {
     position: relative;
+    width: 100%;
+}
+
+/* Full width for content editor */
+.content-section .form-group {
+    width: 100%;
+    max-width: 100%;
+}
+
+.content-section .form-group textarea,
+.content-section .form-group .note-editor {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Ensure summernote textarea is full width */
+#summernote {
+    width: 100% !important;
+    display: block;
 }
 
 .form-label {
@@ -402,6 +438,8 @@
     border-radius: 12px !important;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 .note-editor.note-frame {
@@ -416,6 +454,7 @@
     background: #f9fafb !important;
     border-bottom: 1px solid #e5e7eb !important;
     padding: 0.75rem !important;
+    width: 100% !important;
 }
 
 .note-btn-group {
@@ -446,6 +485,7 @@
 
 .note-editing-area {
     background: white;
+    width: 100% !important;
 }
 
 .note-editable {
@@ -752,10 +792,12 @@
         margin: 0;
         border-radius: 12px;
         max-width: 100%;
+        width: 100%;
     }
     
     .form-section {
         padding: 1.5rem;
+        width: 100%;
     }
     
     .form-section.content-section {
@@ -776,6 +818,10 @@
         min-height: 400px !important;
         max-height: 600px !important;
     }
+    
+    .note-editor {
+        width: 100% !important;
+    }
 }
 
 @media (max-width: 640px) {
@@ -785,6 +831,7 @@
     
     .form-section {
         padding: 1rem;
+        width: 100%;
     }
     
     .form-section.content-section {
@@ -799,6 +846,14 @@
         min-height: 300px !important;
         max-height: 500px !important;
         padding: 1rem !important;
+    }
+    
+    .note-editor {
+        width: 100% !important;
+    }
+    
+    .note-toolbar {
+        padding: 0.5rem !important;
     }
 }
 </style>
@@ -1131,6 +1186,8 @@ jQuery(function($) {
         minHeight: 400,
         maxHeight: 1000,
         focus: false,
+        width: '100%',
+        disableResizeEditor: false,
         toolbar: [
             ['style', ['style']],
             ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
@@ -1318,19 +1375,17 @@ function previewFeaturedImage(input) {
         reader.onload = function(e) {
             const uploadArea = input.closest('.form-group').querySelector('.image-upload-area');
             uploadArea.classList.add('has-image');
-            uploadArea.innerHTML = `
-                <div class="image-preview">
-                    <img src="${e.target.result}" alt="Featured Image Preview" id="featured-preview">
-                    <div class="image-overlay">
-                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('featured_image').click()">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                            </svg>
-                            Ganti Gambar
-                        </button>
-                    </div>
-                </div>
-            `;
+            uploadArea.innerHTML = '<div class="image-preview">' +
+                '<img src="' + e.target.result + '" alt="Featured Image Preview" id="featured-preview">' +
+                '<div class="image-overlay">' +
+                    '<button type="button" class="btn btn-secondary" onclick="document.getElementById(\'featured_image\').click()">' +
+                        '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>' +
+                        '</svg>' +
+                        'Ganti Gambar' +
+                    '</button>' +
+                '</div>' +
+            '</div>';
         };
         reader.readAsDataURL(input.files[0]);
     }
@@ -1339,7 +1394,8 @@ function previewFeaturedImage(input) {
 function previewSlideImages(input) {
     if (input.files && input.files.length > 0) {
         console.log('Slide images selected:', input.files.length);
-        // You can add preview functionality here if needed
+        // Show notification
+        showNotification(input.files.length + ' gambar dipilih untuk galeri', 'success');
     }
 }
 
