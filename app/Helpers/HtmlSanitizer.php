@@ -110,6 +110,14 @@ class HtmlSanitizer
     }
 
     /**
+     * Alias for clean method
+     */
+    public static function sanitize(?string $html): string
+    {
+        return self::clean($html);
+    }
+
+    /**
      * Clean attributes from HTML tags
      */
     protected static function cleanAttributes(string $html): string

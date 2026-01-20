@@ -353,7 +353,7 @@ class NewsControllerSecure extends Controller
     private function handleGalleryImages(News $news, array $images)
     {
         $currentImagesCount = $news->images()->count();
-        $maxImages = 3;
+        $maxImages = 7;
         $remainingSlots = $maxImages - $currentImagesCount;
 
         if ($remainingSlots <= 0) {

@@ -391,16 +391,47 @@
     border: 2px solid #e5e7eb !important;
     border-radius: 12px !important;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .note-editor.note-frame {
     background: white;
 }
 
+.note-editor.note-frame.fullscreen {
+    z-index: 9999;
+}
+
 .note-toolbar {
     background: #f9fafb !important;
     border-bottom: 1px solid #e5e7eb !important;
     padding: 0.75rem !important;
+}
+
+.note-btn-group {
+    margin-right: 0.5rem !important;
+}
+
+.note-btn {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+    padding: 0.375rem 0.75rem !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.875rem !important;
+    transition: all 0.2s !important;
+}
+
+.note-btn:hover {
+    background: #f3f4f6 !important;
+    border-color: #d1d5db !important;
+}
+
+.note-btn.active,
+.note-btn:active {
+    background: #667eea !important;
+    border-color: #667eea !important;
+    color: white !important;
 }
 
 .note-editing-area {
@@ -411,12 +442,208 @@
     padding: 1.5rem !important;
     min-height: 300px !important;
     font-size: 1rem !important;
-    line-height: 1.6 !important;
+    line-height: 1.75 !important;
+    color: #374151 !important;
+}
+
+.note-editable:focus {
+    outline: none;
+}
+
+.note-editable p {
+    margin-bottom: 1rem;
+}
+
+.note-editable h2,
+.note-editable h3,
+.note-editable h4,
+.note-editable h5 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.note-editable h2 {
+    font-size: 1.875rem;
+}
+
+.note-editable h3 {
+    font-size: 1.5rem;
+}
+
+.note-editable h4 {
+    font-size: 1.25rem;
+}
+
+.note-editable h5 {
+    font-size: 1.125rem;
+}
+
+.note-editable ul,
+.note-editable ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.note-editable li {
+    margin-bottom: 0.5rem;
+}
+
+.note-editable blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.note-editable img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+
+.note-editable table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.note-editable table td,
+.note-editable table th {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem;
+}
+
+.note-editable table th {
+    background: #f9fafb;
+    font-weight: 600;
+}
+
+.note-editable a {
+    color: #667eea;
+    text-decoration: underline;
+}
+
+.note-editable a:hover {
+    color: #764ba2;
 }
 
 .note-statusbar {
     background: #f9fafb !important;
     border-top: 1px solid #e5e7eb !important;
+    padding: 0.5rem 1rem !important;
+}
+
+.note-resizebar {
+    background: #e5e7eb !important;
+    height: 8px !important;
+    cursor: ns-resize !important;
+}
+
+.note-resizebar:hover {
+    background: #d1d5db !important;
+}
+
+/* Modal styling */
+.note-modal .modal-dialog {
+    max-width: 600px;
+}
+
+.note-modal .modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.note-modal .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    padding: 1rem 1.5rem;
+}
+
+.note-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.note-modal .form-control {
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0.75rem;
+}
+
+.note-modal .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Dropdown styling */
+.note-dropdown-menu {
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+}
+
+.note-dropdown-item {
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s;
+}
+
+.note-dropdown-item:hover {
+    background: #f3f4f6;
+}
+
+/* Color palette */
+.note-color-palette {
+    margin: 0.5rem;
+}
+
+.note-color-btn {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+}
+
+.note-color-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Fullscreen mode */
+.note-editor.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 9999;
+}
+
+.note-editor.fullscreen .note-editable {
+    min-height: calc(100vh - 200px) !important;
+}
+
+/* Loading state */
+.note-editor.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.note-editor.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 /* Loading States */
@@ -656,8 +883,16 @@
 
                     <div class="form-group">
                         <label class="form-label required">Isi Konten</label>
-                        <textarea name="content" id="summernote" required>{{ old('content', $news->content ?? '') }}</textarea>
-                        <div class="form-help">Gunakan editor untuk memformat teks, menambah gambar, dan link</div>
+                        <div class="relative">
+                            <textarea name="content" id="summernote" required>{{ old('content', $news->content ?? '') }}</textarea>
+                        </div>
+                        <div class="form-help">
+                            <div class="flex items-center gap-4 text-xs">
+                                <span>💡 Tips: Gunakan Ctrl+V untuk paste gambar langsung</span>
+                                <span>📝 Drag & drop gambar juga didukung</span>
+                                <span id="word-count" class="ml-auto font-semibold">0 kata</span>
+                            </div>
+                        </div>
                         @error('content')<div class="form-error"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>{{ $message }}</div>@enderror
                     </div>
                 </div>
@@ -737,7 +972,7 @@
 
                         <!-- Gallery Images -->
                         <div class="form-group">
-                            <label class="form-label">Galeri Gambar (Maksimal 3)</label>
+                            <label class="form-label">Galeri Gambar (Maksimal 7)</label>
                             
                             @if(isset($news) && $news->images->count() > 0)
                             <div class="gallery-grid">
@@ -754,7 +989,7 @@
                             </div>
                             @endif
 
-                            @if(!isset($news) || $news->images->count() < 3)
+                            @if(!isset($news) || $news->images->count() < 7)
                             <div class="image-upload-area" onclick="document.getElementById('slide_images').click()" style="margin-top: 1rem;">
                                 <div class="image-upload-placeholder">
                                     <svg class="image-upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -762,7 +997,7 @@
                                     </svg>
                                     <h3 style="margin: 0 0 0.5rem 0; font-weight: 600;">Tambah ke Galeri</h3>
                                     <p style="margin: 0; font-size: 0.875rem;">
-                                        Maksimal {{ isset($news) ? 3 - $news->images->count() : 3 }} gambar lagi
+                                        Maksimal {{ isset($news) ? 7 - $news->images->count() : 7 }} gambar lagi
                                     </p>
                                 </div>
                             </div>
@@ -841,30 +1076,100 @@ jQuery(function($) {
     $('#summernote').summernote({
         placeholder: 'Tulis konten berita di sini...',
         tabsize: 2,
-        height: 400,
+        height: 450,
+        minHeight: 300,
+        maxHeight: 800,
+        focus: false,
         toolbar: [
             ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
             ['fontname', ['fontname']],
             ['fontsize', ['fontsize']],
             ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
+            ['para', ['ul', 'ol', 'paragraph', 'height']],
             ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
+            ['insert', ['link', 'picture', 'video', 'hr']],
             ['view', ['fullscreen', 'codeview', 'help']]
         ],
-        styleTags: ['p', 'h2', 'h3', 'h4', 'h5', 'blockquote'],
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
-        fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '36', '48'],
+        styleTags: [
+            'p',
+            { title: 'Heading 2', tag: 'h2', className: '', value: 'h2' },
+            { title: 'Heading 3', tag: 'h3', className: '', value: 'h3' },
+            { title: 'Heading 4', tag: 'h4', className: '', value: 'h4' },
+            { title: 'Heading 5', tag: 'h5', className: '', value: 'h5' },
+            { title: 'Blockquote', tag: 'blockquote', className: '', value: 'blockquote' }
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+        fontNamesIgnoreCheck: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+        fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '32', '36', '48', '64'],
+        lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+        dialogsInBody: true,
+        disableDragAndDrop: false,
         callbacks: {
             onInit: function() {
                 console.log('Summernote initialized successfully');
+                // Set initial content if editing
+                @if(isset($news) && $news->content)
+                $('#summernote').summernote('code', {!! json_encode($news->content) !!});
+                @endif
             },
             onChange: function(contents, $editable) {
                 updateProgress();
+                updateWordCount();
+            },
+            onImageUpload: function(files) {
+                // Handle image upload
+                for (let i = 0; i < files.length; i++) {
+                    uploadImage(files[i]);
+                }
+            },
+            onPaste: function(e) {
+                // Handle paste event for images
+                const clipboardData = e.originalEvent.clipboardData;
+                if (clipboardData && clipboardData.items) {
+                    const items = clipboardData.items;
+                    for (let i = 0; i < items.length; i++) {
+                        if (items[i].type.indexOf('image') !== -1) {
+                            e.preventDefault();
+                            const file = items[i].getAsFile();
+                            uploadImage(file);
+                        }
+                    }
+                }
             }
         }
     });
+
+    // Function to upload image to server
+    function uploadImage(file) {
+        const data = new FormData();
+        data.append('image', file);
+        data.append('_token', '{{ csrf_token() }}');
+
+        $.ajax({
+            url: '{{ route("admin.storage.upload") }}',
+            method: 'POST',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success && response.url) {
+                    // Insert image into editor
+                    $('#summernote').summernote('insertImage', response.url, function($image) {
+                        $image.css('max-width', '100%');
+                        $image.css('height', 'auto');
+                        $image.addClass('img-fluid');
+                    });
+                } else {
+                    alert('Gagal mengupload gambar: ' + (response.message || 'Unknown error'));
+                }
+            },
+            error: function(xhr) {
+                console.error('Upload error:', xhr);
+                alert('Gagal mengupload gambar. Silakan coba lagi.');
+            }
+        });
+    }
 
     // Auto-generate slug from title
     $('#title-input').on('input', function() {
@@ -966,22 +1271,111 @@ function previewSlideImages(input) {
     }
 }
 
-// Auto-save functionality (optional)
+// Word counter function
+function updateWordCount() {
+    const content = $('#summernote').summernote('code');
+    const text = $('<div>').html(content).text();
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    const wordCount = words.length;
+    $('#word-count').text(wordCount + ' kata');
+}
+
+// Auto-save functionality with localStorage
 let autoSaveTimer;
 function autoSave() {
     clearTimeout(autoSaveTimer);
     autoSaveTimer = setTimeout(() => {
-        const formData = new FormData(document.getElementById('news-form'));
-        formData.append('auto_save', '1');
+        const formData = {
+            title: $('#title-input').val(),
+            slug: $('#slug-input').val(),
+            content: $('#summernote').summernote('code'),
+            excerpt: $('textarea[name="excerpt"]').val(),
+            category: $('select[name="category"]').val(),
+            author: $('input[name="author"]').val(),
+            meta_description: $('#meta-description').val(),
+            tags: $('#tags-input').val(),
+            published_at: $('input[name="published_at"]').val(),
+            is_published: $('input[name="is_published"]').is(':checked'),
+            timestamp: new Date().toISOString()
+        };
         
-        // You can implement auto-save to localStorage or server here
-        console.log('Auto-saving draft...');
+        // Save to localStorage
+        localStorage.setItem('news_draft_{{ isset($news) ? $news->id : "new" }}', JSON.stringify(formData));
+        console.log('Draft auto-saved at ' + new Date().toLocaleTimeString());
+        
+        // Show notification (optional)
+        showNotification('Draft tersimpan otomatis', 'success');
     }, 30000); // Auto-save every 30 seconds
 }
 
-// Initialize auto-save
+// Load draft from localStorage
+function loadDraft() {
+    const draftKey = 'news_draft_{{ isset($news) ? $news->id : "new" }}';
+    const draft = localStorage.getItem(draftKey);
+    
+    if (draft && confirm('Ditemukan draft yang tersimpan. Muat draft?')) {
+        try {
+            const data = JSON.parse(draft);
+            $('#title-input').val(data.title || '');
+            $('#slug-input').val(data.slug || '');
+            $('#summernote').summernote('code', data.content || '');
+            $('textarea[name="excerpt"]').val(data.excerpt || '');
+            $('select[name="category"]').val(data.category || '');
+            $('input[name="author"]').val(data.author || '');
+            $('#meta-description').val(data.meta_description || '');
+            $('#tags-input').val(data.tags || '');
+            $('input[name="published_at"]').val(data.published_at || '');
+            $('input[name="is_published"]').prop('checked', data.is_published || false);
+            
+            updateProgress();
+            updateWordCount();
+            
+            showNotification('Draft berhasil dimuat', 'success');
+        } catch (e) {
+            console.error('Error loading draft:', e);
+        }
+    }
+}
+
+// Clear draft from localStorage
+function clearDraft() {
+    const draftKey = 'news_draft_{{ isset($news) ? $news->id : "new" }}';
+    localStorage.removeItem(draftKey);
+}
+
+// Show notification
+function showNotification(message, type = 'info') {
+    // Simple notification - you can enhance this
+    const notification = $('<div>')
+        .addClass('fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg text-white z-50')
+        .addClass(type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500')
+        .text(message)
+        .appendTo('body');
+    
+    setTimeout(() => {
+        notification.fadeOut(300, function() {
+            $(this).remove();
+        });
+    }, 3000);
+}
+
+// Initialize auto-save and load draft
 jQuery(document).ready(function($) {
+    // Load draft on page load (only for new posts)
+    @if(!isset($news))
+    setTimeout(loadDraft, 500);
+    @endif
+    
+    // Enable auto-save
     $('input, textarea, select').on('change input', autoSave);
+    
+    // Clear draft on successful submit
+    $('#news-form').on('submit', function() {
+        clearDraft();
+    });
+    
+    // Initial word count
+    updateWordCount();
 });
 </script>
 @endpush

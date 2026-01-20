@@ -256,15 +256,19 @@ class NewsCRUDTest extends TestCase
     }
 
     #[Test]
-    public function admin_cannot_add_more_than_3_slide_images()
+    public function admin_cannot_add_more_than_7_slide_images()
     {
         Storage::fake('public');
 
         $news = News::factory()->create();
 
-        // Add 2 existing images
+        // Add 6 existing images
         NewsImage::create(['news_id' => $news->id, 'image_path' => 'news/slides/img1.jpg', 'order' => 1]);
         NewsImage::create(['news_id' => $news->id, 'image_path' => 'news/slides/img2.jpg', 'order' => 2]);
+        NewsImage::create(['news_id' => $news->id, 'image_path' => 'news/slides/img3.jpg', 'order' => 3]);
+        NewsImage::create(['news_id' => $news->id, 'image_path' => 'news/slides/img4.jpg', 'order' => 4]);
+        NewsImage::create(['news_id' => $news->id, 'image_path' => 'news/slides/img5.jpg', 'order' => 5]);
+        NewsImage::create(['news_id' => $news->id, 'image_path' => 'news/slides/img6.jpg', 'order' => 6]);
 
         $data = [
             'title' => $news->title,
