@@ -3,7 +3,6 @@
 @section('title', isset($news) ? 'Edit Berita' : 'Tambah Berita')
 
 @push('styles')
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
 <style>
 .note-editor.note-frame { border: 1px solid #d1d5db !important; border-radius: 0.5rem !important; }
@@ -381,6 +380,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 <script>
 jQuery(function($) {

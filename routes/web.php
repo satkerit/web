@@ -203,3 +203,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/extend-session', [App\Http\Controllers\SessionController::class, 'extend'])->name('session.extend');
     Route::get('/session-status', [App\Http\Controllers\SessionController::class, 'status'])->name('session.status');
 });
+
+// CSP Test Route (for debugging)
+Route::get('/test-csp-laravel', function () {
+    return view('test-csp');
+})->name('test-csp');
+
+// Test New News Form (for debugging)
+Route::get('/test-news-form-redesign', function () {
+    return view('admin.news.form-redesign');
+})->name('test-news-form-redesign');
