@@ -80,8 +80,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // News Management
-    Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
-    Route::delete('news/image/{image}', [App\Http\Controllers\Admin\NewsController::class, 'destroyImage'])->name('news.delete-image');
+    Route::resource('news', App\Http\Controllers\Admin\NewsControllerSecure::class);
+    Route::delete('news/image/{image}', [App\Http\Controllers\Admin\NewsControllerSecure::class, 'destroyImage'])->name('news.delete-image');
 
     // Products Management
     Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
@@ -159,15 +159,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
         Route::post('/cleanup', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'cleanup'])->name('cleanup');
     });
 
-    // Test route for debugging
-    Route::get('/test-backup', [App\Http\Controllers\Admin\TestBackupController::class, 'index'])->name('test-backup');
-
-    // Simple backup for testing
-    Route::prefix('simple-backup')->name('simple-backup.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\SimpleBackupController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\Admin\SimpleBackupController::class, 'create'])->name('create');
-    });
-
     // Financing Config Management
     Route::prefix('financing-config')->name('financing-config.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\FinancingConfigController::class, 'index'])->name('index');
@@ -203,13 +194,3 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/extend-session', [App\Http\Controllers\SessionController::class, 'extend'])->name('session.extend');
     Route::get('/session-status', [App\Http\Controllers\SessionController::class, 'status'])->name('session.status');
 });
-
-// CSP Test Route (for debugging)
-Route::get('/test-csp-laravel', function () {
-    return view('test-csp');
-})->name('test-csp');
-
-// Test New News Form (for debugging)
-Route::get('/test-news-form-redesign', function () {
-    return view('admin.news.form-redesign');
-})->name('test-news-form-redesign');

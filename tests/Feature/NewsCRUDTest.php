@@ -59,7 +59,7 @@ class NewsCRUDTest extends TestCase
             ->get(route('admin.news.create'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.news.form');
+        $response->assertViewIs('admin.news.form-redesign');
     }
 
     #[Test]
@@ -145,7 +145,7 @@ class NewsCRUDTest extends TestCase
             ->get(route('admin.news.edit', $news));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.news.form');
+        $response->assertViewIs('admin.news.form-redesign');
         $response->assertViewHas('news');
     }
 

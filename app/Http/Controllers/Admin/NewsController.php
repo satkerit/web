@@ -41,7 +41,7 @@ class NewsController extends Controller
     {
         $this->authorizeCreate('news.create');
 
-        return view('admin.news.form');
+        return view('admin.news.form-redesign');
     }
 
     public function store(Request $request)
@@ -109,7 +109,7 @@ class NewsController extends Controller
         $this->authorizeEdit('news.edit');
 
         $news->load('images');
-        return view('admin.news.form', compact('news'));
+        return view('admin.news.form-redesign', compact('news'));
     }
 
     public function update(Request $request, News $news)
