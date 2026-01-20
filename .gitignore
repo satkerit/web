@@ -19,3 +19,6 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 *.md
+*.sh
+*.bat
+*.txt
