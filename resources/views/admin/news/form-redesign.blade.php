@@ -440,10 +440,12 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     width: 100% !important;
     max-width: 100% !important;
+    min-height: 800px !important;
 }
 
 .note-editor.note-frame {
     background: white;
+    min-height: 800px !important;
 }
 
 .note-editor.note-frame.fullscreen {
@@ -486,6 +488,7 @@
 .note-editing-area {
     background: white;
     width: 100% !important;
+    min-height: 750px !important;
 }
 
 .note-editable {
@@ -496,6 +499,23 @@
     font-size: 1rem !important;
     line-height: 1.75 !important;
     color: #374151 !important;
+}
+
+/* Force minimum height for editor */
+#summernote + .note-editor .note-editable {
+    min-height: 700px !important;
+}
+
+.content-section .note-editor {
+    min-height: 800px !important;
+}
+
+.content-section .note-editing-area {
+    min-height: 750px !important;
+}
+
+.content-section .note-editable {
+    min-height: 700px !important;
 }
 
 /* Custom scrollbar for editor */
@@ -1360,15 +1380,9 @@ jQuery(function($) {
 
     // Input change tracking for progress
     $('input, select, textarea').on('change input', updateProgress);
-    
-    // Make functions globally accessible
-    window.generateSlug = generateSlug;
-    window.previewFeaturedImage = previewFeaturedImage;
-    window.previewSlideImages = previewSlideImages;
-    window.updateWordCount = updateWordCount;
-    window.showNotification = showNotification;
 });
 
+// Global helper functions - defined outside jQuery ready
 function generateSlug(text) {
     return text
         .toLowerCase()
@@ -1377,35 +1391,97 @@ function generateSlug(text) {
         .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 }
 
+function showNotification(message, type) {
+    type = type || 'info';
+    // Simple notification - you can enhance this
+    const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+    const notification = jQuery('<div>')
+        .addClass('fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg text-white z-50')
+        .addClass(bgColor)
+        .text(message)
+        .appendTo('body');
+    
+    setTimeout(function() {
+        notification.fadeOut(300, function() {
+            jQuery(this).remove();
+        });
+    }, 3000);
+}
+
 function previewFeaturedImage(input) {
+    console.log('previewFeaturedImage called', input.files);
     if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // Validate file type
+        if (!file.type.match('image.*')) {
+            alert('File harus berupa gambar!');
+            input.value = '';
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Ukuran file maksimal 5MB!');
+            input.value = '';
+            return;
+        }
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             const uploadArea = input.closest('.form-group').querySelector('.image-upload-area');
-            uploadArea.classList.add('has-image');
-            uploadArea.innerHTML = '<div class="image-preview">' +
-                '<img src="' + e.target.result + '" alt="Featured Image Preview" id="featured-preview">' +
-                '<div class="image-overlay">' +
-                    '<button type="button" class="btn btn-secondary" onclick="document.getElementById(\'featured_image\').click()">' +
-                        '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
-                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>' +
-                        '</svg>' +
-                        'Ganti Gambar' +
-                    '</button>' +
-                '</div>' +
-            '</div>';
+            if (uploadArea) {
+                uploadArea.classList.add('has-image');
+                uploadArea.innerHTML = '<div class="image-preview">' +
+                    '<img src="' + e.target.result + '" alt="Featured Image Preview" id="featured-preview">' +
+                    '<div class="image-overlay">' +
+                        '<button type="button" class="btn btn-secondary" onclick="document.getElementById(\'featured_image\').click(); return false;">' +
+                            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>' +
+                            '</svg>' +
+                            'Ganti Gambar' +
+                        '</button>' +
+                    '</div>' +
+                '</div>';
+                showNotification('Preview gambar berhasil dimuat', 'success');
+            }
         };
-        reader.readAsDataURL(input.files[0]);
+        reader.onerror = function() {
+            alert('Gagal membaca file!');
+        };
+        reader.readAsDataURL(file);
     }
 }
 
 function previewSlideImages(input) {
+    console.log('previewSlideImages called', input.files);
     if (input.files && input.files.length > 0) {
-        console.log('Slide images selected:', input.files.length);
-        // Show notification
-        if (typeof showNotification === 'function') {
-            showNotification(input.files.length + ' gambar dipilih untuk galeri', 'success');
+        const fileCount = input.files.length;
+        console.log('Slide images selected:', fileCount);
+        
+        // Validate file count
+        if (fileCount > 7) {
+            alert('Maksimal 7 gambar!');
+            input.value = '';
+            return;
         }
+        
+        // Validate each file
+        let validFiles = 0;
+        for (let i = 0; i < input.files.length; i++) {
+            const file = input.files[i];
+            if (file.type.match('image.*') && file.size <= 5 * 1024 * 1024) {
+                validFiles++;
+            }
+        }
+        
+        if (validFiles !== fileCount) {
+            alert('Beberapa file tidak valid (harus gambar dan maksimal 5MB per file)');
+            input.value = '';
+            return;
+        }
+        
+        showNotification(fileCount + ' gambar dipilih untuk galeri', 'success');
     }
 }
 
@@ -1479,22 +1555,6 @@ function loadDraft() {
 function clearDraft() {
     const draftKey = 'news_draft_{{ isset($news) ? $news->id : "new" }}';
     localStorage.removeItem(draftKey);
-}
-
-// Show notification
-function showNotification(message, type = 'info') {
-    // Simple notification - you can enhance this
-    const notification = $('<div>')
-        .addClass('fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg text-white z-50')
-        .addClass(type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500')
-        .text(message)
-        .appendTo('body');
-    
-    setTimeout(() => {
-        notification.fadeOut(300, function() {
-            $(this).remove();
-        });
-    }, 3000);
 }
 
 // Initialize auto-save and load draft
