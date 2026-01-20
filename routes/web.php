@@ -212,3 +212,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/extend-session', [App\Http\Controllers\SessionController::class, 'extend'])->name('session.extend');
     Route::get('/session-status', [App\Http\Controllers\SessionController::class, 'status'])->name('session.status');
 });
+
+// Storage Serve Routes (for both standard and /dev paths)
+// Standard storage path
+Route::get('/storage/{path}', [App\Http\Controllers\StorageServeController::class, 'serve'])
+    ->where('path', '.*')
+    ->name('storage.serve')
+    ->middleware('throttle:120,1');
+
+// Dev storage path (for development/production compatibility)
+Route::get('/dev/storage/{path}', [App\Http\Controllers\StorageServeController::class, 'serve'])
+    ->where('path', '.*')
+    ->name('dev.storage.serve')
+    ->middleware('throttle:120,1');
