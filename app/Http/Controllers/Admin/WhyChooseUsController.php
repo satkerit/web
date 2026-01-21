@@ -46,7 +46,7 @@ class WhyChooseUsController extends Controller
 
         try {
             if ($request->hasFile('icon')) {
-                $validated['icon'] = $this->handleImageUpload($request, 'icon', 'why-choose-us');
+                $validated['icon'] = $this->storeOptimizedImage($request->file('icon'), 'why-choose-us');
             }
 
             WhyChooseUs::create($validated);
@@ -61,9 +61,9 @@ class WhyChooseUsController extends Controller
     public function edit(WhyChooseUs $whyChooseUs)
     {
         $themes = WhyChooseUs::getThemes();
-        $item = $whyChooseUs; // Alias for consistency if needed
+        $item = $whyChooseUs;
         
-        return view('admin.why-choose-us.form', compact('item', 'themes'));
+        return view('admin.why-choose-us.form', compact('item', 'themes', 'whyChooseUs'));
     }
 
     public function update(Request $request, WhyChooseUs $whyChooseUs)
@@ -81,7 +81,12 @@ class WhyChooseUsController extends Controller
 
         try {
             if ($request->hasFile('icon')) {
-                $validated['icon'] = $this->handleImageUpload($request, 'icon', 'why-choose-us', $whyChooseUs->icon);
+                // Delete old icon if exists
+                if ($whyChooseUs->icon) {
+                    Storage::disk('public')->delete($whyChooseUs->icon);
+                }
+                
+                $validated['icon'] = $this->storeOptimizedImage($request->file('icon'), 'why-choose-us');
             }
 
             $whyChooseUs->update($validated);
