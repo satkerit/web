@@ -276,10 +276,11 @@
     </div>
 </form>
 
-@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+(function() {
+    'use strict';
+    
     // Icon Preview
     window.previewIcon = function(event) {
         const file = event.target.files[0];
@@ -395,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     };
-});
+})();
 </script>
-@endpush
+
 @endsection
