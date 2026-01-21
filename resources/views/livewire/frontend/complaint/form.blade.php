@@ -45,21 +45,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
-                    <input type="text" wire:model="name" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('name') border-red-300 @enderror">
+                    <input type="text" wire:model.live="name" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('name') border-red-300 @enderror">
                     @error('name') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
-                    <input type="email" wire:model="email" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('email') border-red-300 @enderror">
+                    <input type="email" wire:model.live="email" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('email') border-red-300 @enderror">
                     @error('email') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label>
-                    <input type="text" wire:model="phone" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                    <input type="text" wire:model.live="phone" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Identitas (KTP/SIM)</label>
-                    <input type="text" wire:model="identity_number" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                    <input type="text" wire:model.live="identity_number" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Jenis Pelanggaran <span class="text-red-500">*</span></label>
-                        <select wire:model="type" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('type') border-red-300 @enderror">
+                        <select wire:model.live="type" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('type') border-red-300 @enderror">
                             <option value="">Pilih Jenis</option>
                             <option value="fraud">Kecurangan (Fraud)</option>
                             <option value="violation">Pelanggaran Peraturan</option>
@@ -90,13 +90,13 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Subjek Laporan <span class="text-red-500">*</span></label>
-                        <input type="text" wire:model="subject" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('subject') border-red-300 @enderror" placeholder="Ringkasan singkat laporan">
+                        <input type="text" wire:model.live="subject" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('subject') border-red-300 @enderror" placeholder="Ringkasan singkat laporan">
                         @error('subject') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Lengkap <span class="text-red-500">*</span></label>
-                    <textarea wire:model="description" rows="6" maxlength="5000" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none @error('description') border-red-300 @enderror" placeholder="Jelaskan kronologi kejadian secara detail..."></textarea>
+                    <textarea wire:model.live="description" rows="6" maxlength="5000" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none @error('description') border-red-300 @enderror" placeholder="Jelaskan kronologi kejadian secara detail..."></textarea>
                     <div class="flex justify-between items-center mt-1">
                         @error('description') <p class="text-sm text-red-500">{{ $message }}</p> @else <p class="text-xs text-gray-400">Minimal 50 karakter</p> @enderror
                         <p class="text-xs {{ strlen($description) > 5000 ? 'text-red-500' : 'text-gray-400' }}">{{ strlen($description) }}/5000</p>
@@ -116,19 +116,19 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Pihak Terlapor</label>
-                    <input type="text" wire:model="reported_person" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                    <input type="text" wire:model.live="reported_person" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Departemen/Unit</label>
-                    <input type="text" wire:model="reported_department" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                    <input type="text" wire:model.live="reported_department" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Tanggal Kejadian</label>
-                    <input type="date" wire:model="incident_date" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                    <input type="date" wire:model.live="incident_date" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Lokasi Kejadian</label>
-                    <input type="text" wire:model="incident_location" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                    <input type="text" wire:model.live="incident_location" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                 </div>
             </div>
         </div>
@@ -142,7 +142,7 @@
                 Bukti Pendukung (Opsional)
             </h3>
             <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-emerald-400 transition-colors">
-                <input type="file" wire:model="attachments" multiple class="hidden" id="attachments">
+                <input type="file" wire:model.live="attachments" multiple class="hidden" id="attachments">
                 <label for="attachments" class="cursor-pointer">
                     <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                     <p class="text-gray-600 mb-1">Klik untuk upload atau drag & drop</p>
@@ -167,7 +167,7 @@
         <!-- Terms -->
         <div class="bg-gray-50 rounded-2xl p-6">
             <label class="flex items-start cursor-pointer">
-                <input type="checkbox" wire:model="agree_terms" class="w-5 h-5 mt-0.5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 @error('agree_terms') border-red-300 @enderror">
+                <input type="checkbox" wire:model.live="agree_terms" class="w-5 h-5 mt-0.5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 @error('agree_terms') border-red-300 @enderror">
                 <div class="ml-4">
                     <span class="text-gray-700">Saya menyatakan bahwa laporan ini dibuat dengan itikad baik dan informasi yang saya berikan adalah benar. Saya memahami bahwa laporan palsu dapat dikenakan sanksi hukum.</span>
                 </div>

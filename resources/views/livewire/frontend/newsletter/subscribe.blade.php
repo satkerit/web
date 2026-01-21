@@ -3,7 +3,7 @@
         <div class="relative">
             <input
                 type="email"
-                wire:model="email"
+                wire:model.live="email"
                 placeholder="Masukkan email Anda"
                 class="w-full px-4 py-3 pr-32 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('email') border-red-500 @enderror"
             >

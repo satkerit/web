@@ -45,7 +45,7 @@
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                 <input
                     type="text"
-                    wire:model.blur="principal"
+                    wire:model.live.blur="principal"
                     x-data="{
                         formatNumber(e) {
                             let value = e.target.value.replace(/[^0-9]/g, '');
@@ -79,7 +79,7 @@
             <div class="relative">
                 <input
                     type="number"
-                    wire:model="tenor"
+                    wire:model.live="tenor"
                     min="1"
                     max="60"
                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 @error('tenor') border-red-300 @enderror"
@@ -103,7 +103,7 @@
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                 <input
                     type="text"
-                    wire:model.blur="downPayment"
+                    wire:model.live.blur="downPayment"
                     x-data="{
                         formatNumber(e) {
                             let value = e.target.value.replace(/[^0-9]/g, '');

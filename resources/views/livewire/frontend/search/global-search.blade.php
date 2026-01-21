@@ -1,4 +1,4 @@
-<div class="relative" x-data="{ open: @entangle('showResults') }" @click.away="open = false">
+<div class="relative" x-data="{ open: @entangle('showResults').live }" @click.away="open = false">
     <!-- Search Input -->
     <div class="relative">
         <input

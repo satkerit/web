@@ -10,7 +10,7 @@
                 </div>
                 <input
                     type="text"
-                    wire:model="ticketNumber"
+                    wire:model.live="ticketNumber"
                     wire:keydown.enter="search"
                     placeholder="Masukkan nomor tiket (contoh: {{ $type === 'whistleblowing' ? 'WBS-20260105-ABC123' : 'ADU-20260105-ABC123' }})"
                     class="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-700 placeholder-gray-400"

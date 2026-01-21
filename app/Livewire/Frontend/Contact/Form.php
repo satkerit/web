@@ -55,7 +55,7 @@ class Form extends Component
                 'name' => $this->name,
                 'email' => $this->email,
                 'phone' => $this->phone,
-                'subject' => $this->getSubjectLabel($this->subject), // Store readable subject or keep key? DB column is string, keeping readable is better for admin.
+                'subject' => $this->getSubjectLabel($this->subject),
                 'description' => $this->message,
                 'category' => $category,
                 'status' => 'pending',
@@ -67,7 +67,7 @@ class Form extends Component
                 'name' => $this->name,
                 'email' => $this->email,
                 'phone' => $this->phone,
-                'subject' => $this->subject,
+                'subject' => $this->getSubjectLabel($this->subject),
                 'message' => $this->message,
             ];
 
@@ -79,7 +79,6 @@ class Form extends Component
                 try {
                     Mail::to($toEmail)->send(new ContactFormMail($data));
                 } catch (\Exception $e) {
-                    // Log error but don't fail the submission since DB save was successful
                     Log::error('Failed to send contact email: ' . $e->getMessage());
                 }
             }

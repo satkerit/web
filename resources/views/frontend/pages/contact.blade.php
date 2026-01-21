@@ -80,7 +80,7 @@
             </div>
 
             <!-- Map & Offices Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12" x-data="officeMap()">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12" id="mapContainer" x-data="officeMapData()" x-init="init()">
                 <!-- Interactive Map -->
                 <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 h-[500px] flex flex-col">
                     <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
@@ -234,28 +234,32 @@
     </section>
 
     <!-- Leaflet CSS & JS -->
-    @push('styles')
+    @push('head')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
         .leaflet-popup-content-wrapper { border-radius: 12px; }
         .leaflet-popup-content { margin: 12px 16px; }
         .custom-marker { background: none; border: none; }
     </style>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    @endpush
+
+    @push('scripts')
     <script>
-        // Define officeMap before Alpine initializes
         document.addEventListener('alpine:init', () => {
-            Alpine.data('officeMap', () => ({
+            Alpine.data('officeMapData', () => ({
                 filterType: 'all',
                 selectedOffice: null,
                 map: null,
                 markers: {},
                 offices: @json($officesJson),
+
                 init() {
                     this.$nextTick(() => {
                         this.initMap();
                     });
                 },
+
                 initMap() {
                     const centerLat = {{ $centerLat }};
                     const centerLng = {{ $centerLng }};
@@ -263,7 +267,7 @@
                     this.map = L.map('officeMap').setView([centerLat, centerLng], 10);
 
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        attribution: '&copy; OpenStreetMap'
                     }).addTo(this.map);
 
                     const typeColors = {
@@ -304,6 +308,7 @@
                         }
                     });
                 },
+
                 selectOffice(id, lat, lng) {
                     this.selectedOffice = id;
                     if (lat && lng && this.map) {
@@ -312,7 +317,6 @@
                             this.markers[id].openPopup();
                         }
                     }
-                    // Smooth scroll to map on mobile
                     if (window.innerWidth < 1024) {
                         document.getElementById('officeMap').scrollIntoView({ behavior: 'smooth' });
                     }
