@@ -332,6 +332,19 @@
     opacity: 1;
 }
 
+.gallery-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background: #10b981;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 10;
+}
+
 /* Status Toggle */
 .status-toggle {
     display: flex;
@@ -1108,11 +1121,11 @@
                             <label class="form-label">Galeri Gambar (Maksimal 7)</label>
                             
                             @if(isset($news) && $news->images->count() > 0)
-                            <div class="gallery-grid">
+                            <div class="gallery-grid" id="existing-gallery">
                                 @foreach($news->images as $image)
-                                <div class="gallery-item">
+                                <div class="gallery-item" data-image-id="{{ $image->id }}">
                                     <img src="{{ \App\Helpers\StorageHelper::url($image->image_path) }}" alt="Gallery Image">
-                                    <button type="button" class="gallery-remove" onclick="if(confirm(&quot;Hapus gambar ini?&quot;)) document.getElementById('delete-image-{{ $image->id }}').submit();">
+                                    <button type="button" class="gallery-remove" onclick="if(confirm('Hapus gambar ini?')) document.getElementById('delete-image-{{ $image->id }}').submit();">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
@@ -1122,7 +1135,6 @@
                             </div>
                             @endif
 
-                            @if(!isset($news) || $news->images->count() < 7)
                             <div class="image-upload-area" onclick="document.getElementById('slide_images').click()" style="margin-top: 1rem;">
                                 <div class="image-upload-placeholder">
                                     <svg class="image-upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1130,15 +1142,24 @@
                                     </svg>
                                     <h3 style="margin: 0 0 0.5rem 0; font-weight: 600;">Tambah ke Galeri</h3>
                                     <p style="margin: 0; font-size: 0.875rem;">
-                                        Maksimal {{ isset($news) ? 7 - $news->images->count() : 7 }} gambar lagi
+                                        @if(isset($news))
+                                            Maksimal {{ 7 - $news->images->count() }} gambar lagi
+                                        @else
+                                            Maksimal 7 gambar
+                                        @endif
                                     </p>
+                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; opacity: 0.7;">Klik untuk memilih file</p>
                                 </div>
                             </div>
-                            <input type="file" name="slide_images[]" id="slide_images" multiple accept="image/*" style="display: none;" onchange="previewSlideImages(this)">
-                            @endif
+                            
+                            <!-- Preview area for new images -->
+                            <div id="gallery-preview" class="gallery-grid" style="margin-top: 1rem; display: none;"></div>
+                            
+                            <input type="file" name="slide_images[]" id="slide_images" multiple accept="image/*" style="display: none;">
 
-                            <div class="form-help">Gambar tambahan untuk galeri artikel</div>
+                            <div class="form-help">Gambar tambahan untuk galeri artikel (JPG, PNG, WebP - Max 2MB per file)</div>
                             @error('slide_images')<div class="form-error"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>{{ $message }}</div>@enderror
+                            @error('slide_images.*')<div class="form-error"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>{{ $message }}</div>@enderror
                         </div>
                     </div>
                 </div>

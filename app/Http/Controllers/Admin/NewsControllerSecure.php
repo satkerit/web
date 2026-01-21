@@ -93,10 +93,9 @@ class NewsControllerSecure extends Controller
 
             // Handle featured image
             if ($request->hasFile('featured_image')) {
-                $imagePath = $this->handleImageUpload(
+                $imagePath = $this->storeOptimizedImage(
                     $request->file('featured_image'),
-                    'news',
-                    'featured_image'
+                    'news'
                 );
                 $news->update(['featured_image' => $imagePath]);
             }
@@ -173,10 +172,9 @@ class NewsControllerSecure extends Controller
                     Storage::disk('public')->delete($news->featured_image);
                 }
                 
-                $imagePath = $this->handleImageUpload(
+                $imagePath = $this->storeOptimizedImage(
                     $request->file('featured_image'),
-                    'news',
-                    'featured_image'
+                    'news'
                 );
                 $news->update(['featured_image' => $imagePath]);
             }
@@ -364,7 +362,8 @@ class NewsControllerSecure extends Controller
         $currentOrder = $news->images()->max('order') ?? -1;
 
         foreach ($imagesToProcess as $image) {
-            $imagePath = $this->handleImageUpload($image, 'news/slides', 'gallery');
+            // Use storeOptimizedImage directly since we have UploadedFile
+            $imagePath = $this->storeOptimizedImage($image, 'news/slides');
             
             NewsImage::create([
                 'news_id' => $news->id,

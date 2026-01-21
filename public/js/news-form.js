@@ -503,10 +503,19 @@
 
         const fileCount = input.files.length;
 
+        // Get existing images count
+        const existingCount = $("#existing-gallery .gallery-item").length || 0;
+        const maxImages = CONFIG.maxGalleryImages;
+        const remainingSlots = maxImages - existingCount;
+
         // Validate file count
-        if (fileCount > CONFIG.maxGalleryImages) {
+        if (fileCount > remainingSlots) {
             showNotification(
-                "Maksimal " + CONFIG.maxGalleryImages + " gambar!",
+                "Maksimal " +
+                    remainingSlots +
+                    " gambar lagi! (Total max: " +
+                    maxImages +
+                    ")",
                 "error",
             );
             input.value = "";
@@ -515,26 +524,53 @@
 
         // Validate each file
         let validFiles = 0;
+        let invalidFiles = [];
+
         for (let i = 0; i < input.files.length; i++) {
             const file = input.files[i];
-            if (
-                file.type.match("image.*") &&
-                file.size <= CONFIG.maxImageSize
-            ) {
+            if (!file.type.match("image.*")) {
+                invalidFiles.push(file.name + " (bukan gambar)");
+            } else if (file.size > CONFIG.maxImageSize) {
+                invalidFiles.push(file.name + " (terlalu besar)");
+            } else {
                 validFiles++;
             }
         }
 
-        if (validFiles !== fileCount) {
+        if (invalidFiles.length > 0) {
             showNotification(
-                "Beberapa file tidak valid (harus gambar dan maksimal 5MB per file)",
+                "File tidak valid: " + invalidFiles.join(", "),
                 "error",
             );
             input.value = "";
             return;
         }
 
-        showNotification(fileCount + " gambar dipilih untuk galeri", "success");
+        // Show preview
+        const $previewContainer = $("#gallery-preview");
+        $previewContainer.empty().show();
+
+        for (let i = 0; i < input.files.length; i++) {
+            const file = input.files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const $previewItem = $("<div>")
+                    .addClass("gallery-item")
+                    .css("position", "relative")
+                    .html(
+                        '<img src="' +
+                            e.target.result +
+                            '" alt="Preview">' +
+                            '<div style="position: absolute; top: 0.5rem; left: 0.5rem; background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600;">Baru</div>',
+                    );
+                $previewContainer.append($previewItem);
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        showNotification(fileCount + " gambar siap diupload", "success");
     }
 
     /**
