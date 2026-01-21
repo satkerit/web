@@ -76,6 +76,7 @@
                     type="password"
                     name="current_password"
                     id="current_password"
+                    autocomplete="current-password"
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 @error('current_password') border-red-300 @enderror"
                 >
                 @error('current_password')
@@ -89,6 +90,7 @@
                     type="password"
                     name="password"
                     id="password"
+                    autocomplete="new-password"
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 @error('password') border-red-300 @enderror"
                 >
                 @error('password')
@@ -102,6 +104,7 @@
                     type="password"
                     name="password_confirmation"
                     id="password_confirmation"
+                    autocomplete="new-password"
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 >
             </div>

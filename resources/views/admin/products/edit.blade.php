@@ -342,30 +342,19 @@
     :message="'Apakah Anda yakin ingin menghapus produk \'' . $product->name . '\'? Tindakan ini tidak dapat dibatalkan.'"
 />
 
+@push('styles')
+<script>
+    // Define productForm before Alpine initializes
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('productForm', () => ({
+            // Add any form-specific logic here
+        }));
+    });
+</script>
+@endpush
+
 @push('scripts')
 <script>
-    function productForm() {
-        return {
-            // Add any form-specific logic here
-        }
-    }
-
-    // Repeater field component
-    function repeaterField(initialItems = ['']) {
-        return {
-            items: initialItems.map((value, index) => ({ id: index, value: value || '' })),
-            nextId: initialItems.length,
-            addItem() {
-                this.items.push({ id: this.nextId++, value: '' });
-            },
-            removeItem(index) {
-                if (this.items.length > 1) {
-                    this.items.splice(index, 1);
-                }
-            }
-        }
-    }
-
     function confirmDelete() {
         const modal = document.getElementById('deleteModal');
         const form = modal.querySelector('form');
