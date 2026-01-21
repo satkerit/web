@@ -193,7 +193,7 @@
 <script>
 function auctionForm() {
     return { 
-        status: '{{ old('status', $auction->status ?? 'upcoming') }}' 
+        status: '{{ old("status", $auction->status ?? "upcoming") }}' 
     };
 }
 </script>

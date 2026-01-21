@@ -42,7 +42,8 @@ class AuctionController extends Controller
     {
         $this->authorizeCreate('auctions.create');
 
-        return view('admin.auctions.form');
+        $auction = new Auction();
+        return view('admin.auctions.form', compact('auction'));
     }
 
     public function store(Request $request)
