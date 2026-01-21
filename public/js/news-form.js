@@ -57,9 +57,9 @@
             return;
         }
 
-        // Get initial content from data attribute or textarea value
-        const initialContent =
-            $summernote.data("initial-content") || $summernote.val() || "";
+        // Get initial content from textarea value (already unescaped by browser)
+        const initialContent = $summernote.val() || "";
+        console.log("Initial content length:", initialContent.length);
 
         $summernote.summernote({
             placeholder: "Tulis konten berita di sini...",
@@ -499,14 +499,24 @@
      * Preview slide/gallery images
      */
     function previewSlideImages(input) {
-        if (!input.files || input.files.length === 0) return;
+        console.log("previewSlideImages called");
+        console.log("Files selected:", input.files ? input.files.length : 0);
+
+        if (!input.files || input.files.length === 0) {
+            console.log("No files selected");
+            return;
+        }
 
         const fileCount = input.files.length;
+        console.log("Processing", fileCount, "files");
 
         // Get existing images count
         const existingCount = $("#existing-gallery .gallery-item").length || 0;
+        console.log("Existing images:", existingCount);
+
         const maxImages = CONFIG.maxGalleryImages;
         const remainingSlots = maxImages - existingCount;
+        console.log("Remaining slots:", remainingSlots);
 
         // Validate file count
         if (fileCount > remainingSlots) {
@@ -528,14 +538,28 @@
 
         for (let i = 0; i < input.files.length; i++) {
             const file = input.files[i];
+            console.log("File", i, ":", file.name, file.type, file.size);
+
             if (!file.type.match("image.*")) {
                 invalidFiles.push(file.name + " (bukan gambar)");
             } else if (file.size > CONFIG.maxImageSize) {
-                invalidFiles.push(file.name + " (terlalu besar)");
+                invalidFiles.push(
+                    file.name +
+                        " (terlalu besar: " +
+                        Math.round((file.size / 1024 / 1024) * 10) / 10 +
+                        "MB)",
+                );
             } else {
                 validFiles++;
             }
         }
+
+        console.log(
+            "Valid files:",
+            validFiles,
+            "Invalid files:",
+            invalidFiles.length,
+        );
 
         if (invalidFiles.length > 0) {
             showNotification(
@@ -550,11 +574,16 @@
         const $previewContainer = $("#gallery-preview");
         $previewContainer.empty().show();
 
+        let loadedCount = 0;
+
         for (let i = 0; i < input.files.length; i++) {
             const file = input.files[i];
             const reader = new FileReader();
 
             reader.onload = function (e) {
+                loadedCount++;
+                console.log("Preview loaded for file", loadedCount);
+
                 const $previewItem = $("<div>")
                     .addClass("gallery-item")
                     .css("position", "relative")
@@ -565,6 +594,10 @@
                             '<div style="position: absolute; top: 0.5rem; left: 0.5rem; background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600;">Baru</div>',
                     );
                 $previewContainer.append($previewItem);
+            };
+
+            reader.onerror = function () {
+                console.error("Error reading file:", file.name);
             };
 
             reader.readAsDataURL(file);

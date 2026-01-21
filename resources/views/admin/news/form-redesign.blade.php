@@ -1030,7 +1030,7 @@
                     <div class="form-group">
                         <label class="form-label required">Isi Konten</label>
                         <div class="relative">
-                            <textarea name="content" id="summernote" required data-initial-content="{{ old('content', isset($news) ? htmlspecialchars($news->content, ENT_QUOTES) : '') }}">{{ old('content', $news->content ?? '') }}</textarea>
+                            <textarea name="content" id="summernote" required>{{ old('content', $news->content ?? '') }}</textarea>
                         </div>
                         <div class="form-help">
                             <div class="flex items-center gap-4 text-xs">
@@ -1135,7 +1135,7 @@
                             </div>
                             @endif
 
-                            <div class="image-upload-area" onclick="document.getElementById('slide_images').click()" style="margin-top: 1rem;">
+                            <div class="image-upload-area" onclick="document.getElementById('slide_images').click()" style="margin-top: 1rem; cursor: pointer;">
                                 <div class="image-upload-placeholder">
                                     <svg class="image-upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -1148,16 +1148,26 @@
                                             Maksimal 7 gambar
                                         @endif
                                     </p>
-                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; opacity: 0.7;">Klik untuk memilih file</p>
+                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; opacity: 0.7;">
+                                        💡 Klik untuk memilih file (bisa pilih multiple dengan Ctrl/Cmd)
+                                    </p>
                                 </div>
                             </div>
                             
                             <!-- Preview area for new images -->
                             <div id="gallery-preview" class="gallery-grid" style="margin-top: 1rem; display: none;"></div>
                             
-                            <input type="file" name="slide_images[]" id="slide_images" multiple accept="image/*" style="display: none;">
+                            <input type="file" 
+                                   name="slide_images[]" 
+                                   id="slide_images" 
+                                   multiple 
+                                   accept="image/jpeg,image/jpg,image/png,image/webp" 
+                                   style="display: none;">
 
-                            <div class="form-help">Gambar tambahan untuk galeri artikel (JPG, PNG, WebP - Max 2MB per file)</div>
+                            <div class="form-help">
+                                <strong>Tips:</strong> Pilih multiple gambar dengan menekan Ctrl (Windows) atau Cmd (Mac) saat memilih file. 
+                                Format: JPG, PNG, WebP - Max 2MB per file.
+                            </div>
                             @error('slide_images')<div class="form-error"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>{{ $message }}</div>@enderror
                             @error('slide_images.*')<div class="form-error"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>{{ $message }}</div>@enderror
                         </div>
