@@ -279,8 +279,9 @@
         </div>
     </div>
 </form>
+@endsection
 
-@push('styles')
+@push('scripts')
 <script>
     // Define productForm before Alpine initializes
     document.addEventListener('alpine:init', () => {
@@ -290,11 +291,4 @@
     });
 </script>
 @endpush
-
-@push('scripts')
-<script>
-    // Additional scripts if needed
-</script>
-@endpush
-@endsection
 

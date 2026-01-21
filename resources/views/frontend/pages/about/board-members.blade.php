@@ -61,11 +61,21 @@
         x-show="open"
         x-cloak
         class="fixed inset-0 z-50 overflow-y-auto"
+        style="display: none;"
     >
         <div class="flex items-center justify-center min-h-screen px-4">
-            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" @click="open = false" class="fixed inset-0 bg-black bg-opacity-50"></div>
+            <div 
+                x-show="open" 
+                x-transition.opacity.duration.300ms
+                @click="open = false" 
+                class="fixed inset-0 bg-black bg-opacity-50"
+            ></div>
 
-            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="relative bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div 
+                x-show="open" 
+                x-transition.scale.origin.top.duration.300ms
+                class="relative bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            >
                 <button @click="open = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

@@ -341,8 +341,9 @@
     title="Hapus Produk"
     :message="'Apakah Anda yakin ingin menghapus produk \'' . $product->name . '\'? Tindakan ini tidak dapat dibatalkan.'"
 />
+@endsection
 
-@push('styles')
+@push('scripts')
 <script>
     // Define productForm before Alpine initializes
     document.addEventListener('alpine:init', () => {
@@ -350,11 +351,7 @@
             // Add any form-specific logic here
         }));
     });
-</script>
-@endpush
 
-@push('scripts')
-<script>
     function confirmDelete() {
         const modal = document.getElementById('deleteModal');
         const form = modal.querySelector('form');
@@ -366,4 +363,3 @@
     }
 </script>
 @endpush
-@endsection

@@ -6,6 +6,13 @@
 import "./bootstrap";
 import collapse from "@alpinejs/collapse";
 
+// Suppress Alpine transition cancellation warnings
+window.addEventListener("unhandledrejection", (event) => {
+    if (event.reason && event.reason.isFromCancelledTransition) {
+        event.preventDefault();
+    }
+});
+
 // Connect to Alpine instance injected by Livewire
 document.addEventListener("alpine:init", () => {
     // Register plugins
