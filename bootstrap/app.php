@@ -13,6 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::middleware(['web', 'throttle:120,1'])
                 ->group(base_path('routes/hero-slider-routes.php'));
+            
+            // Explicit route model binding for WhyChooseUs
+            Route::bind('why_choose_u', function ($value) {
+                return \App\Models\WhyChooseUs::findOrFail($value);
+            });
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

@@ -63,7 +63,7 @@ class WhyChooseUsController extends Controller
         $themes = WhyChooseUs::getThemes();
         $item = $whyChooseUs;
         
-        return view('admin.why-choose-us.form', compact('item', 'themes', 'whyChooseUs'));
+        return view('admin.why-choose-us.form', compact('item', 'themes'));
     }
 
     public function update(Request $request, WhyChooseUs $whyChooseUs)
@@ -109,7 +109,10 @@ class WhyChooseUsController extends Controller
 
             return redirect()->route('admin.why-choose-us.index')->with('success', 'Data berhasil dihapus.');
         } catch (\Exception $e) {
-            Log::error('Error deleting Why Choose Us item: ' . $e->getMessage());
+            Log::error('Error deleting Why Choose Us item: ' . $e->getMessage(), [
+                'id' => $whyChooseUs->id,
+                'trace' => $e->getTraceAsString()
+            ]);
             return back()->with('error', 'Gagal menghapus data. Silakan coba lagi.');
         }
     }
