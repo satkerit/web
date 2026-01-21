@@ -341,29 +341,4 @@
     title="Hapus Produk"
     :message="'Apakah Anda yakin ingin menghapus produk \'' . $product->name . '\'? Tindakan ini tidak dapat dibatalkan.'"
 />
-
-@push('styles')
-<script>
-    // Define productForm before Alpine initializes
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('productForm', () => ({
-            // Add any form-specific logic here
-        }));
-    });
-</script>
-@endpush
-
-@push('scripts')
-<script>
-    function confirmDelete() {
-        const modal = document.getElementById('deleteModal');
-        const form = modal.querySelector('form');
-
-        form.action = '{{ route('admin.products.destroy', $product) }}';
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-</script>
-@endpush
 @endsection

@@ -279,16 +279,4 @@
         </div>
     </div>
 </form>
-
-@push('styles')
-<script>
-    // Define productForm before Alpine initializes
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('productForm', () => ({
-            // Add any form-specific logic here
-        }));
-    });
-</script>
-@endpush
 @endsection
-

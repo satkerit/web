@@ -63,6 +63,11 @@ window.Alpine.data("adminLayout", () => ({
     },
 }));
 
+// Register productForm component for product pages
+window.Alpine.data("productForm", () => ({
+    // Add any form-specific logic here
+}));
+
 // Register repeaterField component for dynamic form fields
 window.Alpine.data("repeaterField", (initialData = []) => ({
     items: [],
@@ -146,7 +151,7 @@ window.Alpine.data("imagePicker", (config = {}) => ({
 
         try {
             const csrfToken = document.querySelector(
-                'meta[name="csrf-token"]'
+                'meta[name="csrf-token"]',
             )?.content;
             const response = await fetch(
                 `/admin/storage/api/browse?path=${encodeURIComponent(path)}`,
@@ -157,14 +162,14 @@ window.Alpine.data("imagePicker", (config = {}) => ({
                         "X-Requested-With": "XMLHttpRequest",
                         "X-CSRF-TOKEN": csrfToken || "",
                     },
-                }
+                },
             );
 
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const data = await response.json();
             this.items = data.items.filter(
-                (item) => item.type === "folder" || item.isImage
+                (item) => item.type === "folder" || item.isImage,
             );
         } catch (error) {
             console.error("Error loading directory:", error);
@@ -240,7 +245,7 @@ window.Swal = new Proxy(
                 return Swal[prop](...args);
             };
         },
-    }
+    },
 );
 
 // Expose loadSwal for direct usage
@@ -258,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
             parseInt(
                 document
                     .querySelector('meta[name="idle-warning"]')
-                    ?.getAttribute("content")
+                    ?.getAttribute("content"),
             ) || 5;
         const logoutUrl =
             document
