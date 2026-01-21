@@ -37,7 +37,6 @@ class WhyChooseUsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'icon' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
-            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'color_theme' => 'required|string',
             'sort_order' => 'integer|min:0',
             'is_active' => 'boolean',
@@ -48,10 +47,6 @@ class WhyChooseUsController extends Controller
         try {
             if ($request->hasFile('icon')) {
                 $validated['icon'] = $this->storeOptimizedImage($request->file('icon'), 'why-choose-us/icons');
-            }
-
-            if ($request->hasFile('background_image')) {
-                $validated['background_image'] = $this->storeOptimizedImage($request->file('background_image'), 'why-choose-us/backgrounds');
             }
 
             WhyChooseUs::create($validated);
@@ -77,7 +72,6 @@ class WhyChooseUsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'icon' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
-            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'color_theme' => 'required|string',
             'sort_order' => 'integer|min:0',
             'is_active' => 'boolean',
@@ -95,15 +89,6 @@ class WhyChooseUsController extends Controller
                 $validated['icon'] = $this->storeOptimizedImage($request->file('icon'), 'why-choose-us/icons');
             }
 
-            if ($request->hasFile('background_image')) {
-                // Delete old background image if exists
-                if ($whyChooseUs->background_image) {
-                    Storage::disk('public')->delete($whyChooseUs->background_image);
-                }
-                
-                $validated['background_image'] = $this->storeOptimizedImage($request->file('background_image'), 'why-choose-us/backgrounds');
-            }
-
             $whyChooseUs->update($validated);
 
             return redirect()->route('admin.why-choose-us.index')->with('success', 'Data berhasil diperbarui.');
@@ -118,10 +103,6 @@ class WhyChooseUsController extends Controller
         try {
             if ($whyChooseUs->icon) {
                 Storage::disk('public')->delete($whyChooseUs->icon);
-            }
-
-            if ($whyChooseUs->background_image) {
-                Storage::disk('public')->delete($whyChooseUs->background_image);
             }
 
             $whyChooseUs->delete();

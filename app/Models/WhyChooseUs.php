@@ -15,7 +15,6 @@ class WhyChooseUs extends Model
         'title',
         'description',
         'icon',
-        'background_image',
         'color_theme',
         'sort_order',
         'is_active',

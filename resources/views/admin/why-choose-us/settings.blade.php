@@ -298,19 +298,16 @@
     
     console.log('Why Choose Us Settings Script Loaded');
     
-    // Section Image Preview
     window.previewSectionImage = function(event) {
+        console.log('previewSectionImage called');
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('sectionImagePreviewImg').src = e.target.result;
                 document.getElementById('sectionImagePreview').classList.remove('hidden');
-                
                 const currentContainer = document.getElementById('currentSectionImageContainer');
-                if (currentContainer) {
-                    currentContainer.classList.add('hidden');
-                }
+                if (currentContainer) currentContainer.classList.add('hidden');
             }
             reader.readAsDataURL(file);
         }
@@ -319,11 +316,8 @@
     window.clearSectionImagePreview = function() {
         document.getElementById('section_image').value = '';
         document.getElementById('sectionImagePreview').classList.add('hidden');
-        
         const currentContainer = document.getElementById('currentSectionImageContainer');
-        if (currentContainer) {
-            currentContainer.classList.remove('hidden');
-        }
+        if (currentContainer) currentContainer.classList.remove('hidden');
     };
 
     window.removeCurrentSectionImage = function() {
@@ -340,33 +334,22 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 const container = document.getElementById('currentSectionImageContainer');
-                if (container) {
-                    container.remove();
-                }
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Terhapus!',
-                    text: 'Gambar akan dihapus saat Anda menyimpan.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+                if (container) container.remove();
+                Swal.fire({icon: 'success', title: 'Terhapus!', text: 'Gambar akan dihapus saat Anda menyimpan.', timer: 2000, showConfirmButton: false});
             }
         });
     };
 
-    // Badge Icon Preview
     window.previewBadgeIcon = function(event) {
+        console.log('previewBadgeIcon called');
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('badgeIconPreviewImg').src = e.target.result;
                 document.getElementById('badgeIconPreview').classList.remove('hidden');
-                
                 const currentContainer = document.getElementById('currentBadgeIconContainer');
-                if (currentContainer) {
-                    currentContainer.classList.add('hidden');
-                }
+                if (currentContainer) currentContainer.classList.add('hidden');
             }
             reader.readAsDataURL(file);
         }
@@ -375,11 +358,8 @@
     window.clearBadgeIconPreview = function() {
         document.getElementById('badge_icon').value = '';
         document.getElementById('badgeIconPreview').classList.add('hidden');
-        
         const currentContainer = document.getElementById('currentBadgeIconContainer');
-        if (currentContainer) {
-            currentContainer.classList.remove('hidden');
-        }
+        if (currentContainer) currentContainer.classList.remove('hidden');
     };
 
     window.removeCurrentBadgeIcon = function() {
@@ -396,47 +376,33 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 const container = document.getElementById('currentBadgeIconContainer');
-                if (container) {
-                    container.remove();
-                }
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Terhapus!',
-                    text: 'Icon akan dihapus saat Anda menyimpan.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+                if (container) container.remove();
+                Swal.fire({icon: 'success', title: 'Terhapus!', text: 'Icon akan dihapus saat Anda menyimpan.', timer: 2000, showConfirmButton: false});
             }
         });
     };
     
     console.log('Functions defined:', {
         previewSectionImage: typeof window.previewSectionImage,
-        previewBadgeIcon: typeof window.previewBadgeIcon
+        previewBadgeIcon: typeof window.previewBadgeIcon,
+        clearSectionImagePreview: typeof window.clearSectionImagePreview,
+        clearBadgeIconPreview: typeof window.clearBadgeIconPreview,
+        removeCurrentSectionImage: typeof window.removeCurrentSectionImage,
+        removeCurrentBadgeIcon: typeof window.removeCurrentBadgeIcon
     });
 })();
+</script>
 
-// Show success/error messages
 @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: '{{ session('success') }}',
-        timer: 3000,
-        showConfirmButton: false,
-        toast: true,
-        position: 'top-end'
-    });
+<script>
+Swal.fire({icon: 'success', title: 'Berhasil!', text: '{{ session("success") }}', timer: 3000, showConfirmButton: false, toast: true, position: 'top-end'});
+</script>
 @endif
 
 @if(session('error'))
-    Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: '{{ session('error') }}',
-        confirmButtonColor: '#dc2626'
-    });
-@endif
+<script>
+Swal.fire({icon: 'error', title: 'Gagal!', text: '{{ session("error") }}', confirmButtonColor: '#dc2626'});
 </script>
+@endif
 
 @endsection

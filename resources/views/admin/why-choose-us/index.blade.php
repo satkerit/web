@@ -19,43 +19,19 @@
         @forelse($items as $item)
             <div class="p-4 hover:bg-gray-50 transition-colors" data-id="{{ $item->id }}">
                 <div class="flex items-start gap-4">
-                    {{-- Images --}}
-                    <div class="flex-shrink-0 flex gap-2">
-                        {{-- Icon --}}
-                        <div class="relative group">
-                            @if($item->icon)
-                                <img src="{{ \App\Helpers\StorageHelper::url($item->icon) }}" 
-                                     alt="{{ $item->title }}" 
-                                     class="w-16 h-16 object-contain rounded-lg bg-gray-50 p-2 border border-gray-200">
-                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-lg transition-all flex items-center justify-center">
-                                    <span class="text-xs text-white opacity-0 group-hover:opacity-100 font-medium">Icon</span>
-                                </div>
-                            @else
-                                <div class="w-16 h-16 bg-{{ $item->color_theme ?? 'primary' }}-100 rounded-lg flex items-center justify-center border border-{{ $item->color_theme ?? 'primary' }}-200">
-                                    <svg class="w-8 h-8 text-{{ $item->color_theme ?? 'primary' }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                            @endif
-                        </div>
-
-                        {{-- Background Image --}}
-                        <div class="relative group">
-                            @if($item->background_image)
-                                <img src="{{ \App\Helpers\StorageHelper::url($item->background_image) }}" 
-                                     alt="Background" 
-                                     class="w-24 h-16 object-cover rounded-lg border border-gray-200">
-                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-lg transition-all flex items-center justify-center">
-                                    <span class="text-xs text-white opacity-0 group-hover:opacity-100 font-medium">BG</span>
-                                </div>
-                            @else
-                                <div class="w-24 h-16 bg-gray-100 rounded-lg flex items-center justify-center border border-gray-200">
-                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                            @endif
-                        </div>
+                    {{-- Icon --}}
+                    <div class="flex-shrink-0">
+                        @if($item->icon)
+                            <img src="{{ \App\Helpers\StorageHelper::url($item->icon) }}" 
+                                 alt="{{ $item->title }}" 
+                                 class="w-16 h-16 object-contain rounded-lg bg-gray-50 p-2 border border-gray-200">
+                        @else
+                            <div class="w-16 h-16 bg-{{ $item->color_theme ?? 'primary' }}-100 rounded-lg flex items-center justify-center border border-{{ $item->color_theme ?? 'primary' }}-200">
+                                <svg class="w-8 h-8 text-{{ $item->color_theme ?? 'primary' }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Content --}}
