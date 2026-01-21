@@ -234,17 +234,18 @@
     </section>
 
     <!-- Leaflet CSS & JS -->
-    @push('scripts')
+    @push('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
         .leaflet-popup-content-wrapper { border-radius: 12px; }
         .leaflet-popup-content { margin: 12px 16px; }
         .custom-marker { background: none; border: none; }
     </style>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
-        function officeMap() {
-            return {
+        // Define officeMap before Alpine initializes
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('officeMap', () => ({
                 filterType: 'all',
                 selectedOffice: null,
                 map: null,
@@ -278,7 +279,7 @@
                             const icon = L.divIcon({
                                 className: 'custom-marker',
                                 html: `<div style="background:${color};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:3px solid white;">
-                                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                                 </div>`,
                                 iconSize: [32, 32],
                                 iconAnchor: [16, 32]
@@ -316,8 +317,8 @@
                         document.getElementById('officeMap').scrollIntoView({ behavior: 'smooth' });
                     }
                 }
-            }
-        }
+            }));
+        });
     </script>
     @endpush
 </x-frontend-layout>
