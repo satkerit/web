@@ -187,11 +187,14 @@
     </div>
 </form>
 
+@endsection
+
 @push('scripts')
 <script>
 function auctionForm() {
-    return { status: '{{ old('status', $auction->status ?? 'upcoming') }}' }
+    return { 
+        status: '{{ old('status', $auction->status ?? 'upcoming') }}' 
+    };
 }
 </script>
 @endpush
-@endsection

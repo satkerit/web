@@ -313,24 +313,24 @@
     title="Hapus Lelang"
     message="Apakah Anda yakin ingin menghapus lelang ini? Semua gambar dan dokumen terkait juga akan dihapus."
 />
+@endsection
 
 @push('scripts')
 <script>
-    function confirmDelete(id, title) {
-        const modal = document.getElementById('deleteModal');
-        const form = modal.querySelector('form');
-        const messageEl = modal.querySelector('[data-message]');
+function confirmDelete(id, title) {
+    const modal = document.getElementById('deleteModal');
+    const form = modal.querySelector('form');
+    const messageEl = modal.querySelector('[data-message]');
 
-        // Build the correct delete URL
-        form.action = "{{ url('admin/auctions') }}/" + id;
+    // Build the correct delete URL
+    form.action = "{{ url('admin/auctions') }}/" + id;
 
-        if (messageEl) {
-            messageEl.textContent = `Apakah Anda yakin ingin menghapus lelang "${title}"? Semua gambar dan dokumen terkait juga akan dihapus.`;
-        }
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+    if (messageEl) {
+        messageEl.textContent = `Apakah Anda yakin ingin menghapus lelang "${title}"? Semua gambar dan dokumen terkait juga akan dihapus.`;
     }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
 </script>
 @endpush
-@endsection
