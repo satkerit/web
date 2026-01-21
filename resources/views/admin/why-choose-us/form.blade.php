@@ -277,84 +277,125 @@
 </form>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-// Icon Preview
-function previewIcon(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('iconPreviewImg').src = e.target.result;
-            document.getElementById('iconPreview').classList.remove('hidden');
-            
-            // Hide current icon if exists
-            const currentIcon = document.getElementById('currentIcon');
-            if (currentIcon) {
-                currentIcon.closest('.mb-3').classList.add('hidden');
+document.addEventListener('DOMContentLoaded', function() {
+    // Icon Preview
+    window.previewIcon = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('iconPreviewImg').src = e.target.result;
+                document.getElementById('iconPreview').classList.remove('hidden');
+                
+                // Hide current icon if exists
+                const currentIcon = document.getElementById('currentIcon');
+                if (currentIcon) {
+                    currentIcon.closest('.mb-3').classList.add('hidden');
+                }
             }
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
-    }
-}
+    };
 
-function clearIconPreview() {
-    document.getElementById('icon').value = '';
-    document.getElementById('iconPreview').classList.add('hidden');
-    
-    // Show current icon again if exists
-    const currentIcon = document.getElementById('currentIcon');
-    if (currentIcon) {
-        currentIcon.closest('.mb-3').classList.remove('hidden');
-    }
-}
-
-function removeCurrentIcon() {
-    if (confirm('Hapus icon saat ini?')) {
+    window.clearIconPreview = function() {
+        document.getElementById('icon').value = '';
+        document.getElementById('iconPreview').classList.add('hidden');
+        
+        // Show current icon again if exists
         const currentIcon = document.getElementById('currentIcon');
         if (currentIcon) {
-            currentIcon.closest('.mb-3').remove();
+            currentIcon.closest('.mb-3').classList.remove('hidden');
         }
-    }
-}
+    };
 
-// Background Preview
-function previewBackground(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('bgPreviewImg').src = e.target.result;
-            document.getElementById('bgPreview').classList.remove('hidden');
-            
-            // Hide current bg if exists
-            const currentBg = document.getElementById('currentBg');
-            if (currentBg) {
-                currentBg.closest('.mb-3').classList.add('hidden');
+    window.removeCurrentIcon = function() {
+        Swal.fire({
+            title: 'Hapus Icon?',
+            text: 'Icon saat ini akan dihapus.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const currentIcon = document.getElementById('currentIcon');
+                if (currentIcon) {
+                    currentIcon.closest('.mb-3').remove();
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Terhapus!',
+                    text: 'Icon akan dihapus saat Anda menyimpan.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
             }
+        });
+    };
+
+    // Background Preview
+    window.previewBackground = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('bgPreviewImg').src = e.target.result;
+                document.getElementById('bgPreview').classList.remove('hidden');
+                
+                // Hide current bg if exists
+                const currentBg = document.getElementById('currentBg');
+                if (currentBg) {
+                    currentBg.closest('.mb-3').classList.add('hidden');
+                }
+            }
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
-    }
-}
+    };
 
-function clearBgPreview() {
-    document.getElementById('background_image').value = '';
-    document.getElementById('bgPreview').classList.add('hidden');
-    
-    // Show current bg again if exists
-    const currentBg = document.getElementById('currentBg');
-    if (currentBg) {
-        currentBg.closest('.mb-3').classList.remove('hidden');
-    }
-}
-
-function removeCurrentBg() {
-    if (confirm('Hapus background saat ini?')) {
+    window.clearBgPreview = function() {
+        document.getElementById('background_image').value = '';
+        document.getElementById('bgPreview').classList.add('hidden');
+        
+        // Show current bg again if exists
         const currentBg = document.getElementById('currentBg');
         if (currentBg) {
-            currentBg.closest('.mb-3').remove();
+            currentBg.closest('.mb-3').classList.remove('hidden');
         }
-    }
-}
+    };
+
+    window.removeCurrentBg = function() {
+        Swal.fire({
+            title: 'Hapus Background?',
+            text: 'Background image saat ini akan dihapus.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const currentBg = document.getElementById('currentBg');
+                if (currentBg) {
+                    currentBg.closest('.mb-3').remove();
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Terhapus!',
+                    text: 'Background akan dihapus saat Anda menyimpan.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    };
+});
 </script>
 @endpush
 @endsection
