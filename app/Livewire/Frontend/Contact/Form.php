@@ -4,6 +4,7 @@ namespace App\Livewire\Frontend\Contact;
 
 use App\Mail\ContactFormMail;
 use App\Models\CompanyInfo;
+use App\Models\CustomerComplaint;
 use Livewire\Component;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -38,31 +39,72 @@ class Form extends Component
     {
         $this->validate();
 
-        $data = [
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'subject' => $this->subject,
-            'message' => $this->message,
-        ];
+        try {
+            // Map subject to category
+            $category = match($this->subject) {
+                'informasi_produk' => 'product',
+                'pengaduan' => 'service',
+                'saran' => 'other',
+                'kerjasama' => 'other',
+                default => 'other',
+            };
 
-        // Get email from company info
-        $companyInfo = CompanyInfo::first();
-        $toEmail = $companyInfo->email_contact ?? $companyInfo->email ?? config('mail.from.address');
+            // Save to database
+            CustomerComplaint::create([
+                'ticket_number' => CustomerComplaint::generateTicketNumber(),
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'subject' => $this->getSubjectLabel($this->subject), // Store readable subject or keep key? DB column is string, keeping readable is better for admin.
+                'description' => $this->message,
+                'category' => $category,
+                'status' => 'pending',
+                'incident_date' => now(),
+            ]);
 
-        if ($toEmail) {
-            try {
-                Mail::to($toEmail)->send(new ContactFormMail($data));
-            } catch (\Exception $e) {
-                // Log error but don't fail the submission
-                Log::error('Failed to send contact email: ' . $e->getMessage());
+            // Send email notification
+            $data = [
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'subject' => $this->subject,
+                'message' => $this->message,
+            ];
+
+            // Get email from company info
+            $companyInfo = CompanyInfo::first();
+            $toEmail = $companyInfo->email_contact ?? $companyInfo->email ?? config('mail.from.address');
+
+            if ($toEmail) {
+                try {
+                    Mail::to($toEmail)->send(new ContactFormMail($data));
+                } catch (\Exception $e) {
+                    // Log error but don't fail the submission since DB save was successful
+                    Log::error('Failed to send contact email: ' . $e->getMessage());
+                }
             }
+
+            session()->flash('success', 'Terima kasih! Pesan Anda telah terkirim dan tersimpan. Kami akan segera menghubungi Anda.');
+
+            // Reset form
+            $this->reset(['name', 'email', 'phone', 'subject', 'message']);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to save contact message: ' . $e->getMessage());
+            session()->flash('error', 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti.');
         }
+    }
 
-        session()->flash('success', 'Terima kasih! Pesan Anda telah terkirim. Kami akan segera menghubungi Anda.');
-
-        // Reset form
-        $this->reset(['name', 'email', 'phone', 'subject', 'message']);
+    protected function getSubjectLabel($value)
+    {
+        return match($value) {
+            'informasi_produk' => 'Informasi Produk',
+            'pengaduan' => 'Pengaduan',
+            'saran' => 'Saran',
+            'kerjasama' => 'Kerjasama',
+            'lainnya' => 'Lainnya',
+            default => $value,
+        };
     }
 
     public function render()
