@@ -281,8 +281,11 @@
 (function() {
     'use strict';
     
+    console.log('Why Choose Us Form Script Loaded');
+    
     // Icon Preview
     window.previewIcon = function(event) {
+        console.log('previewIcon called');
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -341,6 +344,7 @@
 
     // Background Preview
     window.previewBackground = function(event) {
+        console.log('previewBackground called');
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -396,6 +400,16 @@
             }
         });
     };
+    
+    // Log all functions to verify they're defined
+    console.log('Functions defined:', {
+        previewIcon: typeof window.previewIcon,
+        previewBackground: typeof window.previewBackground,
+        clearIconPreview: typeof window.clearIconPreview,
+        clearBgPreview: typeof window.clearBgPreview,
+        removeCurrentIcon: typeof window.removeCurrentIcon,
+        removeCurrentBg: typeof window.removeCurrentBg
+    });
 })();
 </script>
 
