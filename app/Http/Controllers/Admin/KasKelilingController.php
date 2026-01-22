@@ -42,17 +42,34 @@ class KasKelilingController extends Controller
             'area_name' => 'required|string|max:255',
             'contact_person' => 'nullable|string|max:255',
             'contact_phone' => 'nullable|string|max:20',
+            'route' => 'nullable|array',
+            'route.*' => 'nullable|string',
+            'schedule' => 'nullable|array',
+            'schedule.*' => 'nullable|string',
             'operational_hours' => 'nullable|array',
+            'operational_hours.start' => 'nullable|date_format:H:i',
+            'operational_hours.end' => 'nullable|date_format:H:i',
             'services_offered' => 'nullable|array',
+            'services_offered.*' => 'nullable|string',
             'is_active' => 'boolean'
         ]);
+
+        // Filter empty values from arrays
+        if (isset($validated['route'])) {
+            $validated['route'] = array_values(array_filter($validated['route']));
+        }
+        if (isset($validated['schedule'])) {
+            $validated['schedule'] = array_values(array_filter($validated['schedule']));
+        }
+        if (isset($validated['services_offered'])) {
+            $validated['services_offered'] = array_values(array_filter($validated['services_offered']));
+        }
 
         $validated['is_active'] = $request->has('is_active');
 
         KasKeliling::create($validated);
 
         return redirect()->route('admin.kas-keliling.index')
-
             ->with('success', 'Kas Keliling berhasil ditambahkan');
     }
 
@@ -67,10 +84,28 @@ class KasKelilingController extends Controller
             'area_name' => 'required|string|max:255',
             'contact_person' => 'nullable|string|max:255',
             'contact_phone' => 'nullable|string|max:20',
+            'route' => 'nullable|array',
+            'route.*' => 'nullable|string',
+            'schedule' => 'nullable|array',
+            'schedule.*' => 'nullable|string',
             'operational_hours' => 'nullable|array',
+            'operational_hours.start' => 'nullable|date_format:H:i',
+            'operational_hours.end' => 'nullable|date_format:H:i',
             'services_offered' => 'nullable|array',
+            'services_offered.*' => 'nullable|string',
             'is_active' => 'boolean'
         ]);
+
+        // Filter empty values from arrays
+        if (isset($validated['route'])) {
+            $validated['route'] = array_values(array_filter($validated['route']));
+        }
+        if (isset($validated['schedule'])) {
+            $validated['schedule'] = array_values(array_filter($validated['schedule']));
+        }
+        if (isset($validated['services_offered'])) {
+            $validated['services_offered'] = array_values(array_filter($validated['services_offered']));
+        }
 
         $validated['is_active'] = $request->has('is_active');
 
@@ -102,17 +137,33 @@ class KasKelilingController extends Controller
     {
         $validated = $request->validate([
             'schedule_date' => 'required|date',
+            'day_name' => 'nullable|string|max:20',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'required|string|max:255',
             'route' => 'nullable|array',
+            'route.*' => 'nullable|string',
             'services_offered' => 'nullable|array',
+            'services_offered.*' => 'nullable|string',
             'notes' => 'nullable|string',
             'is_active' => 'boolean'
         ]);
 
+        // Filter empty values from arrays
+        if (isset($validated['route'])) {
+            $validated['route'] = array_values(array_filter($validated['route']));
+        }
+        if (isset($validated['services_offered'])) {
+            $validated['services_offered'] = array_values(array_filter($validated['services_offered']));
+        }
+
         $validated['kas_keliling_id'] = $kasKeliling->id;
-        $validated['day_name'] = \Carbon\Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
+        
+        // Auto-generate day_name if not provided
+        if (empty($validated['day_name'])) {
+            $validated['day_name'] = \Carbon\Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
+        }
+        
         $validated['is_active'] = $request->has('is_active');
 
         KasKelilingSchedule::create($validated);
@@ -125,16 +176,31 @@ class KasKelilingController extends Controller
     {
         $validated = $request->validate([
             'schedule_date' => 'required|date',
+            'day_name' => 'nullable|string|max:20',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'required|string|max:255',
             'route' => 'nullable|array',
+            'route.*' => 'nullable|string',
             'services_offered' => 'nullable|array',
+            'services_offered.*' => 'nullable|string',
             'notes' => 'nullable|string',
             'is_active' => 'boolean'
         ]);
 
-        $validated['day_name'] = \Carbon\Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
+        // Filter empty values from arrays
+        if (isset($validated['route'])) {
+            $validated['route'] = array_values(array_filter($validated['route']));
+        }
+        if (isset($validated['services_offered'])) {
+            $validated['services_offered'] = array_values(array_filter($validated['services_offered']));
+        }
+
+        // Auto-generate day_name if not provided
+        if (empty($validated['day_name'])) {
+            $validated['day_name'] = \Carbon\Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
+        }
+        
         $validated['is_active'] = $request->has('is_active');
 
         $schedule->update($validated);

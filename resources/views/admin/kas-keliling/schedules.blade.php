@@ -108,13 +108,73 @@
                 @csrf
                 
                 <div class="grid grid-cols-2 gap-4">
-                    <x-admin.input type="date" name="schedule_date" label="Tanggal" required />
-                    <x-admin.input name="location" label="Lokasi" required placeholder="Contoh: Pasar Pagi" />
+                    <div>
+                        <x-admin.input type="date" name="schedule_date" label="Tanggal" required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Hari</label>
+                        <select name="day_name" class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                            <option value="">Pilih Hari</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
+                            <option value="Minggu">Minggu</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
                     <x-admin.input type="time" name="start_time" label="Jam Mulai" required />
                     <x-admin.input type="time" name="end_time" label="Jam Selesai" required />
+                </div>
+                
+                <x-admin.input name="location" label="Lokasi" required placeholder="Contoh: Pasar Pagi" />
+                
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Rute Perjalanan (Opsional)</label>
+                    <div x-data="{ routes: [''] }">
+                        <template x-for="(route, index) in routes" :key="index">
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" :name="'route['+index+']'" x-model="routes[index]"
+                                       placeholder="Contoh: Jl. Pasar Pagi"
+                                       class="flex-1 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                                <button type="button" @click="routes.splice(index, 1)" x-show="routes.length > 1"
+                                        class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-xl">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </template>
+                        <button type="button" @click="routes.push('')" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                            + Tambah Rute
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Layanan yang Ditawarkan (Opsional)</label>
+                    <div x-data="{ services: [''] }">
+                        <template x-for="(service, index) in services" :key="index">
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" :name="'services_offered['+index+']'" x-model="services[index]"
+                                       placeholder="Contoh: Setoran Tabungan"
+                                       class="flex-1 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                                <button type="button" @click="services.splice(index, 1)" x-show="services.length > 1"
+                                        class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-xl">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </template>
+                        <button type="button" @click="services.push('')" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                            + Tambah Layanan
+                        </button>
+                    </div>
                 </div>
                 
                 <div>
