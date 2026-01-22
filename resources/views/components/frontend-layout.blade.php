@@ -12,12 +12,13 @@
     @endif
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=montserrat:400,500,600,700,800|inter:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/css/frontend-fixes.css', 'resources/js/app.js'])
     @livewireStyles
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; }
 
         /* Custom Animations */
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -95,13 +96,13 @@
             will-change: opacity;
             content-visibility: auto;
         }
-        
+
         /* Reduce paint on transitions */
         [x-data] {
             contain: layout style paint;
         }
     </style>
-    
+
     @stack('head')
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-800">
