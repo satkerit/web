@@ -39,15 +39,21 @@ class ProductController extends Controller
     public function kasKeliling()
     {
         // Ambil jadwal 5 hari terdekat dengan relasi kas keliling
+        $today = now()->startOfDay();
+        $endDate = now()->addDays(4)->endOfDay();
+        
         $schedules = \App\Models\KasKelilingSchedule::with('kasKeliling')
             ->where('is_active', true)
-            ->where('schedule_date', '>=', now()->toDateString())
-            ->where('schedule_date', '<=', now()->addDays(4)->toDateString())
-            ->whereHas('kasKeliling', fn($q) => $q->where('is_active', true))
+            ->whereBetween('schedule_date', [$today->toDateString(), $endDate->toDateString()])
+            ->whereHas('kasKeliling', function($query) {
+                $query->where('is_active', true);
+            })
             ->orderBy('schedule_date')
             ->orderBy('start_time')
             ->get()
-            ->groupBy(fn($s) => $s->schedule_date->format('Y-m-d'));
+            ->groupBy(function($schedule) {
+                return $schedule->schedule_date->format('Y-m-d');
+            });
 
         return view('frontend.pages.products.kas-keliling', [
             'schedulesByDate' => $schedules,
