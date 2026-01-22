@@ -44,15 +44,19 @@ class ProductController extends Controller
         
         $schedules = \App\Models\KasKelilingSchedule::with('kasKeliling')
             ->where('is_active', true)
-            ->whereBetween('schedule_date', [$today->toDateString(), $endDate->toDateString()])
+            ->whereRaw('DATE(schedule_date) BETWEEN ? AND ?', [
+                $today->toDateString(), 
+                $endDate->toDateString()
+            ])
             ->whereHas('kasKeliling', function($query) {
                 $query->where('is_active', true);
             })
-            ->orderBy('schedule_date')
+            ->orderByRaw('DATE(schedule_date)')
             ->orderBy('start_time')
             ->get()
             ->groupBy(function($schedule) {
-                return $schedule->schedule_date->format('Y-m-d');
+                // Ensure we get just the date part
+                return \Carbon\Carbon::parse($schedule->schedule_date)->format('Y-m-d');
             });
 
         return view('frontend.pages.products.kas-keliling', [

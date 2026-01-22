@@ -159,8 +159,17 @@ class KasKelilingSeeder extends Seeder
                 $dayName = $scheduleData['day'];
                 
                 // Get next 4 occurrences of this day
+                $startDate = Carbon::now()->startOfDay();
+                
                 for ($week = 0; $week < 4; $week++) {
-                    $date = Carbon::parse("next {$dayName}")->addWeeks($week);
+                    // Find next occurrence of this day
+                    if ($week == 0) {
+                        // For first week, find next occurrence from today
+                        $date = Carbon::now()->next($dayName);
+                    } else {
+                        // For subsequent weeks, add weeks
+                        $date = Carbon::now()->next($dayName)->addWeeks($week);
+                    }
                     
                     // Skip if date is in the past
                     if ($date->isPast()) {
@@ -169,7 +178,7 @@ class KasKelilingSeeder extends Seeder
 
                     KasKelilingSchedule::create([
                         'kas_keliling_id' => $kasKeliling->id,
-                        'schedule_date' => $date->toDateString(),
+                        'schedule_date' => $date->format('Y-m-d'), // Format as date only
                         'day_name' => $date->locale('id')->dayName,
                         'start_time' => $scheduleData['start_time'],
                         'end_time' => $scheduleData['end_time'],
