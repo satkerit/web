@@ -68,6 +68,74 @@ window.Alpine.data("productForm", () => ({
     // Add any form-specific logic here
 }));
 
+// Register permissionManager component for role management pages
+window.Alpine.data("permissionManager", () => ({
+    init() {
+        // Initialize group states on page load
+        document.querySelectorAll("[data-group]").forEach((checkbox) => {
+            const group = checkbox.dataset.group;
+            this.updateGroupState(group);
+        });
+    },
+
+    selectAll() {
+        document
+            .querySelectorAll(".permission-checkbox")
+            .forEach((cb) => (cb.checked = true));
+        this.updateAllGroupStates();
+    },
+
+    deselectAll() {
+        document
+            .querySelectorAll(".permission-checkbox")
+            .forEach((cb) => (cb.checked = false));
+        this.updateAllGroupStates();
+    },
+
+    toggleGroup(group) {
+        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
+        const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
+        checkboxes.forEach((cb) => (cb.checked = !allChecked));
+    },
+
+    isGroupChecked(group) {
+        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
+        return Array.from(checkboxes).every((cb) => cb.checked);
+    },
+
+    isGroupIndeterminate(group) {
+        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
+        const checked = Array.from(checkboxes).filter(
+            (cb) => cb.checked,
+        ).length;
+        return checked > 0 && checked < checkboxes.length;
+    },
+
+    getGroupCount(group) {
+        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
+        const checked = Array.from(checkboxes).filter(
+            (cb) => cb.checked,
+        ).length;
+        return `${checked}/${checkboxes.length}`;
+    },
+
+    updateGroupState(group) {
+        // Force Alpine to re-evaluate
+        this.$nextTick(() => {});
+    },
+
+    updateAllGroupStates() {
+        const groups = [
+            ...new Set(
+                Array.from(document.querySelectorAll("[data-group]")).map(
+                    (cb) => cb.dataset.group,
+                ),
+            ),
+        ];
+        groups.forEach((group) => this.updateGroupState(group));
+    },
+}));
+
 // Register repeaterField component for dynamic form fields
 window.Alpine.data("repeaterField", (initialData = []) => ({
     items: [],
@@ -284,3 +352,44 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// Register reportForm component for report pages
+window.Alpine.data("reportForm", (initialPostingMode = "auto") => ({
+    postingMode: initialPostingMode,
+}));
+
+// Register auctionForm component for auction pages
+window.Alpine.data("auctionForm", (initialStatus = "upcoming") => ({
+    status: initialStatus,
+}));
+
+// Register mapPicker component for office location picker
+window.Alpine.data("mapPicker", (initialLat = "", initialLng = "") => ({
+    latitude: initialLat,
+    longitude: initialLng,
+
+    get hasCoordinates() {
+        return (
+            this.latitude &&
+            this.longitude &&
+            !isNaN(parseFloat(this.latitude)) &&
+            !isNaN(parseFloat(this.longitude))
+        );
+    },
+
+    get mapUrl() {
+        if (!this.hasCoordinates) return "";
+        const lat = parseFloat(this.latitude);
+        const lng = parseFloat(this.longitude);
+        return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sid!2sid!4v1234567890!5m2!1sid!2sid&markers=color:red%7C${lat},${lng}`;
+    },
+
+    get directionsUrl() {
+        if (!this.hasCoordinates) return "#";
+        return `https://www.google.com/maps/dir/?api=1&destination=${this.latitude},${this.longitude}`;
+    },
+
+    updateMap() {
+        // Map updates automatically via Alpine.js reactivity
+    },
+}));

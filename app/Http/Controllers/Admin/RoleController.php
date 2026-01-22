@@ -95,28 +95,36 @@ class RoleController extends Controller
     {
         $this->authorizeEdit('roles.edit');
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:50|unique:roles,name,' . $role->id . '|regex:/^[a-z_]+$/',
+        // Different validation rules for system roles
+        $rules = [
             'display_name' => 'required|string|max:100',
             'description' => 'nullable|string|max:500',
             'is_active' => 'boolean',
             'permissions' => 'array',
             'permissions.*' => 'exists:permissions,id',
-        ], [
+        ];
+
+        // Only validate name for non-system roles
+        if (!$role->is_system) {
+            $rules['name'] = 'required|string|max:50|unique:roles,name,' . $role->id . '|regex:/^[a-z_]+$/';
+        }
+
+        $validated = $request->validate($rules, [
             'name.regex' => 'Nama role hanya boleh menggunakan huruf kecil dan underscore.',
         ]);
 
-        // System roles cannot change name
-        if ($role->is_system) {
-            unset($validated['name']);
-        }
-
-        $role->update([
-            'name' => $validated['name'] ?? $role->name,
+        $updateData = [
             'display_name' => $validated['display_name'],
             'description' => $validated['description'] ?? null,
             'is_active' => $request->boolean('is_active'),
-        ]);
+        ];
+
+        // Only update name for non-system roles
+        if (!$role->is_system && isset($validated['name'])) {
+            $updateData['name'] = $validated['name'];
+        }
+
+        $role->update($updateData);
 
         $role->syncPermissions($validated['permissions'] ?? []);
 

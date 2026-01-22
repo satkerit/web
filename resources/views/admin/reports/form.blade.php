@@ -26,7 +26,7 @@
 </div>
 @endif
 
-<form action="{{ isset($report) ? route('admin.reports.update', $report) : route('admin.reports.store') }}" method="POST" enctype="multipart/form-data" x-data="reportForm()">
+<form action="{{ isset($report) ? route('admin.reports.update', $report) : route('admin.reports.store') }}" method="POST" enctype="multipart/form-data" x-data="reportForm('{{ old('posting_mode', $report->posting_mode ?? 'auto') }}')">
     @csrf
     @if(isset($report)) @method('PUT') @endif
 
@@ -135,12 +135,4 @@
         </div>
     </div>
 </form>
-
-<script>
-function reportForm() {
-    return {
-        postingMode: '{{ old('posting_mode', $report->posting_mode ?? 'auto') }}'
-    }
-}
-</script>
 @endsection

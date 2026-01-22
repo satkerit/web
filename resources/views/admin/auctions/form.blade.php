@@ -22,7 +22,7 @@
     </x-slot:actions>
 </x-admin.page-header>
 
-<form action="{{ isset($auction) ? route('admin.auctions.update', $auction) : route('admin.auctions.store') }}" method="POST" enctype="multipart/form-data" x-data="auctionForm()">
+<form action="{{ isset($auction) ? route('admin.auctions.update', $auction) : route('admin.auctions.store') }}" method="POST" enctype="multipart/form-data" x-data="auctionForm('{{ old('status', $auction->status ?? 'upcoming') }}')">
     @csrf
     @if(isset($auction)) @method('PUT') @endif
 
@@ -190,11 +190,4 @@
 @endsection
 
 @push('scripts')
-<script>
-function auctionForm() {
-    return { 
-        status: '{{ old("status", $auction->status ?? "upcoming") }}' 
-    };
-}
-</script>
 @endpush

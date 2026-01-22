@@ -19,16 +19,27 @@
             <x-admin.card title="Informasi Role">
                 <div class="space-y-4">
                     <div>
-                        <x-admin.input
-                            name="name"
-                            label="Nama Role (Slug)"
-                            :value="old('name', $role->name ?? '')"
-                            required
-                            :error="$errors->first('name')"
-                            :disabled="isset($role) && $role->is_system"
-                            placeholder="contoh: content_manager"
-                            hint="Gunakan huruf kecil dan underscore saja"
-                        />
+                        @if(isset($role) && $role->is_system)
+                            <x-admin.input
+                                name="name_display"
+                                label="Nama Role (Slug)"
+                                :value="$role->name"
+                                disabled
+                                placeholder="contoh: content_manager"
+                                hint="Nama role sistem tidak dapat diubah"
+                            />
+                            <input type="hidden" name="name" value="{{ $role->name }}">
+                        @else
+                            <x-admin.input
+                                name="name"
+                                label="Nama Role (Slug)"
+                                :value="old('name', $role->name ?? '')"
+                                required
+                                :error="$errors->first('name')"
+                                placeholder="contoh: content_manager"
+                                hint="Gunakan huruf kecil dan underscore saja"
+                            />
+                        @endif
                     </div>
 
                     <div>
@@ -136,63 +147,4 @@
         </div>
     </div>
 </form>
-
-@push('scripts')
-<script>
-function permissionManager() {
-    return {
-        init() {
-            // Initialize group states on page load
-            document.querySelectorAll('[data-group]').forEach(checkbox => {
-                const group = checkbox.dataset.group;
-                this.updateGroupState(group);
-            });
-        },
-
-        selectAll() {
-            document.querySelectorAll('.permission-checkbox').forEach(cb => cb.checked = true);
-            this.updateAllGroupStates();
-        },
-
-        deselectAll() {
-            document.querySelectorAll('.permission-checkbox').forEach(cb => cb.checked = false);
-            this.updateAllGroupStates();
-        },
-
-        toggleGroup(group) {
-            const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            checkboxes.forEach(cb => cb.checked = !allChecked);
-        },
-
-        isGroupChecked(group) {
-            const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-            return Array.from(checkboxes).every(cb => cb.checked);
-        },
-
-        isGroupIndeterminate(group) {
-            const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
-            return checked > 0 && checked < checkboxes.length;
-        },
-
-        getGroupCount(group) {
-            const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
-            return `${checked}/${checkboxes.length}`;
-        },
-
-        updateGroupState(group) {
-            // Force Alpine to re-evaluate
-            this.$nextTick(() => {});
-        },
-
-        updateAllGroupStates() {
-            const groups = [...new Set(Array.from(document.querySelectorAll('[data-group]')).map(cb => cb.dataset.group))];
-            groups.forEach(group => this.updateGroupState(group));
-        }
-    }
-}
-</script>
-@endpush
 @endsection

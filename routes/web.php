@@ -107,6 +107,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     // Careers Management
     Route::resource('careers', App\Http\Controllers\Admin\CareerController::class);
 
+    // Kas Keliling Management
+    Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
+    Route::get('kas-keliling/{kasKeliling}/schedules', [App\Http\Controllers\Admin\KasKelilingController::class, 'schedules'])->name('kas-keliling.schedules');
+    Route::post('kas-keliling/{kasKeliling}/schedules', [App\Http\Controllers\Admin\KasKelilingController::class, 'storeSchedule'])->name('kas-keliling.schedules.store');
+    Route::put('kas-keliling/{kasKeliling}/schedules/{schedule}', [App\Http\Controllers\Admin\KasKelilingController::class, 'updateSchedule'])->name('kas-keliling.schedules.update');
+    Route::delete('kas-keliling/{kasKeliling}/schedules/{schedule}', [App\Http\Controllers\Admin\KasKelilingController::class, 'destroySchedule'])->name('kas-keliling.schedules.destroy');
+
     // Board Members Management
     Route::resource('board-members', App\Http\Controllers\Admin\BoardMemberController::class);
 

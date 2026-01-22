@@ -88,6 +88,7 @@ class AdminMenu extends Model
             'company-info' => 'settings.company',
             'board-members' => 'board.manage',
             'offices' => 'offices.view',
+            'kas-keliling' => 'offices.view',
             'careers' => 'careers.view',
             'customer-complaints' => 'complaints.view',
             'complaints' => 'complaints.view',

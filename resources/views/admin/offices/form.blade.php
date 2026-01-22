@@ -47,7 +47,7 @@
                 </div>
             </x-admin.card>
 
-            <x-admin.card title="Lokasi" x-data="mapPicker()">
+            <x-admin.card title="Lokasi" x-data="mapPicker(@js(old('latitude', $office->latitude ?? '')), @js(old('longitude', $office->longitude ?? '')))">
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -141,35 +141,4 @@
         </div>
     </div>
 </form>
-
-<script>
-function mapPicker() {
-    return {
-        latitude: '{{ old('latitude', $office->latitude ?? '') }}',
-        longitude: '{{ old('longitude', $office->longitude ?? '') }}',
-
-        get hasCoordinates() {
-            return this.latitude && this.longitude &&
-                   !isNaN(parseFloat(this.latitude)) &&
-                   !isNaN(parseFloat(this.longitude));
-        },
-
-        get mapUrl() {
-            if (!this.hasCoordinates) return '';
-            const lat = parseFloat(this.latitude);
-            const lng = parseFloat(this.longitude);
-            return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sid!2sid!4v1234567890!5m2!1sid!2sid&markers=color:red%7C${lat},${lng}`;
-        },
-
-        get directionsUrl() {
-            if (!this.hasCoordinates) return '#';
-            return `https://www.google.com/maps/dir/?api=1&destination=${this.latitude},${this.longitude}`;
-        },
-
-        updateMap() {
-            // Map updates automatically via Alpine.js reactivity
-        }
-    }
-}
-</script>
 @endsection

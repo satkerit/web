@@ -26,7 +26,8 @@ class AdminMenuSeeder extends Seeder
             ['key' => 'company-info', 'name' => 'Profil Perusahaan', 'route' => 'admin.company-info.edit', 'section' => 'Perusahaan', 'order' => 20],
             ['key' => 'board-members', 'name' => 'Manajemen', 'route' => 'admin.board-members.index', 'section' => 'Perusahaan', 'order' => 21],
             ['key' => 'offices', 'name' => 'Kantor', 'route' => 'admin.offices.index', 'section' => 'Perusahaan', 'order' => 22],
-            ['key' => 'careers', 'name' => 'Karir', 'route' => 'admin.careers.index', 'section' => 'Perusahaan', 'order' => 23],
+            ['key' => 'kas-keliling', 'name' => 'Kas Keliling', 'route' => 'admin.kas-keliling.index', 'section' => 'Perusahaan', 'order' => 23],
+            ['key' => 'careers', 'name' => 'Karir', 'route' => 'admin.careers.index', 'section' => 'Perusahaan', 'order' => 24],
 
             // Layanan
             ['key' => 'customer-complaints', 'name' => 'Pengaduan Nasabah', 'route' => 'admin.customer-complaints.index', 'section' => 'Layanan', 'order' => 30],
@@ -47,9 +48,9 @@ class AdminMenuSeeder extends Seeder
 
         // Default permissions per role
         $defaultPermissions = [
-            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
-            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
-            'editor' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'careers'],
+            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
+            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
+            'editor' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers'],
         ];
 
         foreach ($menus as $menuData) {
