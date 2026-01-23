@@ -79,13 +79,30 @@ mysql -u username -p database_name < database/sql/REBUILD_KAS_KELILING_COMPLETE.
 - [ ] Sample data berhasil di-insert
 - [ ] Tidak ada error
 
-### Step 3: Initialize Security Settings (Opsional)
+### Step 3: Initialize Security Settings & Add Menu
 
-**Hanya jika tabel `security_settings` kosong:**
+**PENTING: Jalankan ini untuk menambahkan menu Security Settings:**
 
-1. [ ] Cek apakah tabel `security_settings` kosong
-2. [ ] Jika kosong, jalankan `database/sql/init_security_settings.sql`
-3. [ ] Verifikasi: Tabel `security_settings` berisi 1 row dengan default values
+1. [ ] Klik tab "SQL" di phpMyAdmin
+2. [ ] Copy-paste isi `database/sql/init_security_settings.sql`
+3. [ ] Klik "Go" / "Jalankan"
+4. [ ] Verifikasi: Lihat pesan "Security settings initialized successfully!"
+5. [ ] Verifikasi: Lihat pesan "Security Settings menu added successfully!"
+
+**Atau via MySQL Command:**
+
+```bash
+mysql -u username -p database_name < database/sql/init_security_settings.sql
+```
+
+**Verifikasi:**
+
+- [ ] Tabel `security_settings` berisi data
+- [ ] Menu "Keamanan" ada di tabel `admin_menus`
+- [ ] Permissions untuk menu "Keamanan" sudah ada
+- [ ] Tidak ada error
+
+**Cek Manual:**
 
 ```sql
 -- Cek apakah kosong

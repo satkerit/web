@@ -37,19 +37,20 @@ class AdminMenuSeeder extends Seeder
             ['key' => 'storage', 'name' => 'File Manager', 'route' => 'admin.storage.index', 'section' => 'Sistem', 'order' => 40],
             ['key' => 'database-backup', 'name' => 'Backup Database', 'route' => 'admin.database-backup.index', 'section' => 'Sistem', 'order' => 41],
             ['key' => 'settings', 'name' => 'Pengaturan', 'route' => 'admin.settings.maintenance', 'section' => 'Sistem', 'order' => 42],
-            ['key' => 'email-settings', 'name' => 'Email / SMTP', 'route' => 'admin.settings.email', 'section' => 'Sistem', 'order' => 43],
-            ['key' => 'financing-config', 'name' => 'Simulasi Pembiayaan', 'route' => 'admin.financing-config.index', 'section' => 'Sistem', 'order' => 44],
-            ['key' => 'audit-trails', 'name' => 'Log Aktivitas', 'route' => 'admin.audit-trails.index', 'section' => 'Sistem', 'order' => 45],
-            ['key' => 'visitor-stats', 'name' => 'Statistik Pengunjung', 'route' => 'admin.visitor-stats.index', 'section' => 'Sistem', 'order' => 46],
-            ['key' => 'menu-permissions', 'name' => 'Hak Akses Menu', 'route' => 'admin.menu-permissions.index', 'section' => 'Sistem', 'order' => 47],
-            ['key' => 'roles', 'name' => 'Manajemen Role', 'route' => 'admin.roles.index', 'section' => 'Sistem', 'order' => 48],
+            ['key' => 'security-settings', 'name' => 'Keamanan', 'route' => 'admin.settings.security', 'section' => 'Sistem', 'order' => 43],
+            ['key' => 'email-settings', 'name' => 'Email / SMTP', 'route' => 'admin.settings.email', 'section' => 'Sistem', 'order' => 44],
+            ['key' => 'financing-config', 'name' => 'Simulasi Pembiayaan', 'route' => 'admin.financing-config.index', 'section' => 'Sistem', 'order' => 45],
+            ['key' => 'audit-trails', 'name' => 'Log Aktivitas', 'route' => 'admin.audit-trails.index', 'section' => 'Sistem', 'order' => 46],
+            ['key' => 'visitor-stats', 'name' => 'Statistik Pengunjung', 'route' => 'admin.visitor-stats.index', 'section' => 'Sistem', 'order' => 47],
+            ['key' => 'menu-permissions', 'name' => 'Hak Akses Menu', 'route' => 'admin.menu-permissions.index', 'section' => 'Sistem', 'order' => 48],
+            ['key' => 'roles', 'name' => 'Manajemen Role', 'route' => 'admin.roles.index', 'section' => 'Sistem', 'order' => 49],
             ['key' => 'users', 'name' => 'Pengguna', 'route' => 'admin.users.index', 'section' => 'Sistem', 'order' => 50],
         ];
 
         // Default permissions per role
         $defaultPermissions = [
-            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
-            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
+            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
+            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
             'editor' => ['dashboard', 'hero-slides', 'news', 'products', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers'],
         ];
 

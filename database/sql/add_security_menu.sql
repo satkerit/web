@@ -1,57 +1,7 @@
 -- =====================================================
--- INITIALIZE SECURITY SETTINGS & ADD MENU
--- Jalankan file ini untuk:
--- 1. Initialize security_settings (jika kosong)
--- 2. Menambahkan menu Security Settings
--- =====================================================
-
--- =====================================================
--- Step 1: Initialize Security Settings
--- =====================================================
-
--- Check if security_settings is empty
-SELECT COUNT(*) as count FROM security_settings;
-
--- Insert default settings if empty
-INSERT INTO security_settings (
-    rate_limit_web,
-    rate_limit_admin,
-    rate_limit_login,
-    rate_limit_password_reset,
-    rate_limit_download,
-    block_threshold,
-    block_duration_hours,
-    ip_whitelist,
-    ip_blacklist,
-    enable_suspicious_blocking,
-    enable_rate_limiting,
-    log_security_events,
-    created_at,
-    updated_at
-)
-SELECT 
-    120,  -- rate_limit_web
-    100,  -- rate_limit_admin
-    5,    -- rate_limit_login
-    3,    -- rate_limit_password_reset
-    30,   -- rate_limit_download
-    10,   -- block_threshold
-    24,   -- block_duration_hours
-    NULL, -- ip_whitelist (kosong, isi manual via admin)
-    NULL, -- ip_blacklist (kosong, isi manual via admin)
-    1,    -- enable_suspicious_blocking
-    1,    -- enable_rate_limiting
-    1,    -- log_security_events
-    NOW(),
-    NOW()
-WHERE NOT EXISTS (SELECT 1 FROM security_settings LIMIT 1);
-
--- Verify security settings
-SELECT 'Security settings initialized successfully!' as status;
-SELECT * FROM security_settings;
-
--- =====================================================
--- Step 2: Add Security Settings Menu
+-- ADD SECURITY SETTINGS MENU
+-- Jalankan file ini HANYA untuk menambahkan menu Security Settings
+-- (Jika sudah jalankan init_security_settings.sql, tidak perlu file ini)
 -- =====================================================
 
 -- Insert menu Security Settings
@@ -92,15 +42,10 @@ UPDATE admin_menus SET `order` = 48 WHERE `key` = 'menu-permissions';
 UPDATE admin_menus SET `order` = 49 WHERE `key` = 'roles';
 UPDATE admin_menus SET `order` = 50 WHERE `key` = 'users';
 
--- Verify menu
+-- Verify
 SELECT 'Security Settings menu added successfully!' as status;
 SELECT * FROM admin_menus WHERE `key` = 'security-settings';
 SELECT amp.role, amp.can_access, am.name as menu_name 
 FROM admin_menu_permissions amp
 JOIN admin_menus am ON amp.admin_menu_id = am.id
 WHERE am.key = 'security-settings';
-
--- =====================================================
--- DONE!
--- =====================================================
-SELECT '✅ All done! Security settings initialized and menu added.' as final_status;
