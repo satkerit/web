@@ -139,6 +139,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::put('settings/email', [App\Http\Controllers\Admin\EmailSettingController::class, 'update'])->name('settings.email.update');
     Route::post('settings/email/test', [App\Http\Controllers\Admin\EmailSettingController::class, 'sendTest'])->name('settings.email.test');
 
+    // Security Settings
+    Route::get('settings/security', [App\Http\Controllers\Admin\SecuritySettingController::class, 'index'])->name('settings.security');
+    Route::put('settings/security', [App\Http\Controllers\Admin\SecuritySettingController::class, 'update'])->name('settings.security.update');
+    Route::get('settings/blocked-ips', [App\Http\Controllers\Admin\SecuritySettingController::class, 'blockedIps'])->name('settings.blocked-ips');
+    Route::post('settings/security/block-ip', [App\Http\Controllers\Admin\SecuritySettingController::class, 'blockIp'])->name('settings.security.block-ip');
+    Route::delete('settings/security/unblock/{blockedIp}', [App\Http\Controllers\Admin\SecuritySettingController::class, 'unblockIp'])->name('settings.security.unblock');
+    Route::post('settings/security/clear-expired', [App\Http\Controllers\Admin\SecuritySettingController::class, 'clearExpiredBlocks'])->name('settings.security.clear-expired');
+    Route::get('settings/security/test', [App\Http\Controllers\Admin\SecuritySettingController::class, 'testSecurity'])->name('settings.security.test');
+
     // Audit Trails / Log Aktivitas
     Route::get('audit-trails', [App\Http\Controllers\Admin\AuditTrailController::class, 'index'])->name('audit-trails.index');
     Route::get('audit-trails/{auditTrail}', [App\Http\Controllers\Admin\AuditTrailController::class, 'show'])->name('audit-trails.show');
