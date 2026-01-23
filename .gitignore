@@ -22,3 +22,4 @@ Thumbs.db
 *.sh
 *.bat
 *.txt
+/public/clear-cache.php
