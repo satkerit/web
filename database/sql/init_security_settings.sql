@@ -103,4 +103,42 @@ WHERE am.key = 'security-settings';
 -- =====================================================
 -- DONE!
 -- =====================================================
+
+-- =====================================================
+-- Step 3: Add Security Permission (for Role-based system)
+-- =====================================================
+
+-- Insert permission settings.security
+INSERT INTO permissions (`name`, `display_name`, `group`, `description`, `created_at`, `updated_at`)
+VALUES ('settings.security', 'Kelola Keamanan', 'settings', 'Mengelola pengaturan keamanan sistem', NOW(), NOW())
+ON DUPLICATE KEY UPDATE 
+    `display_name` = 'Kelola Keamanan',
+    `group` = 'settings',
+    `description` = 'Mengelola pengaturan keamanan sistem',
+    `updated_at` = NOW();
+
+-- Get permission ID
+SET @permission_id = (SELECT id FROM permissions WHERE `name` = 'settings.security' LIMIT 1);
+
+-- Add permission to Super Admin role (role_id = 1)
+INSERT INTO role_permissions (role_id, permission_id, created_at, updated_at)
+SELECT 1, @permission_id, NOW(), NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM role_permissions WHERE role_id = 1 AND permission_id = @permission_id
+);
+
+-- Add permission to Admin role (role_id = 2)
+INSERT INTO role_permissions (role_id, permission_id, created_at, updated_at)
+SELECT 2, @permission_id, NOW(), NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM role_permissions WHERE role_id = 2 AND permission_id = @permission_id
+);
+
+-- Verify permission
+SELECT 'Security permission added successfully!' as status;
+SELECT * FROM permissions WHERE `name` = 'settings.security';
+
+-- =====================================================
+-- DONE!
+-- =====================================================
 SELECT '✅ All done! Security settings initialized and menu added.' as final_status;

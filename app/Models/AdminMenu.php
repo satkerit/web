@@ -95,6 +95,7 @@ class AdminMenu extends Model
             'storage' => 'storage.view',
             'database-backup' => 'storage.manage',
             'settings' => 'settings.maintenance',
+            'security-settings' => 'settings.security',
             'email-settings' => 'settings.email',
             'financing-config' => 'settings.financing',
             'audit-trails' => 'audit.view',

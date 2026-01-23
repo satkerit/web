@@ -72,6 +72,7 @@ class RolePermissionSeeder extends Seeder
             // Settings
             ['name' => 'settings.company', 'display_name' => 'Pengaturan Perusahaan', 'group' => 'settings'],
             ['name' => 'settings.email', 'display_name' => 'Pengaturan Email', 'group' => 'settings'],
+            ['name' => 'settings.security', 'display_name' => 'Kelola Keamanan', 'group' => 'settings'],
             ['name' => 'settings.maintenance', 'display_name' => 'Mode Maintenance', 'group' => 'settings'],
             ['name' => 'settings.hero', 'display_name' => 'Kelola Hero Slides', 'group' => 'settings'],
             ['name' => 'settings.financing', 'display_name' => 'Konfigurasi Pembiayaan', 'group' => 'settings'],
