@@ -113,57 +113,40 @@
                         <!-- Schedules for this date -->
                         <div class="divide-y divide-gray-100">
                             @foreach($schedules as $schedule)
-                            @php $kas = $schedule->kasKeliling; @endphp
                             <div class="p-6 hover:bg-gray-50 transition-colors">
                                 <div class="flex flex-col lg:flex-row lg:items-start gap-6">
                                     <!-- Time & Location -->
                                     <div class="flex-1">
                                         <div class="flex items-start gap-4">
                                             <!-- Time Badge -->
-                                            @if($schedule->start_time || $schedule->end_time)
                                             <div class="flex-shrink-0 px-4 py-2 bg-emerald-50 rounded-xl border border-emerald-100">
                                                 <div class="flex items-center gap-2">
                                                     <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                     </svg>
                                                     <span class="font-bold text-emerald-700">
-                                                        @if($schedule->start_time && $schedule->end_time)
-                                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}
-                                                        @elseif($schedule->start_time)
-                                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}
-                                                        @endif
+                                                        {{ $schedule->time_range }}
                                                     </span>
                                                 </div>
                                             </div>
-                                            @endif
 
                                             <div class="flex-1">
-                                                <!-- Area Name -->
-                                                <h4 class="text-lg font-bold text-gray-900 mb-1">{{ $kas->area_name }}</h4>
-                                                
                                                 <!-- Location -->
-                                                @if($schedule->location)
-                                                <p class="text-gray-600 flex items-center gap-2 mb-2">
-                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                                    </svg>
-                                                    {{ $schedule->location }}
-                                                </p>
-                                                @endif
-
-                                                <!-- Contact -->
-                                                @if($kas->contact_person || $kas->contact_phone)
-                                                <p class="text-sm text-gray-500 flex items-center gap-2">
+                                                <h4 class="text-lg font-bold text-gray-900 mb-1">{{ $schedule->location }}</h4>
+                                                
+                                                <!-- PIC -->
+                                                @if($schedule->pic_name || $schedule->pic_phone)
+                                                <p class="text-sm text-gray-500 flex items-center gap-2 mb-2">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                                     </svg>
-                                                    {{ $kas->contact_person }}
-                                                    @if($kas->contact_phone)
+                                                    {{ $schedule->pic_name }}
+                                                    @if($schedule->pic_phone)
                                                     <span class="text-gray-300">|</span>
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                                     </svg>
-                                                    {{ $kas->contact_phone }}
+                                                    {{ $schedule->pic_phone }}
                                                     @endif
                                                 </p>
                                                 @endif
@@ -175,40 +158,24 @@
                                         </div>
                                     </div>
 
-                                    <!-- Route & Services -->
-                                    <div class="lg:w-96 space-y-4">
-                                        <!-- Route -->
-                                        @if($schedule->route && count($schedule->route) > 0)
-                                        <div>
-                                            <h5 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1">
-                                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                                                </svg>
-                                                Rute
-                                            </h5>
-                                            <p class="text-sm text-gray-600">{{ implode(' → ', $schedule->route) }}</p>
+                                    <!-- Facilities -->
+                                    @if($schedule->facility)
+                                    <div class="lg:w-96">
+                                        <h5 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1">
+                                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                                            </svg>
+                                            Fasilitas
+                                        </h5>
+                                        <div class="flex flex-wrap gap-1.5">
+                                            @foreach($schedule->facility_list as $facility)
+                                            <span class="inline-flex items-center px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-lg border border-amber-200">
+                                                {{ $facility }}
+                                            </span>
+                                            @endforeach
                                         </div>
-                                        @endif
-
-                                        <!-- Services -->
-                                        @if($schedule->services_offered && count($schedule->services_offered) > 0)
-                                        <div>
-                                            <h5 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1">
-                                                <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                                                </svg>
-                                                Layanan
-                                            </h5>
-                                            <div class="flex flex-wrap gap-1.5">
-                                                @foreach($schedule->services_offered as $service)
-                                                <span class="inline-flex items-center px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-lg border border-amber-200">
-                                                    {{ $service }}
-                                                </span>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        @endif
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                             @endforeach

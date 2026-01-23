@@ -38,48 +38,24 @@ class ProductController extends Controller
 
     public function kasKeliling()
     {
-        // Clear cache untuk memastikan data fresh (temporary untuk debugging)
-        \Cache::forget('kas_keliling_schedules');
-        
-        // Ambil jadwal 5 hari terdekat dengan relasi kas keliling
+        // Ambil jadwal 5 hari terdekat
         $today = now()->startOfDay();
         $endDate = now()->addDays(4)->endOfDay();
         
-        // Log untuk debugging
-        \Log::info('Kas Keliling Query', [
-            'today' => $today->toDateString(),
-            'endDate' => $endDate->toDateString(),
-            'timezone' => config('app.timezone'),
-        ]);
-        
-        // Query yang lebih robust untuk compatibility antara local dan production
-        $schedules = \App\Models\KasKelilingSchedule::with('kasKeliling')
-            ->where('is_active', true)
+        $schedules = \App\Models\KasKelilingSchedule::active()
             ->whereBetween('schedule_date', [
                 $today->toDateString(), 
                 $endDate->toDateString()
             ])
-            ->whereHas('kasKeliling', function($query) {
-                $query->where('is_active', true);
-            })
             ->orderBy('schedule_date', 'asc')
             ->orderBy('start_time', 'asc')
-            ->get();
-        
-        // Log hasil query
-        \Log::info('Kas Keliling Results', [
-            'count' => $schedules->count(),
-            'schedules' => $schedules->pluck('schedule_date', 'id')->toArray(),
-        ]);
-        
-        // Group by date
-        $schedulesByDate = $schedules->groupBy(function($schedule) {
-            // Ensure we get just the date part
-            return \Carbon\Carbon::parse($schedule->schedule_date)->format('Y-m-d');
-        });
+            ->get()
+            ->groupBy(function($schedule) {
+                return $schedule->schedule_date->format('Y-m-d');
+            });
 
         return view('frontend.pages.products.kas-keliling', [
-            'schedulesByDate' => $schedulesByDate,
+            'schedulesByDate' => $schedules,
             'companyInfo' => CacheService::getCompanyInfo(),
         ]);
     }

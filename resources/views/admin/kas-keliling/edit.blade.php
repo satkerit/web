@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Kas Keliling')
+@section('title', 'Edit Jadwal Kas Keliling')
 
 @section('content')
-<x-admin.page-header title="Edit Kas Keliling" :subtitle="$kasKeliling->area_name">
+<x-admin.page-header title="Edit Jadwal Kas Keliling" subtitle="Perbarui jadwal kas keliling">
     <x-slot:actions>
         <x-admin.button href="{{ route('admin.kas-keliling.index') }}" variant="secondary">
             Kembali
