@@ -43,7 +43,8 @@ class AuctionCRUDTest extends TestCase
         $response = $this->get(route('admin.auctions.index'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.auctions.index');
+        $response->assertSee('Kelola Lelang');
+        $response->assertSee('Tambah Lelang');
     }
 
     public function test_admin_can_view_create_auction_form()
@@ -53,7 +54,9 @@ class AuctionCRUDTest extends TestCase
         $response = $this->get(route('admin.auctions.create'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.auctions.form');
+        $response->assertSee('Tambah Lelang');
+        $response->assertSee('Judul Lelang');
+        $response->assertSee('Nomor Lelang');
     }
 
     public function test_admin_can_create_auction()
@@ -62,14 +65,17 @@ class AuctionCRUDTest extends TestCase
 
         $data = [
             'title' => 'Test Auction',
+            'auction_number' => 'AUC-001',
             'object_number' => 'OBJ-001',
             'description' => 'Test description',
             'asset_type' => 'rumah',
-            'location' => 'Jakarta',
-            'starting_price' => 500000000,
+            'address' => 'Jl. Test No. 123, Jakarta',
+            'city' => 'Jakarta',
+            'limit_price' => 500000000,
             'auction_date' => now()->addDays(7)->format('Y-m-d\TH:i'),
-            'auction_type' => 'eksekusi',
-            'status' => 'upcoming',
+            'auction_type' => 'eksekusi_hak_tanggungan',
+            'auction_location' => 'Kantor Lelang Jakarta',
+            'status' => 'published',
             'contact_person' => 'John Doe',
             'contact_phone' => '08123456789',
         ];
@@ -94,12 +100,15 @@ class AuctionCRUDTest extends TestCase
 
         $data = [
             'title' => 'Test Auction with Images',
+            'auction_number' => 'AUC-002',
             'asset_type' => 'rumah',
-            'location' => 'Jakarta',
-            'starting_price' => 500000000,
+            'address' => 'Jl. Test No. 123, Jakarta',
+            'city' => 'Jakarta',
+            'limit_price' => 500000000,
             'auction_date' => now()->addDays(7)->format('Y-m-d\TH:i'),
-            'auction_type' => 'eksekusi',
-            'status' => 'upcoming',
+            'auction_type' => 'eksekusi_hak_tanggungan',
+            'auction_location' => 'Kantor Lelang Jakarta',
+            'status' => 'published',
             'contact_person' => 'John Doe',
             'contact_phone' => '08123456789',
             'images' => [$image1, $image2],
@@ -123,8 +132,9 @@ class AuctionCRUDTest extends TestCase
         $response = $this->get(route('admin.auctions.edit', $auction));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.auctions.form');
-        $response->assertViewHas('auction', $auction);
+        $response->assertSee('Edit Lelang');
+        $response->assertSee($auction->title);
+        $response->assertSee($auction->auction_number);
     }
 
     public function test_admin_can_update_auction()
@@ -137,11 +147,14 @@ class AuctionCRUDTest extends TestCase
 
         $data = [
             'title' => 'Updated Title',
+            'auction_number' => $auction->auction_number,
             'asset_type' => $auction->asset_type,
-            'location' => $auction->location,
-            'starting_price' => $auction->starting_price,
+            'address' => $auction->address,
+            'city' => $auction->city,
+            'limit_price' => $auction->limit_price,
             'auction_date' => $auction->auction_date->format('Y-m-d\TH:i'),
             'auction_type' => $auction->auction_type,
+            'auction_location' => $auction->auction_location,
             'status' => $auction->status,
             'contact_person' => $auction->contact_person,
             'contact_phone' => $auction->contact_phone,
@@ -163,16 +176,19 @@ class AuctionCRUDTest extends TestCase
         $this->actingAs($this->admin);
 
         $auction = Auction::factory()->create([
-            'status' => 'ongoing',
+            'status' => 'auction_ongoing',
         ]);
 
         $data = [
             'title' => $auction->title,
+            'auction_number' => $auction->auction_number,
             'asset_type' => $auction->asset_type,
-            'location' => $auction->location,
-            'starting_price' => $auction->starting_price,
+            'address' => $auction->address,
+            'city' => $auction->city,
+            'limit_price' => $auction->limit_price,
             'auction_date' => $auction->auction_date->format('Y-m-d\TH:i'),
             'auction_type' => $auction->auction_type,
+            'auction_location' => $auction->auction_location,
             'status' => 'sold',
             'winning_bid' => 600000000,
             'winner_name' => 'Jane Doe',
@@ -213,12 +229,24 @@ class AuctionCRUDTest extends TestCase
     {
         $this->actingAs($this->admin);
 
-        Auction::factory()->create(['status' => 'upcoming', 'asset_type' => 'rumah']);
-        Auction::factory()->create(['status' => 'ongoing', 'asset_type' => 'tanah']);
-        Auction::factory()->create(['status' => 'sold', 'asset_type' => 'rumah']);
+        Auction::factory()->create([
+            'status' => 'published', 
+            'asset_type' => 'rumah',
+            'auction_number' => 'AUC-FILTER-001'
+        ]);
+        Auction::factory()->create([
+            'status' => 'auction_ongoing', 
+            'asset_type' => 'tanah',
+            'auction_number' => 'AUC-FILTER-002'
+        ]);
+        Auction::factory()->create([
+            'status' => 'sold', 
+            'asset_type' => 'rumah',
+            'auction_number' => 'AUC-FILTER-003'
+        ]);
 
         // Filter by status
-        $response = $this->get(route('admin.auctions.index', ['status' => 'upcoming']));
+        $response = $this->get(route('admin.auctions.index', ['status' => 'published']));
         $response->assertStatus(200);
 
         // Filter by asset_type
@@ -226,7 +254,10 @@ class AuctionCRUDTest extends TestCase
         $response->assertStatus(200);
 
         // Search
-        $auction = Auction::factory()->create(['title' => 'Unique Auction Title']);
+        $auction = Auction::factory()->create([
+            'title' => 'Unique Auction Title',
+            'auction_number' => 'AUC-UNIQUE-001'
+        ]);
         $response = $this->get(route('admin.auctions.index', ['search' => 'Unique']));
         $response->assertStatus(200);
         $response->assertSee('Unique Auction Title');
@@ -241,11 +272,13 @@ class AuctionCRUDTest extends TestCase
         $response->assertSessionHasErrors([
             'title',
             'asset_type',
-            'location',
-            'starting_price',
+            'address',
+            'limit_price',
             'auction_date',
             'auction_type',
-            'status',
+            'auction_location',
+            'contact_person',
+            'contact_phone',
         ]);
     }
 
@@ -253,10 +286,13 @@ class AuctionCRUDTest extends TestCase
     {
         $this->actingAs($this->admin);
 
-        $statuses = ['upcoming', 'ongoing', 'closed', 'sold', 'cancelled'];
+        $statuses = ['draft', 'published', 'registration_open', 'auction_scheduled', 'sold', 'cancelled'];
 
-        foreach ($statuses as $status) {
-            $auction = Auction::factory()->create(['status' => $status]);
+        foreach ($statuses as $index => $status) {
+            $auction = Auction::factory()->create([
+                'status' => $status,
+                'auction_number' => 'AUC-STATUS-' . str_pad($index + 1, 3, '0', STR_PAD_LEFT)
+            ]);
             $this->assertEquals($status, $auction->status);
         }
     }
@@ -267,12 +303,15 @@ class AuctionCRUDTest extends TestCase
 
         $data = [
             'title' => 'Test Auction for Slug',
+            'auction_number' => 'AUC-SLUG-001',
             'asset_type' => 'rumah',
-            'location' => 'Jakarta',
-            'starting_price' => 500000000,
+            'address' => 'Jl. Test No. 123, Jakarta',
+            'city' => 'Jakarta',
+            'limit_price' => 500000000,
             'auction_date' => now()->addDays(7)->format('Y-m-d\TH:i'),
-            'auction_type' => 'eksekusi',
-            'status' => 'upcoming',
+            'auction_type' => 'eksekusi_hak_tanggungan',
+            'auction_location' => 'Kantor Lelang Jakarta',
+            'status' => 'published',
             'contact_person' => 'John Doe',
             'contact_phone' => '08123456789',
         ];

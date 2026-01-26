@@ -1,49 +1,49 @@
 <x-frontend-layout>
-    <x-slot name="title">{{ $auction->title }} - Lelang</x-slot>
+    <x-slot name="title">{{ $auction->title }} - Lelang Properti</x-slot>
+    <x-slot name="meta_description">{{ $auction->meta_description ?? Str::limit($auction->description, 160) }}</x-slot>
 
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-primary-700 via-primary-500 to-primary-600 py-16 md:py-20">
-        <div class="absolute inset-0 bg-black/20"></div>
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <!-- Breadcrumb -->
-            <nav class="flex items-center gap-2 text-sm mb-6">
-                <a href="{{ route('home') }}" class="text-white/70 hover:text-white transition-colors">Beranda</a>
-                <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                <a href="{{ route('auctions.index') }}" class="text-white/70 hover:text-white transition-colors">Lelang</a>
-                <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                <span class="text-white font-medium">Detail</span>
-            </nav>
+    <div class="container mx-auto px-4 py-8">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-8" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600">Beranda</a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="{{ route('auctions.index') }}" class="ml-1 text-gray-700 hover:text-blue-600 md:ml-2">Lelang</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-gray-500 md:ml-2">{{ Str::limit($auction->title, 50) }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
 
-            <!-- Status Badges -->
-            <div class="flex flex-wrap items-center gap-3 mb-6">
-                @php $colors = $auction->status_color; @endphp
-                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold {{ $colors['bg'] }} {{ $colors['text'] }} shadow-lg">
-                    @if($auction->status === 'sold')
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    @else
-                        <span class="w-2 h-2 rounded-full {{ $colors['dot'] }} animate-pulse"></span>
-                    @endif
-                    {{ $auction->status_label }}
-                </span>
-                @if($auction->auction_type)
-                    <span class="px-4 py-2 text-sm font-medium rounded-full bg-white/20 text-white backdrop-blur-sm">
-                        {{ \App\Models\Auction::$auctionTypes[$auction->auction_type] ?? $auction->auction_type }}
-                    </span>
-                @endif
-                <span class="px-4 py-2 text-sm font-medium rounded-full bg-white/20 text-white backdrop-blur-sm">
-                    {{ \App\Models\Auction::$assetTypes[$auction->asset_type] ?? $auction->asset_type }}
-                </span>
-            </div>
-
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">{{ $auction->title }}</h1>
-            @if($auction->object_number)
-                <p class="text-white/80 text-lg">No. Objek: <span class="font-semibold">{{ $auction->object_number }}</span></p>
-            @endif>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <!-- Header -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-sm text-blue-600 font-medium">{{ $auction->asset_type_label }}</span>
+                                @if($auction->is_featured)
+                                    <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">Featured</span>
+                                @endif
+                                @if($auction->is_urgent)
+                                    <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">Urgent</span>
+                                @endif
+                            </div>
     </section>
 
     <!-- Main Content -->
@@ -276,8 +276,12 @@
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-500 uppercase tracking-wide">Tanggal Lelang</p>
-                                    <p class="font-bold text-gray-900 text-sm md:text-base">{{ $auction->auction_date->translatedFormat('d F Y') }}</p>
-                                    <p class="text-xs md:text-sm text-gray-600">{{ $auction->auction_date->format('H:i') }} WIB</p>
+                                    @if($auction->auction_date)
+                                        <p class="font-bold text-gray-900 text-sm md:text-base">{{ $auction->auction_date->translatedFormat('d F Y') }}</p>
+                                        <p class="text-xs md:text-sm text-gray-600">{{ $auction->auction_date->format('H:i') }} WIB</p>
+                                    @else
+                                        <p class="font-bold text-gray-900 text-sm md:text-base">Belum ditentukan</p>
+                                    @endif
                                 </div>
                             </div>
 
@@ -288,8 +292,12 @@
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-500 uppercase tracking-wide">Batas Pendaftaran</p>
-                                    <p class="font-bold text-gray-900 text-sm md:text-base">{{ $auction->registration_deadline->translatedFormat('d F Y') }}</p>
-                                    <p class="text-xs md:text-sm text-gray-600">{{ $auction->registration_deadline->format('H:i') }} WIB</p>
+                                    @if($auction->registration_deadline)
+                                        <p class="font-bold text-gray-900 text-sm md:text-base">{{ $auction->registration_deadline->translatedFormat('d F Y') }}</p>
+                                        <p class="text-xs md:text-sm text-gray-600">{{ $auction->registration_deadline->format('H:i') }} WIB</p>
+                                    @else
+                                        <p class="font-bold text-gray-900 text-sm md:text-base">Belum ditentukan</p>
+                                    @endif
                                 </div>
                             </div>
                             @endif

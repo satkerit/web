@@ -1,258 +1,352 @@
 <x-frontend-layout>
-    <x-slot:title>Lelang Agunan - {{ config('app.name') }}</x-slot:title>
+    <x-slot name="title">Lelang Properti - {{ config('app.name') }}</x-slot>
+    <x-slot name="meta_description">Temukan berbagai lelang properti terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.</x-slot>
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-primary-700 via-primary-500 to-primary-600 py-16 md:py-20">
-        <div class="absolute inset-0 bg-black/20"></div>
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+        <div class="container mx-auto px-4">
             <div class="text-center">
-                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">Lelang Agunan</h1>
-                <p class="text-lg text-white/90 max-w-2xl mx-auto">Temukan peluang investasi menarik melalui lelang aset dengan harga terbaik dan proses yang transparan</p>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Lelang Properti</h1>
+                <p class="text-xl mb-8">Temukan properti impian Anda dengan harga terbaik melalui lelang terpercaya</p>
+                
+                <!-- Search Form -->
+                <div class="max-w-4xl mx-auto">
+                    <form method="GET" class="bg-white rounded-lg p-6 shadow-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <input type="text" name="search" value="{{ request('search') }}" 
+                                       placeholder="Cari properti, lokasi..."
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                            </div>
+                            <div>
+                                <select name="asset_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                                    <option value="">Semua Jenis</option>
+                                    @foreach($assetTypes as $value => $label)
+                                        <option value="{{ $value }}" {{ request('asset_type') === $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <select name="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                                    <option value="">Semua Kota</option>
+                                    @foreach($cities as $city)
+                                        <option value="{{ $city }}" {{ request('city') === $city ? 'selected' : '' }}>
+                                            {{ $city }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                                    Cari Lelang
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Main Content -->
-    <section class="py-12 md:py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Search & Filter Card -->
-            <div class="mb-8 bg-white rounded-xl shadow-sm p-4 md:p-6">
-                <form method="GET" class="flex flex-col lg:flex-row gap-4">
-                    <div class="flex-1">
-                        <div class="relative">
-                            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari berdasarkan judul atau lokasi..." class="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900 placeholder-gray-400">
+    <div class="container mx-auto px-4 py-12">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Main Content -->
+            <div class="lg:w-3/4">
+                <!-- Filters & Sort -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <input type="hidden" name="search" value="{{ request('search') }}">
+                        <input type="hidden" name="asset_type" value="{{ request('asset_type') }}">
+                        <input type="hidden" name="city" value="{{ request('city') }}">
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Min</label>
+                            <input type="number" name="min_price" value="{{ request('min_price') }}" 
+                                   placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                         </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <select name="status" class="px-5 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-700 min-w-[160px]">
-                            <option value="">Semua Status</option>
-                            <option value="upcoming" {{ request('status') == 'upcoming' ? 'selected' : '' }}>Akan Datang</option>
-                            <option value="ongoing" {{ request('status') == 'ongoing' ? 'selected' : '' }}>Berlangsung</option>
-                            <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Terjual</option>
-                            <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Selesai</option>
-                        </select>
-                        <select name="type" class="px-5 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-700 min-w-[160px]">
-                            <option value="">Semua Jenis</option>
-                            @foreach(\App\Models\Auction::$assetTypes as $key => $label)
-                                <option value="{{ $key }}" {{ request('type') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                        <button type="submit" class="px-6 py-4 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-colors">
-                            Cari
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Active Filters -->
-                @if(request('search') || request('status') || request('type'))
-                <div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-gray-100">
-                    <span class="text-sm text-gray-500">Filter aktif:</span>
-                    @if(request('search'))
-                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                            "{{ request('search') }}"
-                        </span>
-                    @endif
-                    @if(request('status'))
-                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                            {{ \App\Models\Auction::$statusLabels[request('status')] ?? request('status') }}
-                        </span>
-                    @endif
-                    @if(request('type'))
-                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                            {{ \App\Models\Auction::$assetTypes[request('type')] ?? request('type') }}
-                        </span>
-                    @endif
-                    <a href="{{ route('auctions.index') }}" class="text-sm text-gray-500 hover:text-gray-700 underline">
-                        Reset semua
-                    </a>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Max</label>
+                            <input type="number" name="max_price" value="{{ request('max_price') }}" 
+                                   placeholder="Unlimited" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                                <option value="">Semua Status</option>
+                                <option value="registration_open" {{ request('status') === 'registration_open' ? 'selected' : '' }}>Pendaftaran Dibuka</option>
+                                <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Dipublikasi</option>
+                                <option value="auction_scheduled" {{ request('status') === 'auction_scheduled' ? 'selected' : '' }}>Terjadwal</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Urutkan</label>
+                            <select name="sort_by" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                                <option value="date" {{ request('sort_by') === 'date' ? 'selected' : '' }}>Tanggal Lelang</option>
+                                <option value="price" {{ request('sort_by') === 'price' ? 'selected' : '' }}>Harga</option>
+                                <option value="featured" {{ request('sort_by') === 'featured' ? 'selected' : '' }}>Featured</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                                Filter
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                @endif
-            </div>
 
-            <!-- Auctions Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @forelse($auctions as $auction)
-                <article class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 hover:-translate-y-1">
-                    <!-- Image Container -->
-                    <div class="relative h-64 overflow-hidden">
-                        @if($auction->images && count($auction->images) > 0)
-                            <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}" alt="{{ $auction->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
-                        @else
-                            <div class="w-full h-full bg-gradient-to-br from-primary-400 via-primary-300 to-primary-500 flex items-center justify-center">
-                                <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                </svg>
+                <!-- Results Info -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-gray-600">
+                        Menampilkan {{ $auctions->firstItem() ?? 0 }}-{{ $auctions->lastItem() ?? 0 }} dari {{ $auctions->total() }} lelang
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'asc'])) }}" 
+                           class="px-3 py-1 text-sm border rounded {{ request('sort_order') === 'asc' ? 'bg-blue-100 border-blue-300' : 'border-gray-300' }}">
+                            Ascending
+                        </a>
+                        <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'desc'])) }}" 
+                           class="px-3 py-1 text-sm border rounded {{ request('sort_order') === 'desc' ? 'bg-blue-100 border-blue-300' : 'border-gray-300' }}">
+                            Descending
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Auction Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    @forelse($auctions as $auction)
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                            <!-- Image -->
+                            <div class="relative">
+                                @if($auction->main_image)
+                                    <img src="{{ $auction->main_image }}" alt="{{ $auction->title }}" 
+                                         class="w-full h-48 object-cover">
+                                @else
+                                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                        <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                @endif
+                                
+                                <!-- Badges -->
+                                <div class="absolute top-3 left-3 flex flex-col space-y-1">
+                                    @if($auction->is_featured)
+                                        <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                            Featured
+                                        </span>
+                                    @endif
+                                    @if($auction->is_urgent)
+                                        <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                                            Urgent
+                                        </span>
+                                    @endif
+                                </div>
+                                
+                                <!-- Status -->
+                                <div class="absolute top-3 right-3">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $auction->status_color['bg'] }} {{ $auction->status_color['text'] }}">
+                                        {{ $auction->status_label }}
+                                    </span>
+                                </div>
                             </div>
-                        @endif
 
-                        <!-- Gradient Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-
-                        <!-- Status Badge -->
-                        <div class="absolute top-4 left-4 z-10">
-                            @if($auction->status === 'upcoming')
-                                <span class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-500 text-white text-sm font-bold rounded-xl shadow-lg">
-                                    <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                                    Akan Datang
-                                </span>
-                            @elseif($auction->status === 'ongoing')
-                                <span class="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-500 text-white text-sm font-bold rounded-xl shadow-lg">
-                                    <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                                    Berlangsung
-                                </span>
-                            @elseif($auction->status === 'sold')
-                                <span class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-500 text-white text-sm font-bold rounded-xl shadow-lg">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            <!-- Content -->
+                            <div class="p-6">
+                                <div class="mb-2">
+                                    <span class="text-sm text-blue-600 font-medium">{{ $auction->asset_type_label }}</span>
+                                </div>
+                                
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                                    <a href="{{ route('auctions.show', $auction) }}" class="hover:text-blue-600 transition duration-300">
+                                        {{ $auction->title }}
+                                    </a>
+                                </h3>
+                                
+                                <div class="text-sm text-gray-600 mb-3 flex items-center">
+                                    <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
-                                    Terjual
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-4 py-2 bg-gray-500 text-white text-sm font-bold rounded-xl shadow-lg">
-                                    Selesai
-                                </span>
-                            @endif
-                        </div>
+                                    {{ $auction->city }}
+                                </div>
 
-                        <!-- Asset Type Badge -->
-                        <div class="absolute top-4 right-4">
-                            <span class="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-gray-700 text-xs font-semibold rounded-lg shadow">
-                                {{ \App\Models\Auction::$assetTypes[$auction->asset_type] ?? $auction->asset_type }}
-                            </span>
-                        </div>
+                                <div class="mb-4">
+                                    <div class="text-2xl font-bold text-green-600">{{ $auction->formatted_limit_price }}</div>
+                                    @if($auction->estimated_price)
+                                        <div class="text-sm text-gray-500">Taksiran: {{ $auction->formatted_estimated_price }}</div>
+                                    @endif
+                                </div>
 
-                        <!-- Sold Overlay -->
-                        @if($auction->status === 'sold')
-                            <div class="absolute inset-0 bg-primary-900/70 flex items-center justify-center z-20">
-                                <div class="text-center transform -rotate-12">
-                                    <div class="inline-block border-4 border-white px-8 py-4 rounded-lg">
-                                        <p class="text-white font-black text-3xl tracking-wider">TERJUAL</p>
-                                        @if($auction->winning_bid)
-                                            <p class="text-primary-200 text-sm mt-1">Rp {{ number_format($auction->winning_bid, 0, ',', '.') }}</p>
+                                <div class="flex items-center justify-between text-sm text-gray-600 mb-4">
+                                    <div class="flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        @if($auction->auction_date)
+                                            {{ $auction->auction_date->format('d M Y') }}
+                                        @else
+                                            Belum ditentukan
+                                        @endif
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        @if($auction->auction_date)
+                                            {{ $auction->auction_date->format('H:i') }} WIB
+                                        @else
+                                            -
                                         @endif
                                     </div>
                                 </div>
-                            </div>
-                        @endif
 
-                        <!-- Price on Image -->
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <p class="text-white/80 text-xs font-medium mb-1">Harga Limit</p>
-                            <p class="text-2xl font-bold text-white drop-shadow-lg">Rp {{ number_format($auction->starting_price, 0, ',', '.') }}</p>
-                        </div>
-                    </div>
+                                @if($auction->days_until_auction >= 0)
+                                    <div class="text-sm text-orange-600 font-medium mb-4">
+                                        {{ $auction->time_until_auction }}
+                                    </div>
+                                @endif
 
-                    <!-- Content -->
-                    <div class="p-6">
-                        <!-- Title -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors min-h-[56px]">
-                            {{ $auction->title }}
-                        </h3>
-
-                        <!-- Info Grid -->
-                        <div class="space-y-3 mb-5">
-                            <div class="flex items-start gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm text-gray-600 line-clamp-2">{{ $auction->location }}</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-gray-900">{{ $auction->auction_date->translatedFormat('d F Y') }}</p>
-                                    <p class="text-xs text-gray-500">{{ $auction->auction_date->format('H:i') }} WIB</p>
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('auctions.show', $auction) }}" 
+                                       class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-md transition duration-300">
+                                        Lihat Detail
+                                    </a>
+                                    <button onclick="showInterestModal({{ $auction->id }})" 
+                                            class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition duration-300">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Specs -->
-                        @if($auction->land_area || $auction->building_area)
-                        <div class="flex gap-4 mb-5 py-3 border-y border-gray-100">
-                            @if($auction->land_area)
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/>
-                                </svg>
-                                <span class="text-sm text-gray-600">LT: {{ number_format($auction->land_area) }}m²</span>
-                            </div>
-                            @endif
-                            @if($auction->building_area)
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/>
-                                </svg>
-                                <span class="text-sm text-gray-600">LB: {{ number_format($auction->building_area) }}m²</span>
-                            </div>
-                            @endif
+                    @empty
+                        <div class="col-span-full text-center py-12">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">Tidak ada lelang</h3>
+                            <p class="mt-1 text-sm text-gray-500">Belum ada lelang yang sesuai dengan kriteria pencarian Anda.</p>
                         </div>
-                        @endif
-
-                        <!-- Action Button -->
-                        <a href="{{ route('auctions.show', $auction->slug) }}" class="block w-full text-center py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:scale-[1.02]">
-                            Lihat Detail
-                            <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </div>
-                </article>
-                @empty
-                <!-- Empty State -->
-                <div class="col-span-full">
-                    <div class="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-lg">
-                        <div class="w-32 h-32 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <svg class="w-16 h-16 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Tidak Ada Lelang Ditemukan</h3>
-                        <p class="text-gray-500 max-w-md mx-auto mb-6">Belum ada lelang yang sesuai dengan pencarian Anda.</p>
-                        <a href="{{ route('auctions.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                            </svg>
-                            Reset Filter
-                        </a>
-                    </div>
+                    @endforelse
                 </div>
-                @endforelse
+
+                <!-- Pagination -->
+                @if($auctions->hasPages())
+                    <div class="mt-8">
+                        {{ $auctions->links() }}
+                    </div>
+                @endif
             </div>
 
-            <!-- Pagination -->
-            @if($auctions->hasPages())
-            <div class="mt-12">
-                {{ $auctions->appends(request()->query())->links('pagination.custom') }}
-            </div>
-            @endif
-        </div>
-    </section>
+            <!-- Sidebar -->
+            <div class="lg:w-1/4">
+                <!-- Featured Auctions -->
+                @if($featuredAuctions->count() > 0)
+                    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Lelang Unggulan</h3>
+                        <div class="space-y-4">
+                            @foreach($featuredAuctions as $featured)
+                                <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                                    <h4 class="font-medium text-gray-900 mb-1">
+                                        <a href="{{ route('auctions.show', $featured) }}" class="hover:text-blue-600 transition duration-300">
+                                            {{ Str::limit($featured->title, 50) }}
+                                        </a>
+                                    </h4>
+                                    <div class="text-sm text-gray-600 mb-1">{{ $featured->city }}</div>
+                                    <div class="text-sm font-semibold text-green-600">{{ $featured->formatted_limit_price }}</div>
+                                    <div class="text-xs text-gray-500">
+                                        @if($featured->auction_date)
+                                            {{ $featured->auction_date->format('d M Y') }}
+                                        @else
+                                            Belum ditentukan
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
-    <!-- CTA Section -->
-    <section class="py-16 bg-gradient-to-r from-primary-600 to-primary-700">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-white mb-4">Tertarik dengan Lelang Kami?</h2>
-            <p class="text-white/90 text-lg mb-8">Hubungi kami untuk informasi lebih lanjut tentang prosedur dan persyaratan lelang</p>
-            <a href="{{ route('contact') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 font-bold rounded-xl hover:bg-primary-50 transition-colors shadow-lg">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                </svg>
-                Hubungi Kami
-            </a>
+                <!-- Upcoming Auctions -->
+                @if($upcomingAuctions->count() > 0)
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Lelang Mendatang</h3>
+                        <div class="space-y-4">
+                            @foreach($upcomingAuctions as $upcoming)
+                                <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                                    <h4 class="font-medium text-gray-900 mb-1">
+                                        <a href="{{ route('auctions.show', $upcoming) }}" class="hover:text-blue-600 transition duration-300">
+                                            {{ Str::limit($upcoming->title, 50) }}
+                                        </a>
+                                    </h4>
+                                    <div class="text-sm text-gray-600 mb-1">{{ $upcoming->city }}</div>
+                                    <div class="text-sm font-semibold text-green-600">{{ $upcoming->formatted_limit_price }}</div>
+                                    <div class="text-xs text-orange-600">{{ $upcoming->time_until_auction }}</div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Interest Modal -->
+    <div id="interest-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Nyatakan Minat</h3>
+                <form id="interest-form" method="POST">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                        <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
+                        <input type="tel" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Pesan (Opsional)</label>
+                        <textarea name="message" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                            Kirim
+                        </button>
+                        <button type="button" onclick="hideInterestModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-md transition duration-300">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+    <script>
+        function showInterestModal(auctionId) {
+            document.getElementById('interest-form').action = `/auctions/${auctionId}/interest`;
+            document.getElementById('interest-modal').classList.remove('hidden');
+        }
+
+        function hideInterestModal() {
+            document.getElementById('interest-modal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('interest-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideInterestModal();
+            }
+        });
+    </script>
+    @endpush
 </x-frontend-layout>

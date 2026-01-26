@@ -9,13 +9,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Untuk MySQL, kita perlu mengubah enum dengan cara yang berbeda
-        DB::statement("ALTER TABLE auctions MODIFY COLUMN status ENUM('upcoming', 'ongoing', 'closed', 'sold', 'cancelled') NOT NULL DEFAULT 'upcoming'");
+        // Only run for MySQL/MariaDB - SQLite doesn't support ENUM modification
+        if (DB::connection()->getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE auctions MODIFY COLUMN status ENUM('upcoming', 'ongoing', 'closed', 'sold', 'cancelled') NOT NULL DEFAULT 'upcoming'");
+        }
+        // For SQLite (testing), the status column is already a string, so no modification needed
     }
 
     public function down(): void
     {
-        // Kembalikan ke enum lama (hati-hati, data 'sold' dan 'cancelled' akan hilang)
-        DB::statement("ALTER TABLE auctions MODIFY COLUMN status ENUM('upcoming', 'ongoing', 'closed') NOT NULL DEFAULT 'upcoming'");
+        // Only run for MySQL/MariaDB
+        if (DB::connection()->getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE auctions MODIFY COLUMN status ENUM('upcoming', 'ongoing', 'closed') NOT NULL DEFAULT 'upcoming'");
+        }
     }
 };

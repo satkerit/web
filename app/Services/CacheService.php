@@ -115,10 +115,11 @@ class CacheService
             "auctions_home_{$limit}",
             self::CACHE_SHORT,
             fn() =>
-            Auction::where('status', 'upcoming')
+            Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled'])
+                ->where('auction_date', '>', now())
                 ->orderBy('auction_date')
                 ->limit($limit)
-                ->get(['id', 'title', 'slug', 'location', 'starting_price', 'auction_date', 'images', 'asset_type', 'status'])
+                ->get(['id', 'title', 'slug', 'city', 'limit_price', 'auction_date', 'images', 'asset_type', 'status'])
         );
     }
 

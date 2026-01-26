@@ -88,6 +88,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 
     // Auctions Management
     Route::resource('auctions', App\Http\Controllers\Admin\AuctionController::class);
+    Route::post('auctions/bulk-action', [App\Http\Controllers\Admin\AuctionController::class, 'bulkAction'])->name('auctions.bulk-action');
 
     // Reports Management
     Route::resource('reports', App\Http\Controllers\Admin\ReportController::class);
