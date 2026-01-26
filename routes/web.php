@@ -75,7 +75,7 @@ Route::middleware(['throttle:120,1'])->group(function () {
 
 
 // Admin Routes with DDoS Protection
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos', 'menu.permission'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos', 'idle.timeout', 'menu.permission'])->group(function () {
     // Dashboard
     Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 

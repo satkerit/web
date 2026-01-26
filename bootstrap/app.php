@@ -40,7 +40,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\DdosProtection::class,
             \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\BlockSuspiciousRequests::class,
-            \App\Http\Middleware\IdleTimeoutMiddleware::class,
             \App\Http\Middleware\LogVisitor::class,
             \App\Http\Middleware\OptimizeResponse::class,
         ]);

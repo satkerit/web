@@ -190,4 +190,14 @@
 @endsection
 
 @push('scripts')
+<script>
+function auctionForm(initialStatus) {
+    return {
+        status: initialStatus,
+        init() {
+            // Initialize
+        }
+    }
+}
+</script>
 @endpush

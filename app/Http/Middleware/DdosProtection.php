@@ -32,6 +32,8 @@ class DdosProtection
         'favicon.ico',
         'robots.txt',
         '_debugbar/*',
+        'login',
+        'logout',
     ];
 
     public function __construct()

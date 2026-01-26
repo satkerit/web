@@ -22,6 +22,11 @@ class IdleTimeoutMiddleware
             return $next($request);
         }
 
+        // Skip for login, logout, and authentication routes
+        if ($request->is('login') || $request->is('logout') || $request->is('register') || $request->is('password/*')) {
+            return $next($request);
+        }
+
         // Skip for storage and download routes
         if ($request->is('storage/*') || str_contains($request->getPathInfo(), '/download/')) {
             return $next($request);
