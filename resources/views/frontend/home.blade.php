@@ -676,8 +676,8 @@
 
                         <!-- Status Badge -->
                         <div class="absolute top-4 left-4">
-                            <span class="px-3 py-1.5 text-xs font-semibold rounded-lg {{ $auction->status === 'upcoming' ? 'bg-yellow-500 text-white' : ($auction->status === 'ongoing' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white') }}">
-                                {{ $auction->status === 'upcoming' ? 'Akan Datang' : ($auction->status === 'ongoing' ? 'Berlangsung' : 'Selesai') }}
+                            <span class="px-3 py-1.5 text-xs font-semibold rounded-lg {{ $auction->status === 'published' ? 'bg-blue-500 text-white' : ($auction->status === 'registration_open' ? 'bg-green-500 text-white' : ($auction->status === 'auction_scheduled' ? 'bg-yellow-500 text-white' : 'bg-gray-500 text-white')) }}">
+                                {{ $auction->status_label }}
                             </span>
                         </div>
                     </div>
@@ -692,7 +692,7 @@
                                 <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 </svg>
-                                {{ $auction->location }}
+                                {{ $auction->city }}
                             </div>
                             <div class="flex items-center text-sm text-gray-600">
                                 <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

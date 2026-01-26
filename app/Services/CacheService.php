@@ -114,12 +114,23 @@ class CacheService
         return Cache::remember(
             "auctions_home_{$limit}",
             self::CACHE_SHORT,
-            fn() =>
-            Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled'])
-                ->where('auction_date', '>', now())
-                ->orderBy('auction_date')
-                ->limit($limit)
-                ->get(['id', 'title', 'slug', 'city', 'limit_price', 'auction_date', 'images', 'asset_type', 'status'])
+            function () use ($limit) {
+                try {
+                    return Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled'])
+                        ->where(function($query) {
+                            $query->whereNull('auction_date')
+                                  ->orWhere('auction_date', '>', now());
+                        })
+                        ->orderBy('auction_date', 'asc')
+                        ->orderBy('created_at', 'desc')
+                        ->limit($limit)
+                        ->get(['id', 'title', 'slug', 'city', 'limit_price', 'auction_date', 'images', 'asset_type', 'status']);
+                } catch (\Exception $e) {
+                    // Fallback jika ada masalah dengan kolom
+                    \Log::error('Error getting home auctions: ' . $e->getMessage());
+                    return collect(); // Return empty collection
+                }
+            }
         );
     }
 
