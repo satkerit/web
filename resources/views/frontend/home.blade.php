@@ -2,10 +2,17 @@
     @if($firstHeroImage)
     @push('head')
     @php
-        $compressedFirstImage = \App\Services\ImageCompressionService::compressForWeb($firstHeroImage, 70, 1920);
-        $responsiveFirst = \App\Services\ImageCompressionService::generateResponsiveSizes($firstHeroImage);
-        $webpFirst = \App\Services\WebPConverterService::generateResponsiveWebP($firstHeroImage);
-        $mainWebPFirst = \App\Services\WebPConverterService::convertToWebP($firstHeroImage, 75);
+        try {
+            $compressedFirstImage = \App\Services\ImageCompressionService::compressForWeb($firstHeroImage, 70, 1920);
+            $responsiveFirst = \App\Services\ImageCompressionService::generateResponsiveSizes($firstHeroImage);
+            $webpFirst = \App\Services\WebPConverterService::generateResponsiveWebP($firstHeroImage);
+            $mainWebPFirst = \App\Services\WebPConverterService::convertToWebP($firstHeroImage, 75);
+        } catch (Exception $e) {
+            $compressedFirstImage = $firstHeroImage;
+            $responsiveFirst = [];
+            $webpFirst = [];
+            $mainWebPFirst = null;
+        }
     @endphp
     {{-- Preload WebP for modern browsers --}}
     @if($mainWebPFirst)
@@ -108,10 +115,17 @@
                              :style="getTransitionStyle({{ $index }})">
                             @if($slide->image)
                             @php
-                                $compressedImage = \App\Services\ImageCompressionService::compressForWeb($slide->image, 70, 1920);
-                                $responsiveImages = \App\Services\ImageCompressionService::generateResponsiveSizes($slide->image);
-                                $webpImages = \App\Services\WebPConverterService::generateResponsiveWebP($slide->image);
-                                $mainWebP = \App\Services\WebPConverterService::convertToWebP($slide->image, 75);
+                                try {
+                                    $compressedImage = \App\Services\ImageCompressionService::compressForWeb($slide->image, 70, 1920);
+                                    $responsiveImages = \App\Services\ImageCompressionService::generateResponsiveSizes($slide->image);
+                                    $webpImages = \App\Services\WebPConverterService::generateResponsiveWebP($slide->image);
+                                    $mainWebP = \App\Services\WebPConverterService::convertToWebP($slide->image, 75);
+                                } catch (Exception $e) {
+                                    $compressedImage = $slide->image;
+                                    $responsiveImages = [];
+                                    $webpImages = [];
+                                    $mainWebP = null;
+                                }
                             @endphp
                             <picture>
                                 {{-- WebP sources for better compression --}}
@@ -579,7 +593,7 @@
                     <!-- News Image -->
                     <div class="relative h-56 overflow-hidden bg-gray-100">
                         @if($item->featured_image)
-                        <img src="{{ storage_url($item->featured_image) }}"
+                        <img src="{{ \App\Helpers\StorageHelper::url($item->featured_image) }}"
                              alt="{{ $item->title }}"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                              loading="lazy">
