@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JavaScript Syntax Test</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <h1>JavaScript Syntax Test</h1>
+        <p>Buka Developer Console untuk melihat hasil test.</p>
+
+        <button onclick="testFunctions()">Test All Functions</button>
+
+        <script>
+            (function () {
+                "use strict";
+
+                console.log("Why Choose Us Settings Script Loaded");
+
+                window.previewSectionImage = function (event) {
+                    console.log("previewSectionImage called");
+                    const file = event.target.files[0];
+
+                    if (!file) {
+                        console.log("No file selected");
+                        return;
+                    }
+
+                    // Validate file type
+                    const allowedTypes = [
+                        "image/png",
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/webp",
+                    ];
+                    if (!allowedTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Format File Tidak Valid",
+                            text: "Hanya file PNG, JPG, JPEG, dan WEBP yang diperbolehkan.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    // Validate file size (5MB max)
+                    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                    if (file.size > maxSize) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "File Terlalu Besar",
+                            text: "Ukuran file maksimal adalah 5MB.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    console.log("Section image validation passed");
+                };
+
+                window.previewBadgeIcon = function (event) {
+                    console.log("previewBadgeIcon called");
+                    const file = event.target.files[0];
+
+                    if (!file) {
+                        console.log("No file selected");
+                        return;
+                    }
+
+                    // Validate file type
+                    const allowedTypes = [
+                        "image/png",
+                        "image/svg+xml",
+                        "image/jpeg",
+                        "image/webp",
+                    ];
+                    if (!allowedTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Format File Tidak Valid",
+                            text: "Hanya file PNG, SVG, JPEG, dan WEBP yang diperbolehkan.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    // Validate file size (2MB max)
+                    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+                    if (file.size > maxSize) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "File Terlalu Besar",
+                            text: "Ukuran file maksimal adalah 2MB.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    console.log("Badge icon validation passed");
+                };
+
+                window.clearSectionImagePreview = function () {
+                    console.log("clearSectionImagePreview called");
+                };
+
+                window.clearBadgeIconPreview = function () {
+                    console.log("clearBadgeIconPreview called");
+                };
+
+                window.removeCurrentSectionImage = function () {
+                    console.log("removeCurrentSectionImage called");
+                };
+
+                window.removeCurrentBadgeIcon = function () {
+                    console.log("removeCurrentBadgeIcon called");
+                };
+
+                window.testFunctions = function () {
+                    console.log("=== Testing All Functions ===");
+
+                    const functions = {
+                        previewSectionImage: typeof window.previewSectionImage,
+                        previewBadgeIcon: typeof window.previewBadgeIcon,
+                        clearSectionImagePreview:
+                            typeof window.clearSectionImagePreview,
+                        clearBadgeIconPreview:
+                            typeof window.clearBadgeIconPreview,
+                        removeCurrentSectionImage:
+                            typeof window.removeCurrentSectionImage,
+                        removeCurrentBadgeIcon:
+                            typeof window.removeCurrentBadgeIcon,
+                    };
+
+                    let allPassed = true;
+                    for (const [name, type] of Object.entries(functions)) {
+                        const status = type === "function" ? "PASS" : "FAIL";
+                        console.log(`${name}: ${status} (${type})`);
+                        if (type !== "function") allPassed = false;
+                    }
+
+                    console.log(
+                        `=== Test Result: ${allPassed ? "ALL PASSED" : "SOME FAILED"} ===`,
+                    );
+
+                    Swal.fire({
+                        icon: allPassed ? "success" : "error",
+                        title: allPassed
+                            ? "All Functions OK!"
+                            : "Some Functions Failed",
+                        text: "Check console for details",
+                    });
+                };
+
+                console.log("Functions defined:", {
+                    previewSectionImage: typeof window.previewSectionImage,
+                    previewBadgeIcon: typeof window.previewBadgeIcon,
+                    clearSectionImagePreview:
+                        typeof window.clearSectionImagePreview,
+                    clearBadgeIconPreview: typeof window.clearBadgeIconPreview,
+                    removeCurrentSectionImage:
+                        typeof window.removeCurrentSectionImage,
+                    removeCurrentBadgeIcon:
+                        typeof window.removeCurrentBadgeIcon,
+                });
+
+                console.log("Script loaded successfully - no syntax errors!");
+            })();
+        </script>
+    </body>
+</html>

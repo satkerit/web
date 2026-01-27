@@ -403,96 +403,6 @@
         }
     };
 
-    window.clearSectionImagePreview = function() {
-        try {
-            const fileInput = document.getElementById('section_image');
-            const previewContainer = document.getElementById('sectionImagePreview');
-            const previewImg = document.getElementById('sectionImagePreviewImg');
-            const currentContainer = document.getElementById('currentSectionImageContainer');
-            
-            // Reset file input
-            if (fileInput) fileInput.value = '';
-            
-            // Clear preview image source
-            if (previewImg) previewImg.src = '';
-            
-            // Hide preview container
-            if (previewContainer) previewContainer.classList.add('hidden');
-            
-            // Show current image container if exists
-            if (currentContainer) currentContainer.classList.remove('hidden');
-            
-            console.log('Section image preview cleared successfully');
-        } catch (error) {
-            console.error('Error clearing section image preview:', error);
-        }
-    };
-
-    window.clearBadgeIconPreview = function() {
-        try {
-            const fileInput = document.getElementById('badge_icon');
-            const previewContainer = document.getElementById('badgeIconPreview');
-            const previewImg = document.getElementById('badgeIconPreviewImg');
-            const currentContainer = document.getElementById('currentBadgeIconContainer');
-            
-            // Reset file input
-            if (fileInput) fileInput.value = '';
-            
-            // Clear preview image source
-            if (previewImg) previewImg.src = '';
-            
-            // Hide preview container
-            if (previewContainer) previewContainer.classList.add('hidden');
-            
-            // Show current icon container if exists
-            if (currentContainer) currentContainer.classList.remove('hidden');
-            
-            console.log('Badge icon preview cleared successfully');
-        } catch (error) {
-            console.error('Error clearing badge icon preview:', error);
-        }
-    };
-
-    window.removeCurrentBadgeIcon = function() {
-        Swal.fire({
-            title: 'Hapus Icon Badge?',
-            text: 'Icon badge saat ini akan dihapus.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const container = document.getElementById('currentBadgeIconContainer');
-                if (container) container.remove();
-                Swal.fire({icon: 'success', title: 'Terhapus!', text: 'Icon akan dihapus saat Anda menyimpan.', timer: 2000, showConfirmButton: false});
-            }
-        });
-    };
-
-    window.removeCurrentSectionImage = function() {
-        Swal.fire({
-            title: 'Hapus Gambar Section?',
-            text: 'Gambar section saat ini akan dihapus.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const container = document.getElementById('currentSectionImageContainer');
-                if (container) container.remove();
-                Swal.fire({icon: 'success', title: 'Terhapus!', text: 'Gambar akan dihapus saat Anda menyimpan.', timer: 2000, showConfirmButton: false});
-            }
-        });
-    };
-
     window.previewBadgeIcon = function(event) {
         console.log('previewBadgeIcon called');
         const file = event.target.files[0];
@@ -582,6 +492,108 @@
             if (currentContainer) currentContainer.classList.remove('hidden');
             if (statusElement) statusElement.textContent = 'Gagal memuat preview icon';
         }
+    };
+
+    window.clearSectionImagePreview = function() {
+        try {
+            const fileInput = document.getElementById('section_image');
+            const previewContainer = document.getElementById('sectionImagePreview');
+            const previewImg = document.getElementById('sectionImagePreviewImg');
+            const currentContainer = document.getElementById('currentSectionImageContainer');
+            
+            // Reset file input
+            if (fileInput) fileInput.value = '';
+            
+            // Clear preview image source
+            if (previewImg) previewImg.src = '';
+            
+            // Hide preview container
+            if (previewContainer) previewContainer.classList.add('hidden');
+            
+            // Show current image container if exists
+            if (currentContainer) currentContainer.classList.remove('hidden');
+            
+            console.log('Section image preview cleared successfully');
+        } catch (error) {
+            console.error('Error clearing section image preview:', error);
+        }
+    };
+
+    window.clearBadgeIconPreview = function() {
+        try {
+            const fileInput = document.getElementById('badge_icon');
+            const previewContainer = document.getElementById('badgeIconPreview');
+            const previewImg = document.getElementById('badgeIconPreviewImg');
+            const currentContainer = document.getElementById('currentBadgeIconContainer');
+            
+            // Reset file input
+            if (fileInput) fileInput.value = '';
+            
+            // Clear preview image source
+            if (previewImg) previewImg.src = '';
+            
+            // Hide preview container
+            if (previewContainer) previewContainer.classList.add('hidden');
+            
+            // Show current icon container if exists
+            if (currentContainer) currentContainer.classList.remove('hidden');
+            
+            console.log('Badge icon preview cleared successfully');
+        } catch (error) {
+            console.error('Error clearing badge icon preview:', error);
+        }
+    };
+
+    window.removeCurrentSectionImage = function() {
+        Swal.fire({
+            title: 'Hapus Gambar Section?',
+            text: 'Gambar section saat ini akan dihapus.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const container = document.getElementById('currentSectionImageContainer');
+                if (container) container.remove();
+                Swal.fire({
+                    icon: 'success', 
+                    title: 'Terhapus!', 
+                    text: 'Gambar akan dihapus saat Anda menyimpan.', 
+                    timer: 2000, 
+                    showConfirmButton: false
+                });
+            }
+        });
+    };
+
+    window.removeCurrentBadgeIcon = function() {
+        Swal.fire({
+            title: 'Hapus Icon Badge?',
+            text: 'Icon badge saat ini akan dihapus.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const container = document.getElementById('currentBadgeIconContainer');
+                if (container) container.remove();
+                Swal.fire({
+                    icon: 'success', 
+                    title: 'Terhapus!', 
+                    text: 'Icon akan dihapus saat Anda menyimpan.', 
+                    timer: 2000, 
+                    showConfirmButton: false
+                });
+            }
+        });
     };
     
     console.log('Functions defined:', {
