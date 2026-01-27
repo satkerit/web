@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
+use App\Rules\MinimumImages;
 use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -163,7 +164,15 @@ class AuctionController extends Controller
             'winner_name' => 'nullable|string|max:255',
             'winner_phone' => 'nullable|string|max:20',
             'sold_at' => 'nullable|date',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'images' => ['required', 'array', new MinimumImages(3)],
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ], [
+            'images.required' => 'Gambar aset wajib diupload.',
+            'images.min' => 'Minimal 3 gambar aset diperlukan untuk lelang.',
+            'images.*.required' => 'Setiap file gambar wajib diisi.',
+            'images.*.image' => 'File harus berupa gambar.',
+            'images.*.mimes' => 'Format gambar harus JPEG, PNG, JPG, atau WebP.',
+            'images.*.max' => 'Ukuran gambar maksimal 5MB.',
         ]);
 
         // Handle image uploads

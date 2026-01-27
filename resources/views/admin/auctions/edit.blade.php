@@ -93,6 +93,171 @@
                 </div>
             </x-admin.card>
 
+            {{-- Object Information --}}
+            <x-admin.card title="Informasi Objek" subtitle="Detail spesifikasi objek lelang">
+                <div class="space-y-5">
+                    {{-- Certificate Information --}}
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h4 class="text-sm font-semibold text-blue-900 mb-3">Informasi Sertifikat</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="certificate_type" class="block text-sm font-semibold text-gray-700 mb-2">Jenis Sertifikat</label>
+                                <select name="certificate_type" id="certificate_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('certificate_type') border-red-500 @enderror">
+                                    <option value="">Pilih Jenis Sertifikat</option>
+                                    @foreach(\App\Models\Auction::$certificateTypes as $value => $label)
+                                        <option value="{{ $value }}" {{ old('certificate_type', $auction->certificate_type) === $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('certificate_type')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="certificate_number" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Sertifikat</label>
+                                <input type="text" name="certificate_number" id="certificate_number" value="{{ old('certificate_number', $auction->certificate_number) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('certificate_number') border-red-500 @enderror" 
+                                       placeholder="Contoh: 12345/2023">
+                                @error('certificate_number')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Property Details --}}
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h4 class="text-sm font-semibold text-green-900 mb-3">Detail Properti</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="land_area" class="block text-sm font-semibold text-gray-700 mb-2">Luas Tanah (m²)</label>
+                                <input type="number" name="land_area" id="land_area" value="{{ old('land_area', $auction->land_area) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('land_area') border-red-500 @enderror" 
+                                       step="0.01" placeholder="120">
+                                @error('land_area')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="building_area" class="block text-sm font-semibold text-gray-700 mb-2">Luas Bangunan (m²)</label>
+                                <input type="number" name="building_area" id="building_area" value="{{ old('building_area', $auction->building_area) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('building_area') border-red-500 @enderror" 
+                                       step="0.01" placeholder="80">
+                                @error('building_area')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="year_built" class="block text-sm font-semibold text-gray-700 mb-2">Tahun Dibangun</label>
+                                <input type="number" name="year_built" id="year_built" value="{{ old('year_built', $auction->year_built) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('year_built') border-red-500 @enderror" 
+                                       min="1900" max="{{ date('Y') }}" placeholder="2020">
+                                @error('year_built')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                            <div>
+                                <label for="floors" class="block text-sm font-semibold text-gray-700 mb-2">Jumlah Lantai</label>
+                                <input type="number" name="floors" id="floors" value="{{ old('floors', $auction->floors) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('floors') border-red-500 @enderror" 
+                                       min="1" placeholder="2">
+                                @error('floors')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="bedrooms" class="block text-sm font-semibold text-gray-700 mb-2">Kamar Tidur</label>
+                                <input type="number" name="bedrooms" id="bedrooms" value="{{ old('bedrooms', $auction->bedrooms) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bedrooms') border-red-500 @enderror" 
+                                       min="0" placeholder="3">
+                                @error('bedrooms')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="bathrooms" class="block text-sm font-semibold text-gray-700 mb-2">Kamar Mandi</label>
+                                <input type="number" name="bathrooms" id="bathrooms" value="{{ old('bathrooms', $auction->bathrooms) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bathrooms') border-red-500 @enderror" 
+                                       min="0" placeholder="2">
+                                @error('bathrooms')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="parking_spaces" class="block text-sm font-semibold text-gray-700 mb-2">Tempat Parkir</label>
+                                <input type="number" name="parking_spaces" id="parking_spaces" value="{{ old('parking_spaces', $auction->parking_spaces) }}" 
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('parking_spaces') border-red-500 @enderror" 
+                                       min="0" placeholder="1">
+                                @error('parking_spaces')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label for="building_condition" class="block text-sm font-semibold text-gray-700 mb-2">Kondisi Bangunan</label>
+                            <select name="building_condition" id="building_condition" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('building_condition') border-red-500 @enderror">
+                                <option value="">Pilih Kondisi Bangunan</option>
+                                <option value="sangat_baik" {{ old('building_condition', $auction->building_condition) === 'sangat_baik' ? 'selected' : '' }}>Sangat Baik</option>
+                                <option value="baik" {{ old('building_condition', $auction->building_condition) === 'baik' ? 'selected' : '' }}>Baik</option>
+                                <option value="cukup" {{ old('building_condition', $auction->building_condition) === 'cukup' ? 'selected' : '' }}>Cukup</option>
+                                <option value="perlu_renovasi" {{ old('building_condition', $auction->building_condition) === 'perlu_renovasi' ? 'selected' : '' }}>Perlu Renovasi</option>
+                                <option value="rusak" {{ old('building_condition', $auction->building_condition) === 'rusak' ? 'selected' : '' }}>Rusak</option>
+                            </select>
+                            @error('building_condition')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Facilities --}}
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                        <h4 class="text-sm font-semibold text-purple-900 mb-3">Fasilitas & Akses</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="facilities" class="block text-sm font-semibold text-gray-700 mb-2">Fasilitas</label>
+                                <textarea name="facilities" id="facilities" rows="3" 
+                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('facilities') border-red-500 @enderror" 
+                                          placeholder="Contoh: Listrik PLN, Air PDAM, Telepon, Internet, Taman, Pagar, dll">{{ old('facilities', $auction->facilities) }}</textarea>
+                                @error('facilities')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="nearby_facilities" class="block text-sm font-semibold text-gray-700 mb-2">Fasilitas Sekitar</label>
+                                <textarea name="nearby_facilities" id="nearby_facilities" rows="3" 
+                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('nearby_facilities') border-red-500 @enderror" 
+                                          placeholder="Contoh: Sekolah, Rumah Sakit, Mall, Pasar, Masjid, dll">{{ old('nearby_facilities', $auction->nearby_facilities) }}</textarea>
+                                @error('nearby_facilities')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="transportation_access" class="block text-sm font-semibold text-gray-700 mb-2">Akses Transportasi</label>
+                                <textarea name="transportation_access" id="transportation_access" rows="2" 
+                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('transportation_access') border-red-500 @enderror" 
+                                          placeholder="Contoh: 5 menit ke jalan raya, 10 menit ke terminal, dll">{{ old('transportation_access', $auction->transportation_access) }}</textarea>
+                                @error('transportation_access')
+                                    <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </x-admin.card>
+
             {{-- Address Information --}}
             <x-admin.card title="Informasi Alamat" subtitle="Lokasi aset yang dilelang">
                 <div class="space-y-5">
@@ -323,7 +488,7 @@
             </x-admin.card>
 
             {{-- Images --}}
-            <x-admin.card title="Gambar Aset" subtitle="Upload gambar aset yang dilelang">
+            <x-admin.card title="Gambar Aset" subtitle="Upload minimal 3 gambar aset yang dilelang">
                 <div>
                     <div class="relative">
                         <input type="file" name="images[]" id="images" accept="image/*" multiple class="hidden" onchange="previewImages(event)">
@@ -332,8 +497,9 @@
                                 <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                 </svg>
-                                <p class="text-xs text-gray-500 font-medium">Upload Gambar</p>
+                                <p class="text-xs text-gray-500 font-medium">Upload Gambar Baru</p>
                                 <p class="text-xs text-gray-400">PNG, JPG, WEBP (Max 5MB per file)</p>
+                                <p class="text-xs text-amber-600 font-medium mt-1">Opsional - kosongkan jika tidak ingin mengubah</p>
                             </div>
                         </label>
                     </div>
@@ -341,10 +507,13 @@
                     @error('images')
                         <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                     @enderror
+                    @error('images.*')
+                        <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                     
                     @if($auction->images && count($auction->images) > 0)
                         <div class="mt-6">
-                            <p class="text-sm font-medium text-gray-700 mb-3">Gambar Saat Ini:</p>
+                            <p class="text-sm font-medium text-gray-700 mb-3">Gambar Saat Ini ({{ count($auction->images) }} gambar):</p>
                             <div class="grid grid-cols-2 gap-4">
                                 @foreach($auction->images as $image)
                                     <div class="relative group">
@@ -360,11 +529,35 @@
                                     </div>
                                 @endforeach
                             </div>
+                            @if(count($auction->images) >= 3)
+                                <p class="mt-2 text-sm text-green-600">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Sudah memenuhi minimal 3 gambar
+                                </p>
+                            @else
+                                <p class="mt-2 text-sm text-amber-600">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                    Disarankan minimal 3 gambar untuk lelang
+                                </p>
+                            @endif
                             <p class="mt-2 text-sm text-amber-600">
                                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                                 </svg>
                                 Upload gambar baru akan mengganti semua gambar yang ada
+                            </p>
+                        </div>
+                    @else
+                        <div class="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                            <p class="text-sm text-amber-700">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                                Belum ada gambar. Disarankan upload minimal 3 gambar untuk lelang.
                             </p>
                         </div>
                     @endif
@@ -386,9 +579,13 @@
 
 @push('scripts')
 <script>
+let selectedImages = [];
+
 function previewImages(event) {
     const files = event.target.files;
     const preview = document.getElementById('image-preview');
+    
+    selectedImages = Array.from(files);
     preview.innerHTML = '';
 
     for (let i = 0; i < files.length; i++) {
@@ -400,7 +597,7 @@ function previewImages(event) {
                 div.className = 'relative';
                 div.innerHTML = `
                     <img src="${e.target.result}" class="w-full h-20 object-cover rounded-lg">
-                    <button type="button" onclick="this.parentElement.remove()" 
+                    <button type="button" onclick="removeImage(${i})" 
                             class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600">
                         ×
                     </button>
@@ -410,6 +607,21 @@ function previewImages(event) {
             reader.readAsDataURL(file);
         }
     }
+}
+
+function removeImage(index) {
+    const dt = new DataTransfer();
+    const input = document.getElementById('images');
+    const files = input.files;
+
+    for (let i = 0; i < files.length; i++) {
+        if (i !== index) {
+            dt.items.add(files[i]);
+        }
+    }
+
+    input.files = dt.files;
+    previewImages({ target: input });
 }
 
 // Auto-calculate deposit amount based on limit price and percentage
