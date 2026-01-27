@@ -77,7 +77,6 @@
                 </div>
             </x-admin.card>
 
-
             {{-- Images --}}
             <x-admin.card title="Gambar Section" subtitle="Upload gambar utama dan icon badge">
                 <div class="space-y-6">
@@ -88,17 +87,11 @@
                         </label>
                         
                         @if($setting->section_image)
-                            <div class="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200" id="currentSectionImageContainer">
+                            <div class="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                 <img src="{{ \App\Helpers\StorageHelper::url($setting->section_image) }}" 
                                      alt="Current section image" 
-                                     class="w-full h-48 object-cover rounded mx-auto"
-                                     id="currentSectionImage">
+                                     class="w-full h-48 object-cover rounded mx-auto">
                                 <p class="text-xs text-gray-500 text-center mt-2">Gambar section saat ini</p>
-                                <button type="button" 
-                                        onclick="removeCurrentSectionImage()"
-                                        class="mt-2 w-full text-xs text-red-600 hover:text-red-700 font-medium">
-                                    Hapus Gambar
-                                </button>
                             </div>
                         @endif
 
@@ -107,20 +100,15 @@
                                    name="section_image"
                                    id="section_image"
                                    accept="image/png,image/jpeg,image/jpg,image/webp"
-                                   class="hidden"
-                                   onchange="previewSectionImage(event)"
-                                   aria-describedby="section-image-help">
+                                   class="hidden">
                             <label for="section_image" 
-                                   class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all"
-                                   role="button"
-                                   tabindex="0"
-                                   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('section_image').click();}">
+                                   class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
                                     <p class="text-sm text-gray-500 font-medium mb-1">Upload Gambar Section</p>
-                                    <p class="text-xs text-gray-400" id="section-image-help">PNG, JPG, WEBP (Max 5MB)</p>
+                                    <p class="text-xs text-gray-400">PNG, JPG, WEBP (Max 5MB)</p>
                                 </div>
                             </label>
                         </div>
@@ -135,9 +123,6 @@
                                 Batal
                             </button>
                         </div>
-
-                        <!-- ARIA Live Region for Screen Readers -->
-                        <div id="sectionImageStatus" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
                         <p class="text-xs text-gray-500 mt-2">
                             <strong>Rekomendasi:</strong> Gambar landscape (1200x800px) untuk tampilan optimal
@@ -156,17 +141,11 @@
                         </label>
                         
                         @if($setting->badge_icon)
-                            <div class="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200" id="currentBadgeIconContainer">
+                            <div class="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                 <img src="{{ \App\Helpers\StorageHelper::url($setting->badge_icon) }}" 
                                      alt="Current badge icon" 
-                                     class="w-16 h-16 object-contain mx-auto"
-                                     id="currentBadgeIcon">
+                                     class="w-16 h-16 object-contain mx-auto">
                                 <p class="text-xs text-gray-500 text-center mt-2">Icon badge saat ini</p>
-                                <button type="button" 
-                                        onclick="removeCurrentBadgeIcon()"
-                                        class="mt-2 w-full text-xs text-red-600 hover:text-red-700 font-medium">
-                                    Hapus Icon
-                                </button>
                             </div>
                         @endif
 
@@ -175,20 +154,15 @@
                                    name="badge_icon"
                                    id="badge_icon"
                                    accept="image/png,image/svg+xml,image/jpeg,image/webp"
-                                   class="hidden"
-                                   onchange="previewBadgeIcon(event)"
-                                   aria-describedby="badge-icon-help">
+                                   class="hidden">
                             <label for="badge_icon" 
-                                   class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all"
-                                   role="button"
-                                   tabindex="0"
-                                   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('badge_icon').click();}">
+                                   class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                     </svg>
                                     <p class="text-xs text-gray-500 font-medium">Upload Icon Badge</p>
-                                    <p class="text-xs text-gray-400" id="badge-icon-help">PNG, SVG (Max 2MB)</p>
+                                    <p class="text-xs text-gray-400">PNG, SVG (Max 2MB)</p>
                                 </div>
                             </label>
                         </div>
@@ -203,9 +177,6 @@
                                 Batal
                             </button>
                         </div>
-
-                        <!-- ARIA Live Region for Screen Readers -->
-                        <div id="badgeIconStatus" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
                         <p class="text-xs text-gray-500 mt-2">
                             <strong>Rekomendasi:</strong> Icon SVG atau PNG transparan (48x48px)
@@ -305,214 +276,102 @@
     </div>
 </form>
 
+@push('scripts')
 <script>
-(function() {
-    'use strict';
-    
+document.addEventListener('DOMContentLoaded', function() {
     console.log('Why Choose Us Settings Script Loaded');
     
-    window.previewSectionImage = function(event) {
-        console.log('previewSectionImage called');
+    // Section Image Preview
+    const sectionImageInput = document.getElementById('section_image');
+    const sectionImagePreview = document.getElementById('sectionImagePreview');
+    const sectionImagePreviewImg = document.getElementById('sectionImagePreviewImg');
+    
+    if (sectionImageInput) {
+        sectionImageInput.addEventListener('change', function(event) {
+            handleImagePreview(event, 'section');
+        });
+    }
+    
+    // Badge Icon Preview
+    const badgeIconInput = document.getElementById('badge_icon');
+    const badgeIconPreview = document.getElementById('badgeIconPreview');
+    const badgeIconPreviewImg = document.getElementById('badgeIconPreviewImg');
+    
+    if (badgeIconInput) {
+        badgeIconInput.addEventListener('change', function(event) {
+            handleImagePreview(event, 'badge');
+        });
+    }
+    
+    // Generic image preview handler
+    function handleImagePreview(event, type) {
         const file = event.target.files[0];
         
         if (!file) {
-            console.log('No file selected');
             return;
+        }
+
+        // Define validation rules based on type
+        let allowedTypes, maxSize, previewElement, previewImg;
+        
+        if (type === 'section') {
+            allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+            maxSize = 5 * 1024 * 1024; // 5MB
+            previewElement = sectionImagePreview;
+            previewImg = sectionImagePreviewImg;
+        } else if (type === 'badge') {
+            allowedTypes = ['image/png', 'image/svg+xml', 'image/jpeg', 'image/webp'];
+            maxSize = 2 * 1024 * 1024; // 2MB
+            previewElement = badgeIconPreview;
+            previewImg = badgeIconPreviewImg;
         }
 
         // Validate file type
-        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
-            window.Swal.fire({
-                icon: 'error',
-                title: 'Format File Tidak Valid',
-                text: 'Hanya file PNG, JPG, JPEG, dan WEBP yang diperbolehkan.',
-                confirmButtonColor: '#dc2626'
-            });
+            const typeText = type === 'section' ? 'PNG, JPG, JPEG, dan WEBP' : 'PNG, SVG, JPEG, dan WEBP';
+            alert(`Hanya file ${typeText} yang diperbolehkan.`);
             event.target.value = '';
             return;
         }
 
-        // Validate file size (5MB max)
-        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        // Validate file size
         if (file.size > maxSize) {
-            window.Swal.fire({
-                icon: 'error',
-                title: 'File Terlalu Besar',
-                text: 'Ukuran file maksimal adalah 5MB.',
-                confirmButtonColor: '#dc2626'
-            });
+            const sizeText = type === 'section' ? '5MB' : '2MB';
+            alert(`Ukuran file maksimal adalah ${sizeText}.`);
             event.target.value = '';
             return;
         }
 
-        // Show loading state
-        const previewContainer = document.getElementById('sectionImagePreview');
-        const previewImg = document.getElementById('sectionImagePreviewImg');
-        const statusElement = document.getElementById('sectionImageStatus');
-        
-        // Add loading indicator
-        previewImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIHN0cm9rZT0iI2U1ZTdlYiIgc3Ryb2tlLXdpZHRoPSI0Ii8+CjxwYXRoIGQ9Im0zOCAyMGMwLTkuOTQxLTguMDU5LTE4LTE4LTE4IiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIGR1cj0iMXMiIHZhbHVlcz0iMCAyMCAyMDszNjAgMjAgMjAiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CjwvcGF0aD4KPC9zdmc+';
-        previewContainer.classList.remove('hidden');
-        if (statusElement) statusElement.textContent = 'Memuat preview gambar...';
-        
-        // Hide current image container
-        const currentContainer = document.getElementById('currentSectionImageContainer');
-        if (currentContainer) currentContainer.classList.add('hidden');
-
-        try {
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                try {
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                if (previewImg) {
                     previewImg.src = e.target.result;
-                    if (statusElement) statusElement.textContent = 'Preview gambar berhasil dimuat';
-                    console.log('Section image preview loaded successfully');
-                } catch (error) {
-                    console.error('Error setting preview image:', error);
-                    handlePreviewError();
                 }
-            };
-            
-            reader.onerror = function(error) {
-                console.error('FileReader error:', error);
-                handlePreviewError();
-            };
-            
-            reader.readAsDataURL(file);
-            
-        } catch (error) {
-            console.error('Error reading file:', error);
-            handlePreviewError();
-        }
-
-        function handlePreviewError() {
-            window.Swal.fire({
-                icon: 'error',
-                title: 'Gagal Memuat Preview',
-                text: 'Terjadi kesalahan saat memuat preview gambar. Silakan coba lagi.',
-                confirmButtonColor: '#dc2626'
-            });
-            
-            // Reset state
-            event.target.value = '';
-            previewContainer.classList.add('hidden');
-            if (currentContainer) currentContainer.classList.remove('hidden');
-            if (statusElement) statusElement.textContent = 'Gagal memuat preview gambar';
-        }
-    };
-
-    window.previewBadgeIcon = function(event) {
-        console.log('previewBadgeIcon called');
-        const file = event.target.files[0];
-        
-        if (!file) {
-            console.log('No file selected');
-            return;
-        }
-
-        // Validate file type
-        const allowedTypes = ['image/png', 'image/svg+xml', 'image/jpeg', 'image/webp'];
-        if (!allowedTypes.includes(file.type)) {
-            window.Swal.fire({
-                icon: 'error',
-                title: 'Format File Tidak Valid',
-                text: 'Hanya file PNG, SVG, JPEG, dan WEBP yang diperbolehkan.',
-                confirmButtonColor: '#dc2626'
-            });
-            event.target.value = '';
-            return;
-        }
-
-        // Validate file size (2MB max)
-        const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-        if (file.size > maxSize) {
-            window.Swal.fire({
-                icon: 'error',
-                title: 'File Terlalu Besar',
-                text: 'Ukuran file maksimal adalah 2MB.',
-                confirmButtonColor: '#dc2626'
-            });
-            event.target.value = '';
-            return;
-        }
-
-        // Show loading state
-        const previewContainer = document.getElementById('badgeIconPreview');
-        const previewImg = document.getElementById('badgeIconPreviewImg');
-        const statusElement = document.getElementById('badgeIconStatus');
-        
-        // Add loading indicator
-        previewImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIHN0cm9rZT0iI2U1ZTdlYiIgc3Ryb2tlLXdpZHRoPSI0Ii8+CjxwYXRoIGQ9Im0zOCAyMGMwLTkuOTQxLTguMDU5LTE4LTE4LTE4IiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIGR1cj0iMXMiIHZhbHVlcz0iMCAyMCAyMDszNjAgMjAgMjAiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CjwvcGF0aD4KPC9zdmc+';
-        previewContainer.classList.remove('hidden');
-        if (statusElement) statusElement.textContent = 'Memuat preview icon...';
-        
-        // Hide current icon container
-        const currentContainer = document.getElementById('currentBadgeIconContainer');
-        if (currentContainer) currentContainer.classList.add('hidden');
-
-        try {
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                try {
-                    previewImg.src = e.target.result;
-                    if (statusElement) statusElement.textContent = 'Preview icon berhasil dimuat';
-                    console.log('Badge icon preview loaded successfully');
-                } catch (error) {
-                    console.error('Error setting preview icon:', error);
-                    handlePreviewError();
+                if (previewElement) {
+                    previewElement.classList.remove('hidden');
                 }
-            };
-            
-            reader.onerror = function(error) {
-                console.error('FileReader error:', error);
-                handlePreviewError();
-            };
-            
-            reader.readAsDataURL(file);
-            
-        } catch (error) {
-            console.error('Error reading file:', error);
-            handlePreviewError();
-        }
-
-        function handlePreviewError() {
-            window.Swal.fire({
-                icon: 'error',
-                title: 'Gagal Memuat Preview',
-                text: 'Terjadi kesalahan saat memuat preview icon. Silakan coba lagi.',
-                confirmButtonColor: '#dc2626'
-            });
-            
-            // Reset state
+            } catch (error) {
+                console.error('Error showing preview:', error);
+                alert('Terjadi kesalahan saat menampilkan preview gambar.');
+            }
+        };
+        
+        reader.onerror = function() {
+            alert('Terjadi kesalahan saat membaca file.');
             event.target.value = '';
-            previewContainer.classList.add('hidden');
-            if (currentContainer) currentContainer.classList.remove('hidden');
-            if (statusElement) statusElement.textContent = 'Gagal memuat preview icon';
-        }
-    };
-
+        };
+        
+        reader.readAsDataURL(file);
+    }
+    
+    // Clear preview functions
     window.clearSectionImagePreview = function() {
         try {
-            const fileInput = document.getElementById('section_image');
-            const previewContainer = document.getElementById('sectionImagePreview');
-            const previewImg = document.getElementById('sectionImagePreviewImg');
-            const currentContainer = document.getElementById('currentSectionImageContainer');
-            
-            // Reset file input
-            if (fileInput) fileInput.value = '';
-            
-            // Clear preview image source
-            if (previewImg) previewImg.src = '';
-            
-            // Hide preview container
-            if (previewContainer) previewContainer.classList.add('hidden');
-            
-            // Show current image container if exists
-            if (currentContainer) currentContainer.classList.remove('hidden');
-            
-            console.log('Section image preview cleared successfully');
+            if (sectionImageInput) sectionImageInput.value = '';
+            if (sectionImagePreviewImg) sectionImagePreviewImg.src = '';
+            if (sectionImagePreview) sectionImagePreview.classList.add('hidden');
         } catch (error) {
             console.error('Error clearing section image preview:', error);
         }
@@ -520,102 +379,32 @@
 
     window.clearBadgeIconPreview = function() {
         try {
-            const fileInput = document.getElementById('badge_icon');
-            const previewContainer = document.getElementById('badgeIconPreview');
-            const previewImg = document.getElementById('badgeIconPreviewImg');
-            const currentContainer = document.getElementById('currentBadgeIconContainer');
-            
-            // Reset file input
-            if (fileInput) fileInput.value = '';
-            
-            // Clear preview image source
-            if (previewImg) previewImg.src = '';
-            
-            // Hide preview container
-            if (previewContainer) previewContainer.classList.add('hidden');
-            
-            // Show current icon container if exists
-            if (currentContainer) currentContainer.classList.remove('hidden');
-            
-            console.log('Badge icon preview cleared successfully');
+            if (badgeIconInput) badgeIconInput.value = '';
+            if (badgeIconPreviewImg) badgeIconPreviewImg.src = '';
+            if (badgeIconPreview) badgeIconPreview.classList.add('hidden');
         } catch (error) {
             console.error('Error clearing badge icon preview:', error);
         }
     };
-
-    window.removeCurrentSectionImage = function() {
-        window.Swal.fire({
-            title: 'Hapus Gambar Section?',
-            text: 'Gambar section saat ini akan dihapus.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const container = document.getElementById('currentSectionImageContainer');
-                if (container) container.remove();
-                window.Swal.fire({
-                    icon: 'success', 
-                    title: 'Terhapus!', 
-                    text: 'Gambar akan dihapus saat Anda menyimpan.', 
-                    timer: 2000, 
-                    showConfirmButton: false
-                });
-            }
-        });
-    };
-
-    window.removeCurrentBadgeIcon = function() {
-        window.Swal.fire({
-            title: 'Hapus Icon Badge?',
-            text: 'Icon badge saat ini akan dihapus.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const container = document.getElementById('currentBadgeIconContainer');
-                if (container) container.remove();
-                window.Swal.fire({
-                    icon: 'success', 
-                    title: 'Terhapus!', 
-                    text: 'Icon akan dihapus saat Anda menyimpan.', 
-                    timer: 2000, 
-                    showConfirmButton: false
-                });
-            }
-        });
-    };
     
-    console.log('Functions defined:', {
-        previewSectionImage: typeof window.previewSectionImage,
-        previewBadgeIcon: typeof window.previewBadgeIcon,
-        clearSectionImagePreview: typeof window.clearSectionImagePreview,
-        clearBadgeIconPreview: typeof window.clearBadgeIconPreview,
-        removeCurrentSectionImage: typeof window.removeCurrentSectionImage,
-        removeCurrentBadgeIcon: typeof window.removeCurrentBadgeIcon
-    });
-})();
+    // Form validation before submit
+    const form = document.getElementById('settingsForm');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            const sectionTitle = document.getElementById('section_title');
+            
+            if (!sectionTitle || !sectionTitle.value.trim()) {
+                event.preventDefault();
+                alert('Judul Section wajib diisi.');
+                if (sectionTitle) sectionTitle.focus();
+                return false;
+            }
+            
+            return true;
+        });
+    }
+});
 </script>
-
-@if(session('success'))
-<script>
-window.Swal.fire({icon: 'success', title: 'Berhasil!', text: '{{ session("success") }}', timer: 3000, showConfirmButton: false, toast: true, position: 'top-end'});
-</script>
-@endif
-
-@if(session('error'))
-<script>
-window.Swal.fire({icon: 'error', title: 'Gagal!', text: '{{ session("error") }}', confirmButtonColor: '#dc2626'});
-</script>
-@endif
+@endpush
 
 @endsection
