@@ -441,7 +441,7 @@ window.backupManager = {
                 const data = await response.json();
 
                 if (data.success) {
-                    Swal.fire({
+                    window.Swal.fire({
                         title: 'Berhasil!',
                         text: data.message,
                         icon: 'success',
@@ -453,7 +453,7 @@ window.backupManager = {
                     throw new Error(data.message);
                 }
             } catch (error) {
-                Swal.fire({
+                window.Swal.fire({
                     title: 'Error!',
                     text: error.message || 'Terjadi kesalahan saat membersihkan backup.',
                     icon: 'error',

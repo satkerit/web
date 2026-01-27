@@ -3,7 +3,7 @@
 @section('title', isset($news) ? 'Edit Berita' : 'Tambah Berita Baru')
 
 @push('styles')
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+{{-- Summernote and Select2 styles are loaded via Vite in admin.css --}}
 <style>
     .form-container {
         background: #f8fafc;

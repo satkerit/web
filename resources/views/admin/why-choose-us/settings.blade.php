@@ -305,7 +305,6 @@
     </div>
 </form>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 (function() {
     'use strict';
@@ -324,7 +323,7 @@
         // Validate file type
         const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
-            Swal.fire({
+            window.Swal.fire({
                 icon: 'error',
                 title: 'Format File Tidak Valid',
                 text: 'Hanya file PNG, JPG, JPEG, dan WEBP yang diperbolehkan.',
@@ -337,7 +336,7 @@
         // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024; // 5MB in bytes
         if (file.size > maxSize) {
-            Swal.fire({
+            window.Swal.fire({
                 icon: 'error',
                 title: 'File Terlalu Besar',
                 text: 'Ukuran file maksimal adalah 5MB.',
@@ -388,7 +387,7 @@
         }
 
         function handlePreviewError() {
-            Swal.fire({
+            window.Swal.fire({
                 icon: 'error',
                 title: 'Gagal Memuat Preview',
                 text: 'Terjadi kesalahan saat memuat preview gambar. Silakan coba lagi.',
@@ -415,7 +414,7 @@
         // Validate file type
         const allowedTypes = ['image/png', 'image/svg+xml', 'image/jpeg', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
-            Swal.fire({
+            window.Swal.fire({
                 icon: 'error',
                 title: 'Format File Tidak Valid',
                 text: 'Hanya file PNG, SVG, JPEG, dan WEBP yang diperbolehkan.',
@@ -428,7 +427,7 @@
         // Validate file size (2MB max)
         const maxSize = 2 * 1024 * 1024; // 2MB in bytes
         if (file.size > maxSize) {
-            Swal.fire({
+            window.Swal.fire({
                 icon: 'error',
                 title: 'File Terlalu Besar',
                 text: 'Ukuran file maksimal adalah 2MB.',
@@ -479,7 +478,7 @@
         }
 
         function handlePreviewError() {
-            Swal.fire({
+            window.Swal.fire({
                 icon: 'error',
                 title: 'Gagal Memuat Preview',
                 text: 'Terjadi kesalahan saat memuat preview icon. Silakan coba lagi.',
@@ -545,7 +544,7 @@
     };
 
     window.removeCurrentSectionImage = function() {
-        Swal.fire({
+        window.Swal.fire({
             title: 'Hapus Gambar Section?',
             text: 'Gambar section saat ini akan dihapus.',
             icon: 'warning',
@@ -559,7 +558,7 @@
             if (result.isConfirmed) {
                 const container = document.getElementById('currentSectionImageContainer');
                 if (container) container.remove();
-                Swal.fire({
+                window.Swal.fire({
                     icon: 'success', 
                     title: 'Terhapus!', 
                     text: 'Gambar akan dihapus saat Anda menyimpan.', 
@@ -571,7 +570,7 @@
     };
 
     window.removeCurrentBadgeIcon = function() {
-        Swal.fire({
+        window.Swal.fire({
             title: 'Hapus Icon Badge?',
             text: 'Icon badge saat ini akan dihapus.',
             icon: 'warning',
@@ -585,7 +584,7 @@
             if (result.isConfirmed) {
                 const container = document.getElementById('currentBadgeIconContainer');
                 if (container) container.remove();
-                Swal.fire({
+                window.Swal.fire({
                     icon: 'success', 
                     title: 'Terhapus!', 
                     text: 'Icon akan dihapus saat Anda menyimpan.', 
@@ -609,13 +608,13 @@
 
 @if(session('success'))
 <script>
-Swal.fire({icon: 'success', title: 'Berhasil!', text: '{{ session("success") }}', timer: 3000, showConfirmButton: false, toast: true, position: 'top-end'});
+window.Swal.fire({icon: 'success', title: 'Berhasil!', text: '{{ session("success") }}', timer: 3000, showConfirmButton: false, toast: true, position: 'top-end'});
 </script>
 @endif
 
 @if(session('error'))
 <script>
-Swal.fire({icon: 'error', title: 'Gagal!', text: '{{ session("error") }}', confirmButtonColor: '#dc2626'});
+window.Swal.fire({icon: 'error', title: 'Gagal!', text: '{{ session("error") }}', confirmButtonColor: '#dc2626'});
 </script>
 @endif
 

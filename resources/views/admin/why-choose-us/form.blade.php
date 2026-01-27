@@ -212,7 +212,6 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 (function() {
     'use strict';
@@ -249,7 +248,7 @@
     };
 
     window.removeCurrentIcon = function() {
-        Swal.fire({
+        window.Swal.fire({
             title: 'Hapus Icon?',
             text: 'Icon saat ini akan dihapus.',
             icon: 'warning',
@@ -265,7 +264,7 @@
                 if (container) {
                     container.remove();
                 }
-                Swal.fire({
+                window.Swal.fire({
                     icon: 'success',
                     title: 'Terhapus!',
                     text: 'Icon akan dihapus saat Anda menyimpan.',

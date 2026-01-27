@@ -118,10 +118,9 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function confirmDelete(id, title) {
-    Swal.fire({
+    window.Swal.fire({
         title: 'Hapus Item?',
         html: `Yakin ingin menghapus <strong>"${title}"</strong>?<br><small class="text-gray-500">Tindakan ini tidak dapat dibatalkan.</small>`,
         icon: 'warning',
@@ -146,7 +145,7 @@ function confirmDelete(id, title) {
 
 // Show success/error messages
 @if(session('success'))
-    Swal.fire({
+    window.Swal.fire({
         icon: 'success',
         title: 'Berhasil!',
         text: '{{ session('success') }}',
@@ -161,7 +160,7 @@ function confirmDelete(id, title) {
 @endif
 
 @if(session('error'))
-    Swal.fire({
+    window.Swal.fire({
         icon: 'error',
         title: 'Gagal!',
         text: '{{ session('error') }}',

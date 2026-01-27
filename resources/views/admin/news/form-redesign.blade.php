@@ -3,8 +3,7 @@
 @section('title', isset($news) ? 'Edit Berita' : 'Tambah Berita Baru')
 
 @push('styles')
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet" crossorigin="anonymous">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" crossorigin="anonymous">
+{{-- Summernote and Select2 styles are loaded via Vite in admin.css --}}
 <style>
 /* Modern Form Styling */
 .form-container {
@@ -1231,8 +1230,6 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" crossorigin="anonymous"></script>
+{{-- jQuery, Summernote, and Select2 are loaded via Vite in admin.js --}}
 <script src="{{ asset('js/news-form.js') }}"></script>
 @endpush

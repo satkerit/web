@@ -323,7 +323,7 @@ document.addEventListener('alpine:init', () => {
                 const data = await response.json();
 
                 if (data.success) {
-                    await Swal.fire({
+                    await window.Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
                         text: data.message,
@@ -335,7 +335,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (error) {
                 console.error('Error:', error);
-                await Swal.fire({
+                await window.Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: error.message || 'Terjadi kesalahan saat membuat backup.',
@@ -348,7 +348,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         async createQuickBackup() {
-            const result = await Swal.fire({
+            const result = await window.Swal.fire({
                 title: 'Buat Quick Backup?',
                 text: 'Backup full database dengan kompresi akan dibuat.',
                 icon: 'question',
@@ -384,7 +384,7 @@ document.addEventListener('alpine:init', () => {
                 const data = await response.json();
 
                 if (data.success) {
-                    await Swal.fire({
+                    await window.Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
                         text: data.message,
@@ -396,7 +396,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (error) {
                 console.error('Error:', error);
-                await Swal.fire({
+                await window.Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: error.message || 'Terjadi kesalahan saat membuat backup.',
@@ -408,7 +408,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         async confirmDelete(filename) {
-            const result = await Swal.fire({
+            const result = await window.Swal.fire({
                 title: 'Hapus Backup?',
                 text: `File "${filename}" akan dihapus permanen.`,
                 icon: 'warning',
@@ -442,7 +442,7 @@ document.addEventListener('alpine:init', () => {
                 const data = await response.json();
 
                 if (data.success) {
-                    await Swal.fire({
+                    await window.Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
                         text: data.message,
@@ -454,7 +454,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (error) {
                 console.error('Error:', error);
-                await Swal.fire({
+                await window.Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: error.message || 'Terjadi kesalahan saat menghapus backup.',
