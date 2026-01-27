@@ -34,7 +34,8 @@ Route::middleware(['throttle:120,1'])->group(function () {
     // Auction Routes
     Route::prefix('lelang')->name('auctions.')->group(function () {
         Route::get('/', [App\Http\Controllers\AuctionController::class, 'index'])->name('index');
-        Route::get('/{slug}', [App\Http\Controllers\AuctionController::class, 'show'])->name('show');
+        Route::get('/{auction:slug}', [App\Http\Controllers\AuctionController::class, 'show'])->name('show');
+        Route::post('/{auction}/interest', [App\Http\Controllers\AuctionController::class, 'expressInterest'])->name('express-interest');
     });
 
     // News Routes

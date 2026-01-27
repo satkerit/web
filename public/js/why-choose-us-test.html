@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Test Why Choose Us Functions</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+            }
+            .test-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .test-section {
+                margin: 20px 0;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+            }
+            .hidden {
+                display: none;
+            }
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+            input[type="file"] {
+                margin: 10px 0;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+            button {
+                padding: 8px 16px;
+                margin: 5px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .btn-primary {
+                background: #007bff;
+                color: white;
+            }
+            .btn-danger {
+                background: #dc3545;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="test-container">
+            <h1>Test Why Choose Us Functions</h1>
+
+            <div class="test-section">
+                <h2>Test Section Image Preview</h2>
+                <input
+                    type="file"
+                    id="section_image"
+                    accept="image/png,image/jpeg,image/jpg,image/webp"
+                    onchange="previewSectionImage(event)"
+                />
+
+                <div id="currentSectionImageContainer" class="hidden">
+                    <p>Current section image container</p>
+                    <button
+                        type="button"
+                        onclick="removeCurrentSectionImage()"
+                        class="btn-danger"
+                    >
+                        Remove Current
+                    </button>
+                </div>
+
+                <div id="sectionImagePreview" class="hidden">
+                    <img
+                        src=""
+                        alt="Section preview"
+                        id="sectionImagePreviewImg"
+                    />
+                    <p>Preview Gambar</p>
+                    <button
+                        type="button"
+                        onclick="clearSectionImagePreview()"
+                        class="btn-danger"
+                    >
+                        Clear Preview
+                    </button>
+                </div>
+
+                <div
+                    id="sectionImageStatus"
+                    class="sr-only"
+                    aria-live="polite"
+                    aria-atomic="true"
+                ></div>
+            </div>
+
+            <div class="test-section">
+                <h2>Test Badge Icon Preview</h2>
+                <input
+                    type="file"
+                    id="badge_icon"
+                    accept="image/png,image/svg+xml,image/jpeg,image/webp"
+                    onchange="previewBadgeIcon(event)"
+                />
+
+                <div id="currentBadgeIconContainer" class="hidden">
+                    <p>Current badge icon container</p>
+                    <button
+                        type="button"
+                        onclick="removeCurrentBadgeIcon()"
+                        class="btn-danger"
+                    >
+                        Remove Current
+                    </button>
+                </div>
+
+                <div id="badgeIconPreview" class="hidden">
+                    <img
+                        src=""
+                        alt="Badge icon preview"
+                        id="badgeIconPreviewImg"
+                        style="width: 64px; height: 64px; object-fit: contain"
+                    />
+                    <p>Preview Icon</p>
+                    <button
+                        type="button"
+                        onclick="clearBadgeIconPreview()"
+                        class="btn-danger"
+                    >
+                        Clear Preview
+                    </button>
+                </div>
+
+                <div
+                    id="badgeIconStatus"
+                    class="sr-only"
+                    aria-live="polite"
+                    aria-atomic="true"
+                ></div>
+            </div>
+
+            <div class="test-section">
+                <h2>Function Status</h2>
+                <button onclick="checkFunctions()" class="btn-primary">
+                    Check Functions
+                </button>
+                <div id="functionStatus"></div>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                "use strict";
+
+                console.log("Why Choose Us Test Script Loaded");
+
+                window.previewSectionImage = function (event) {
+                    console.log("previewSectionImage called");
+                    const file = event.target.files[0];
+
+                    if (!file) {
+                        console.log("No file selected");
+                        return;
+                    }
+
+                    // Validate file type
+                    const allowedTypes = [
+                        "image/png",
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/webp",
+                    ];
+                    if (!allowedTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Format File Tidak Valid",
+                            text: "Hanya file PNG, JPG, JPEG, dan WEBP yang diperbolehkan.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    // Validate file size (5MB max)
+                    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                    if (file.size > maxSize) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "File Terlalu Besar",
+                            text: "Ukuran file maksimal adalah 5MB.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    // Show loading state
+                    const previewContainer = document.getElementById(
+                        "sectionImagePreview",
+                    );
+                    const previewImg = document.getElementById(
+                        "sectionImagePreviewImg",
+                    );
+                    const statusElement =
+                        document.getElementById("sectionImageStatus");
+
+                    // Add loading indicator
+                    previewImg.src =
+                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIHN0cm9rZT0iI2U1ZTdlYiIgc3Ryb2tlLXdpZHRoPSI0Ii8+CjxwYXRoIGQ9Im0zOCAyMGMwLTkuOTQxLTguMDU5LTE4LTE4LTE4IiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIGR1cj0iMXMiIHZhbHVlcz0iMCAyMCAyMDszNjAgMjAgMjAiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CjwvcGF0aD4KPC9zdmc+";
+                    previewContainer.classList.remove("hidden");
+                    if (statusElement)
+                        statusElement.textContent = "Memuat preview gambar...";
+
+                    // Hide current image container
+                    const currentContainer = document.getElementById(
+                        "currentSectionImageContainer",
+                    );
+                    if (currentContainer)
+                        currentContainer.classList.add("hidden");
+
+                    try {
+                        const reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            try {
+                                previewImg.src = e.target.result;
+                                if (statusElement)
+                                    statusElement.textContent =
+                                        "Preview gambar berhasil dimuat";
+                                console.log(
+                                    "Section image preview loaded successfully",
+                                );
+                            } catch (error) {
+                                console.error(
+                                    "Error setting preview image:",
+                                    error,
+                                );
+                                handlePreviewError();
+                            }
+                        };
+
+                        reader.onerror = function (error) {
+                            console.error("FileReader error:", error);
+                            handlePreviewError();
+                        };
+
+                        reader.readAsDataURL(file);
+                    } catch (error) {
+                        console.error("Error reading file:", error);
+                        handlePreviewError();
+                    }
+
+                    function handlePreviewError() {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal Memuat Preview",
+                            text: "Terjadi kesalahan saat memuat preview gambar. Silakan coba lagi.",
+                            confirmButtonColor: "#dc2626",
+                        });
+
+                        // Reset state
+                        event.target.value = "";
+                        previewContainer.classList.add("hidden");
+                        if (currentContainer)
+                            currentContainer.classList.remove("hidden");
+                        if (statusElement)
+                            statusElement.textContent =
+                                "Gagal memuat preview gambar";
+                    }
+                };
+
+                window.clearSectionImagePreview = function () {
+                    try {
+                        const fileInput =
+                            document.getElementById("section_image");
+                        const previewContainer = document.getElementById(
+                            "sectionImagePreview",
+                        );
+                        const previewImg = document.getElementById(
+                            "sectionImagePreviewImg",
+                        );
+                        const currentContainer = document.getElementById(
+                            "currentSectionImageContainer",
+                        );
+
+                        // Reset file input
+                        if (fileInput) fileInput.value = "";
+
+                        // Clear preview image source
+                        if (previewImg) previewImg.src = "";
+
+                        // Hide preview container
+                        if (previewContainer)
+                            previewContainer.classList.add("hidden");
+
+                        // Show current image container if exists
+                        if (currentContainer)
+                            currentContainer.classList.remove("hidden");
+
+                        console.log(
+                            "Section image preview cleared successfully",
+                        );
+                    } catch (error) {
+                        console.error(
+                            "Error clearing section image preview:",
+                            error,
+                        );
+                    }
+                };
+
+                window.removeCurrentSectionImage = function () {
+                    Swal.fire({
+                        title: "Hapus Gambar Section?",
+                        text: "Gambar section saat ini akan dihapus.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#dc2626",
+                        cancelButtonColor: "#6b7280",
+                        confirmButtonText: "Ya, Hapus!",
+                        cancelButtonText: "Batal",
+                        reverseButtons: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const container = document.getElementById(
+                                "currentSectionImageContainer",
+                            );
+                            if (container) container.remove();
+                            Swal.fire({
+                                icon: "success",
+                                title: "Terhapus!",
+                                text: "Gambar akan dihapus saat Anda menyimpan.",
+                                timer: 2000,
+                                showConfirmButton: false,
+                            });
+                        }
+                    });
+                };
+
+                window.previewBadgeIcon = function (event) {
+                    console.log("previewBadgeIcon called");
+                    const file = event.target.files[0];
+
+                    if (!file) {
+                        console.log("No file selected");
+                        return;
+                    }
+
+                    // Validate file type
+                    const allowedTypes = [
+                        "image/png",
+                        "image/svg+xml",
+                        "image/jpeg",
+                        "image/webp",
+                    ];
+                    if (!allowedTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Format File Tidak Valid",
+                            text: "Hanya file PNG, SVG, JPEG, dan WEBP yang diperbolehkan.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    // Validate file size (2MB max)
+                    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+                    if (file.size > maxSize) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "File Terlalu Besar",
+                            text: "Ukuran file maksimal adalah 2MB.",
+                            confirmButtonColor: "#dc2626",
+                        });
+                        event.target.value = "";
+                        return;
+                    }
+
+                    // Show loading state
+                    const previewContainer =
+                        document.getElementById("badgeIconPreview");
+                    const previewImg = document.getElementById(
+                        "badgeIconPreviewImg",
+                    );
+                    const statusElement =
+                        document.getElementById("badgeIconStatus");
+
+                    // Add loading indicator
+                    previewImg.src =
+                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIHN0cm9rZT0iI2U1ZTdlYiIgc3Ryb2tlLXdpZHRoPSI0Ii8+CjxwYXRoIGQ9Im0zOCAyMGMwLTkuOTQxLTguMDU5LTE4LTE4LTE4IiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIGR1cj0iMXMiIHZhbHVlcz0iMCAyMCAyMDszNjAgMjAgMjAiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CjwvcGF0aD4KPC9zdmc+";
+                    previewContainer.classList.remove("hidden");
+                    if (statusElement)
+                        statusElement.textContent = "Memuat preview icon...";
+
+                    // Hide current icon container
+                    const currentContainer = document.getElementById(
+                        "currentBadgeIconContainer",
+                    );
+                    if (currentContainer)
+                        currentContainer.classList.add("hidden");
+
+                    try {
+                        const reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            try {
+                                previewImg.src = e.target.result;
+                                if (statusElement)
+                                    statusElement.textContent =
+                                        "Preview icon berhasil dimuat";
+                                console.log(
+                                    "Badge icon preview loaded successfully",
+                                );
+                            } catch (error) {
+                                console.error(
+                                    "Error setting preview icon:",
+                                    error,
+                                );
+                                handlePreviewError();
+                            }
+                        };
+
+                        reader.onerror = function (error) {
+                            console.error("FileReader error:", error);
+                            handlePreviewError();
+                        };
+
+                        reader.readAsDataURL(file);
+                    } catch (error) {
+                        console.error("Error reading file:", error);
+                        handlePreviewError();
+                    }
+
+                    function handlePreviewError() {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal Memuat Preview",
+                            text: "Terjadi kesalahan saat memuat preview icon. Silakan coba lagi.",
+                            confirmButtonColor: "#dc2626",
+                        });
+
+                        // Reset state
+                        event.target.value = "";
+                        previewContainer.classList.add("hidden");
+                        if (currentContainer)
+                            currentContainer.classList.remove("hidden");
+                        if (statusElement)
+                            statusElement.textContent =
+                                "Gagal memuat preview icon";
+                    }
+                };
+
+                window.clearBadgeIconPreview = function () {
+                    try {
+                        const fileInput = document.getElementById("badge_icon");
+                        const previewContainer =
+                            document.getElementById("badgeIconPreview");
+                        const previewImg = document.getElementById(
+                            "badgeIconPreviewImg",
+                        );
+                        const currentContainer = document.getElementById(
+                            "currentBadgeIconContainer",
+                        );
+
+                        // Reset file input
+                        if (fileInput) fileInput.value = "";
+
+                        // Clear preview image source
+                        if (previewImg) previewImg.src = "";
+
+                        // Hide preview container
+                        if (previewContainer)
+                            previewContainer.classList.add("hidden");
+
+                        // Show current icon container if exists
+                        if (currentContainer)
+                            currentContainer.classList.remove("hidden");
+
+                        console.log("Badge icon preview cleared successfully");
+                    } catch (error) {
+                        console.error(
+                            "Error clearing badge icon preview:",
+                            error,
+                        );
+                    }
+                };
+
+                window.removeCurrentBadgeIcon = function () {
+                    Swal.fire({
+                        title: "Hapus Icon Badge?",
+                        text: "Icon badge saat ini akan dihapus.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#dc2626",
+                        cancelButtonColor: "#6b7280",
+                        confirmButtonText: "Ya, Hapus!",
+                        cancelButtonText: "Batal",
+                        reverseButtons: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const container = document.getElementById(
+                                "currentBadgeIconContainer",
+                            );
+                            if (container) container.remove();
+                            Swal.fire({
+                                icon: "success",
+                                title: "Terhapus!",
+                                text: "Icon akan dihapus saat Anda menyimpan.",
+                                timer: 2000,
+                                showConfirmButton: false,
+                            });
+                        }
+                    });
+                };
+
+                window.checkFunctions = function () {
+                    const status = document.getElementById("functionStatus");
+                    const functions = {
+                        previewSectionImage: typeof window.previewSectionImage,
+                        previewBadgeIcon: typeof window.previewBadgeIcon,
+                        clearSectionImagePreview:
+                            typeof window.clearSectionImagePreview,
+                        clearBadgeIconPreview:
+                            typeof window.clearBadgeIconPreview,
+                        removeCurrentSectionImage:
+                            typeof window.removeCurrentSectionImage,
+                        removeCurrentBadgeIcon:
+                            typeof window.removeCurrentBadgeIcon,
+                    };
+
+                    let html = "<h3>Function Status:</h3><ul>";
+                    for (const [name, type] of Object.entries(functions)) {
+                        const color = type === "function" ? "green" : "red";
+                        html += `<li style="color: ${color};">${name}: ${type}</li>`;
+                    }
+                    html += "</ul>";
+
+                    status.innerHTML = html;
+                    console.log("Functions defined:", functions);
+                };
+
+                console.log("All functions loaded successfully");
+            })();
+        </script>
+    </body>
+</html>
