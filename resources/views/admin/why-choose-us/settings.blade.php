@@ -583,26 +583,6 @@
             if (statusElement) statusElement.textContent = 'Gagal memuat preview icon';
         }
     };
-
-    window.removeCurrentBadgeIcon = function() {
-        Swal.fire({
-            title: 'Hapus Icon Badge?',
-            text: 'Icon badge saat ini akan dihapus.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const container = document.getElementById('currentBadgeIconContainer');
-                if (container) container.remove();
-                Swal.fire({icon: 'success', title: 'Terhapus!', text: 'Icon akan dihapus saat Anda menyimpan.', timer: 2000, showConfirmButton: false});
-            }
-        });
-    };
     
     console.log('Functions defined:', {
         previewSectionImage: typeof window.previewSectionImage,
