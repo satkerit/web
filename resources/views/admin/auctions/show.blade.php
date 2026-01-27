@@ -123,7 +123,7 @@
                             </button>
                             <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" 
                                     data-tab="auction">
-                                Lelang
+                                Lelang Agunan
                             </button>
                             <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" 
                                     data-tab="legal">
@@ -225,15 +225,15 @@
                     <div class="tab-content hidden" id="auction">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <h4 class="font-semibold text-lg mb-3">Informasi Lelang</h4>
+                                <h4 class="font-semibold text-lg mb-3">Informasi Lelang Agunan</h4>
                                 <div class="space-y-2">
                                     <div class="flex justify-between">
-                                        <span class="text-gray-600">Jenis Lelang:</span>
+                                        <span class="text-gray-600">Jenis Lelang Agunan:</span>
                                         <span class="font-medium">{{ $auction->auction_type_label }}</span>
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Metode:</span>
-                                        <span class="font-medium">{{ $auction->auction_method ?? 'Lelang Terbuka' }}</span>
+                                        <span class="font-medium">{{ $auction->auction_method ?? 'Lelang Agunan Terbuka' }}</span>
                                     </div>
                                     @if($auction->registration_start && $auction->registration_end)
                                         <div class="flex justify-between">

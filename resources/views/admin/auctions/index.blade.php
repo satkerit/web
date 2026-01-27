@@ -191,7 +191,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                            Tidak ada data lelang.
+                                            Tidak ada data lelang agunan.
                                         </td>
                                     </tr>
                                 @endforelse
