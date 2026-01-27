@@ -37,7 +37,7 @@
                                value="{{ old('section_title', $setting->section_title) }}"
                                required
                                placeholder="Contoh: Mengapa Memilih Kami"
-                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors @error('section_title') border-red-500 @enderror">
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('section_title') border-red-500 @enderror">
                         @error('section_title')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -52,7 +52,7 @@
                                   id="section_subtitle"
                                   rows="3"
                                   placeholder="Deskripsi singkat tentang keunggulan Anda..."
-                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none @error('section_subtitle') border-red-500 @enderror">{{ old('section_subtitle', $setting->section_subtitle) }}</textarea>
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('section_subtitle') border-red-500 @enderror">{{ old('section_subtitle', $setting->section_subtitle) }}</textarea>
                         @error('section_subtitle')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -68,7 +68,7 @@
                                id="badge_text"
                                value="{{ old('badge_text', $setting->badge_text) }}"
                                placeholder="Contoh: 100% Syariah Compliant"
-                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors @error('badge_text') border-red-500 @enderror">
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('badge_text') border-red-500 @enderror">
                         <p class="text-xs text-gray-500 mt-1.5">Badge yang muncul di pojok gambar section</p>
                         @error('badge_text')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -111,7 +111,7 @@
                                    onchange="previewSectionImage(event)"
                                    aria-describedby="section-image-help">
                             <label for="section_image" 
-                                   class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-all"
+                                   class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all"
                                    role="button"
                                    tabindex="0"
                                    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('section_image').click();}">
@@ -179,7 +179,7 @@
                                    onchange="previewBadgeIcon(event)"
                                    aria-describedby="badge-icon-help">
                             <label for="badge_icon" 
-                                   class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-all"
+                                   class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all"
                                    role="button"
                                    tabindex="0"
                                    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('badge_icon').click();}">
@@ -275,7 +275,7 @@
                                    value="1"
                                    class="sr-only peer"
                                    {{ old('is_active', $setting->is_active) ? 'checked' : '' }}>
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                         </div>
                     </label>
                 </div>
@@ -285,7 +285,7 @@
             <x-admin.card :noPadding="true">
                 <div class="p-5 space-y-3">
                     <button type="submit" 
-                            class="w-full px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2">
+                            class="w-full px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
