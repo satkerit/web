@@ -568,6 +568,24 @@
                 });
             }
         });
+    }; '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const container = document.getElementById('currentSectionImageContainer');
+                if (container) container.remove();
+                Swal.fire({
+                    icon: 'success', 
+                    title: 'Terhapus!', 
+                    text: 'Gambar akan dihapus saat Anda menyimpan.', 
+                    timer: 2000, 
+                    showConfirmButton: false
+                });
+            }
+        });
     };
 
     window.removeCurrentBadgeIcon = function() {
