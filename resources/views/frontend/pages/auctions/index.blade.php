@@ -3,23 +3,44 @@
     <x-slot name="meta_description">Temukan berbagai lelang properti terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.</x-slot>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div class="container mx-auto px-4">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">Lelang Properti</h1>
-                <p class="text-xl mb-8">Temukan properti impian Anda dengan harga terbaik melalui lelang terpercaya</p>
+    <section class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-emerald-600 text-white py-20 md:py-24 overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl animate-float"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-emerald-400/20 rounded-full blur-xl animate-float-delayed"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-6 animate-bounce-in">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    Lelang Properti Terpercaya
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in-up">
+                    Temukan Properti <span class="text-emerald-300">Impian Anda</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in-up delay-200">
+                    Dapatkan properti berkualitas dengan harga terbaik melalui lelang resmi dan terpercaya
+                </p>
                 
                 <!-- Search Form -->
-                <div class="max-w-4xl mx-auto">
-                    <form method="GET" class="bg-white rounded-lg p-6 shadow-lg">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div>
+                <div class="max-w-5xl mx-auto animate-fade-in-up delay-300">
+                    <form method="GET" class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-2xl">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-700">Cari Properti</label>
                                 <input type="text" name="search" value="{{ request('search') }}" 
-                                       placeholder="Cari properti, lokasi..."
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                                       placeholder="Lokasi, jenis properti..."
+                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 transition-all">
                             </div>
-                            <div>
-                                <select name="asset_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-700">Jenis Aset</label>
+                                <select name="asset_type" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 transition-all">
                                     <option value="">Semua Jenis</option>
                                     @foreach($assetTypes as $value => $label)
                                         <option value="{{ $value }}" {{ request('asset_type') === $value ? 'selected' : '' }}>
@@ -28,8 +49,9 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div>
-                                <select name="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-700">Kota</label>
+                                <select name="city" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 transition-all">
                                     <option value="">Semua Kota</option>
                                     @foreach($cities as $city)
                                         <option value="{{ $city }}" {{ request('city') === $city ? 'selected' : '' }}>
@@ -38,8 +60,12 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div>
-                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-700">&nbsp;</label>
+                                <button type="submit" class="w-full bg-gradient-to-r from-primary-600 to-emerald-600 hover:from-primary-700 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
                                     Cari Lelang
                                 </button>
                             </div>
@@ -50,68 +76,98 @@
         </div>
     </section>
 
-    <div class="container mx-auto px-4 py-12">
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Main Content -->
-            <div class="lg:w-3/4">
-                <!-- Filters & Sort -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                    <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <input type="hidden" name="search" value="{{ request('search') }}">
-                        <input type="hidden" name="asset_type" value="{{ request('asset_type') }}">
-                        <input type="hidden" name="city" value="{{ request('city') }}">
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Min</label>
-                            <input type="number" name="min_price" value="{{ request('min_price') }}" 
-                                   placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Max</label>
-                            <input type="number" name="max_price" value="{{ request('max_price') }}" 
-                                   placeholder="Unlimited" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <option value="">Semua Status</option>
-                                <option value="registration_open" {{ request('status') === 'registration_open' ? 'selected' : '' }}>Pendaftaran Dibuka</option>
-                                <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Dipublikasi</option>
-                                <option value="auction_scheduled" {{ request('status') === 'auction_scheduled' ? 'selected' : '' }}>Terjadwal</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Urutkan</label>
-                            <select name="sort_by" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <option value="date" {{ request('sort_by') === 'date' ? 'selected' : '' }}>Tanggal Lelang</option>
-                                <option value="price" {{ request('sort_by') === 'price' ? 'selected' : '' }}>Harga</option>
-                                <option value="featured" {{ request('sort_by') === 'featured' ? 'selected' : '' }}>Featured</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">
-                                Filter
+    <!-- Main Content -->
+    <section class="py-12 md:py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Main Content -->
+                <div class="lg:w-3/4">
+                    <!-- Advanced Filters -->
+                    <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 border border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-3">
+                                <span class="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                                    </svg>
+                                </span>
+                                Filter Lanjutan
+                            </h3>
+                            <button onclick="toggleFilters()" class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                                <span id="filter-toggle-text">Tampilkan</span>
+                                <svg id="filter-toggle-icon" class="w-4 h-4 inline ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
                             </button>
                         </div>
-                    </form>
-                </div>
+                        
+                        <div id="advanced-filters" class="hidden">
+                            <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                                <input type="hidden" name="search" value="{{ request('search') }}">
+                                <input type="hidden" name="asset_type" value="{{ request('asset_type') }}">
+                                <input type="hidden" name="city" value="{{ request('city') }}">
+                                
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-700">Harga Minimum</label>
+                                    <input type="number" name="min_price" value="{{ request('min_price') }}" 
+                                           placeholder="0" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-700">Harga Maksimum</label>
+                                    <input type="number" name="max_price" value="{{ request('max_price') }}" 
+                                           placeholder="Unlimited" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-700">Status Lelang</label>
+                                    <select name="status" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all">
+                                        <option value="">Semua Status</option>
+                                        <option value="registration_open" {{ request('status') === 'registration_open' ? 'selected' : '' }}>Pendaftaran Dibuka</option>
+                                        <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Dipublikasi</option>
+                                        <option value="auction_scheduled" {{ request('status') === 'auction_scheduled' ? 'selected' : '' }}>Terjadwal</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-700">Urutkan Berdasarkan</label>
+                                    <select name="sort_by" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all">
+                                        <option value="date" {{ request('sort_by') === 'date' ? 'selected' : '' }}>Tanggal Lelang</option>
+                                        <option value="price" {{ request('sort_by') === 'price' ? 'selected' : '' }}>Harga</option>
+                                        <option value="featured" {{ request('sort_by') === 'featured' ? 'selected' : '' }}>Featured</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2 lg:col-span-4 flex gap-4">
+                                    <button type="submit" class="flex-1 bg-gradient-to-r from-primary-600 to-emerald-600 hover:from-primary-700 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105">
+                                        Terapkan Filter
+                                    </button>
+                                    <a href="{{ route('auctions.index') }}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-xl transition-all duration-300 text-center">
+                                        Reset Filter
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
-                <!-- Results Info -->
-                <div class="flex justify-between items-center mb-6">
-                    <div class="text-gray-600">
-                        Menampilkan {{ $auctions->firstItem() ?? 0 }}-{{ $auctions->lastItem() ?? 0 }} dari {{ $auctions->total() }} lelang
+                    <!-- Results Info & Sort -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                        <div class="text-gray-600">
+                            <span class="font-semibold text-gray-900">{{ $auctions->total() }}</span> lelang ditemukan
+                            @if(request()->hasAny(['search', 'asset_type', 'city', 'min_price', 'max_price', 'status']))
+                                <span class="text-sm text-primary-600 ml-2">
+                                    (dengan filter aktif)
+                                </span>
+                            @endif
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-600">Urutan:</span>
+                            <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'asc'])) }}" 
+                               class="px-3 py-2 text-sm border rounded-lg transition-all {{ request('sort_order') === 'asc' ? 'bg-primary-100 border-primary-300 text-primary-700' : 'border-gray-300 hover:border-primary-300' }}">
+                                Ascending
+                            </a>
+                            <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'desc'])) }}" 
+                               class="px-3 py-2 text-sm border rounded-lg transition-all {{ request('sort_order') === 'desc' ? 'bg-primary-100 border-primary-300 text-primary-700' : 'border-gray-300 hover:border-primary-300' }}">
+                                Descending
+                            </a>
+                        </div>
                     </div>
-                    <div class="flex space-x-2">
-                        <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'asc'])) }}" 
-                           class="px-3 py-1 text-sm border rounded {{ request('sort_order') === 'asc' ? 'bg-blue-100 border-blue-300' : 'border-gray-300' }}">
-                            Ascending
-                        </a>
-                        <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'desc'])) }}" 
-                           class="px-3 py-1 text-sm border rounded {{ request('sort_order') === 'desc' ? 'bg-blue-100 border-blue-300' : 'border-gray-300' }}">
-                            Descending
-                        </a>
-                    </div>
-                </div>
 
                 <!-- Auction Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
