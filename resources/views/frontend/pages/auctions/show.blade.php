@@ -1,16 +1,20 @@
-<x-frontend-layout>
+<x-auction-layout>
     <x-slot name="title">{{ $auction->title }} - Lelang Agunan</x-slot>
-    <x-slot name="meta_description">{{ $auction->meta_description ?? Str::limit($auction->description, 160) }}</x-slot>
+    <x-slot name="metaDescription">{{ $auction->meta_description ?? Str::limit($auction->description, 160) }}</x-slot>
+    <x-slot name="metaKeywords">{{ $auction->meta_keywords ?? 'lelang agunan, ' . $auction->title . ', BPRS Babel' }}</x-slot>
+    @if($auction->main_image)
+    <x-slot name="ogImage">{{ $auction->main_image }}</x-slot>
+    @endif
 
     <!-- Breadcrumb -->
     <section class="bg-gray-50 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex items-center space-x-2 text-sm" aria-label="Breadcrumb">
-                <a href="{{ route('home') }}" class="text-gray-600 hover:text-primary-600 transition-colors">Beranda</a>
+                <a href="{{ route('home') }}" class="text-gray-600 hover:text-orange-600 transition-colors">Beranda</a>
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
-                <a href="{{ route('auctions.index') }}" class="text-gray-600 hover:text-primary-600 transition-colors">Lelang Agunan</a>
+                <a href="{{ route('auctions.index') }}" class="text-gray-600 hover:text-orange-600 transition-colors">Lelang Agunan</a>
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -27,7 +31,7 @@
                 <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                     <div class="flex-1">
                         <div class="flex flex-wrap items-center gap-3 mb-4">
-                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-primary-100 text-primary-700">
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-orange-100 text-orange-700">
                                 {{ $auction->asset_type_label }}
                             </span>
                             @if($auction->is_featured)
@@ -784,4 +788,4 @@
         });
     </script>
     @endpush
-</x-frontend-layout>
+</x-auction-layout>

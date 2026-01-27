@@ -51,62 +51,88 @@ class KasKelilingController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'schedule_date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-            'location' => 'required|string|max:255',
-            'facility' => 'nullable|string|max:1000',
-            'pic_name' => 'nullable|string|max:255',
-            'pic_phone' => 'nullable|string|max:20',
-            'notes' => 'nullable|string|max:1000',
-            'is_active' => 'boolean'
-        ]);
+        try {
+            $validated = $request->validate([
+                'schedule_date' => 'required|date',
+                'start_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time',
+                'location' => 'required|string|max:255',
+                'facility' => 'nullable|string|max:1000',
+                'pic_name' => 'nullable|string|max:255',
+                'pic_phone' => 'nullable|string|max:20',
+                'notes' => 'nullable|string|max:1000',
+                'is_active' => 'boolean'
+            ]);
 
-        // Auto-generate day_name
-        $validated['day_name'] = Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
-        $validated['is_active'] = $request->has('is_active');
+            // Auto-generate day_name
+            $validated['day_name'] = Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
+            $validated['is_active'] = $request->has('is_active');
 
-        KasKelilingSchedule::create($validated);
+            KasKelilingSchedule::create($validated);
 
-        return redirect()->route('admin.kas-keliling.index')
-            ->with('success', 'Jadwal kas keliling berhasil ditambahkan');
+            return redirect()->route('admin.kas-keliling.index')
+                ->with('success', 'Jadwal kas keliling berhasil ditambahkan');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menambahkan jadwal kas keliling.')
+                ->withInput();
+        }
     }
 
-    public function edit(KasKelilingSchedule $kasKeliling)
+    public function edit($id)
     {
-        return view('admin.kas-keliling.edit', compact('kasKeliling'));
+        try {
+            $kasKeliling = KasKelilingSchedule::findOrFail($id);
+            return view('admin.kas-keliling.edit', compact('kasKeliling'));
+        } catch (\Exception $e) {
+            return redirect()->route('admin.kas-keliling.index')
+                ->with('error', 'Jadwal kas keliling tidak ditemukan.');
+        }
     }
 
-    public function update(Request $request, KasKelilingSchedule $kasKeliling)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'schedule_date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-            'location' => 'required|string|max:255',
-            'facility' => 'nullable|string|max:1000',
-            'pic_name' => 'nullable|string|max:255',
-            'pic_phone' => 'nullable|string|max:20',
-            'notes' => 'nullable|string|max:1000',
-            'is_active' => 'boolean'
-        ]);
+        try {
+            $kasKeliling = KasKelilingSchedule::findOrFail($id);
+            
+            $validated = $request->validate([
+                'schedule_date' => 'required|date',
+                'start_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time',
+                'location' => 'required|string|max:255',
+                'facility' => 'nullable|string|max:1000',
+                'pic_name' => 'nullable|string|max:255',
+                'pic_phone' => 'nullable|string|max:20',
+                'notes' => 'nullable|string|max:1000',
+                'is_active' => 'boolean'
+            ]);
 
-        // Auto-generate day_name
-        $validated['day_name'] = Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
-        $validated['is_active'] = $request->has('is_active');
+            // Auto-generate day_name
+            $validated['day_name'] = Carbon::parse($validated['schedule_date'])->locale('id')->dayName;
+            $validated['is_active'] = $request->has('is_active');
 
-        $kasKeliling->update($validated);
+            $kasKeliling->update($validated);
 
-        return redirect()->route('admin.kas-keliling.index')
-            ->with('success', 'Jadwal kas keliling berhasil diperbarui');
+            return redirect()->route('admin.kas-keliling.index')
+                ->with('success', 'Jadwal kas keliling berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat memperbarui jadwal kas keliling.')
+                ->withInput();
+        }
     }
 
-    public function destroy(KasKelilingSchedule $kasKeliling)
+    public function destroy($id)
     {
-        $kasKeliling->delete();
+        try {
+            $kasKeliling = KasKelilingSchedule::findOrFail($id);
+            $kasKeliling->delete();
 
-        return redirect()->route('admin.kas-keliling.index')
-            ->with('success', 'Jadwal kas keliling berhasil dihapus');
+            return redirect()->route('admin.kas-keliling.index')
+                ->with('success', 'Jadwal kas keliling berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.kas-keliling.index')
+                ->with('error', 'Terjadi kesalahan saat menghapus jadwal kas keliling.');
+        }
     }
 }
