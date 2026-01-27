@@ -60,11 +60,11 @@
             </div>
         </div>
 
-        <!-- Lelang Stats -->
+        <!-- Lelang Agunan Stats -->
         <div class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group">
             <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-sm font-medium text-slate-500 mb-1">Lelang Aktif</p>
+                    <p class="text-sm font-medium text-slate-500 mb-1">Lelang Agunan Aktif</p>
                     <p class="text-3xl font-bold text-slate-900 tracking-tight group-hover:text-amber-600 transition-colors">{{ \App\Models\Auction::where('status', 'upcoming')->count() }}</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center group-hover:bg-amber-500 transition-colors duration-300">

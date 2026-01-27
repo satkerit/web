@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Kelola Lelang') }}
+                {{ __('Kelola Lelang Agunan') }}
             </h2>
             <a href="{{ route('admin.auctions.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Tambah Lelang
+                Tambah Lelang Agunan
             </a>
         </div>
     </x-slot>
@@ -20,7 +20,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
                                 <input type="text" name="search" value="{{ request('search') }}" 
-                                       placeholder="Cari judul, nomor lelang, alamat..."
+                                       placeholder="Cari judul, nomor lelang agunan, alamat..."
                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
                             <div>
@@ -95,7 +95,7 @@
                                         <input type="checkbox" id="select-all" class="rounded border-gray-300">
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Lelang
+                                        Lelang Agunan
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Jenis & Lokasi
@@ -104,7 +104,7 @@
                                         Harga Limit
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Tanggal Lelang
+                                        Tanggal Lelang Agunan
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status

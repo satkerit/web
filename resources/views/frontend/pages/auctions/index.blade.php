@@ -1,6 +1,6 @@
 <x-frontend-layout>
-    <x-slot name="title">Lelang Properti - {{ config('app.name') }}</x-slot>
-    <x-slot name="meta_description">Temukan berbagai lelang properti terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.</x-slot>
+    <x-slot name="title">Lelang Agunan - {{ config('app.name') }}</x-slot>
+    <x-slot name="meta_description">Temukan berbagai lelang agunan terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.</x-slot>
 
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-emerald-600 text-white py-20 md:py-24 overflow-hidden">
@@ -19,13 +19,13 @@
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    Lelang Properti Terpercaya
+                    Lelang Agunan Terpercaya
                 </div>
                 <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in-up">
-                    Temukan Properti <span class="text-emerald-300">Impian Anda</span>
+                    Temukan Agunan <span class="text-emerald-300">Impian Anda</span>
                 </h1>
                 <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in-up delay-200">
-                    Dapatkan properti berkualitas dengan harga terbaik melalui lelang resmi dan terpercaya
+                    Dapatkan agunan berkualitas dengan harga terbaik melalui lelang resmi dan terpercaya
                 </p>
                 
                 <!-- Search Form -->
@@ -33,9 +33,9 @@
                     <form method="GET" class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-2xl">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                             <div class="space-y-2">
-                                <label class="block text-sm font-semibold text-gray-700">Cari Properti</label>
+                                <label class="block text-sm font-semibold text-gray-700">Cari Agunan</label>
                                 <input type="text" name="search" value="{{ request('search') }}" 
-                                       placeholder="Lokasi, jenis properti..."
+                                       placeholder="Lokasi, jenis agunan..."
                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 transition-all">
                             </div>
                             <div class="space-y-2">

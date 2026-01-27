@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Detail Lelang: {{ $auction->title }}
+                Detail Lelang Agunan: {{ $auction->title }}
             </h2>
             <div class="flex space-x-2">
                 <a href="{{ route('admin.auctions.edit', $auction) }}" 
@@ -54,7 +54,7 @@
                             <!-- Images -->
                             @if($auction->images && count($auction->images) > 0)
                                 <div class="mb-6">
-                                    <h3 class="text-lg font-semibold mb-3">Foto Objek Lelang</h3>
+                                    <h3 class="text-lg font-semibold mb-3">Foto Objek Lelang Agunan</h3>
                                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         @foreach($auction->images as $image)
                                             <img src="{{ \App\Helpers\StorageHelper::url($image) }}" 
@@ -71,7 +71,7 @@
                             <h3 class="text-lg font-semibold mb-4">Informasi Cepat</h3>
                             <div class="space-y-3">
                                 <div>
-                                    <span class="text-sm text-gray-600">Nomor Lelang:</span>
+                                    <span class="text-sm text-gray-600">Nomor Lelang Agunan:</span>
                                     <div class="font-medium">{{ $auction->auction_number }}</div>
                                 </div>
                                 <div>
@@ -89,7 +89,7 @@
                                     </div>
                                 @endif
                                 <div>
-                                    <span class="text-sm text-gray-600">Tanggal Lelang:</span>
+                                    <span class="text-sm text-gray-600">Tanggal Lelang Agunan:</span>
                                     <div class="font-medium">
                                         @if($auction->auction_date)
                                             {{ $auction->auction_date->format('d F Y, H:i') }} WIB
@@ -99,7 +99,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <span class="text-sm text-gray-600">Lokasi Lelang:</span>
+                                    <span class="text-sm text-gray-600">Lokasi Lelang Agunan:</span>
                                     <div class="font-medium">{{ $auction->auction_location }}</div>
                                 </div>
                                 <div>

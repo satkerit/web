@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Lelang') }}
+            {{ __('Tambah Lelang Agunan') }}
         </h2>
     </x-slot>
 
@@ -15,7 +15,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Basic Information -->
                             <div>
-                                <label for="title" class="block text-sm font-medium text-gray-700">Judul Lelang</label>
+                                <label for="title" class="block text-sm font-medium text-gray-700">Judul Lelang Agunan</label>
                                 <input type="text" name="title" id="title" value="{{ old('title') }}" 
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 @error('title')
@@ -24,7 +24,7 @@
                             </div>
 
                             <div>
-                                <label for="auction_number" class="block text-sm font-medium text-gray-700">Nomor Lelang</label>
+                                <label for="auction_number" class="block text-sm font-medium text-gray-700">Nomor Lelang Agunan</label>
                                 <input type="text" name="auction_number" id="auction_number" value="{{ old('auction_number') }}" 
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 @error('auction_number')
@@ -67,7 +67,7 @@
                             </div>
 
                             <div>
-                                <label for="auction_date" class="block text-sm font-medium text-gray-700">Tanggal Lelang</label>
+                                <label for="auction_date" class="block text-sm font-medium text-gray-700">Tanggal Lelang Agunan</label>
                                 <input type="datetime-local" name="auction_date" id="auction_date" value="{{ old('auction_date') }}" 
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 @error('auction_date')
@@ -76,10 +76,10 @@
                             </div>
 
                             <div>
-                                <label for="auction_type" class="block text-sm font-medium text-gray-700">Jenis Lelang</label>
+                                <label for="auction_type" class="block text-sm font-medium text-gray-700">Jenis Lelang Agunan</label>
                                 <select name="auction_type" id="auction_type" 
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                    <option value="">Pilih Jenis Lelang</option>
+                                    <option value="">Pilih Jenis Lelang Agunan</option>
                                     @foreach(\App\Models\Auction::$auctionTypes as $value => $label)
                                         <option value="{{ $value }}" {{ old('auction_type') === $value ? 'selected' : '' }}>
                                             {{ $label }}
@@ -92,7 +92,7 @@
                             </div>
 
                             <div>
-                                <label for="auction_location" class="block text-sm font-medium text-gray-700">Lokasi Lelang</label>
+                                <label for="auction_location" class="block text-sm font-medium text-gray-700">Lokasi Lelang Agunan</label>
                                 <input type="text" name="auction_location" id="auction_location" value="{{ old('auction_location') }}" 
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 @error('auction_location')

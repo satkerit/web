@@ -666,10 +666,10 @@
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    Lelang Aset
+                    Lelang Agunan
                 </div>
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Informasi Lelang Terbaru</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Temukan peluang investasi menarik melalui lelang aset dari BPRS Bangka Belitung</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Informasi Lelang Agunan Terbaru</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Temukan peluang investasi menarik melalui lelang agunan dari BPRS Bangka Belitung</p>
             </div>
 
             <!-- Auctions Grid -->
@@ -731,6 +731,21 @@
                     </div>
                 </div>
                 @endforeach
+            </div>
+
+            <!-- View All Auctions Button -->
+            <div class="text-center mt-12">
+                <a href="{{ route('auctions.index') }}" 
+                   class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    <span>Lihat Semua Lelang Agunan</span>
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+                <p class="text-gray-500 text-sm mt-3">Jelajahi {{ $auctions->count() > 0 ? 'lebih banyak' : 'semua' }} lelang agunan yang tersedia</p>
             </div>
         </div>
     </section>

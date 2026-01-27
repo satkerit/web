@@ -1,5 +1,5 @@
 <x-frontend-layout>
-    <x-slot name="title">{{ $auction->title }} - Lelang Properti</x-slot>
+    <x-slot name="title">{{ $auction->title }} - Lelang Agunan</x-slot>
     <x-slot name="meta_description">{{ $auction->meta_description ?? Str::limit($auction->description, 160) }}</x-slot>
 
     <!-- Breadcrumb -->
@@ -10,7 +10,7 @@
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
-                <a href="{{ route('auctions.index') }}" class="text-gray-600 hover:text-primary-600 transition-colors">Lelang</a>
+                <a href="{{ route('auctions.index') }}" class="text-gray-600 hover:text-primary-600 transition-colors">Lelang Agunan</a>
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
