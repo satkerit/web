@@ -1,7 +1,125 @@
-<x-auction-layout>
+<x-frontend-layout>
     <x-slot name="title">Lelang Agunan - {{ config('app.name') }}</x-slot>
-    <x-slot name="metaDescription">Temukan berbagai lelang agunan terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.</x-slot>
-    <x-slot name="metaKeywords">lelang agunan, lelang properti, BPRS Babel, auction, property auction, rumah lelang, tanah lelang</x-slot>
+    
+    @push('head')
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Temukan berbagai lelang agunan terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.">
+    <meta name="keywords" content="lelang agunan, lelang properti, BPRS Babel, auction, property auction, rumah lelang, tanah lelang">
+    <meta name="author" content="BPRS Bangka Belitung">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Lelang Agunan - {{ config('app.name') }}">
+    <meta property="og:description" content="Temukan berbagai lelang agunan terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    
+    <!-- Auction-specific styles -->
+    <style>
+        /* Auction-specific styling */
+        .auction-hero {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+        }
+        
+        .btn-auction-primary {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-auction-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+        }
+        
+        .auction-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .auction-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .auction-price {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        
+        .status-active { 
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+        
+        .status-upcoming { 
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            color: white;
+        }
+        
+        .status-closed { 
+            background: linear-gradient(135deg, #6b7280, #9ca3af);
+            color: white;
+        }
+        
+        .status-sold { 
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+        }
+        
+        .auction-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        
+        .slide-up-auction {
+            animation: slideUp 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scale-in-auction {
+            animation: scaleIn 0.6s ease-out forwards;
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .float-auction {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(1deg); }
+            66% { transform: translateY(-5px) rotate(-1deg); }
+        }
+        
+        .glass-auction {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .auction-search-form {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.1);
+        }
+    </style>
+    @endpush
 
     <!-- Hero Section -->
     <section class="relative auction-hero bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 text-white py-20 md:py-24 overflow-hidden">
@@ -580,4 +698,4 @@
         });
     </script>
     @endpush
-</x-auction-layout>
+</x-frontend-layout>

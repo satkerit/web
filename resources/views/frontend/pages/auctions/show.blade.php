@@ -1,10 +1,87 @@
-<x-auction-layout>
+<x-frontend-layout>
     <x-slot name="title">{{ $auction->title }} - Lelang Agunan</x-slot>
-    <x-slot name="metaDescription">{{ $auction->meta_description ?? Str::limit($auction->description, 160) }}</x-slot>
-    <x-slot name="metaKeywords">{{ $auction->meta_keywords ?? 'lelang agunan, ' . $auction->title . ', BPRS Babel' }}</x-slot>
+    
+    @push('head')
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{ $auction->meta_description ?? Str::limit($auction->description, 160) }}">
+    <meta name="keywords" content="{{ $auction->meta_keywords ?? 'lelang agunan, ' . $auction->title . ', BPRS Babel' }}">
+    <meta name="author" content="BPRS Bangka Belitung">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{{ $auction->title }} - Lelang Agunan">
+    <meta property="og:description" content="{{ $auction->meta_description ?? Str::limit($auction->description, 160) }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
     @if($auction->main_image)
-    <x-slot name="ogImage">{{ $auction->main_image }}</x-slot>
+    <meta property="og:image" content="{{ $auction->main_image }}">
     @endif
+    
+    <!-- Auction-specific styles -->
+    <style>
+        /* Auction-specific styling */
+        .auction-hero {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+        }
+        
+        .btn-auction-primary {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-auction-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+        }
+        
+        .auction-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .auction-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .auction-price {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        
+        .status-active { 
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+        
+        .status-upcoming { 
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            color: white;
+        }
+        
+        .status-closed { 
+            background: linear-gradient(135deg, #6b7280, #9ca3af);
+            color: white;
+        }
+        
+        .status-sold { 
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+        }
+        
+        .auction-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+    </style>
+    @endpush
 
     <!-- Breadcrumb -->
     <section class="bg-gray-50 py-6">
@@ -103,7 +180,7 @@
                 <div class="lg:col-span-2 space-y-8">
                     <!-- Sold Banner -->
                     @if($auction->status === 'sold')
-                    <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-6 md:p-8 text-white shadow-xl">
+                    <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl p-6 md:p-8 text-white shadow-xl">
                         <div class="flex items-center gap-4 mb-4">
                             <div class="w-14 h-14 md:w-16 md:h-16 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
                                 <svg class="w-7 h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +227,7 @@
                                 >
                             </template>
                             @if($auction->status === 'sold')
-                            <div class="absolute inset-0 bg-primary-900/50 flex items-center justify-center">
+                            <div class="absolute inset-0 bg-emerald-900/50 flex items-center justify-center">
                                 <div class="text-center transform -rotate-12">
                                     <div class="inline-block border-4 border-white px-8 md:px-12 py-4 md:py-6 rounded-lg">
                                         <p class="text-white font-black text-3xl md:text-5xl tracking-wider">TERJUAL</p>
@@ -173,7 +250,7 @@
                         @if(count($auction->images) > 1)
                         <div class="p-3 md:p-4 bg-gray-50 flex gap-2 md:gap-3 justify-start overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                             @foreach($auction->images as $index => $image)
-                            <button @click="activeImage = {{ $index }}" :class="activeImage === {{ $index }} ? 'ring-2 ring-primary-500 ring-offset-2' : 'opacity-60 hover:opacity-100'" class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all">
+                            <button @click="activeImage = {{ $index }}" :class="activeImage === {{ $index }} ? 'ring-2 ring-emerald-500 ring-offset-2' : 'opacity-60 hover:opacity-100'" class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all">
                                 <img src="{{ \App\Helpers\StorageHelper::url($image) }}" class="w-full h-full object-cover" loading="lazy">
                             </button>
                             @endforeach
@@ -182,10 +259,10 @@
                     </div>
                     @else
                     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                        <div class="aspect-[16/10] md:aspect-[16/9] bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                        <div class="aspect-[16/10] md:aspect-[16/9] bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
                             <div class="text-center">
-                                <svg class="w-20 h-20 md:w-24 md:h-24 text-primary-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                <p class="text-primary-600 font-medium text-base md:text-lg">Belum ada foto</p>
+                                <svg class="w-20 h-20 md:w-24 md:h-24 text-emerald-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <p class="text-emerald-600 font-medium text-base md:text-lg">Belum ada foto</p>
                             </div>
                         </div>
                     </div>
@@ -194,8 +271,8 @@
                     <!-- Specifications -->
                     <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                            <span class="w-10 h-10 md:w-12 md:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                            <span class="w-10 h-10 md:w-12 md:h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 md:w-6 md:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                             </span>
                             Spesifikasi Objek
                         </h2>
@@ -211,9 +288,9 @@
                             </div>
                             @endif
                             @if($auction->land_area)
-                            <div class="p-4 md:p-5 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl">
-                                <p class="text-xs text-primary-600 uppercase tracking-wide font-semibold mb-2">Luas Tanah</p>
-                                <p class="font-bold text-primary-700 text-lg md:text-xl">{{ number_format($auction->land_area, 0, ',', '.') }} m²</p>
+                            <div class="p-4 md:p-5 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl">
+                                <p class="text-xs text-emerald-600 uppercase tracking-wide font-semibold mb-2">Luas Tanah</p>
+                                <p class="font-bold text-emerald-700 text-lg md:text-xl">{{ number_format($auction->land_area, 0, ',', '.') }} m²</p>
                             </div>
                             @endif
                             @if($auction->building_area)
@@ -788,4 +865,4 @@
         });
     </script>
     @endpush
-</x-auction-layout>
+</x-frontend-layout>
