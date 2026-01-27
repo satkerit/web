@@ -486,14 +486,14 @@
                                                 <img src="{{ $featured->main_image }}" alt="{{ $featured->title }}" 
                                                      class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
                                             @else
-                                                <div class="w-16 h-16 bg-gradient-to-br from-primary-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                                    <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                    <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                                     </svg>
                                                 </div>
                                             @endif
                                             <div class="flex-1 min-w-0">
-                                                <h4 class="font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors line-clamp-2">
+                                                <h4 class="font-semibold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors line-clamp-2">
                                                     <a href="{{ route('auctions.show', $featured) }}">
                                                         {{ $featured->title }}
                                                     </a>
@@ -539,14 +539,14 @@
                                                 <img src="{{ $upcoming->main_image }}" alt="{{ $upcoming->title }}" 
                                                      class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
                                             @else
-                                                <div class="w-16 h-16 bg-gradient-to-br from-primary-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                                    <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                    <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                                     </svg>
                                                 </div>
                                             @endif
                                             <div class="flex-1 min-w-0">
-                                                <h4 class="font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors line-clamp-2">
+                                                <h4 class="font-semibold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors line-clamp-2">
                                                     <a href="{{ route('auctions.show', $upcoming) }}">
                                                         {{ $upcoming->title }}
                                                     </a>
@@ -568,7 +568,7 @@
                     @endif
 
                     <!-- Quick Stats -->
-                    <div class="bg-gradient-to-br from-primary-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white">
+                    <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white">
                         <h3 class="text-lg font-bold mb-4 flex items-center gap-3">
                             <span class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -622,22 +622,22 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
                         <input type="text" name="name" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
                         <input type="email" name="email" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label>
                         <input type="tel" name="phone" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Pesan (Opsional)</label>
                         <textarea name="message" rows="3" 
-                                  class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"></textarea>
+                                  class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"></textarea>
                     </div>
                     <div class="flex gap-3 pt-4">
                         <button type="submit" 

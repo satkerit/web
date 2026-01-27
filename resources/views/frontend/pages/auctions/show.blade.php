@@ -294,9 +294,9 @@
                             </div>
                             @endif
                             @if($auction->building_area)
-                            <div class="p-4 md:p-5 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl">
-                                <p class="text-xs text-primary-600 uppercase tracking-wide font-semibold mb-2">Luas Bangunan</p>
-                                <p class="font-bold text-primary-700 text-lg md:text-xl">{{ number_format($auction->building_area, 0, ',', '.') }} m²</p>
+                            <div class="p-4 md:p-5 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl">
+                                <p class="text-xs text-emerald-600 uppercase tracking-wide font-semibold mb-2">Luas Bangunan</p>
+                                <p class="font-bold text-emerald-700 text-lg md:text-xl">{{ number_format($auction->building_area, 0, ',', '.') }} m²</p>
                             </div>
                             @endif
                             @if($auction->bedrooms)
@@ -341,8 +341,8 @@
                     <!-- Location -->
                     <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                            <span class="w-10 h-10 md:w-12 md:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span class="w-10 h-10 md:w-12 md:h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 md:w-6 md:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                             </span>
                             Lokasi Objek
                         </h2>
@@ -367,8 +367,8 @@
                     @if($auction->description)
                     <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                            <span class="w-10 h-10 md:w-12 md:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                            <span class="w-10 h-10 md:w-12 md:h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 md:w-6 md:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
                             </span>
                             Deskripsi
                         </h2>
@@ -415,8 +415,8 @@
                     @if($auction->viewing_schedule || $auction->viewing_start || $auction->viewing_end)
                     <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                            <span class="w-10 h-10 md:w-12 md:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            <span class="w-10 h-10 md:w-12 md:h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 md:w-6 md:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                             </span>
                             Jadwal Open House
                         </h2>
@@ -447,8 +447,8 @@
                     @if($auction->terms_conditions)
                     <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                            <span class="w-10 h-10 md:w-12 md:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span class="w-10 h-10 md:w-12 md:h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 md:w-6 md:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </span>
                             Syarat & Ketentuan
                         </h2>
@@ -466,17 +466,17 @@
                     @if($auction->documents && count($auction->documents) > 0)
                     <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                            <span class="w-10 h-10 md:w-12 md:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            <span class="w-10 h-10 md:w-12 md:h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 md:w-6 md:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             </span>
                             Dokumen Pendukung
                         </h2>
                         <div class="grid gap-3">
                             @foreach($auction->documents as $doc)
-                            <a href="{{ \App\Helpers\StorageHelper::url($doc['path'] ?? $doc) }}" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-primary-50 transition-colors group">
+                            <a href="{{ \App\Helpers\StorageHelper::url($doc['path'] ?? $doc) }}" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-colors group">
                                 <svg class="w-8 h-8 md:w-10 md:h-10 text-red-500 mr-3 md:mr-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg>
-                                <span class="text-gray-700 group-hover:text-primary-600 font-medium flex-1 text-sm md:text-base truncate">{{ $doc['name'] ?? basename($doc['path'] ?? $doc) }}</span>
-                                <svg class="w-5 h-5 text-gray-400 group-hover:text-primary-500 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span class="text-gray-700 group-hover:text-emerald-600 font-medium flex-1 text-sm md:text-base truncate">{{ $doc['name'] ?? basename($doc['path'] ?? $doc) }}</span>
+                                <svg class="w-5 h-5 text-gray-400 group-hover:text-emerald-500 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                             </a>
                             @endforeach
                         </div>
