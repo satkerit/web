@@ -12,6 +12,7 @@ use App\Models\BoardMember;
 use App\Models\Report;
 use App\Models\KasKeliling;
 use App\Models\WhyChooseUs;
+use App\Models\WhyChooseUsSetting;
 use Illuminate\Support\Facades\Cache;
 
 class CacheService
@@ -217,6 +218,18 @@ class CacheService
     }
 
     /**
+     * Get Why Choose Us Settings
+     */
+    public static function getWhyChooseUsSettings()
+    {
+        return Cache::remember(
+            'why_choose_us_settings',
+            self::CACHE_LONG,
+            fn() => WhyChooseUsSetting::getSettings()
+        );
+    }
+
+    /**
      * Clear all frontend caches
      */
     public static function clearAll(): void
@@ -238,6 +251,8 @@ class CacheService
             'board_members_direksi',
             'board_members_pengawas_syariah',
             'kas_keliling',
+            'why_choose_us_items',
+            'why_choose_us_settings',
         ];
 
         foreach ($keys as $key) {

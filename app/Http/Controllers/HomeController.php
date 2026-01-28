@@ -21,6 +21,7 @@ class HomeController extends Controller
             'news' => CacheService::getHomeNews(3),
             'auctions' => CacheService::getHomeAuctions(3),
             'whyChooseUs' => CacheService::getWhyChooseUs(),
+            'whyChooseUsSettings' => CacheService::getWhyChooseUsSettings(),
         ]);
     }
 }

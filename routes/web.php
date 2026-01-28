@@ -99,10 +99,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class);
 
     // Why Choose Us Management
-    Route::get('why-choose-us', \App\Livewire\Admin\WhyChooseUs\Index::class)->name('why-choose-us.index');
-    Route::get('why-choose-us/create', \App\Livewire\Admin\WhyChooseUs\Create::class)->name('why-choose-us.create');
-    Route::get('why-choose-us/{id}/edit', \App\Livewire\Admin\WhyChooseUs\Edit::class)->name('why-choose-us.edit');
-    Route::get('why-choose-us-settings', \App\Livewire\Admin\WhyChooseUs\Settings::class)->name('why-choose-us-settings.edit');
+    Route::get('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'editSettings'])->name('why-choose-us.settings');
+    Route::put('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'updateSettings'])->name('why-choose-us.settings.update');
+    Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class);
 
     // Offices Management
     Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class);
@@ -210,22 +209,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 // Authentication Routes with strict rate limiting
 require __DIR__ . '/auth.php';
 
-// Test route for news form (temporary)
-Route::get('/test-news-form', function () {
-    try {
-        return view('admin.news.form-redesign');
-    } catch (Exception $e) {
-        return response()->json([
-            'error' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ], 500);
-    }
-});
 
-Route::get('/linkstorage', function () {
-    Artisan::call('storage:link');
-});
 
 // Session Management Routes
 Route::middleware(['auth'])->group(function () {

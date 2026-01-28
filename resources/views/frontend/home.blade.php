@@ -453,6 +453,7 @@
 
 
     <!-- Why Choose Us Section -->
+    @if($whyChooseUsSettings?->is_active)
     <section class="py-20 bg-white relative overflow-hidden">
         <!-- Background Elements -->
         <div class="absolute inset-0">
@@ -471,10 +472,10 @@
                         Mengapa Memilih Kami
                     </div>
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                        Bank Syariah yang <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Terpercaya</span> dan Amanah
+                        {!! $whyChooseUsSettings->section_title ?? 'Bank Syariah yang <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Terpercaya</span> dan Amanah' !!}
                     </h2>
                     <p class="text-gray-600 text-lg mb-8 leading-relaxed">
-                        Kami berkomitmen memberikan layanan perbankan syariah terbaik dengan prinsip kehati-hatian dan kepatuhan terhadap syariah Islam.
+                        {{ $whyChooseUsSettings->section_subtitle ?? 'Kami berkomitmen memberikan layanan perbankan syariah terbaik dengan prinsip kehati-hatian dan kepatuhan terhadap syariah Islam.' }}
                     </p>
 
                     <!-- Features List -->
@@ -537,9 +538,15 @@
                 <!-- Image -->
                 <div class="relative slide-in-right">
                     <div class="relative z-10">
+                        @if($whyChooseUsSettings->section_image)
+                        <img src="{{ \App\Helpers\StorageHelper::url($whyChooseUsSettings->section_image) }}"
+                             alt="Why Choose Us"
+                             class="rounded-3xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none">
+                        @else
                         <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=700&fit=crop"
                              alt="Banking"
                              class="rounded-3xl shadow-2xl">
+                        @endif
                     </div>
                     <!-- Decorative Elements -->
                     <div class="absolute -bottom-6 -left-6 w-72 h-72 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-3xl -z-10 opacity-20 animate-pulse-glow"></div>
@@ -554,8 +561,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-2xl font-bold text-gray-900">100%</p>
-                                <p class="text-gray-500 text-sm">Syariah Compliant</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $whyChooseUsSettings->badge_text ?? '100% Syariah Compliant' }}</p>
                             </div>
                         </div>
                     </div>
@@ -563,6 +569,7 @@
             </div>
         </div>
     </section>
+    @endif
 
 
     <!-- News Section -->
@@ -735,7 +742,7 @@
 
             <!-- View All Auctions Button -->
             <div class="text-center mt-12">
-                <a href="{{ route('auctions.index') }}" 
+                <a href="{{ route('auctions.index') }}"
                    class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
