@@ -100,8 +100,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 
     // Why Choose Us Management
     Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class);
-    Route::get('why-choose-us-settings', [App\Http\Controllers\Admin\WhyChooseUsSettingController::class, 'edit'])->name('why-choose-us-settings.edit');
-    Route::put('why-choose-us-settings', [App\Http\Controllers\Admin\WhyChooseUsSettingController::class, 'update'])->name('why-choose-us-settings.update');
+    Route::get('why-choose-us-settings', \App\Livewire\Admin\WhyChooseUs\Settings::class)->name('why-choose-us-settings.edit');
 
     // Offices Management
     Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class);
