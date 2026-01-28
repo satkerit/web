@@ -99,7 +99,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class);
 
     // Why Choose Us Management
-    Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class);
+    Route::get('why-choose-us', \App\Livewire\Admin\WhyChooseUs\Index::class)->name('why-choose-us.index');
+    Route::get('why-choose-us/create', \App\Livewire\Admin\WhyChooseUs\Create::class)->name('why-choose-us.create');
+    Route::get('why-choose-us/{id}/edit', \App\Livewire\Admin\WhyChooseUs\Edit::class)->name('why-choose-us.edit');
     Route::get('why-choose-us-settings', \App\Livewire\Admin\WhyChooseUs\Settings::class)->name('why-choose-us-settings.edit');
 
     // Offices Management

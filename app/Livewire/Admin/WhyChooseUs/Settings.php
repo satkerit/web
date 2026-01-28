@@ -3,16 +3,16 @@
 namespace App\Livewire\Admin\WhyChooseUs;
 
 use App\Models\WhyChooseUsSetting;
-use App\Traits\HandlesImageUpload;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+use Livewire\Attributes\{Layout, Title};
+use App\Traits\HandlesImageUpload;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 
+#[Layout('layouts.admin')]
+#[Title('Pengaturan Section Why Choose Us')]
 class Settings extends Component
 {
-    use WithFileUploads, HandlesImageUpload;
+    use HandlesImageUpload;
 
     public $section_title;
     public $section_subtitle;
@@ -127,8 +127,6 @@ class Settings extends Component
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Error updating Why Choose Us settings: ' . $e->getMessage());
-            
             $this->dispatch('showToast', [
                 'type' => 'error',
                 'message' => 'Gagal memperbarui pengaturan. Silakan coba lagi.'
@@ -153,8 +151,6 @@ class Settings extends Component
                 ]);
             }
         } catch (\Exception $e) {
-            Log::error('Error removing section image: ' . $e->getMessage());
-            
             $this->dispatch('showToast', [
                 'type' => 'error',
                 'message' => 'Gagal menghapus gambar. Silakan coba lagi.'
@@ -179,8 +175,6 @@ class Settings extends Component
                 ]);
             }
         } catch (\Exception $e) {
-            Log::error('Error removing badge icon: ' . $e->getMessage());
-            
             $this->dispatch('showToast', [
                 'type' => 'error',
                 'message' => 'Gagal menghapus icon. Silakan coba lagi.'
@@ -195,7 +189,6 @@ class Settings extends Component
 
     public function render()
     {
-        return view('livewire.admin.why-choose-us.settings')
-            ->layout('layouts.admin');
+        return view('livewire.admin.why-choose-us.settings');
     }
 }

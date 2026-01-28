@@ -5,16 +5,26 @@
 
 import "./bootstrap";
 
-// Alpine.js - Core functionality (handled by Livewire)
+// Alpine.js - Core functionality
 import Alpine from "alpinejs";
 import collapse from "@alpinejs/collapse";
 
-// Wait for Livewire to be ready, then register components
+// Wait for Livewire to be ready before initializing Alpine
 document.addEventListener('livewire:init', () => {
-    // Only register components if Alpine exists and not started
-    if (window.Alpine && !window.Alpine._started) {
+    // Initialize Alpine only if not already provided by Livewire
+    if (!window.Alpine) {
+        window.Alpine = Alpine;
+    }
+    
+    // Prevent multiple initialization
+    if (!window.Alpine._started) {
         window.Alpine.plugin(collapse);
+        
+        // Register all components
         registerAlpineComponents();
+        
+        // Start Alpine
+        window.Alpine.start();
         window.Alpine._started = true;
     }
 });
@@ -325,11 +335,13 @@ window.Alpine.data("mapPicker", (initialLat = "", initialLng = "") => ({
             return `https://www.google.com/maps/dir/?api=1&destination=${this.latitude},${this.longitude}`;
         },
 
-updateMap() {
-            // Map updates automatically via Alpine.js reactivity
-        },
-    }));
-}
+// Start Alpine only if not already started by Livewire
+document.addEventListener('DOMContentLoaded', function() {
+    if (!window.Alpine._started) {
+        window.Alpine.start();
+        window.Alpine._started = true;
+    }
+});
 
 // Lazy load SweetAlert2 only when needed
 let SwalPromise = null;

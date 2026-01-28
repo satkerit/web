@@ -7,8 +7,8 @@
     "file": "assets/js/preload-helper-DAHR15QK.js",
     "name": "preload-helper"
   },
-  "_vendor-alpine-D6KjVx7g.js": {
-    "file": "assets/js/vendor-alpine-D6KjVx7g.js",
+  "_vendor-alpine-K8C6FM0f.js": {
+    "file": "assets/js/vendor-alpine-K8C6FM0f.js",
     "name": "vendor-alpine"
   },
   "_vendor-swiper-vJqVmmGx.js": {
@@ -46,7 +46,7 @@
     ]
   },
   "resources/css/admin.css": {
-    "file": "assets/css/admin-CRvmGdWL.css",
+    "file": "assets/css/admin-zYOgtUQI.css",
     "src": "resources/css/admin.css",
     "isEntry": true,
     "name": "admin",
@@ -55,7 +55,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/css/app-y_sGkFEu.css",
+    "file": "assets/css/app-CPw_bSMO.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -73,28 +73,28 @@
     ]
   },
   "resources/js/admin.js": {
-    "file": "assets/js/admin-DRNxy6Cc.js",
+    "file": "assets/js/admin-24L6P-tA.js",
     "name": "admin",
     "src": "resources/js/admin.js",
     "isEntry": true,
     "imports": [
       "_preload-helper-DAHR15QK.js",
       "_bootstrap-Dn177VMY.js",
-      "_vendor-alpine-D6KjVx7g.js"
+      "_vendor-alpine-K8C6FM0f.js"
     ],
     "dynamicImports": [
       "node_modules/sweetalert2/dist/sweetalert2.esm.all.js"
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/js/app-C7YiXRXw.js",
+    "file": "assets/js/app-lPwRVB49.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
       "_preload-helper-DAHR15QK.js",
       "_bootstrap-Dn177VMY.js",
-      "_vendor-alpine-D6KjVx7g.js"
+      "_vendor-alpine-K8C6FM0f.js"
     ],
     "dynamicImports": [
       "node_modules/sweetalert2/dist/sweetalert2.esm.all.js",
