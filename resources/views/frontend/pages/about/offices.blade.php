@@ -39,7 +39,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($offices as $office)
                 <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all group">
-                    <div class="relative h-48 overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">
                         @if($office->photo)
                         <img src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         @else

@@ -37,7 +37,7 @@
                     <!-- Photo -->
                     @if($office->photo)
                     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <img src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-80 object-cover">
+                        <img src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-96 object-cover">
                     </div>
                     @endif
 
