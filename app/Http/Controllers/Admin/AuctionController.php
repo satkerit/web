@@ -23,11 +23,11 @@ class AuctionController extends Controller
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('auction_number', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%")
-                  ->orWhere('city', 'like', "%{$search}%");
+                    ->orWhere('auction_number', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%");
             });
         }
 
@@ -99,7 +99,7 @@ class AuctionController extends Controller
             'debtor_address' => 'nullable|string',
             'auction_type' => 'required|in:eksekusi_hak_tanggungan,eksekusi_fidusia,eksekusi_hipotik,non_eksekusi_wajib,non_eksekusi_sukarela',
             'auction_method' => 'nullable|string|max:255',
-            'auction_date' => 'required|date|after:today',
+            'auction_date' => 'required|date',
             'auction_time' => 'nullable|date_format:H:i',
             'auction_location' => 'required|string|max:255',
             'auction_address' => 'nullable|string',
@@ -194,7 +194,7 @@ class AuctionController extends Controller
         $auction = Auction::create($validated);
 
         return redirect()->route('admin.auctions.index')
-                        ->with('success', 'Lelang berhasil dibuat.');
+            ->with('success', 'Lelang berhasil dibuat.');
     }
 
     public function show(Auction $auction)
@@ -340,7 +340,7 @@ class AuctionController extends Controller
         $auction->update($validated);
 
         return redirect()->route('admin.auctions.index')
-                        ->with('success', 'Lelang berhasil diperbarui.');
+            ->with('success', 'Lelang berhasil diperbarui.');
     }
 
     public function destroy(Auction $auction)
@@ -357,7 +357,7 @@ class AuctionController extends Controller
         $auction->delete();
 
         return redirect()->route('admin.auctions.index')
-                        ->with('success', 'Lelang berhasil dihapus.');
+            ->with('success', 'Lelang berhasil dihapus.');
     }
 
     public function bulkAction(Request $request)
@@ -376,7 +376,7 @@ class AuctionController extends Controller
             case 'delete':
                 $this->authorizeDelete('auctions.delete');
                 $count = $auctions->count();
-                
+
                 // Delete images for each auction
                 foreach ($auctions->get() as $auction) {
                     if ($auction->images) {
@@ -385,7 +385,7 @@ class AuctionController extends Controller
                         }
                     }
                 }
-                
+
                 $auctions->delete();
                 return back()->with('success', "{$count} lelang berhasil dihapus.");
 
