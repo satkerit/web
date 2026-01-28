@@ -130,7 +130,7 @@
                 <x-admin.image-picker
                     name="photo"
                     :value="$office->photo ?? null"
-                    hint="Format: JPG, PNG, WebP. Maks 2MB"
+                    hint="Format: JPG, PNG, WebP. Maks 2MB. Disarankan ukuran 1200x800 pixel (Rasio 3:2)"
                     previewClass="w-full h-40 object-cover"
                 />
             </x-admin.card>

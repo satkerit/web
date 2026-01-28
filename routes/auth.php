@@ -20,9 +20,8 @@ Route::middleware(['guest', 'throttle:10,1'])->group(function () {
         ->middleware('throttle:5,1'); // 5 registrations per minute
 
     // Use custom admin login view
-    Route::get('login', function () {
-        return view('auth.admin-login');
-    })->name('login');
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store'])
         ->middleware('throttle:5,1'); // 5 login attempts per minute
