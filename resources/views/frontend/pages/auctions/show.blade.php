@@ -253,7 +253,7 @@
                                         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                                         :src="image" :alt="'Foto ' + (index + 1)"
                                         class="absolute inset-0 w-full h-full object-contain md:object-cover"
-                                        loading="lazy">
+                                        :loading="index === 0 ? 'eager' : 'lazy'">
                                 </template>
                                 @if($auction->status === 'sold')
                                     <div class="absolute inset-0 bg-emerald-900/50 flex items-center justify-center">
