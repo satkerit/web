@@ -543,9 +543,16 @@
                              alt="Why Choose Us"
                              class="rounded-3xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none">
                         @else
-                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=700&fit=crop"
-                             alt="Banking"
-                             class="rounded-3xl shadow-2xl">
+                        <div class="rounded-3xl shadow-2xl w-full h-[600px] bg-gradient-to-br from-emerald-400 via-teal-500 to-emerald-600 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-20"></div>
+                            <div class="text-center p-8">
+                                <span class="block mb-4 p-4 bg-white/20 rounded-2xl w-24 h-24 mx-auto backdrop-blur-sm shadow-inner">
+                                    <svg class="w-full h-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
                         @endif
                     </div>
                     <!-- Decorative Elements -->
