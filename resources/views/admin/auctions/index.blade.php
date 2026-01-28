@@ -26,7 +26,7 @@
 <x-admin.card :noPadding="true">
     <div class="p-4 border-b border-gray-100">
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
-            <input type="text" name="search" value="{{ request('search') }}" 
+            <input type="text" name="search" value="{{ request('search') }}"
                    placeholder="Cari judul, nomor lelang, alamat..."
                    class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
             <div class="flex flex-wrap gap-3">
@@ -46,7 +46,7 @@
                         </option>
                     @endforeach
                 </select>
-                <input type="text" name="city" value="{{ request('city') }}" 
+                <input type="text" name="city" value="{{ request('city') }}"
                        placeholder="Nama kota..."
                        class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
                 <x-admin.button type="submit" variant="secondary">Filter</x-admin.button>
@@ -64,9 +64,8 @@
         @forelse($auctions as $auction)
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <div class="flex items-start gap-3 mb-3">
-                    @if($auction->images && count(json_decode($auction->images, true)) > 0)
-                        @php $images = json_decode($auction->images, true); @endphp
-                        <img src="{{ \App\Helpers\StorageHelper::url($images[0]) }}" alt="" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+                    @if($auction->images && is_array($auction->images) && count($auction->images) > 0)
+                        <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}" alt="" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
                     @else
                         <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                             <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,9 +119,8 @@
                 <tr>
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-3">
-                            @if($auction->images && count(json_decode($auction->images, true)) > 0)
-                                @php $images = json_decode($auction->images, true); @endphp
-                                <img src="{{ \App\Helpers\StorageHelper::url($images[0]) }}" alt="" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
+                            @if($auction->images && is_array($auction->images) && count($auction->images) > 0)
+                                <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}" alt="" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
                             @else
                                 <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                                     <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
