@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\KasKeliling;
 use App\Models\KasKelilingSchedule;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class DebugKasKeliling extends Command
 {
@@ -45,9 +46,84 @@ class DebugKasKeliling extends Command
         );
         $this->newLine();
 
-        // Check Kas Keliling Data
-        $this->info('📋 Kas Keliling Master Data:');
-        $kasKelilings = KasKeliling::all();
+        // Check Kas Keliling Schedules Data
+        $this->info('📋 Kas Keliling Schedules Data:');
+        $schedules = KasKelilingSchedule::all();
+
+        if ($schedules->isEmpty()) {
+            $this->warn('❌ No kas keliling schedules found in database');
+        } else {
+            $this->info("✅ Found {$schedules->count()} kas keliling schedules");
+            
+            $this->table(
+                ['ID', 'Date', 'Day', 'Location', 'Time', 'PIC', 'Status'],
+                $schedules->map(function ($schedule) {
+                    return [
+                        $schedule->id,
+                        $schedule->schedule_date->format('d/m/Y'),
+                        $schedule->day_name,
+                        Str::limit($schedule->location, 20),
+                        $schedule->time_range,
+                        $schedule->pic_name ?? '-',
+                        $schedule->is_active ? '✅ Active' : '❌ Inactive'
+                    ];
+                })->toArray()
+            );
+        }
+        $this->newLine();
+
+        // Check Upcoming Schedules
+        $this->info('📅 Upcoming Schedules (Next 7 Days):');
+        $upcomingSchedules = KasKelilingSchedule::where('schedule_date', '>=', now()->toDateString())
+            ->where('schedule_date', '<=', now()->addDays(7)->toDateString())
+            ->where('is_active', true)
+            ->orderBy('schedule_date')
+            ->get();
+
+        if ($upcomingSchedules->isEmpty()) {
+            $this->warn('❌ No upcoming schedules found for the next 7 days');
+        } else {
+            $this->info("✅ Found {$upcomingSchedules->count()} upcoming schedules");
+            
+            $this->table(
+                ['Date', 'Day', 'Location', 'Time', 'PIC'],
+                $upcomingSchedules->map(function ($schedule) {
+                    return [
+                        $schedule->schedule_date->format('d/m/Y'),
+                        $schedule->day_name,
+                        $schedule->location,
+                        $schedule->time_range,
+                        $schedule->pic_name ?? '-'
+                    ];
+                })->toArray()
+            );
+        }
+        $this->newLine();
+
+        // Statistics
+        $this->info('📊 Statistics:');
+        $totalSchedules = KasKelilingSchedule::count();
+        $activeSchedules = KasKelilingSchedule::where('is_active', true)->count();
+        $todaySchedules = KasKelilingSchedule::whereDate('schedule_date', now()->toDateString())->count();
+        $thisWeekSchedules = KasKelilingSchedule::whereBetween('schedule_date', [
+            now()->startOfWeek()->toDateString(),
+            now()->endOfWeek()->toDateString()
+        ])->count();
+
+        $this->table(
+            ['Metric', 'Count'],
+            [
+                ['Total Schedules', $totalSchedules],
+                ['Active Schedules', $activeSchedules],
+                ['Today\'s Schedules', $todaySchedules],
+                ['This Week\'s Schedules', $thisWeekSchedules],
+            ]
+        );
+
+        $this->newLine();
+        $this->info('✅ Debug completed successfully!');
+
+        return 0;
         
         if ($kasKelilings->isEmpty()) {
             $this->error('❌ No kas keliling data found!');

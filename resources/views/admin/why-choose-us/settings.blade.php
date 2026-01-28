@@ -90,7 +90,8 @@
                             <div class="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                 <img src="{{ \App\Helpers\StorageHelper::url($setting->section_image) }}" 
                                      alt="Current section image" 
-                                     class="w-full h-48 object-cover rounded mx-auto">
+                                     class="w-full h-48 object-cover rounded mx-auto"
+                                     onerror="this.parentElement.style.display='none';">
                                 <p class="text-xs text-gray-500 text-center mt-2">Gambar section saat ini</p>
                             </div>
                         @endif
@@ -144,7 +145,8 @@
                             <div class="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                 <img src="{{ \App\Helpers\StorageHelper::url($setting->badge_icon) }}" 
                                      alt="Current badge icon" 
-                                     class="w-16 h-16 object-contain mx-auto">
+                                     class="w-16 h-16 object-contain mx-auto"
+                                     onerror="this.parentElement.style.display='none';">
                                 <p class="text-xs text-gray-500 text-center mt-2">Icon badge saat ini</p>
                             </div>
                         @endif
@@ -198,7 +200,13 @@
                         @if($setting->section_image)
                             <img src="{{ \App\Helpers\StorageHelper::url($setting->section_image) }}" 
                                  alt="Preview" 
-                                 class="w-full h-48 object-cover">
+                                 class="w-full h-48 object-cover"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="w-full h-48 bg-gray-100 items-center justify-center" style="display: none;">
+                                <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
                         @else
                             <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
                                 <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +220,11 @@
                                 @if($setting->badge_icon)
                                     <img src="{{ \App\Helpers\StorageHelper::url($setting->badge_icon) }}" 
                                          alt="Badge" 
-                                         class="w-6 h-6">
+                                         class="w-6 h-6"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                                    <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
                                 @else
                                     <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -287,9 +299,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const sectionImagePreviewImg = document.getElementById('sectionImagePreviewImg');
     
     if (sectionImageInput) {
+        console.log('Section image input found');
         sectionImageInput.addEventListener('change', function(event) {
+            console.log('Section image changed');
             handleImagePreview(event, 'section');
         });
+    } else {
+        console.error('Section image input not found');
     }
     
     // Badge Icon Preview
@@ -298,18 +314,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const badgeIconPreviewImg = document.getElementById('badgeIconPreviewImg');
     
     if (badgeIconInput) {
+        console.log('Badge icon input found');
         badgeIconInput.addEventListener('change', function(event) {
+            console.log('Badge icon changed');
             handleImagePreview(event, 'badge');
         });
+    } else {
+        console.error('Badge icon input not found');
     }
     
     // Generic image preview handler
     function handleImagePreview(event, type) {
+        console.log('Handling image preview for type:', type);
         const file = event.target.files[0];
         
         if (!file) {
+            console.log('No file selected');
             return;
         }
+
+        console.log('File selected:', file.name, 'Size:', file.size, 'Type:', file.type);
 
         // Define validation rules based on type
         let allowedTypes, maxSize, previewElement, previewImg;
@@ -342,15 +366,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        console.log('File validation passed, creating preview...');
+
         // Show preview
         const reader = new FileReader();
         reader.onload = function(e) {
             try {
+                console.log('FileReader loaded successfully');
                 if (previewImg) {
                     previewImg.src = e.target.result;
+                    console.log('Preview image src set');
                 }
                 if (previewElement) {
                     previewElement.classList.remove('hidden');
+                    console.log('Preview element shown');
                 }
             } catch (error) {
                 console.error('Error showing preview:', error);
@@ -359,6 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         reader.onerror = function() {
+            console.error('FileReader error');
             alert('Terjadi kesalahan saat membaca file.');
             event.target.value = '';
         };
@@ -368,6 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Clear preview functions
     window.clearSectionImagePreview = function() {
+        console.log('Clearing section image preview');
         try {
             if (sectionImageInput) sectionImageInput.value = '';
             if (sectionImagePreviewImg) sectionImagePreviewImg.src = '';
@@ -378,6 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     window.clearBadgeIconPreview = function() {
+        console.log('Clearing badge icon preview');
         try {
             if (badgeIconInput) badgeIconInput.value = '';
             if (badgeIconPreviewImg) badgeIconPreviewImg.src = '';
@@ -390,7 +422,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form validation before submit
     const form = document.getElementById('settingsForm');
     if (form) {
+        console.log('Form found, adding submit validation');
         form.addEventListener('submit', function(event) {
+            console.log('Form submit triggered');
             const sectionTitle = document.getElementById('section_title');
             
             if (!sectionTitle || !sectionTitle.value.trim()) {
@@ -400,8 +434,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
             
+            console.log('Form validation passed');
             return true;
         });
+    } else {
+        console.error('Form not found');
     }
 });
 </script>

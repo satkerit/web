@@ -111,10 +111,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 
     // Kas Keliling Management
     Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
-    Route::get('kas-keliling/{kasKeliling}/schedules', [App\Http\Controllers\Admin\KasKelilingController::class, 'schedules'])->name('kas-keliling.schedules');
-    Route::post('kas-keliling/{kasKeliling}/schedules', [App\Http\Controllers\Admin\KasKelilingController::class, 'storeSchedule'])->name('kas-keliling.schedules.store');
-    Route::put('kas-keliling/{kasKeliling}/schedules/{schedule}', [App\Http\Controllers\Admin\KasKelilingController::class, 'updateSchedule'])->name('kas-keliling.schedules.update');
-    Route::delete('kas-keliling/{kasKeliling}/schedules/{schedule}', [App\Http\Controllers\Admin\KasKelilingController::class, 'destroySchedule'])->name('kas-keliling.schedules.destroy');
+    Route::post('kas-keliling/bulk-delete', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkDelete'])->name('kas-keliling.bulk-delete');
+    Route::post('kas-keliling/bulk-status', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkUpdateStatus'])->name('kas-keliling.bulk-status');
+    Route::get('kas-keliling-export', [App\Http\Controllers\Admin\KasKelilingController::class, 'export'])->name('kas-keliling.export');
 
     // Board Members Management
     Route::resource('board-members', App\Http\Controllers\Admin\BoardMemberController::class);
