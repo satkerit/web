@@ -532,8 +532,8 @@
     }
     return null;
   }
-  function getUriPrefix() {
-    return document.querySelector("[data-uri-prefix]")?.getAttribute("data-uri-prefix") ?? window.livewireScriptConfig["uriPrefix"] ?? null;
+  function getModuleUrl() {
+    return document.querySelector("[data-module-url]")?.getAttribute("data-module-url") ?? window.livewireScriptConfig["moduleUrl"] ?? null;
   }
   function getUpdateUri() {
     return document.querySelector("[data-update-uri]")?.getAttribute("data-update-uri") ?? window.livewireScriptConfig["uri"] ?? null;
@@ -2505,7 +2505,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     get raw() {
       return raw;
     },
-    version: "3.15.4",
+    version: "3.15.5",
     flushAndStopDeferringMutations,
     dontAutoEvaluateFunctions,
     disableEffectScheduling,
@@ -3512,7 +3512,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function isListeningForASpecificKeyThatHasntBeenPressed(e, modifiers) {
     let keyModifiers = modifiers.filter((i) => {
-      return !["window", "document", "prevent", "stop", "once", "capture", "self", "away", "outside", "passive", "preserve-scroll"].includes(i);
+      return !["window", "document", "prevent", "stop", "once", "capture", "self", "away", "outside", "passive", "preserve-scroll", "blur", "change", "lazy"].includes(i);
     });
     if (keyModifiers.includes("debounce")) {
       let debounceIndex = keyModifiers.indexOf("debounce");
@@ -3609,11 +3609,36 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           el.setAttribute("name", expression);
       });
     }
-    let event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) || modifiers.includes("lazy") ? "change" : "input";
-    let removeListener = isCloning ? () => {
-    } : on(el, event, modifiers, (e) => {
-      setValue(getInputValue(el, modifiers, e, getValue()));
-    });
+    let hasChangeModifier = modifiers.includes("change") || modifiers.includes("lazy");
+    let hasBlurModifier = modifiers.includes("blur");
+    let hasEnterModifier = modifiers.includes("enter");
+    let hasExplicitEventModifiers = hasChangeModifier || hasBlurModifier || hasEnterModifier;
+    let removeListener;
+    if (isCloning) {
+      removeListener = () => {
+      };
+    } else if (hasExplicitEventModifiers) {
+      let listeners2 = [];
+      let syncValue = (e) => setValue(getInputValue(el, modifiers, e, getValue()));
+      if (hasChangeModifier) {
+        listeners2.push(on(el, "change", modifiers, syncValue));
+      }
+      if (hasBlurModifier) {
+        listeners2.push(on(el, "blur", modifiers, syncValue));
+      }
+      if (hasEnterModifier) {
+        listeners2.push(on(el, "keydown", modifiers, (e) => {
+          if (e.key === "Enter")
+            syncValue(e);
+        }));
+      }
+      removeListener = () => listeners2.forEach((remove) => remove());
+    } else {
+      let event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) ? "change" : "input";
+      removeListener = on(el, event, modifiers, (e) => {
+        setValue(getInputValue(el, modifiers, e, getValue()));
+      });
+    }
     if (modifiers.includes("fill")) {
       if ([void 0, null, ""].includes(getValue()) || isCheckbox(el) && Array.isArray(getValue()) || el.tagName.toLowerCase() === "select" && el.multiple) {
         setValue(
@@ -4666,6 +4691,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     calls = null;
     payload = null;
     responsePayload = null;
+    pendingReturns = [];
+    pendingReturnsMeta = {};
     interceptors = [];
     cancelled = false;
     request = null;
@@ -4794,10 +4821,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           onRender: (callback) => interceptor2.onRender = callback
         });
       });
-      let returns = this.responsePayload.effects["returns"] || [];
-      let returnsMeta = this.responsePayload.effects["returnsMeta"] || {};
-      this.resolveActionPromises(returns, returnsMeta);
-      this.invokeOnFinish();
+      this.pendingReturns = this.responsePayload.effects["returns"] || [];
+      this.pendingReturnsMeta = this.responsePayload.effects["returnsMeta"] || {};
     }
     invokeOnSync() {
       this.interceptors.forEach((interceptor2) => interceptor2.onSync());
@@ -4806,9 +4831,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this.interceptors.forEach((interceptor2) => interceptor2.onEffect());
     }
     async invokeOnMorph() {
-      this.interceptors.forEach(async (interceptor2) => {
-        await interceptor2.onMorph();
-      });
+      await Promise.all(
+        this.interceptors.map((interceptor2) => interceptor2.onMorph())
+      );
     }
     invokeOnRender() {
       this.interceptors.forEach((interceptor2) => interceptor2.onRender());
@@ -4904,7 +4929,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       let name = this.name;
       let params = JSON.stringify(this.params);
       let metadata = JSON.stringify(this.metadata);
-      return window.btoa(String.fromCharCode(...new TextEncoder().encode(componentId + name + params + metadata)));
+      let bytes = new TextEncoder().encode(componentId + name + params + metadata);
+      let binary = "";
+      let chunkSize = 8192;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+      }
+      return window.btoa(binary);
     }
     isAsync() {
       let asyncMethods = this.component.snapshot.memo?.async || [];
@@ -5260,9 +5291,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           };
         }
       });
+      let cachedOptions = null;
       Object.defineProperty(request, "options", {
         get() {
-          return {
+          if (cachedOptions)
+            return cachedOptions;
+          cachedOptions = {
             method: "POST",
             body: JSON.stringify(request.payload),
             headers: {
@@ -5271,6 +5305,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             },
             signal: request.controller.signal
           };
+          return cachedOptions;
         }
       });
     });
@@ -5323,6 +5358,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             confirm(
               "This page has expired.\nWould you like to refresh the page?"
             ) && window.location.reload();
+            return;
           }
           if (response.aborted)
             return;
@@ -5369,7 +5405,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                   if (message.isCancelled())
                     return;
                   message.invokeOnMorph().finally(() => {
-                    setTimeout(() => {
+                    if (!message.isCancelled()) {
+                      message.resolveActionPromises(
+                        message.pendingReturns,
+                        message.pendingReturnsMeta
+                      );
+                      message.invokeOnFinish();
+                    }
+                    requestAnimationFrame(() => {
                       if (message.isCancelled())
                         return;
                       message.invokeOnRender();
@@ -5833,13 +5876,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   on2("effect", ({ component, effects }) => {
     let scriptModuleHash = effects.scriptModule;
     if (scriptModuleHash) {
-      let encodedName = component.name.replace(".", "--").replace("::", "---").replace(":", "----");
-      let path = `${getUriPrefix()}/js/${encodedName}.js?v=${scriptModuleHash}`;
+      let encodedName = component.name.replace(/\./g, "--").replace(/::/g, "---").replace(/:/g, "----");
+      let path = `${getModuleUrl()}/js/${encodedName}.js?v=${scriptModuleHash}`;
       pendingComponentAssets.set(component, Alpine.reactive({
         loading: true,
         afterLoaded: []
       }));
-      import(path).then((module) => {
+      import(
+        /* @vite-ignore */
+        path
+      ).then((module) => {
         module.run.call(component.$wire, component.$wire, component.$wire.js);
         pendingComponentAssets.get(component).loading = false;
         pendingComponentAssets.get(component).afterLoaded.forEach((callback) => callback());
@@ -13308,6 +13354,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       return callback();
     if (!fromEl.querySelector("[wire\\:transition]") && !toEl.querySelector("[wire\\:transition]"))
       return callback();
+    if (typeof document.startViewTransition !== "function") {
+      return callback();
+    }
     let style = document.createElement("style");
     style.textContent = `
         @media (prefers-reduced-motion: reduce) {
@@ -13333,11 +13382,19 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (options.type) {
       transitionConfig.types = [options.type];
     }
-    let transition2 = document.startViewTransition(transitionConfig);
-    transition2.finished.finally(() => {
-      style.remove();
-    });
-    await transition2.updateCallbackDone;
+    try {
+      let transition2 = document.startViewTransition(transitionConfig);
+      transition2.finished.finally(() => {
+        style.remove();
+      });
+      await transition2.updateCallbackDone;
+    } catch (e) {
+      let transition2 = document.startViewTransition(() => callback());
+      transition2.finished.finally(() => {
+        style.remove();
+      });
+      await transition2.updateCallbackDone;
+    }
   }
 
   // js/morph.js
@@ -14134,16 +14191,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var loadedStyles = /* @__PURE__ */ new Set();
   on2("effect", ({ component, effects }) => {
     if (effects.styleModule) {
-      let encodedName = component.name.replace(".", "--").replace("::", "---").replace(":", "----");
-      let path = `${getUriPrefix()}/css/${encodedName}.css?v=${effects.styleModule}`;
+      let encodedName = component.name.replace(/\./g, "--").replace(/::/g, "---").replace(/:/g, "----");
+      let path = `${getModuleUrl()}/css/${encodedName}.css?v=${effects.styleModule}`;
       if (!loadedStyles.has(path)) {
         loadedStyles.add(path);
         injectStylesheet(path);
       }
     }
     if (effects.globalStyleModule) {
-      let encodedName = component.name.replace(".", "--").replace("::", "---").replace(":", "----");
-      let path = `${getUriPrefix()}/css/${encodedName}.global.css?v=${effects.globalStyleModule}`;
+      let encodedName = component.name.replace(/\./g, "--").replace(/::/g, "---").replace(/:/g, "----");
+      let path = `${getModuleUrl()}/css/${encodedName}.global.css?v=${effects.globalStyleModule}`;
       if (!loadedStyles.has(path)) {
         loadedStyles.add(path);
         injectStylesheet(path);
@@ -14212,7 +14269,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             let expression = directive3.expression;
             if (livewireOptions?.defaultParams !== void 0 && !expression.includes("(")) {
               let params = Array.isArray(livewireOptions.defaultParams) ? livewireOptions.defaultParams : [livewireOptions.defaultParams];
-              expression = `${expression}(${params.map((p) => JSON.stringify(p)).join(", ")})`;
+              expression = expression + "(" + params.map((p) => JSON.stringify(p)).join(", ") + ")";
             }
             evaluateActionExpression(el, expression, { scope: { $event: e } });
           });
@@ -14332,7 +14389,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     ];
   }
   function whenTargetsArePartOfRequest(component, el, targets, inverted, [startLoading, endLoading]) {
-    return interceptMessage(({ message, onSend, onFinish }) => {
+    return interceptMessage(({ message, onSend, onSuccess, onFinish }) => {
       if (component !== message.component)
         return;
       let island = closestIsland(el);
@@ -14343,14 +14400,26 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return;
       }
       let matches3 = true;
+      let cleared = false;
       onSend(({ payload }) => {
         if (targets.length > 0 && containsTargets(payload, targets) === inverted) {
           matches3 = false;
         }
         matches3 && startLoading();
       });
+      onSuccess(({ onEffect }) => {
+        onEffect(() => {
+          if (matches3 && !cleared) {
+            endLoading();
+            cleared = true;
+          }
+        });
+      });
       onFinish(() => {
-        matches3 && endLoading();
+        if (matches3 && !cleared) {
+          endLoading();
+          cleared = true;
+        }
       });
     });
   }
@@ -14470,14 +14539,29 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (el.type && el.type.toLowerCase() === "file") {
       return handleFileUpload(el, expression, component, cleanup2);
     }
-    if (!modifiers.includes("self") && !modifiers.includes("deep")) {
-      modifiers.push("self");
+    let liveIndex = modifiers.indexOf("live");
+    let isLive = liveIndex !== -1;
+    let hasLazyWithoutLive = modifiers.includes("lazy") && !isLive;
+    let shouldSendNetwork = isLive || hasLazyWithoutLive;
+    let ephemeralModifiers = isLive && !hasLazyWithoutLive ? modifiers.slice(0, liveIndex) : modifiers.slice();
+    let networkModifiers = isLive && !hasLazyWithoutLive ? modifiers.slice(liveIndex + 1) : [];
+    if (hasLazyWithoutLive) {
+      ephemeralModifiers = ephemeralModifiers.filter((m) => m !== "lazy");
+      networkModifiers.push("change");
     }
-    let isLive = modifiers.includes("live");
-    let isLazy = modifiers.includes("lazy") || modifiers.includes("change");
-    let onBlur = modifiers.includes("blur");
-    let isDebounced = modifiers.includes("debounce");
-    let isThrottled = modifiers.includes("throttle");
+    if (!(ephemeralModifiers.includes("self") || networkModifiers.includes("self")) && !(ephemeralModifiers.includes("deep") || networkModifiers.includes("deep"))) {
+      ephemeralModifiers.push("self");
+    }
+    let ephemeralOnBlur = ephemeralModifiers.includes("blur");
+    let ephemeralOnChange = ephemeralModifiers.includes("change") || ephemeralModifiers.includes("lazy");
+    let ephemeralOnEnter = ephemeralModifiers.includes("enter");
+    let hasEphemeralTriggers = ephemeralOnBlur || ephemeralOnChange || ephemeralOnEnter;
+    let networkOnBlur = networkModifiers.includes("blur");
+    let networkOnChange = networkModifiers.includes("change") || networkModifiers.includes("lazy");
+    let networkOnEnter = networkModifiers.includes("enter");
+    let hasNetworkTriggers = networkOnBlur || networkOnChange || networkOnEnter;
+    let isDebounced = networkModifiers.includes("debounce");
+    let isThrottled = networkModifiers.includes("throttle");
     let update = () => {
       setNextActionOrigin({ el, directive: directive3 });
       if (isLive || isDebounced) {
@@ -14486,36 +14570,42 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       expression.startsWith("$parent") ? component.$wire.$parent.$commit() : component.$wire.$commit();
     };
     let debouncedUpdate = update;
-    if (isLive && isRealtimeInput(el) || isDebounced) {
-      debouncedUpdate = debounce2(debouncedUpdate, parseModifierDuration(modifiers, "debounce") || 150);
+    if (shouldSendNetwork && !hasNetworkTriggers && isRealtimeInput(el) || isDebounced) {
+      debouncedUpdate = debounce2(debouncedUpdate, parseModifierDuration(networkModifiers, "debounce") || 150);
     }
     if (isThrottled) {
-      debouncedUpdate = throttle3(debouncedUpdate, parseModifierDuration(modifiers, "throttle") || 150);
+      debouncedUpdate = throttle3(debouncedUpdate, parseModifierDuration(networkModifiers, "throttle") || 150);
     }
-    module_default.bind(el, {
-      ["@change"]() {
-        isLazy && update();
-      },
-      ["@blur"]() {
-        onBlur && update();
-      },
-      ["x-model" + getModifierTail(modifiers)]() {
-        return {
-          get() {
-            return dataGet(component.$wire, expression);
-          },
-          set(value) {
-            dataSet(component.$wire, expression, value);
-            isLive && !isLazy && !onBlur && debouncedUpdate();
+    let bindings = {};
+    if (shouldSendNetwork && networkOnBlur) {
+      bindings["@blur"] = () => update();
+    }
+    if (shouldSendNetwork && networkOnChange) {
+      bindings["@change"] = () => update();
+    }
+    if (shouldSendNetwork && networkOnEnter) {
+      bindings["@keydown.enter"] = () => update();
+    }
+    let xModelTail = getModifierTail(ephemeralModifiers);
+    bindings["x-model" + xModelTail] = () => {
+      return {
+        get() {
+          return dataGet(component.$wire, expression);
+        },
+        set(value) {
+          dataSet(component.$wire, expression, value);
+          if (shouldSendNetwork && !hasNetworkTriggers) {
+            debouncedUpdate();
           }
-        };
-      }
-    });
+        }
+      };
+    };
+    module_default.bind(el, bindings);
   });
   function getModifierTail(modifiers) {
     modifiers = modifiers.filter((i) => ![
-      "lazy",
-      "defer"
+      "defer",
+      "live"
     ].includes(i));
     if (modifiers.includes("debounce")) {
       let index2 = modifiers.indexOf("debounce");
