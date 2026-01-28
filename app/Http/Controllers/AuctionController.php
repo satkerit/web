@@ -46,9 +46,15 @@ class AuctionController extends Controller
         }
 
         // Sort
+        $validSortColumns = ['created_at', 'auction_date', 'limit_price', 'title', 'city'];
         $sortBy = $request->get('sort_by', 'auction_date');
-        $sortOrder = $request->get('sort_order', 'asc');
-        
+
+        if (!in_array($sortBy, $validSortColumns) && $sortBy !== 'featured' && $sortBy !== 'price' && $sortBy !== 'date') {
+            $sortBy = 'auction_date';
+        }
+
+        $sortOrder = strtolower($request->get('sort_order', 'asc')) === 'desc' ? 'desc' : 'asc';
+
         if ($sortBy === 'price') {
             $query->orderBy('limit_price', $sortOrder);
         } elseif ($sortBy === 'date') {
@@ -91,8 +97,8 @@ class AuctionController extends Controller
                         ->pluck('city');
 
         return view('frontend.pages.auctions.index', compact(
-            'auctions', 
-            'featuredAuctions', 
+            'auctions',
+            'featuredAuctions',
             'upcomingAuctions',
             'assetTypes',
             'cities'
@@ -127,7 +133,7 @@ class AuctionController extends Controller
                                    ->get();
 
         return view('frontend.pages.auctions.show', compact(
-            'auction', 
+            'auction',
             'relatedAuctions',
             'organizerAuctions'
         ));
@@ -170,7 +176,7 @@ class AuctionController extends Controller
     public function search(Request $request)
     {
         $query = $request->get('q');
-        
+
         if (empty($query)) {
             return redirect()->route('auctions.index');
         }
