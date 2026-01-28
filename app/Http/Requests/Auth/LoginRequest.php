@@ -29,6 +29,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'captcha_answer' => ['required', 'numeric'],
         ];
     }
 
@@ -41,8 +42,22 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Verify CAPTCHA
+        $captchaAnswer = session('login_captcha_answer');
+        $userAnswer = $this->input('captcha_answer');
+
+        if ($captchaAnswer === null || (int)$userAnswer !== (int)$captchaAnswer) {
+            \App\Models\AuditTrail::log('login_failed', 'Invalid CAPTCHA for: ' . $this->email . ' from IP: ' . $this->ip(), null, null, ['ip' => $this->ip(), 'email' => $this->email]);
+
+            throw ValidationException::withMessages([
+                'captcha_answer' => 'Jawaban CAPTCHA salah.',
+            ]);
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
+            \App\Models\AuditTrail::log('login_failed', 'Failed login attempt for: ' . $this->email . ' from IP: ' . $this->ip(), null, null, ['ip' => $this->ip(), 'email' => $this->email]);
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -50,6 +65,9 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        // Clear CAPTCHA from session after successful login
+        session()->forget('login_captcha_answer');
     }
 
     /**

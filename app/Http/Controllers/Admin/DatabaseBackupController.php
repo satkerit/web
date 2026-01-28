@@ -131,6 +131,9 @@ class DatabaseBackupController extends Controller
     {
         $this->authorizeView('storage.view');
 
+        // Sanitize filename
+        $filename = basename($filename);
+
         $filePath = storage_path("app/{$this->backupPath}/{$filename}");
 
         if (!File::exists($filePath)) {
@@ -160,6 +163,9 @@ class DatabaseBackupController extends Controller
     public function delete(Request $request, $filename)
     {
         $this->authorizeDelete('storage.manage');
+
+        // Sanitize filename
+        $filename = basename($filename);
 
         $filePath = storage_path("app/{$this->backupPath}/{$filename}");
 
@@ -191,6 +197,9 @@ class DatabaseBackupController extends Controller
     public function restore(Request $request, $filename)
     {
         $this->authorizeEdit('storage.manage');
+
+        // Sanitize filename
+        $filename = basename($filename);
 
         $filePath = storage_path("app/{$this->backupPath}/{$filename}");
 

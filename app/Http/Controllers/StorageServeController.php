@@ -17,7 +17,7 @@ class StorageServeController extends Controller
         $path = str_replace(['..', '\\'], ['', '/'], $path);
         $path = preg_replace('/\/+/', '/', $path);
         $path = trim($path, '/');
-        
+
         // Validasi path tidak kosong
         if (empty($path)) {
             Log::warning('StorageServe: Empty path requested');
@@ -35,7 +35,16 @@ class StorageServeController extends Controller
         }
 
         $fullPath = Storage::disk('public')->path($path);
-        
+
+        // Prevent directory traversal using realpath
+        $realPath = realpath($fullPath);
+        $storageRoot = realpath(Storage::disk('public')->path(''));
+
+        if ($realPath === false || !str_starts_with($realPath, $storageRoot)) {
+            Log::warning('StorageServe: Directory traversal attempt', ['path' => $path]);
+            abort(404);
+        }
+
         // Pastikan ini file, bukan directory
         if (is_dir($fullPath)) {
             Log::warning('StorageServe: Path is directory', ['path' => $path]);

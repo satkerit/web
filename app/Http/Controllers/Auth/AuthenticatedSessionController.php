@@ -17,7 +17,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.admin-login');
+        // Simple Math CAPTCHA
+        $num1 = random_int(1, 10);
+        $num2 = random_int(1, 10);
+        $operator = random_int(0, 1) ? '+' : '-';
+
+        if ($operator === '-') {
+            // Ensure positive result for simplicity
+            if ($num1 < $num2) {
+                [$num1, $num2] = [$num2, $num1];
+            }
+        }
+
+        $answer = $operator === '+' ? $num1 + $num2 : $num1 - $num2;
+
+        session(['login_captcha_answer' => $answer]);
+
+        return view('auth.admin-login', [
+            'captcha_question' => "$num1 $operator $num2 = ?",
+        ]);
     }
 
     /**
