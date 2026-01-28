@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\WhyChooseUs;
 use App\Models\WhyChooseUsSetting;
+use App\Services\CacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -53,6 +54,8 @@ class WhyChooseUsController extends Controller
 
         WhyChooseUs::create($validated);
 
+        CacheService::clear('why_choose_us_items');
+
         return redirect()->route('admin.why-choose-us.index')
             ->with('success', 'Item berhasil ditambahkan.');
     }
@@ -94,6 +97,8 @@ class WhyChooseUsController extends Controller
 
         $whyChooseUs->update($validated);
 
+        CacheService::clear('why_choose_us_items');
+
         return redirect()->route('admin.why-choose-us.index')
             ->with('success', 'Item berhasil diperbarui.');
     }
@@ -107,6 +112,8 @@ class WhyChooseUsController extends Controller
             Storage::disk('public')->delete($whyChooseUs->icon);
         }
         $whyChooseUs->delete();
+
+        CacheService::clear('why_choose_us_items');
 
         return redirect()->route('admin.why-choose-us.index')
             ->with('success', 'Item berhasil dihapus.');
@@ -149,6 +156,8 @@ class WhyChooseUsController extends Controller
         }
 
         $settings->update($validated);
+
+        CacheService::clear('why_choose_us_settings');
 
         return redirect()->route('admin.why-choose-us.settings')
             ->with('success', 'Pengaturan berhasil disimpan.');

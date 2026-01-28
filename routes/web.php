@@ -88,8 +88,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
 
     // Auctions Management
-    Route::resource('auctions', App\Http\Controllers\Admin\AuctionController::class);
     Route::post('auctions/bulk-action', [App\Http\Controllers\Admin\AuctionController::class, 'bulkAction'])->name('auctions.bulk-action');
+    Route::resource('auctions', App\Http\Controllers\Admin\AuctionController::class);
 
     // Reports Management
     Route::resource('reports', App\Http\Controllers\Admin\ReportController::class);
@@ -110,10 +110,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::resource('careers', App\Http\Controllers\Admin\CareerController::class);
 
     // Kas Keliling Management
-    Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
     Route::post('kas-keliling/bulk-delete', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkDelete'])->name('kas-keliling.bulk-delete');
     Route::post('kas-keliling/bulk-status', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkUpdateStatus'])->name('kas-keliling.bulk-status');
     Route::get('kas-keliling-export', [App\Http\Controllers\Admin\KasKelilingController::class, 'export'])->name('kas-keliling.export');
+    Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
 
     // Board Members Management
     Route::resource('board-members', App\Http\Controllers\Admin\BoardMemberController::class);
