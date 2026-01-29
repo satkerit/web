@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ProductRepeaterTest extends TestCase
@@ -17,15 +19,21 @@ class ProductRepeaterTest extends TestCase
     {
         parent::setUp();
 
+        // Seed permissions and admin menus
+        $this->seed(\Database\Seeders\RolePermissionSeeder::class);
+        $this->seed(\Database\Seeders\AdminMenuSeeder::class);
+
+        $adminRoleId = Role::where('name', 'admin')->value('id');
         $this->admin = User::factory()->create([
             'email' => 'admin@test.com',
             'password' => bcrypt('password'),
             'role' => 'admin',
+            'role_id' => $adminRoleId,
             'is_active' => true,
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_save_json_repeater_fields()
     {
         $data = [

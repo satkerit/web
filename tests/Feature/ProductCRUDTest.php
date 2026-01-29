@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ProductCRUDTest extends TestCase
@@ -20,16 +22,22 @@ class ProductCRUDTest extends TestCase
     {
         parent::setUp();
 
-        // Create admin user with proper role and active status
+        // Seed permissions and admin menus
+        $this->seed(\Database\Seeders\RolePermissionSeeder::class);
+        $this->seed(\Database\Seeders\AdminMenuSeeder::class);
+
+        // Create admin user with proper role_id and active status
+        $adminRoleId = Role::where('name', 'admin')->value('id');
         $this->admin = User::factory()->create([
             'email' => 'admin@test.com',
             'password' => bcrypt('password'),
             'role' => 'admin',
+            'role_id' => $adminRoleId,
             'is_active' => true,
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function admin_can_view_products_index()
     {
         $response = $this->actingAs($this->admin)
@@ -45,7 +53,7 @@ class ProductCRUDTest extends TestCase
         $response->assertViewIs('admin.products.index');
     }
 
-    /** @test */
+    #[Test]
     public function admin_can_view_create_product_form()
     {
         $response = $this->actingAs($this->admin)
@@ -61,7 +69,7 @@ class ProductCRUDTest extends TestCase
         $response->assertViewIs('admin.products.create');
     }
 
-    /** @test */
+    #[Test]
     public function admin_can_create_product()
     {
         Storage::fake('public');
@@ -108,7 +116,7 @@ class ProductCRUDTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function admin_can_view_edit_product_form()
     {
         $product = Product::factory()->create();
@@ -127,7 +135,7 @@ class ProductCRUDTest extends TestCase
         $response->assertViewHas('product');
     }
 
-    /** @test */
+    #[Test]
     public function admin_can_update_product()
     {
         Storage::fake('public');
@@ -172,7 +180,7 @@ class ProductCRUDTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function admin_can_delete_product()
     {
         Storage::fake('public');
@@ -200,13 +208,13 @@ class ProductCRUDTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function description_is_required_when_creating_product()
     {
         $data = [
             'name' => 'Test Product',
             'type' => 'simpanan_syariah',
-            'description' => '', // Empty description
+            // description is missing
         ];
 
         $response = $this->actingAs($this->admin)
@@ -221,7 +229,7 @@ class ProductCRUDTest extends TestCase
         $response->assertSessionHasErrors('description');
     }
 
-    /** @test */
+    #[Test]
     public function product_filters_work_correctly()
     {
         Product::factory()->create(['name' => 'Tabungan Test', 'type' => 'simpanan_syariah']);

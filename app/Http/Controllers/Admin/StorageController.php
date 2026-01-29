@@ -224,12 +224,23 @@ class StorageController extends Controller
 
     protected function sanitizePath(?string $path): string
     {
-        if ($path === null) {
+        if (empty($path)) {
             return '';
         }
-        $path = str_replace(['..', '\\'], ['', '/'], $path);
-        $path = preg_replace('/\/+/', '/', $path);
-        return trim($path, '/');
+
+        // Normalize slashes
+        $path = str_replace('\\', '/', $path);
+
+        // Split path into segments
+        $segments = explode('/', $path);
+
+        // Filter out '..' and '.' to prevent directory traversal
+        $safeSegments = array_filter($segments, function ($segment) {
+            return $segment !== '..' && $segment !== '.' && $segment !== '';
+        });
+
+        // Rebuild path
+        return implode('/', $safeSegments);
     }
 
     protected function sanitizeFilename(string $filename): string

@@ -76,7 +76,10 @@
                 <div class="relative" x-data="{ open: false, timeout: null }"
                      @mouseenter="clearTimeout(timeout); open = true"
                      @mouseleave="timeout = setTimeout(() => open = false, 150)">
-                    <button class="nav-link px-4 py-2 rounded-lg font-medium transition-all duration-300 inline-flex items-center" :class="scrolled ? 'text-gray-800 hover:text-emerald-600 hover:bg-emerald-50' : 'text-gray-800 hover:text-emerald-600 hover:bg-gray-100/30'">
+                    <button class="nav-link px-4 py-2 rounded-lg font-medium transition-all duration-300 inline-flex items-center"
+                            :class="scrolled ? 'text-gray-800 hover:text-emerald-600 hover:bg-emerald-50' : 'text-gray-800 hover:text-emerald-600 hover:bg-gray-100/30'"
+                            :aria-expanded="open"
+                            aria-haspopup="true">
                         Produk & Layanan
                         <svg class="ml-1 h-4 w-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>

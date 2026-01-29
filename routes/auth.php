@@ -23,8 +23,8 @@ Route::middleware(['guest', 'throttle:10,1'])->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store'])
-        ->middleware('throttle:5,1'); // 5 login attempts per minute
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+        // Rate limiting is handled in LoginRequest class for better UX (redirect with error)
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

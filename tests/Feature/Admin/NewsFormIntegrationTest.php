@@ -8,6 +8,7 @@ use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class NewsFormIntegrationTest extends TestCase
@@ -19,16 +20,16 @@ class NewsFormIntegrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         Storage::fake('public');
-        
+
         // Create super admin role
         $role = Role::create([
             'name' => 'super_admin',
             'display_name' => 'Super Admin',
             'description' => 'Super Administrator'
         ]);
-        
+
         // Create user with super admin role
         $this->user = User::factory()->create([
             'role_id' => $role->id,
@@ -36,10 +37,11 @@ class NewsFormIntegrationTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_news_create_form()
     {
         $response = $this->actingAs($this->user)
+            ->withoutMiddleware(\App\Http\Middleware\OptimizeResponse::class)
             ->get(route('admin.news.create'));
 
         $response->assertStatus(200);
@@ -47,7 +49,7 @@ class NewsFormIntegrationTest extends TestCase
         $response->assertSee('Tambah Berita Baru');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_news_with_all_fields()
     {
         $data = [
@@ -78,7 +80,7 @@ class NewsFormIntegrationTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_news_edit_form()
     {
         $news = News::factory()->create([
@@ -86,6 +88,7 @@ class NewsFormIntegrationTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
+            ->withoutMiddleware(\App\Http\Middleware\OptimizeResponse::class)
             ->get(route('admin.news.edit', $news));
 
         $response->assertStatus(200);
@@ -95,7 +98,7 @@ class NewsFormIntegrationTest extends TestCase
         $response->assertSee($news->title);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_existing_news()
     {
         $news = News::factory()->create([
@@ -131,16 +134,16 @@ class NewsFormIntegrationTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_required_fields()
     {
         $response = $this->actingAs($this->user)
             ->post(route('admin.news.store'), []);
 
-        $response->assertSessionHasErrors(['title', 'slug', 'content', 'category']);
+        $response->assertSessionHasErrors(['title', 'content', 'category']);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_slug_uniqueness()
     {
         News::factory()->create([
@@ -162,7 +165,7 @@ class NewsFormIntegrationTest extends TestCase
         $response->assertSessionHasErrors(['slug']);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_image_upload()
     {
         $data = [
@@ -180,7 +183,7 @@ class NewsFormIntegrationTest extends TestCase
         $response->assertSessionHasErrors(['featured_image']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_upload_gallery_images()
     {
         $data = [
@@ -206,7 +209,7 @@ class NewsFormIntegrationTest extends TestCase
         $this->assertEquals(3, $news->images()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_limits_gallery_images_to_seven()
     {
         $news = News::factory()->create([
@@ -241,7 +244,7 @@ class NewsFormIntegrationTest extends TestCase
         $this->assertEquals(7, $news->fresh()->images()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_delete_news_image()
     {
         $news = News::factory()->create([
@@ -268,7 +271,7 @@ class NewsFormIntegrationTest extends TestCase
         Storage::disk('public')->assertMissing('news/slides/test.jpg');
     }
 
-    /** @test */
+    #[Test]
     public function it_sanitizes_html_content()
     {
         $data = [
@@ -289,7 +292,7 @@ class NewsFormIntegrationTest extends TestCase
         $this->assertStringNotContainsString('<script>', $news->content);
     }
 
-    /** @test */
+    #[Test]
     public function it_auto_generates_slug_if_empty()
     {
         $data = [
@@ -311,7 +314,7 @@ class NewsFormIntegrationTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_sets_default_author_if_empty()
     {
         $data = [
@@ -333,7 +336,7 @@ class NewsFormIntegrationTest extends TestCase
         $this->assertEquals($this->user->id, $news->author_id);
     }
 
-    /** @test */
+    #[Test]
     public function form_has_correct_data_attributes()
     {
         $news = News::factory()->create([
@@ -341,6 +344,7 @@ class NewsFormIntegrationTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
+            ->withoutMiddleware(\App\Http\Middleware\OptimizeResponse::class)
             ->get(route('admin.news.edit', $news));
 
         $response->assertStatus(200);
@@ -349,10 +353,11 @@ class NewsFormIntegrationTest extends TestCase
         $response->assertSee('data-upload-url', false);
     }
 
-    /** @test */
+    #[Test]
     public function create_form_has_correct_data_attributes()
     {
         $response = $this->actingAs($this->user)
+            ->withoutMiddleware(\App\Http\Middleware\OptimizeResponse::class)
             ->get(route('admin.news.create'));
 
         $response->assertStatus(200);

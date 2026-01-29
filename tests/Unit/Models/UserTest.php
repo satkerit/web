@@ -101,7 +101,7 @@ class UserTest extends TestCase
     }
 
     #[Test]
-    public function can_manage_settings_returns_true_for_admin_roles(): void
+    public function can_manage_settings_returns_true_for_authorized_roles(): void
     {
         $superAdmin = User::factory()->create(['role' => 'super_admin']);
         $admin = User::factory()->create(['role' => 'admin']);
@@ -109,7 +109,8 @@ class UserTest extends TestCase
 
         $this->assertTrue($superAdmin->canManageSettings());
         $this->assertTrue($admin->canManageSettings());
-        $this->assertFalse($editor->canManageSettings());
+        // Editor has access to settings.company (Company Info), so they can manage settings
+        $this->assertTrue($editor->canManageSettings());
     }
 
     #[Test]

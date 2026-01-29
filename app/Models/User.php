@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
-use App\Notifications\ResetPasswordNotification;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,7 +58,7 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token): void
     {
-        $this->notify(new ResetPasswordNotification($token));
+        $this->notify(new ResetPassword($token));
     }
 
     /**
@@ -71,12 +71,12 @@ class User extends Authenticatable
             return true;
         }
 
-        // Check from Role model if role_id exists
-        if ($this->role_id && $this->roleModel) {
+        // 1. Prioritize Check from Role model relationship if exists
+        if ($this->role_id && $this->relationLoaded('roleModel') ? $this->roleModel : $this->roleModel()->first()) {
             return $this->roleModel->hasPermission($permission);
         }
 
-        // Fallback: Check from AdminMenuPermission based on role string
+        // 2. Fallback: Check from AdminMenuPermission based on role string (Legacy Support)
         return $this->hasMenuPermission($permission);
     }
 
@@ -85,16 +85,17 @@ class User extends Authenticatable
      */
     public function hasAnyPermission(array $permissions): bool
     {
+        // Super admin has all permissions
         if ($this->role === self::ROLE_SUPER_ADMIN) {
             return true;
         }
 
-        // Check from Role model if role_id exists
-        if ($this->role_id && $this->roleModel) {
+        // 1. Prioritize Check from Role model relationship if exists
+        if ($this->role_id && $this->relationLoaded('roleModel') ? $this->roleModel : $this->roleModel()->first()) {
             return $this->roleModel->hasAnyPermission($permissions);
         }
 
-        // Fallback: Check from AdminMenuPermission
+        // 2. Fallback: Check from AdminMenuPermission
         foreach ($permissions as $permission) {
             if ($this->hasMenuPermission($permission)) {
                 return true;

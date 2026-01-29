@@ -84,12 +84,12 @@ class Product extends Model
 
     public function scopeDeposito($query)
     {
-        return $query->where('type', 'deposito_syariah');
+        return $query->where('type', 'deposito');
     }
 
     public function scopeDepositoSyariah($query)
     {
-        return $query->where('type', 'deposito_syariah');
+        return $query->where('type', 'deposito');
     }
 
     protected static function booted(): void

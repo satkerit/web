@@ -108,7 +108,7 @@ class NewsControllerSecure extends Controller
             DB::commit();
 
             return redirect()->route('admin.news.index')
-                ->with('success', 'Berita berhasil dibuat dan dipublikasikan!');
+                ->with('success', 'Berita berhasil ditambahkan.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -164,6 +164,7 @@ class NewsControllerSecure extends Controller
 
             $data = $this->prepareNewsData($request);
             $news->update($data);
+            $overflowSlides = false;
 
             // Handle featured image
             if ($request->hasFile('featured_image')) {
@@ -181,13 +182,23 @@ class NewsControllerSecure extends Controller
 
             // Handle gallery images
             if ($request->hasFile('slide_images')) {
+                $currentImagesCount = $news->images()->count();
+                $maxImages = 7;
+                $requestedCount = count($request->file('slide_images'));
+                if ($requestedCount > ($maxImages - $currentImagesCount)) {
+                    $overflowSlides = true;
+                }
                 $this->handleGalleryImages($news, $request->file('slide_images'));
             }
 
             DB::commit();
 
-            return redirect()->route('admin.news.index')
-                ->with('success', 'Berita berhasil diperbarui!');
+            $response = redirect()->route('admin.news.index')
+                ->with('success', 'Berita berhasil diperbarui.');
+            if ($overflowSlides) {
+                $response->with('error', 'Maksimal 7 foto slide.');
+            }
+            return $response;
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -225,7 +236,7 @@ class NewsControllerSecure extends Controller
             DB::commit();
 
             return redirect()->route('admin.news.index')
-                ->with('success', 'Berita berhasil dihapus!');
+                ->with('success', 'Berita berhasil dihapus.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -248,7 +259,7 @@ class NewsControllerSecure extends Controller
             $image->delete();
 
             return redirect()->back()
-                ->with('success', 'Gambar berhasil dihapus!');
+                ->with('success', 'Foto slide berhasil dihapus.');
 
         } catch (\Exception $e) {
             Log::error('Error deleting news image: ' . $e->getMessage());
@@ -266,7 +277,7 @@ class NewsControllerSecure extends Controller
         $rules = [
             'title' => 'required|string|max:255',
             'slug' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255',
                 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
@@ -287,7 +298,6 @@ class NewsControllerSecure extends Controller
         $messages = [
             'title.required' => 'Judul berita wajib diisi.',
             'title.max' => 'Judul berita maksimal 255 karakter.',
-            'slug.required' => 'Slug URL wajib diisi.',
             'slug.unique' => 'Slug URL sudah digunakan.',
             'slug.regex' => 'Slug URL hanya boleh mengandung huruf kecil, angka, dan tanda hubung.',
             'content.required' => 'Konten berita wajib diisi.',

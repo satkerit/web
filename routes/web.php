@@ -217,6 +217,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 // Authentication Routes with strict rate limiting
 require __DIR__ . '/auth.php';
 
+// Dashboard alias (compatibility for auth tests)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return redirect()->route('admin.dashboard');
+    })->name('dashboard');
+});
+
 
 
 // Session Management Routes

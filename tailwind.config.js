@@ -36,9 +36,8 @@ export default {
         "lg:grid-cols-5",
         // Dynamic colors for Why Choose Us
         {
-            pattern:
-                /(bg|text|border)-(primary|emerald|blue|amber|rose|purple|teal|cyan|indigo)-(50|100|200|300|400|500|600|700)/,
-            variants: ["hover", "group-hover", "focus"],
+            pattern: /(bg|text)-(primary|emerald|blue|amber|rose|purple|teal|cyan|indigo)-(100|500|600)/,
+            variants: ["group-hover"],
         },
     ],
 

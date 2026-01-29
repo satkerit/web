@@ -71,7 +71,7 @@ class FinancingConfigTest extends TestCase
             ->withoutSecurityMiddleware()
             ->put(route('admin.financing-config.update', $this->config), [
                 'name' => 'Updated Murabahah',
-                'margin_rate' => 0.15,
+                'margin_rate' => 15, // 15%
                 'min_principal' => 10000000,
                 'max_principal' => 600000000,
                 'available_tenors' => [12, 24, 36],

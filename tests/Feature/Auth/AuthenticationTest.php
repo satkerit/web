@@ -21,13 +21,15 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+        $response = $this->withSession(['login_captcha_answer' => 10])
+            ->post('/login', [
+                'email' => $user->email,
+                'password' => 'password',
+                'captcha_answer' => '10',
+            ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('admin.dashboard', absolute: false));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void

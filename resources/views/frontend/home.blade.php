@@ -244,6 +244,7 @@
                 <!-- Navigation Arrows -->
                 @if($heroSlides->count() > 1)
                 <button @click="prev()"
+                        aria-label="Previous slide"
                         class="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2
                                w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14
                                bg-white/90 hover:bg-white backdrop-blur-sm
@@ -257,6 +258,7 @@
                     </svg>
                 </button>
                 <button @click="next()"
+                        aria-label="Next slide"
                         class="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2
                                w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14
                                bg-white/90 hover:bg-white backdrop-blur-sm
@@ -274,6 +276,7 @@
                 <div class="absolute -bottom-6 sm:-bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-20">
                     @foreach($heroSlides as $index => $slide)
                     <button @click="goTo({{ $index }})"
+                            aria-label="Go to slide {{ $index + 1 }}"
                             class="group/dot relative flex items-center justify-center"
                             :class="active === {{ $index }} ? 'scale-100' : 'scale-90 hover:scale-100'">
                         <!-- Outer ring for active -->

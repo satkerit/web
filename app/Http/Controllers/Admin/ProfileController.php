@@ -30,10 +30,16 @@ class ProfileController extends Controller
             'email.unique' => 'Email sudah digunakan.',
         ]);
 
-        $user->update([
+        $user->fill([
             'name' => $request->name,
             'email' => $request->email,
         ]);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return redirect()->route('admin.profile.edit')
             ->with('success', 'Profil berhasil diperbarui.');

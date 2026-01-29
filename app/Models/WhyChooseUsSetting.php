@@ -27,14 +27,16 @@ class WhyChooseUsSetting extends Model
      */
     public static function getSettings()
     {
-        return self::firstOrCreate(
-            ['id' => 1],
-            [
-                'section_title' => 'Mengapa Memilih Kami',
-                'section_subtitle' => 'Kami memberikan layanan terbaik dengan standar syariah yang terpercaya',
-                'badge_text' => '100% Syariah Compliant',
-                'is_active' => true,
-            ]
-        );
+        return static::unguarded(function () {
+            return self::firstOrCreate(
+                ['id' => 1],
+                [
+                    'section_title' => 'Mengapa Memilih Kami',
+                    'section_subtitle' => 'Kami memberikan layanan terbaik dengan standar syariah yang terpercaya',
+                    'badge_text' => '100% Syariah Compliant',
+                    'is_active' => true,
+                ]
+            );
+        });
     }
 }

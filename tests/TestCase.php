@@ -10,6 +10,19 @@ abstract class TestCase extends BaseTestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Clear cache to reset rate limiters for each test
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+
+        // Seed AdminMenu if table exists to ensure RBAC works in tests
+        if (\Illuminate\Support\Facades\Schema::hasTable('admin_menus')) {
+            $this->seed(\Database\Seeders\AdminMenuSeeder::class);
+        }
+    }
+
     /**
      * Create an admin user.
      */

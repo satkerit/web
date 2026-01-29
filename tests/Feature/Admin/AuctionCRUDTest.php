@@ -63,6 +63,10 @@ class AuctionCRUDTest extends TestCase
     {
         $this->actingAs($this->admin);
 
+        $image1 = UploadedFile::fake()->image('auction1.jpg');
+        $image2 = UploadedFile::fake()->image('auction2.jpg');
+        $image3 = UploadedFile::fake()->image('auction3.jpg');
+
         $data = [
             'title' => 'Test Auction',
             'auction_number' => 'AUC-001',
@@ -78,6 +82,7 @@ class AuctionCRUDTest extends TestCase
             'status' => 'published',
             'contact_person' => 'John Doe',
             'contact_phone' => '08123456789',
+            'images' => [$image1, $image2, $image3],
         ];
 
         $response = $this->post(route('admin.auctions.store'), $data);
@@ -97,6 +102,7 @@ class AuctionCRUDTest extends TestCase
 
         $image1 = UploadedFile::fake()->image('auction1.jpg');
         $image2 = UploadedFile::fake()->image('auction2.jpg');
+        $image3 = UploadedFile::fake()->image('auction3.jpg');
 
         $data = [
             'title' => 'Test Auction with Images',
@@ -111,7 +117,7 @@ class AuctionCRUDTest extends TestCase
             'status' => 'published',
             'contact_person' => 'John Doe',
             'contact_phone' => '08123456789',
-            'images' => [$image1, $image2],
+            'images' => [$image1, $image2, $image3],
         ];
 
         $response = $this->post(route('admin.auctions.store'), $data);
@@ -120,7 +126,7 @@ class AuctionCRUDTest extends TestCase
 
         $auction = Auction::where('title', 'Test Auction with Images')->first();
         $this->assertNotNull($auction);
-        $this->assertCount(2, $auction->images);
+        $this->assertCount(3, $auction->images);
     }
 
     public function test_admin_can_view_edit_auction_form()
@@ -230,17 +236,17 @@ class AuctionCRUDTest extends TestCase
         $this->actingAs($this->admin);
 
         Auction::factory()->create([
-            'status' => 'published', 
+            'status' => 'published',
             'asset_type' => 'rumah',
             'auction_number' => 'AUC-FILTER-001'
         ]);
         Auction::factory()->create([
-            'status' => 'auction_ongoing', 
+            'status' => 'auction_ongoing',
             'asset_type' => 'tanah',
             'auction_number' => 'AUC-FILTER-002'
         ]);
         Auction::factory()->create([
-            'status' => 'sold', 
+            'status' => 'sold',
             'asset_type' => 'rumah',
             'auction_number' => 'AUC-FILTER-003'
         ]);
@@ -301,6 +307,10 @@ class AuctionCRUDTest extends TestCase
     {
         $this->actingAs($this->admin);
 
+        $image1 = UploadedFile::fake()->image('auction1.jpg');
+        $image2 = UploadedFile::fake()->image('auction2.jpg');
+        $image3 = UploadedFile::fake()->image('auction3.jpg');
+
         $data = [
             'title' => 'Test Auction for Slug',
             'auction_number' => 'AUC-SLUG-001',
@@ -314,11 +324,13 @@ class AuctionCRUDTest extends TestCase
             'status' => 'published',
             'contact_person' => 'John Doe',
             'contact_phone' => '08123456789',
+            'images' => [$image1, $image2, $image3],
         ];
 
         $this->post(route('admin.auctions.store'), $data);
 
         $auction = Auction::where('title', 'Test Auction for Slug')->first();
+        $this->assertNotNull($auction);
         $this->assertNotNull($auction->slug);
         $this->assertEquals('test-auction-for-slug', $auction->slug);
     }
