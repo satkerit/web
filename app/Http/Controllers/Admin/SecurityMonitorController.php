@@ -12,6 +12,23 @@ use Illuminate\Support\Facades\Cache;
 class SecurityMonitorController extends Controller
 {
     /**
+     * Constructor - Apply permission middleware
+     */
+    public function __construct()
+    {
+        // View permission required for all methods
+        $this->middleware('permission:security.view');
+
+        // Manage permission required for block/unblock actions
+        $this->middleware('permission:security.manage')->only([
+            'blockIp',
+            'unblockIp',
+            'cleanup',
+            'clearExpiredBlocks'
+        ]);
+    }
+
+    /**
      * Display security monitoring dashboard
      */
     public function index(Request $request)

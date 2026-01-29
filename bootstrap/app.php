@@ -24,6 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register middleware aliases
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'throttle.custom' => \App\Http\Middleware\RateLimitRequests::class,
             'security.block' => \App\Http\Middleware\BlockSuspiciousRequests::class,
             'admin.ddos' => \App\Http\Middleware\AdminDdosProtection::class,

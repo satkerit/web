@@ -76,7 +76,12 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'settings.maintenance', 'display_name' => 'Mode Maintenance', 'group' => 'settings'],
             ['name' => 'settings.hero', 'display_name' => 'Kelola Hero Slides', 'group' => 'settings'],
             ['name' => 'settings.financing', 'display_name' => 'Konfigurasi Pembiayaan', 'group' => 'settings'],
+            ['name' => 'settings.financing', 'display_name' => 'Konfigurasi Pembiayaan', 'group' => 'settings'],
             ['name' => 'settings.menu', 'display_name' => 'Kelola Menu Permission', 'group' => 'settings'],
+
+            // Security Monitoring permissions
+            ['name' => 'security.view', 'display_name' => 'Lihat Security Logs', 'group' => 'security'],
+            ['name' => 'security.manage', 'display_name' => 'Kelola Security (Block/Unblock)', 'group' => 'security'],
 
             // Audit
             ['name' => 'audit.view', 'display_name' => 'Lihat Log Aktivitas', 'group' => 'audit'],
