@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class BlockedIp extends Model
 {
@@ -22,9 +23,9 @@ class BlockedIp extends Model
     // Scopes
     public function scopeActive($query)
     {
-        return $query->where(function($q) {
+        return $query->where(function ($q) {
             $q->where('is_permanent', true)
-              ->orWhere('blocked_until', '>', now());
+                ->orWhere('blocked_until', '>', now());
         });
     }
 
@@ -65,17 +66,21 @@ class BlockedIp extends Model
 
     public static function isBlocked(string $ip): bool
     {
-        return self::where('ip_address', $ip)
-            ->where(function($q) {
-                $q->where('is_permanent', true)
-                  ->orWhere('blocked_until', '>', now());
-            })
-            ->exists();
+        // Cache result for 5 minutes (300 seconds)
+        // This drastically reduces DB load during DDoS attacks
+        return Cache::remember('blocked_ip:' . $ip, 300, function () use ($ip) {
+            return self::where('ip_address', $ip)
+                ->where(function ($q) {
+                    $q->where('is_permanent', true)
+                        ->orWhere('blocked_until', '>', now());
+                })
+                ->exists();
+        });
     }
 
     public static function blockIp(string $ip, string $reason = null, int $hours = 24, bool $permanent = false): self
     {
-        return self::updateOrCreate(
+        $blocked = self::updateOrCreate(
             ['ip_address' => $ip],
             [
                 'reason' => $reason,
@@ -84,10 +89,18 @@ class BlockedIp extends Model
                 'is_permanent' => $permanent,
             ]
         );
+
+        // Cache the blocked status immediately
+        $ttl = $permanent ? 86400 : ($hours * 3600);
+        Cache::put('blocked_ip:' . $ip, true, $ttl);
+
+        return $blocked;
     }
 
     public static function unblockIp(string $ip): bool
     {
+        // Clear cache immediately
+        Cache::forget('blocked_ip:' . $ip);
         return self::where('ip_address', $ip)->delete();
     }
 

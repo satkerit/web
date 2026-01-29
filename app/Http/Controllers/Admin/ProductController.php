@@ -61,6 +61,7 @@ class ProductController extends Controller
             'benefits' => 'nullable|array',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'image_alt' => 'nullable|string|max:255',
+            'brochure' => 'nullable|file|mimes:pdf|max:10240',
             'is_active' => 'boolean',
             'order_position' => 'nullable|integer|min:0',
         ]);
@@ -85,6 +86,10 @@ class ProductController extends Controller
 
         try {
             $validated['image'] = $this->handleImageUpload($request, 'image', 'products');
+
+            if ($request->hasFile('brochure')) {
+                $validated['brochure'] = $request->file('brochure')->store('products/brochures', 'public');
+            }
 
             Product::create($validated);
 
@@ -116,6 +121,7 @@ class ProductController extends Controller
             'benefits' => 'nullable|array',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'image_alt' => 'nullable|string|max:255',
+            'brochure' => 'nullable|file|mimes:pdf|max:10240',
             'is_active' => 'boolean',
             'order_position' => 'nullable|integer|min:0',
         ]);
@@ -141,6 +147,13 @@ class ProductController extends Controller
         try {
             $validated['image'] = $this->handleImageUpload($request, 'image', 'products', $product->image);
 
+            if ($request->hasFile('brochure')) {
+                if ($product->brochure) {
+                    Storage::disk('public')->delete($product->brochure);
+                }
+                $validated['brochure'] = $request->file('brochure')->store('products/brochures', 'public');
+            }
+
             $product->update($validated);
 
             return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
@@ -157,6 +170,10 @@ class ProductController extends Controller
         try {
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
+            }
+
+            if ($product->brochure) {
+                Storage::disk('public')->delete($product->brochure);
             }
 
             $product->delete();

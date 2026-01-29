@@ -83,6 +83,7 @@ class AdminMenu extends Model
             'why-choose-us' => 'settings.hero',
             'news' => 'news.view',
             'products' => 'products.view',
+            'brochures' => 'products.view',
             'auctions' => 'auctions.view',
             'reports' => 'reports.view',
             'company-info' => 'settings.company',

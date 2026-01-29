@@ -7,6 +7,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 trait HandlesImageUpload
 {
@@ -55,28 +57,45 @@ trait HandlesImageUpload
     }
 
     /**
-     * Store image with optimization
+     * Store image with optimization using Intervention Image
      */
     protected function storeOptimizedImage(UploadedFile $file, string $storagePath): string
     {
-        $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($file->getClientOriginalExtension());
         $filename = Str::uuid() . '.' . $extension;
         $fullPath = $storagePath . '/' . $filename;
 
         // For images that can be optimized
-        if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'webp'])) {
-            // Check if GD or Imagick is available
-            if (extension_loaded('gd') || extension_loaded('imagick')) {
-                try {
-                    $optimizedContent = $this->optimizeImage($file);
-                    if ($optimizedContent) {
-                        Storage::disk('public')->put($fullPath, $optimizedContent);
-                        return $fullPath;
-                    }
-                } catch (\Exception $e) {
-                    // Fall back to normal upload if optimization fails
-                    Log::warning('Image optimization failed: ' . $e->getMessage());
+        if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+            try {
+                // Initialize ImageManager with GD driver
+                $manager = new ImageManager(new Driver());
+
+                // Read image
+                $image = $manager->read($file);
+
+                // Resize if needed (max 1920x1080)
+                $maxWidth = 1920;
+                $maxHeight = 1080;
+
+                if ($image->width() > $maxWidth || $image->height() > $maxHeight) {
+                    $image->scaleDown(width: $maxWidth, height: $maxHeight);
                 }
+
+                // Encode based on extension
+                $encoded = match ($extension) {
+                    'jpg', 'jpeg' => $image->toJpeg(quality: 85),
+                    'png' => $image->toPng(),
+                    'webp' => $image->toWebp(quality: 85),
+                    default => $image->toJpeg(),
+                };
+
+                // Save to storage
+                Storage::disk('public')->put($fullPath, (string) $encoded);
+                return $fullPath;
+            } catch (\Exception $e) {
+                // Log error and fall back to normal upload
+                Log::warning('Image optimization failed: ' . $e->getMessage());
             }
         }
 
@@ -85,74 +104,8 @@ trait HandlesImageUpload
     }
 
     /**
-     * Optimize image using GD library
+     * Handle logo uploads explicitly (skip optimization to preserve quality/transparency perfectly if needed)
+     * Or just use the same method if confident.
+     * For now, we'll keep the main logic in storeOptimizedImage and remove the old optimizeImage method.
      */
-    protected function optimizeImage(UploadedFile $file): ?string
-    {
-        $extension = strtolower($file->getClientOriginalExtension());
-        $path = $file->getPathname();
-
-        // Create image resource based on type
-        $image = match ($extension) {
-            'jpg', 'jpeg' => @imagecreatefromjpeg($path),
-            'png' => @imagecreatefrompng($path),
-            'webp' => @imagecreatefromwebp($path),
-            default => null,
-        };
-
-        if (!$image) {
-            return null;
-        }
-
-        // Get original dimensions
-        $width = imagesx($image);
-        $height = imagesy($image);
-
-        // Max dimensions (adjust as needed)
-        $maxWidth = 1920;
-        $maxHeight = 1080;
-
-        // Calculate new dimensions if needed
-        if ($width > $maxWidth || $height > $maxHeight) {
-            $ratio = min($maxWidth / $width, $maxHeight / $height);
-            $newWidth = (int) ($width * $ratio);
-            $newHeight = (int) ($height * $ratio);
-
-            // Create resized image
-            $resized = imagecreatetruecolor($newWidth, $newHeight);
-
-            // Preserve transparency for PNG and WebP
-            if ($extension === 'png' || $extension === 'webp') {
-                imagealphablending($resized, false);
-                imagesavealpha($resized, true);
-                $transparent = imagecolorallocatealpha($resized, 0, 0, 0, 127);
-                imagefill($resized, 0, 0, $transparent);
-            }
-
-            imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-            imagedestroy($image);
-            $image = $resized;
-        } else {
-            // Even if not resizing, preserve transparency for PNG
-            if ($extension === 'png') {
-                imagealphablending($image, false);
-                imagesavealpha($image, true);
-            }
-        }
-
-        // Output to string
-        ob_start();
-
-        match ($extension) {
-            'jpg', 'jpeg' => imagejpeg($image, null, 85), // 85% quality
-            'png' => imagepng($image, null, 8), // Compression level 8
-            'webp' => imagewebp($image, null, 85), // 85% quality
-            default => null,
-        };
-
-        $content = ob_get_clean();
-        imagedestroy($image);
-
-        return $content ?: null;
-    }
 }

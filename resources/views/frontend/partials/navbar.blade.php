@@ -128,6 +128,10 @@
                                 <span class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center mr-3"><svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg></span>
                                 Lelang Agunan
                             </a>
+                            <a href="{{ route('brochures.index') }}" class="flex items-center px-5 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors">
+                                <span class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center mr-3"><svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></span>
+                                Brosur Pembiayaan
+                            </a>
                             <a href="{{ route('careers.index') }}" class="flex items-center px-5 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors">
                                 <span class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center mr-3"><svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
                                 Karir
@@ -350,6 +354,10 @@
                     <a href="{{ route('auctions.index') }}" @click="mobileOpen = false" class="flex items-center px-4 py-2 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
                         <span class="w-2 h-2 bg-amber-400 rounded-full mr-3"></span>
                         Lelang Agunan
+                    </a>
+                    <a href="{{ route('brochures.index') }}" @click="mobileOpen = false" class="flex items-center px-4 py-2 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                        <span class="w-2 h-2 bg-pink-400 rounded-full mr-3"></span>
+                        Brosur Pembiayaan
                     </a>
                     <a href="{{ route('careers.index') }}" @click="mobileOpen = false" class="flex items-center px-4 py-2 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
                         <span class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></span>

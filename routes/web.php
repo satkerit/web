@@ -31,6 +31,11 @@ Route::middleware(['throttle:120,1'])->group(function () {
         Route::get('/detail/{slug}', [ProductController::class, 'show'])->name('show');
     });
 
+    // Brochure Library
+    Route::get('/brosur-pembiayaan-syariah', [App\Http\Controllers\BrochureController::class, 'index'])->name('brochures.index');
+    Route::get('/brosur-pembiayaan-syariah/{brochure}/download', [App\Http\Controllers\BrochureController::class, 'download'])->name('brochures.download');
+    Route::get('/brosur-pembiayaan-syariah/{brochure}/preview', [App\Http\Controllers\BrochureController::class, 'preview'])->name('brochures.preview');
+
     // Auction Routes
     Route::prefix('lelang')->name('auctions.')->group(function () {
         Route::get('/', [App\Http\Controllers\AuctionController::class, 'index'])->name('index');
@@ -86,6 +91,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 
     // Products Management
     Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
+
+    // Brochures Management
+    Route::resource('brochures', App\Http\Controllers\Admin\BrochureController::class);
 
     // Auctions Management
     Route::post('auctions/bulk-action', [App\Http\Controllers\Admin\AuctionController::class, 'bulkAction'])->name('auctions.bulk-action');

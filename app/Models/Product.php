@@ -30,6 +30,7 @@ class Product extends Model
         'benefits',
         'image',
         'image_alt',
+        'brochure',
         'is_active',
         'order_position'
     ];
