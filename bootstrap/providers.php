@@ -4,6 +4,5 @@ return [
     App\Providers\AppServiceProvider::class,
     App\Providers\MailConfigServiceProvider::class,
     App\Providers\StorageServiceProvider::class,
-    App\Providers\TelescopeServiceProvider::class,
     App\Providers\ViewServiceProvider::class,
 ];
