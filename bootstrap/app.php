@@ -30,14 +30,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'ddos' => \App\Http\Middleware\DdosProtection::class,
             'menu.permission' => \App\Http\Middleware\CheckMenuPermission::class,
             'idle.timeout' => \App\Http\Middleware\IdleTimeoutMiddleware::class,
+            'detect.suspicious' => \App\Http\Middleware\DetectSuspiciousActivity::class,
         ]);
 
         // Security headers for all responses
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
-        // Web middleware group - DDoS protection runs first
+        // Web middleware group - Security monitoring runs early
         $middleware->web(append: [
             \App\Http\Middleware\DdosProtection::class,
+            \App\Http\Middleware\DetectSuspiciousActivity::class,
             \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\BlockSuspiciousRequests::class,
             \App\Http\Middleware\LogVisitor::class,

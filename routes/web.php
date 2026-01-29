@@ -162,6 +162,19 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::get('audit-trails/{auditTrail}', [App\Http\Controllers\Admin\AuditTrailController::class, 'show'])->name('audit-trails.show');
     Route::post('audit-trails/clear', [App\Http\Controllers\Admin\AuditTrailController::class, 'clear'])->name('audit-trails.clear');
 
+    // Security Monitoring
+    Route::prefix('security-monitor')->name('security-monitor.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'index'])->name('index');
+        Route::get('/export', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'export'])->name('export');
+        Route::get('/chart-data', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'chartData'])->name('chart-data');
+        Route::get('/threats/{ip}', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'threatsByIp'])->name('threats-by-ip');
+        Route::get('/{securityLog}', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'show'])->name('show');
+        Route::post('/block-ip', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'blockIp'])->name('block-ip');
+        Route::delete('/unblock/{ip}', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'unblockIp'])->name('unblock');
+        Route::post('/cleanup', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'cleanup'])->name('cleanup');
+        Route::post('/clear-expired', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'clearExpiredBlocks'])->name('clear-expired');
+    });
+
     // Visitor Statistics
     Route::get('visitor-stats', [App\Http\Controllers\Admin\VisitorStatController::class, 'index'])->name('visitor-stats.index');
 
