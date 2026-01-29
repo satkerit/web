@@ -72,15 +72,32 @@ class AdminDdosProtection
         }
 
         // Process request
-        $response = $next($request);
+        try {
+            $response = $next($request);
 
-        // Track failed responses (4xx, 5xx)
-        if ($response->getStatusCode() >= 400) {
+            // Track failed responses (4xx, 5xx)
+            if ($response->getStatusCode() >= 400) {
+                $this->trackFailedRequest($ip);
+            }
+
+            // Add rate limit headers
+            return $this->addRateLimitHeaders($response, $ip, $userId);
+
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
+            // Track HTTP exceptions (404, 403, etc)
+            if ($e->getStatusCode() >= 400) {
+                $this->trackFailedRequest($ip);
+            }
+            throw $e;
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Track validation errors (422)
             $this->trackFailedRequest($ip);
+            throw $e;
+        } catch (\Throwable $e) {
+            // Track other server errors (500)
+            $this->trackFailedRequest($ip);
+            throw $e;
         }
-
-        // Add rate limit headers
-        return $this->addRateLimitHeaders($response, $ip, $userId);
     }
 
     protected function isIpBlocked(string $ip): bool
