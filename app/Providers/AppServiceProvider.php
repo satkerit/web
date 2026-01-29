@@ -16,10 +16,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind('path.public', function () {
-            // Mengarahkan path public ke folder public_html
-            return realpath(base_path() . '/../public_html');
-        });
+        // Check if running on shared hosting with public_html
+        $publicHtmlPath = base_path() . '/../public_html';
+
+        if (file_exists($publicHtmlPath)) {
+            $this->app->bind('path.public', function () use ($publicHtmlPath) {
+                return realpath($publicHtmlPath);
+            });
+        }
     }
 
     /**
