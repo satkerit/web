@@ -272,10 +272,14 @@ class StorageController extends Controller
 
     /**
      * API endpoint for browsing storage (used by image picker component)
+     * This is more permissive than other storage actions because it's used
+     * by the image picker component across various forms (news, products, company info, etc.)
      */
     public function apiBrowse(Request $request)
     {
-        $this->authorizeView('storage.view');
+        // Any authenticated admin can browse storage for image selection
+        // This is a read-only operation used by image picker components
+        $this->authorizeAdmin();
 
         try {
             $path = $this->sanitizePath($request->get('path', ''));
@@ -366,7 +370,7 @@ class StorageController extends Controller
             }
 
             $file = $request->file('image');
-            
+
             // Check if file is valid
             if (!$file->isValid()) {
                 return response()->json([
@@ -376,25 +380,25 @@ class StorageController extends Controller
             }
 
             $path = 'news/editor-images';
-            
+
             // Create directory if not exists
             if (!Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->makeDirectory($path);
             }
-            
+
             // Generate unique filename
             $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            
+
             // Store file
             $storedPath = $file->storeAs($path, $filename, 'public');
-            
+
             if (!$storedPath) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Failed to store file'
                 ], 500);
             }
-            
+
             // Get full URL
             $url = asset('storage/' . $storedPath);
 
@@ -409,7 +413,7 @@ class StorageController extends Controller
             \Log::error('Editor image upload error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to upload image: ' . $e->getMessage()
