@@ -279,7 +279,23 @@ class StorageController extends Controller
     {
         // Any authenticated admin can browse storage for image selection
         // This is a read-only operation used by image picker components
-        $this->authorizeAdmin();
+
+        // Allow Admin, Editor, or users with specific permissions
+        $user = auth()->user();
+        $allowed = $user->isAdmin() ||
+                   $user->isEditor() ||
+                   $user->hasPermission('storage.view') ||
+                   $user->hasAnyPermission([
+                       'settings.company',
+                       'news.create', 'news.edit',
+                       'products.create', 'products.edit',
+                       'auctions.create', 'auctions.edit',
+                       'board.manage'
+                   ]);
+
+        if (!$allowed) {
+            abort(403, 'Anda tidak memiliki akses untuk melihat file.');
+        }
 
         try {
             $path = $this->sanitizePath($request->get('path', ''));
@@ -421,4 +437,3 @@ class StorageController extends Controller
         }
     }
 }
-
