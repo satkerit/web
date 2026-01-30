@@ -48,6 +48,7 @@ class CompanyInfoController extends Controller
             'mission' => 'nullable|string',
             'history' => 'nullable|string',
             'organization_structure' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'established_year' => 'nullable|integer|min:1900|max:' . date('Y'),
             'stat_years_experience' => 'nullable|integer|min:0',
             'stat_branch_offices' => 'nullable|integer|min:0',
@@ -70,15 +71,18 @@ class CompanyInfoController extends Controller
             'operational_hours' => 'nullable|array',
         ]);
 
+
         $company = CompanyInfo::first();
 
         // Handle logo uploads WITHOUT optimization to preserve transparency
         $validated['logo'] = $this->handleLogoUpload($request, 'logo', 'company', $company?->logo);
         $validated['logo_footer'] = $this->handleLogoUpload($request, 'logo_footer', 'company', $company?->logo_footer);
-        
+
         // Handle other image uploads with optimization
         $validated['favicon'] = $this->handleImageUpload($request, 'favicon', 'company', $company?->favicon);
         $validated['organization_structure'] = $this->handleImageUpload($request, 'organization_structure', 'company', $company?->organization_structure);
+        $validated['profile_image'] = $this->handleImageUpload($request, 'profile_image', 'company/profile', $company?->profile_image);
+
 
         if ($company) {
             $company->update($validated);

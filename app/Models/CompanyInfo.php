@@ -41,6 +41,7 @@ class CompanyInfo extends Model
         'mission',
         'history',
         'organization_structure',
+        'profile_image',
         'established_year',
         'stat_years_experience',
         'stat_branch_offices',
@@ -63,6 +64,7 @@ class CompanyInfo extends Model
         'meta_keywords',
         'operational_hours'
     ];
+
 
     protected $casts = [
         'established_year' => 'integer',

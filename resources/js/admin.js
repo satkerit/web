@@ -186,6 +186,8 @@ window.Alpine.data("imagePicker", (config = {}) => ({
     fromStorage: false,
     storagePath: "",
     inputId: config.inputId || "",
+    hasExistingImage: config.hasExistingImage || false,
+    shouldDelete: false,
 
     handleFileSelect(event) {
         const file = event.target.files[0];
@@ -193,6 +195,7 @@ window.Alpine.data("imagePicker", (config = {}) => ({
             this.previewUrl = URL.createObjectURL(file);
             this.fromStorage = false;
             this.storagePath = "";
+            this.shouldDelete = false; // Reset delete flag when new file is selected
         }
     },
 
@@ -200,6 +203,10 @@ window.Alpine.data("imagePicker", (config = {}) => ({
         this.previewUrl = "";
         this.fromStorage = false;
         this.storagePath = "";
+        // Set shouldDelete to true if there was an existing image
+        if (this.hasExistingImage) {
+            this.shouldDelete = true;
+        }
         if (this.inputId) {
             const input = document.getElementById(this.inputId);
             if (input) input.value = "";
@@ -280,6 +287,7 @@ window.Alpine.data("imagePicker", (config = {}) => ({
             this.previewUrl = this.selectedItem.url;
             this.fromStorage = true;
             this.storagePath = this.selectedItem.path;
+            this.shouldDelete = false; // Reset delete flag when selecting from storage
             if (this.inputId) {
                 const input = document.getElementById(this.inputId);
                 if (input) input.value = "";

@@ -11,7 +11,9 @@
 @php
     use App\Helpers\StorageHelper;
     $inputId = 'input_' . $name;
+    $deleteFieldName = $name . '_delete';
     $previewUrl = '';
+    $hasExistingImage = !empty($value);
     if ($value) {
         $previewUrl = StorageHelper::url($value);
     }
@@ -20,6 +22,8 @@
 <div x-data="imagePicker(@js([
     'inputId' => $inputId,
     'initialPreview' => $previewUrl,
+    'hasExistingImage' => $hasExistingImage,
+    'deleteFieldName' => $deleteFieldName,
 ]))" class="group">
     @if($label)
         <label class="block text-sm font-semibold text-slate-700 mb-1.5 ml-0.5">
@@ -35,6 +39,9 @@
 
     {{-- Hidden input for storage path --}}
     <input type="hidden" name="{{ $name }}_from_storage" :value="fromStorage ? storagePath : ''">
+
+    {{-- Hidden input for delete flag --}}
+    <input type="hidden" name="{{ $name }}_delete" :value="shouldDelete ? '1' : ''">
 
     {{-- Buttons --}}
     <div class="flex flex-wrap gap-2">

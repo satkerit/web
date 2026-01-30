@@ -23,7 +23,17 @@ trait HandlesImageUpload
      */
     protected function handleImageUpload(Request $request, string $fieldName, string $storagePath, ?string $oldPath = null): ?string
     {
+        $deleteField = $fieldName . '_delete';
         $fromStorageField = $fieldName . '_from_storage';
+
+        // Check if image should be deleted
+        if ($request->input($deleteField) === '1') {
+            // Delete old file if exists
+            if ($oldPath) {
+                Storage::disk('public')->delete($oldPath);
+            }
+            return null;
+        }
 
         // Check if image is selected from storage
         if ($request->filled($fromStorageField)) {

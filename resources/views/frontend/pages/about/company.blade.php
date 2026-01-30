@@ -42,7 +42,11 @@
                         @endif
                     </div>
                     <div class="relative h-80 lg:h-auto" x-intersect="$el.classList.add('animate-slide-in-right')">
-                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop" alt="Building" class="w-full h-full object-cover">
+                        @if($companyInfo->profile_image)
+                            <img src="{{ \App\Helpers\StorageHelper::url($companyInfo->profile_image) }}" alt="{{ $companyInfo->name ?? 'Building' }}" class="w-full h-full object-cover">
+                        @else
+                            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop" alt="Building" class="w-full h-full object-cover">
+                        @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/50 to-transparent"></div>
                     </div>
                 </div>
