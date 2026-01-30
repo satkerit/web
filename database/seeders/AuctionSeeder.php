@@ -11,16 +11,16 @@ class AuctionSeeder extends Seeder
     {
         // Create regular auctions
         Auction::factory(15)->create();
-        
+
         // Create featured auctions
         Auction::factory(3)->featured()->create();
-        
+
         // Create urgent auctions
         Auction::factory(2)->urgent()->create();
-        
+
         // Create sold auctions
         Auction::factory(5)->sold()->create();
-        
+
         // Create specific sample auctions with detailed information
         $this->createSampleAuctions();
     }
@@ -116,7 +116,7 @@ class AuctionSeeder extends Seeder
             'meta_title' => 'Lelang Rumah Mewah 2 Lantai Pangkalpinang - BPRS Babel',
             'meta_description' => 'Lelang rumah mewah 2 lantai dengan kolam renang di Pangkalpinang. Harga limit Rp 1.5 Miliar. Info lengkap di BPRS Babel.',
             'meta_keywords' => 'lelang rumah, rumah mewah pangkalpinang, properti babel, bprs babel',
-            'status' => 'registration_open',
+            'status' => 'upcoming',
             'published_at' => now(),
             'is_featured' => true,
             'featured_until' => now()->addDays(60),
@@ -216,7 +216,7 @@ class AuctionSeeder extends Seeder
             'meta_title' => 'Lelang Ruko 3 Lantai Strategis Sungailiat - BPRS Babel',
             'meta_description' => 'Lelang ruko 3 lantai di lokasi strategis Sungailiat. Harga limit Rp 800 Juta. Cocok untuk usaha dengan traffic tinggi.',
             'meta_keywords' => 'lelang ruko, ruko sungailiat, properti komersial, bprs babel',
-            'status' => 'published',
+            'status' => 'upcoming',
             'published_at' => now()->subDays(5),
             'is_featured' => false,
             'is_urgent' => false,
@@ -315,7 +315,7 @@ class AuctionSeeder extends Seeder
             'meta_title' => 'Lelang Tanah Komersial 1000m² Toboali - BPRS Babel',
             'meta_description' => 'Lelang tanah komersial strategis 1000m² di Toboali. Harga limit Rp 2 Miliar. Cocok untuk mall, hotel, perkantoran.',
             'meta_keywords' => 'lelang tanah, tanah komersial toboali, investasi properti, bprs babel',
-            'status' => 'published',
+            'status' => 'upcoming',
             'published_at' => now()->subDays(2),
             'is_featured' => false,
             'is_urgent' => true,

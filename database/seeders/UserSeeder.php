@@ -11,33 +11,39 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Super Admin
-        User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@bprsyariah.co.id',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_SUPER_ADMIN,
-            'is_active' => true,
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'superadmin@bprsyariah.co.id'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_SUPER_ADMIN,
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Admin
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@bprsyariah.co.id',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_ADMIN,
-            'is_active' => true,
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@bprsyariah.co.id'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_ADMIN,
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Editor
-        User::create([
-            'name' => 'Editor',
-            'email' => 'editor@bprsyariah.co.id',
-            'password' => Hash::make('password'),
-            'role' => User::ROLE_EDITOR,
-            'is_active' => true,
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'editor@bprsyariah.co.id'],
+            [
+                'name' => 'Editor',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_EDITOR,
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
