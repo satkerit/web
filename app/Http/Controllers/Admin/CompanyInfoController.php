@@ -9,6 +9,7 @@ use App\Traits\HandlesImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class CompanyInfoController extends Controller
 {
@@ -16,7 +17,16 @@ class CompanyInfoController extends Controller
 
     public function edit()
     {
-        $this->authorizeAny(['settings.company']);
+        $user = auth()->user();
+        if ($user && !$user->hasAnyPermission(['settings.company'])) {
+            Log::warning('Authorization failed accessing company-info.edit', [
+                'user_id' => $user->id ?? null,
+                'role' => $user->role ?? null,
+                'role_id' => $user->role_id ?? null,
+                'has_any_settings_company' => $user->hasAnyPermission(['settings.company']),
+            ]);
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
 
         $company = CompanyInfo::first() ?? new CompanyInfo();
         return view('admin.company-info.form', compact('company'));
@@ -24,7 +34,16 @@ class CompanyInfoController extends Controller
 
     public function update(Request $request)
     {
-        $this->authorizeAny(['settings.company']);
+        $user = auth()->user();
+        if ($user && !$user->hasAnyPermission(['settings.company'])) {
+            Log::warning('Authorization failed accessing company-info.update', [
+                'user_id' => $user->id ?? null,
+                'role' => $user->role ?? null,
+                'role_id' => $user->role_id ?? null,
+                'has_any_settings_company' => $user->hasAnyPermission(['settings.company']),
+            ]);
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
