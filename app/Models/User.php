@@ -149,4 +149,13 @@ class User extends Authenticatable
     {
         return $this->roleModel?->display_name ?? 'Editor';
     }
+
+    /**
+     * Get available roles (for backward compatibility)
+     * @deprecated Use Role model directly
+     */
+    public static function getRoles(): array
+    {
+        return Role::orderBy('name')->pluck('display_name', 'name')->toArray();
+    }
 }

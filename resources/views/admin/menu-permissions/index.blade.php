@@ -48,7 +48,9 @@
                             </td>
                             @foreach($roles as $role => $roleName)
                                 @php
-                                    $permission = $menu->permissions->firstWhere('role', $role);
+                                    $permission = $menu->permissions->first(function($p) use ($role) {
+                                        return $p->role && $p->role->name === $role;
+                                    });
                                     $canAccess = $permission ? $permission->can_access : false;
                                     $isDisabled = ($menu->key === 'menu-permissions' || $menu->key === 'users') && $role !== 'super_admin';
                                 @endphp

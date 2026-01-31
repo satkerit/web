@@ -196,7 +196,9 @@ class AdminMenu extends Model
      */
     public static function getAllWithPermissions(): \Illuminate\Support\Collection
     {
-        return static::with('permissions')
+        return static::with(['permissions' => function ($query) {
+            $query->with('role');
+        }])
             ->orderBy('section')
             ->orderBy('order')
             ->get();

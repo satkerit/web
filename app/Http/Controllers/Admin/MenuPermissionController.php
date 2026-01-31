@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminMenu;
 use App\Models\AdminMenuPermission;
-use App\Models\User;
+use App\Models\Role;
 use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,9 @@ class MenuPermissionController extends Controller
         $this->authorizeAny(['settings.menu']);
 
         $menus = AdminMenu::getAllWithPermissions();
-        $roles = User::getRoles();
+        
+        // Get roles from Role model instead of User::getRoles()
+        $roles = Role::orderBy('name')->pluck('display_name', 'name')->toArray();
 
         return view('admin.menu-permissions.index', compact('menus', 'roles'));
     }
@@ -34,15 +36,16 @@ class MenuPermissionController extends Controller
 
         $permissions = $request->input('permissions', []);
 
-        // Get all menus
+        // Get all menus and roles
         $menus = AdminMenu::all();
+        $roles = Role::all()->keyBy('name');
 
         foreach ($menus as $menu) {
-            foreach (User::getRoles() as $role => $roleName) {
-                $canAccess = isset($permissions[$menu->id][$role]);
+            foreach ($roles as $roleName => $roleModel) {
+                $canAccess = isset($permissions[$menu->id][$roleName]);
 
                 AdminMenuPermission::updateOrCreate(
-                    ['admin_menu_id' => $menu->id, 'role' => $role],
+                    ['admin_menu_id' => $menu->id, 'role_id' => $roleModel->id],
                     ['can_access' => $canAccess]
                 );
             }
