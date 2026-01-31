@@ -26,6 +26,9 @@ class BlockSuspiciousRequests
         'livewire/*',
         'sanctum/*',
         '_ignition/*',
+        'admin/storage/*',
+        'admin/company-info',
+        'admin/*/upload*',
     ];
 
     protected array $suspiciousPatterns = [

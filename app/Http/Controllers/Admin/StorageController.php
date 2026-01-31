@@ -280,21 +280,55 @@ class StorageController extends Controller
         // Any authenticated admin can browse storage for image selection
         // This is a read-only operation used by image picker components
 
-        // Allow Admin, Editor, or users with specific permissions
         $user = auth()->user();
-        $allowed = $user->isAdmin() ||
-                   $user->isEditor() ||
-                   $user->hasPermission('storage.view') ||
-                   $user->hasAnyPermission([
-                       'settings.company',
-                       'news.create', 'news.edit',
-                       'products.create', 'products.edit',
-                       'auctions.create', 'auctions.edit',
-                       'board.manage'
-                   ]);
+        
+        // Log the permission check for debugging
+        \Log::info('Storage API Browse Permission Check', [
+            'user_id' => $user?->id,
+            'role_id' => $user?->role_id ?? null,
+            'is_admin' => $user?->isAdmin() ?? false,
+            'is_editor' => $user?->isEditor() ?? false,
+            'has_storage_view' => $user?->hasPermission('storage.view') ?? false,
+            'has_settings_company' => $user?->hasAnyPermission(['settings.company']) ?? false,
+            'request_path' => $request->path(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        // Allow Admin, Editor, or users with specific permissions
+        $allowed = $user && (
+            $user->isAdmin() ||
+            $user->isEditor() ||
+            $user->hasPermission('storage.view') ||
+            $user->hasAnyPermission([
+                'settings.company',
+                'news.create', 'news.edit',
+                'products.create', 'products.edit',
+                'auctions.create', 'auctions.edit',
+                'board.manage',
+                'hero.manage',
+                'offices.manage',
+                'careers.manage',
+                'brochures.manage',
+                'why-choose-us.manage'
+            ])
+        );
 
         if (!$allowed) {
-            abort(403, 'Anda tidak memiliki akses untuk melihat file.');
+            \Log::warning('Storage API Browse Access Denied', [
+                'user_id' => $user?->id,
+                'role_id' => $user?->role_id ?? null,
+                'ip' => $request->ip(),
+                'path' => $request->path(),
+            ]);
+            
+            return response()->json([
+                'error' => 'Anda tidak memiliki akses untuk melihat file.',
+                'debug' => [
+                    'user_id' => $user?->id,
+                    'authenticated' => auth()->check(),
+                    'has_settings_company' => $user?->hasAnyPermission(['settings.company']) ?? false,
+                ]
+            ], 403);
         }
 
         try {
@@ -316,6 +350,12 @@ class StorageController extends Controller
                 'items' => $items,
             ]);
         } catch (\Exception $e) {
+            \Log::error('Storage API Browse Error', [
+                'error' => $e->getMessage(),
+                'path' => $request->get('path', ''),
+                'user_id' => $user?->id,
+            ]);
+            
             return response()->json([
                 'error' => 'Gagal memuat direktori: ' . $e->getMessage(),
                 'path' => $request->get('path', ''),
