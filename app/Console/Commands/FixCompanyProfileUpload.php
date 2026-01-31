@@ -26,7 +26,7 @@ class FixCompanyProfileUpload extends Command
             
             foreach ($users as $user) {
                 $this->line("User: {$user->name} (ID: {$user->id})");
-                $this->line("  - Role: {$user->role}");
+                $this->line("  - Role: " . ($user->roleModel?->display_name ?? 'N/A'));
                 $this->line("  - Role ID: " . ($user->role_id ?? 'NULL'));
                 $this->line("  - Has settings.company: " . ($user->hasAnyPermission(['settings.company']) ? 'YES' : 'NO'));
                 $this->line("  - Is Admin: " . ($user->isAdmin() ? 'YES' : 'NO'));

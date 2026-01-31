@@ -3,17 +3,16 @@
     use App\Models\User;
 
     $user = auth()->user();
-    $userRole = $user->role;
+    $userRoleName = $user->roleModel?->name ?? 'editor';
 
-    // Get menus based on both systems
+    // Get menus based on Role permissions
     $groupedMenus = [];
 
-    // If user has role_id, get menus based on Role permissions
     if ($user->role_id && $user->roleModel) {
         $groupedMenus = AdminMenu::getGroupedMenusForUser($user);
     } else {
         // Fallback to legacy AdminMenuPermission system
-        $groupedMenus = AdminMenu::getGroupedMenusForRole($userRole);
+        $groupedMenus = AdminMenu::getGroupedMenusForRole($userRoleName);
     }
 
     // Icon mapping

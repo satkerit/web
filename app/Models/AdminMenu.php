@@ -31,21 +31,33 @@ class AdminMenu extends Model
     /**
      * Check if a role can access this menu
      */
-    public function canAccess(string $role): bool
+    public function canAccessByRoleId(int $roleId): bool
     {
-        $permission = $this->permissions()->where('role', $role)->first();
+        $permission = $this->permissions()->where('role_id', $roleId)->first();
         return $permission ? $permission->can_access : false;
     }
 
     /**
-     * Get all menus accessible by a role
+     * Check if a role can access this menu (legacy method for backward compatibility)
      */
-    public static function getMenusForRole(string $role): \Illuminate\Support\Collection
+    public function canAccess(string $role): bool
     {
-        return Cache::remember("admin_menus_{$role}", 3600, function () use ($role) {
+        $roleModel = Role::where('name', $role)->first();
+        if (!$roleModel) {
+            return false;
+        }
+        return $this->canAccessByRoleId($roleModel->id);
+    }
+
+    /**
+     * Get all menus accessible by a role ID
+     */
+    public static function getMenusForRoleId(int $roleId): \Illuminate\Support\Collection
+    {
+        return Cache::remember("admin_menus_role_{$roleId}", 3600, function () use ($roleId) {
             return static::where('is_active', true)
-                ->whereHas('permissions', function ($query) use ($role) {
-                    $query->where('role', $role)->where('can_access', true);
+                ->whereHas('permissions', function ($query) use ($roleId) {
+                    $query->where('role_id', $roleId)->where('can_access', true);
                 })
                 ->orderBy('order')
                 ->get();
@@ -53,11 +65,23 @@ class AdminMenu extends Model
     }
 
     /**
-     * Get menus grouped by section for a role
+     * Get all menus accessible by a role (legacy method)
      */
-    public static function getGroupedMenusForRole(string $role): array
+    public static function getMenusForRole(string $role): \Illuminate\Support\Collection
     {
-        $menus = static::getMenusForRole($role);
+        $roleModel = Role::where('name', $role)->first();
+        if (!$roleModel) {
+            return collect();
+        }
+        return static::getMenusForRoleId($roleModel->id);
+    }
+
+    /**
+     * Get menus grouped by section for a role ID
+     */
+    public static function getGroupedMenusForRoleId(int $roleId): array
+    {
+        $menus = static::getMenusForRoleId($roleId);
         $grouped = [];
 
         foreach ($menus as $menu) {
@@ -69,6 +93,18 @@ class AdminMenu extends Model
         }
 
         return $grouped;
+    }
+
+    /**
+     * Get menus grouped by section for a role (legacy method)
+     */
+    public static function getGroupedMenusForRole(string $role): array
+    {
+        $roleModel = Role::where('name', $role)->first();
+        if (!$roleModel) {
+            return [];
+        }
+        return static::getGroupedMenusForRoleId($roleModel->id);
     }
 
     /**
@@ -148,8 +184,10 @@ class AdminMenu extends Model
      */
     public static function clearCache(): void
     {
-        foreach (User::getRoles() as $role => $name) {
-            Cache::forget("admin_menus_{$role}");
+        $roles = Role::all();
+        foreach ($roles as $role) {
+            Cache::forget("admin_menus_{$role->name}");
+            Cache::forget("admin_menus_role_{$role->id}");
         }
     }
 

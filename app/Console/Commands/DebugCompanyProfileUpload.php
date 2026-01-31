@@ -38,7 +38,7 @@ class DebugCompanyProfileUpload extends Command
                 return [
                     $user->id,
                     $user->name,
-                    $user->role,
+                    $user->roleModel?->display_name ?? 'N/A',
                     $user->role_id ?? 'NULL',
                     $user->hasAnyPermission(['settings.company']) ? '✓' : '✗',
                     $this->canAccessCompanyInfo($user) ? '✓' : '✗'
@@ -66,7 +66,7 @@ class DebugCompanyProfileUpload extends Command
         $this->line("Basic Info:");
         $this->line("  - Name: {$user->name}");
         $this->line("  - Email: {$user->email}");
-        $this->line("  - Role (string): {$user->role}");
+        $this->line("  - Role: " . ($user->roleModel?->display_name ?? 'N/A'));
         $this->line("  - Role ID: " . ($user->role_id ?? 'NULL'));
         $this->line("  - Created: {$user->created_at}");
         $this->newLine();

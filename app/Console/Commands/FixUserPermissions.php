@@ -35,7 +35,6 @@ class FixUserPermissions extends Command
             $adminRole = Role::where('name', 'admin')->first();
             if ($adminRole) {
                 $user->role_id = $adminRole->id;
-                $user->role = 'admin'; // Keep legacy field in sync
                 $user->save();
                 
                 $this->info("✅ Assigned 'admin' role to user");
@@ -69,7 +68,6 @@ class FixUserPermissions extends Command
         }
         
         $user->role_id = $customRole->id;
-        $user->role = 'editor'; // Keep legacy field
         $user->save();
         
         $this->info("✅ Created and assigned 'company_editor' role to user");

@@ -9,7 +9,7 @@ class AdminMenuPermission extends Model
 {
     protected $fillable = [
         'admin_menu_id',
-        'role',
+        'role_id',
         'can_access',
     ];
 
@@ -20,5 +20,10 @@ class AdminMenuPermission extends Model
     public function menu(): BelongsTo
     {
         return $this->belongsTo(AdminMenu::class, 'admin_menu_id');
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }

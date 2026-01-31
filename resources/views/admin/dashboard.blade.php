@@ -253,7 +253,7 @@
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Peran Akses</p>
-                    <p class="font-medium text-slate-900">{{ ucfirst(str_replace('_', ' ', auth()->user()->role)) }}</p>
+                    <p class="font-medium text-slate-900">{{ auth()->user()->roleModel?->display_name ?? 'N/A' }}</p>
                 </div>
             </div>
 

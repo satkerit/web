@@ -29,29 +29,18 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Role Dasar <span class="text-red-500">*</span></label>
-                        <select name="role" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
-                            @foreach($roles as $key => $label)
-                                <option value="{{ $key }}" {{ old('role', $user->role ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                        @error('role')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
-                    </div>
-                    @if(isset($roleModels) && $roleModels->count() > 0)
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Role Dinamis</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Role <span class="text-red-500">*</span></label>
                         <select name="role_id" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                             <option value="">-- Pilih Role --</option>
-                            @foreach($roleModels as $roleModel)
+                            @foreach($roles as $roleModel)
                                 <option value="{{ $roleModel->id }}" {{ old('role_id', $user->role_id ?? '') == $roleModel->id ? 'selected' : '' }}>{{ $roleModel->display_name }}</option>
                             @endforeach
                         </select>
-                        <p class="mt-1 text-xs text-gray-500">Role dinamis dengan permission yang dapat dikustomisasi</p>
+                        <p class="mt-1 text-xs text-gray-500">Pilih role dengan permission yang sesuai</p>
                         @error('role_id')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
-                    @endif
                 </div>
 
                 <div class="flex items-center gap-2">

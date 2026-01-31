@@ -79,7 +79,8 @@ class FixKasKelilingMenu extends Command
         } else {
             $this->info('✅ Permissions found:');
             foreach ($permissions as $perm) {
-                $this->line('   - ' . $perm->role . ': ' . ($perm->can_access ? 'CAN ACCESS' : 'NO ACCESS'));
+                $roleName = $perm->role?->name ?? 'Unknown';
+                $this->line('   - ' . $roleName . ': ' . ($perm->can_access ? 'CAN ACCESS' : 'NO ACCESS'));
             }
         }
 

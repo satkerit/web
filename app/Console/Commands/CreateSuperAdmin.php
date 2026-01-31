@@ -99,7 +99,7 @@ class CreateSuperAdmin extends Command
                     ['ID', $user->id],
                     ['Nama', $user->name],
                     ['Email', $user->email],
-                    ['Role', $user->role],
+                    ['Role', $user->roleModel?->display_name ?? 'N/A'],
                     ['Status', $user->is_active ? 'Active' : 'Inactive'],
                     ['Created At', $user->created_at->format('d M Y H:i:s')],
                 ]

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\AdminMenu;
 use App\Models\AdminMenuPermission;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 
 class AdminMenuSeeder extends Seeder
@@ -54,18 +55,24 @@ class AdminMenuSeeder extends Seeder
             'editor' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers'],
         ];
 
+        // Get roles
+        $roles = Role::all()->keyBy('name');
+
         foreach ($menus as $menuData) {
             $menu = AdminMenu::updateOrCreate(
                 ['key' => $menuData['key']],
                 $menuData
             );
 
-            // Create permissions for each role
-            foreach (User::getRoles() as $role => $roleName) {
-                AdminMenuPermission::updateOrCreate(
-                    ['admin_menu_id' => $menu->id, 'role' => $role],
-                    ['can_access' => in_array($menuData['key'], $defaultPermissions[$role] ?? [])]
-                );
+            // Create permissions for each role using role_id
+            foreach ($defaultPermissions as $roleName => $allowedMenus) {
+                $role = $roles->get($roleName);
+                if ($role) {
+                    AdminMenuPermission::updateOrCreate(
+                        ['admin_menu_id' => $menu->id, 'role_id' => $role->id],
+                        ['can_access' => in_array($menuData['key'], $allowedMenus)]
+                    );
+                }
             }
         }
 

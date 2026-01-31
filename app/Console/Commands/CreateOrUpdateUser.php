@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -53,7 +54,14 @@ class CreateOrUpdateUser extends Command
                 $this->info('✓ Name updated');
             }
 
-            $user->role = $role;
+            // Get role model
+            $roleModel = Role::where('name', $role)->first();
+            if (!$roleModel) {
+                $this->error("Role '{$role}' not found!");
+                return Command::FAILURE;
+            }
+
+            $user->role_id = $roleModel->id;
             $user->is_active = $isActive;
             $user->save();
 
@@ -69,11 +77,18 @@ class CreateOrUpdateUser extends Command
                 $password = $this->secret('Enter password');
             }
 
+            // Get role model
+            $roleModel = Role::where('name', $role)->first();
+            if (!$roleModel) {
+                $this->error("Role '{$role}' not found!");
+                return Command::FAILURE;
+            }
+
             $user = User::create([
                 'name' => $name,
                 'email' => $email,
                 'password' => Hash::make($password),
-                'role' => $role,
+                'role_id' => $roleModel->id,
                 'is_active' => $isActive,
             ]);
 
@@ -87,7 +102,7 @@ class CreateOrUpdateUser extends Command
         $this->line('ID       : ' . $user->id);
         $this->line('Name     : ' . $user->name);
         $this->line('Email    : ' . $user->email);
-        $this->line('Role     : ' . $user->role);
+        $this->line('Role     : ' . ($user->roleModel?->display_name ?? 'N/A'));
         $this->line('Status   : ' . ($user->is_active ? 'Active' : 'Inactive'));
         if ($password) {
             $this->line('Password : ' . $password);

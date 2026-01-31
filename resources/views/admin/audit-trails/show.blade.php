@@ -164,7 +164,7 @@
             <div class="pt-4 border-t border-slate-100">
                 <div class="flex items-center justify-between text-sm">
                     <span class="text-slate-500">Role</span>
-                    <span class="font-medium text-slate-900">{{ ucfirst(str_replace('_', ' ', $auditTrail->user->role)) }}</span>
+                    <span class="font-medium text-slate-900">{{ $auditTrail->user->roleModel?->display_name ?? 'N/A' }}</span>
                 </div>
             </div>
             @endif

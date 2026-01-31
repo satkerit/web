@@ -99,22 +99,22 @@ class CheckMenuPermission
     }
 
     /**
-     * Check if user can access menu using both permission systems
+     * Check if user can access menu using role-based permission system
      */
     protected function canAccessMenu($user, string $menuKey): bool
     {
-        // Method 1: Check via Role model (new system) if user has role_id
+        // Check via Role model (new system)
         if ($user->role_id && $user->roleModel) {
             $permissionName = $this->menuPermissionMap[$menuKey] ?? null;
             if ($permissionName && $user->roleModel->hasPermission($permissionName)) {
                 return true;
             }
-        }
 
-        // Method 2: Check via AdminMenuPermission (legacy system)
-        $menu = AdminMenu::where('key', $menuKey)->first();
-        if ($menu && $menu->canAccess($user->role)) {
-            return true;
+            // Also check via AdminMenuPermission using role_id
+            $menu = AdminMenu::where('key', $menuKey)->first();
+            if ($menu && $menu->canAccessByRoleId($user->role_id)) {
+                return true;
+            }
         }
 
         return false;

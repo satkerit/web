@@ -47,19 +47,21 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 mb-3">
-                    @switch($user->role)
-                        @case('super_admin')
-                            <x-admin.badge variant="danger">Super Admin</x-admin.badge>
-                            @break
-                        @case('admin')
-                            <x-admin.badge variant="primary">Admin</x-admin.badge>
-                            @break
-                        @case('editor')
-                            <x-admin.badge variant="info">Editor</x-admin.badge>
-                            @break
-                    @endswitch
                     @if($user->roleModel)
-                        <x-admin.badge variant="secondary">{{ $user->roleModel->display_name }}</x-admin.badge>
+                        @switch($user->roleModel->name)
+                            @case('super_admin')
+                                <x-admin.badge variant="danger">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                @break
+                            @case('admin')
+                                <x-admin.badge variant="primary">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                @break
+                            @case('editor')
+                                <x-admin.badge variant="info">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                @break
+                            @default
+                                <x-admin.badge variant="secondary">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                @break
+                        @endswitch
                     @endif
                     @if($user->is_active)
                         <x-admin.badge variant="success">Aktif</x-admin.badge>
@@ -107,19 +109,21 @@
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-1">
-                            @switch($user->role)
-                                @case('super_admin')
-                                    <x-admin.badge variant="danger">Super Admin</x-admin.badge>
-                                    @break
-                                @case('admin')
-                                    <x-admin.badge variant="primary">Admin</x-admin.badge>
-                                    @break
-                                @case('editor')
-                                    <x-admin.badge variant="info">Editor</x-admin.badge>
-                                    @break
-                            @endswitch
-                            @if($user->roleModel && $user->roleModel->name !== $user->role)
-                                <x-admin.badge variant="secondary">{{ $user->roleModel->display_name }}</x-admin.badge>
+                            @if($user->roleModel)
+                                @switch($user->roleModel->name)
+                                    @case('super_admin')
+                                        <x-admin.badge variant="danger">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                        @break
+                                    @case('admin')
+                                        <x-admin.badge variant="primary">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                        @break
+                                    @case('editor')
+                                        <x-admin.badge variant="info">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                        @break
+                                    @default
+                                        <x-admin.badge variant="secondary">{{ $user->roleModel->display_name }}</x-admin.badge>
+                                        @break
+                                @endswitch
                             @endif
                         </div>
                     </td>

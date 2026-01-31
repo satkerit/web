@@ -24,14 +24,15 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $editorRole = \App\Models\Role::where('name', 'editor')->first();
+        
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'role' => 'editor',
-            'role_id' => null,
+            'role_id' => $editorRole?->id,
             'is_active' => true,
         ];
     }
@@ -51,8 +52,9 @@ class UserFactory extends Factory
      */
     public function superAdmin(): static
     {
+        $superAdminRole = \App\Models\Role::where('name', User::ROLE_SUPER_ADMIN)->first();
         return $this->state(fn(array $attributes) => [
-            'role' => User::ROLE_SUPER_ADMIN,
+            'role_id' => $superAdminRole?->id,
         ]);
     }
 
@@ -61,8 +63,9 @@ class UserFactory extends Factory
      */
     public function admin(): static
     {
+        $adminRole = \App\Models\Role::where('name', User::ROLE_ADMIN)->first();
         return $this->state(fn(array $attributes) => [
-            'role' => User::ROLE_ADMIN,
+            'role_id' => $adminRole?->id,
         ]);
     }
 
@@ -71,8 +74,9 @@ class UserFactory extends Factory
      */
     public function editor(): static
     {
+        $editorRole = \App\Models\Role::where('name', User::ROLE_EDITOR)->first();
         return $this->state(fn(array $attributes) => [
-            'role' => User::ROLE_EDITOR,
+            'role_id' => $editorRole?->id,
         ]);
     }
 

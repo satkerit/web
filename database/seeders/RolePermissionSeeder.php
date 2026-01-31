@@ -161,10 +161,5 @@ class RolePermissionSeeder extends Seeder
                 });
         })->pluck('id')->toArray();
         $editor->syncPermissions($editorPermissions);
-
-        // Update existing users to use role_id
-        User::where('role', 'super_admin')->update(['role_id' => $superAdmin->id]);
-        User::where('role', 'admin')->update(['role_id' => $admin->id]);
-        User::where('role', 'editor')->update(['role_id' => $editor->id]);
     }
 }

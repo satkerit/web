@@ -31,19 +31,17 @@ class GrantFullAccess extends Command
 
         $this->info("✓ User ditemukan: {$user->name}");
 
-        // 2. Set role to super_admin
-        $user->role = User::ROLE_SUPER_ADMIN;
+        // 2. Set role_id to super_admin
+        $superAdminRole = Role::where('name', 'super_admin')->first();
+        if (!$superAdminRole) {
+            $this->error('Super Admin role not found. Please run RolePermissionSeeder first.');
+            return 1;
+        }
+
+        $user->role_id = $superAdminRole->id;
         $user->is_active = true;
         $user->save();
-        $this->info('✓ Role diset ke: super_admin');
-
-        // 3. Check if Role system exists (RBAC)
-        $superAdminRole = Role::where('name', 'super_admin')->first();
-
-        if ($superAdminRole) {
-            $user->role_id = $superAdminRole->id;
-            $user->save();
-            $this->info("✓ Role ID diset ke: {$superAdminRole->id} ({$superAdminRole->display_name})");
+        $this->info("✓ Role ID diset ke: {$superAdminRole->id} ({$superAdminRole->display_name})");
 
             // Grant all permissions to this role
             $allPermissions = Permission::all();
@@ -93,7 +91,7 @@ class GrantFullAccess extends Command
                 ['User ID', $user->id],
                 ['Nama', $user->name],
                 ['Email', $user->email],
-                ['Role', $user->role],
+                ['Role', $user->roleModel?->display_name ?? 'N/A'],
                 ['Role ID', $user->role_id ?? 'N/A'],
                 ['Status', $user->is_active ? 'Aktif' : 'Tidak Aktif'],
                 ['Menu Access', $allMenus->count() . ' menu'],

@@ -47,7 +47,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
                 <div class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-600">
-                    {{ \App\Models\User::getRoles()[$user->role] ?? $user->role }}
+                    {{ $user->roleModel?->display_name ?? 'N/A' }}
                 </div>
             </div>
 

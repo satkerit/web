@@ -27,10 +27,6 @@ class UserController extends Controller
             });
         }
 
-        if ($request->filled('role')) {
-            $query->where('role', $request->role);
-        }
-
         if ($request->filled('role_id')) {
             $query->where('role_id', $request->role_id);
         }
@@ -45,9 +41,8 @@ class UserController extends Controller
     {
         $this->authorizeCreate('users.create');
 
-        $roles = User::getRoles();
-        $roleModels = Role::getActiveRoles();
-        return view('admin.users.form', compact('roles', 'roleModels'));
+        $roles = Role::getActiveRoles();
+        return view('admin.users.form', compact('roles'));
     }
 
     public function store(Request $request)
@@ -58,19 +53,12 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => 'required|in:super_admin,admin,editor',
-            'role_id' => 'nullable|exists:roles,id',
+            'role_id' => 'required|exists:roles,id',
             'is_active' => 'boolean',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
         $validated['is_active'] = $request->boolean('is_active');
-
-        // Auto-assign role_id based on role if not provided
-        if (empty($validated['role_id'])) {
-            $roleModel = Role::where('name', $validated['role'])->first();
-            $validated['role_id'] = $roleModel?->id;
-        }
 
         User::create($validated);
 
@@ -81,9 +69,8 @@ class UserController extends Controller
     {
         $this->authorizeEdit('users.edit');
 
-        $roles = User::getRoles();
-        $roleModels = Role::getActiveRoles();
-        return view('admin.users.form', compact('user', 'roles', 'roleModels'));
+        $roles = Role::getActiveRoles();
+        return view('admin.users.form', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -94,8 +81,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => ['nullable', 'confirmed', Password::defaults()],
-            'role' => 'required|in:super_admin,admin,editor',
-            'role_id' => 'nullable|exists:roles,id',
+            'role_id' => 'required|exists:roles,id',
             'is_active' => 'boolean',
         ]);
 
@@ -106,12 +92,6 @@ class UserController extends Controller
         }
 
         $validated['is_active'] = $request->boolean('is_active');
-
-        // Auto-assign role_id based on role if not provided
-        if (empty($validated['role_id'])) {
-            $roleModel = Role::where('name', $validated['role'])->first();
-            $validated['role_id'] = $roleModel?->id;
-        }
 
         $user->update($validated);
 
