@@ -10,7 +10,7 @@ import Alpine from "alpinejs";
 import collapse from "@alpinejs/collapse";
 
 // Wait for Livewire to be ready, then register components
-document.addEventListener('livewire:init', () => {
+document.addEventListener("livewire:init", () => {
     // Only register components if Alpine exists and not started
     if (window.Alpine && !window.Alpine._started) {
         window.Alpine.plugin(collapse);
@@ -22,293 +22,343 @@ document.addEventListener('livewire:init', () => {
 function registerAlpineComponents() {
     // Register adminLayout component globally
     window.Alpine.data("adminLayout", () => ({
-    sidebarOpen: false,
-    isMobile: false,
+        sidebarOpen: false,
+        isMobile: false,
 
-    init() {
-        this.checkMobile();
-        window.addEventListener("resize", this.handleResize.bind(this), {
-            passive: true,
-        });
+        init() {
+            this.checkMobile();
+            window.addEventListener("resize", this.handleResize.bind(this), {
+                passive: true,
+            });
 
-        this.$watch("sidebarOpen", (value) => {
-            if (this.isMobile) {
-                document.body.style.overflow = value ? "hidden" : "";
+            this.$watch("sidebarOpen", (value) => {
+                if (this.isMobile) {
+                    document.body.style.overflow = value ? "hidden" : "";
+                }
+            });
+        },
+
+        checkMobile() {
+            this.isMobile = window.innerWidth < 1024;
+        },
+
+        handleResize() {
+            const wasMobile = this.isMobile;
+            this.checkMobile();
+
+            if (wasMobile && !this.isMobile) {
+                this.sidebarOpen = false;
+                document.body.style.overflow = "";
             }
-        });
-    },
+        },
 
-    checkMobile() {
-        this.isMobile = window.innerWidth < 1024;
-    },
+        openSidebar() {
+            this.sidebarOpen = true;
+        },
 
-    handleResize() {
-        const wasMobile = this.isMobile;
-        this.checkMobile();
-
-        if (wasMobile && !this.isMobile) {
+        closeSidebar() {
             this.sidebarOpen = false;
-            document.body.style.overflow = "";
-        }
-    },
+        },
 
-    openSidebar() {
-        this.sidebarOpen = true;
-    },
+        closeSidebarOnMobile() {
+            if (this.isMobile) {
+                this.sidebarOpen = false;
+            }
+        },
+    }));
 
-    closeSidebar() {
-        this.sidebarOpen = false;
-    },
+    // Register productForm component for product pages
+    window.Alpine.data("productForm", () => ({
+        // Add any form-specific logic here
+    }));
 
-    closeSidebarOnMobile() {
-        if (this.isMobile) {
-            this.sidebarOpen = false;
-        }
-    },
-}));
+    // Register permissionManager component for role management pages
+    window.Alpine.data("permissionManager", () => ({
+        init() {
+            // Initialize group states on page load
+            document.querySelectorAll("[data-group]").forEach((checkbox) => {
+                const group = checkbox.dataset.group;
+                this.updateGroupState(group);
+            });
+        },
 
-// Register productForm component for product pages
-window.Alpine.data("productForm", () => ({
-    // Add any form-specific logic here
-}));
+        selectAll() {
+            document
+                .querySelectorAll(".permission-checkbox")
+                .forEach((cb) => (cb.checked = true));
+            this.updateAllGroupStates();
+        },
 
-// Register permissionManager component for role management pages
-window.Alpine.data("permissionManager", () => ({
-    init() {
-        // Initialize group states on page load
-        document.querySelectorAll("[data-group]").forEach((checkbox) => {
-            const group = checkbox.dataset.group;
-            this.updateGroupState(group);
-        });
-    },
+        deselectAll() {
+            document
+                .querySelectorAll(".permission-checkbox")
+                .forEach((cb) => (cb.checked = false));
+            this.updateAllGroupStates();
+        },
 
-    selectAll() {
-        document
-            .querySelectorAll(".permission-checkbox")
-            .forEach((cb) => (cb.checked = true));
-        this.updateAllGroupStates();
-    },
+        toggleGroup(group) {
+            const checkboxes = document.querySelectorAll(
+                `[data-group="${group}"]`,
+            );
+            const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
+            checkboxes.forEach((cb) => (cb.checked = !allChecked));
+        },
 
-    deselectAll() {
-        document
-            .querySelectorAll(".permission-checkbox")
-            .forEach((cb) => (cb.checked = false));
-        this.updateAllGroupStates();
-    },
+        isGroupChecked(group) {
+            const checkboxes = document.querySelectorAll(
+                `[data-group="${group}"]`,
+            );
+            return Array.from(checkboxes).every((cb) => cb.checked);
+        },
 
-    toggleGroup(group) {
-        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-        const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
-        checkboxes.forEach((cb) => (cb.checked = !allChecked));
-    },
+        isGroupIndeterminate(group) {
+            const checkboxes = document.querySelectorAll(
+                `[data-group="${group}"]`,
+            );
+            const checked = Array.from(checkboxes).filter(
+                (cb) => cb.checked,
+            ).length;
+            return checked > 0 && checked < checkboxes.length;
+        },
 
-    isGroupChecked(group) {
-        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-        return Array.from(checkboxes).every((cb) => cb.checked);
-    },
+        getGroupCount(group) {
+            const checkboxes = document.querySelectorAll(
+                `[data-group="${group}"]`,
+            );
+            const checked = Array.from(checkboxes).filter(
+                (cb) => cb.checked,
+            ).length;
+            return `${checked}/${checkboxes.length}`;
+        },
 
-    isGroupIndeterminate(group) {
-        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-        const checked = Array.from(checkboxes).filter(
-            (cb) => cb.checked,
-        ).length;
-        return checked > 0 && checked < checkboxes.length;
-    },
+        updateGroupState(group) {
+            // Force Alpine to re-evaluate
+            this.$nextTick(() => {});
+        },
 
-    getGroupCount(group) {
-        const checkboxes = document.querySelectorAll(`[data-group="${group}"]`);
-        const checked = Array.from(checkboxes).filter(
-            (cb) => cb.checked,
-        ).length;
-        return `${checked}/${checkboxes.length}`;
-    },
-
-    updateGroupState(group) {
-        // Force Alpine to re-evaluate
-        this.$nextTick(() => {});
-    },
-
-    updateAllGroupStates() {
-        const groups = [
-            ...new Set(
-                Array.from(document.querySelectorAll("[data-group]")).map(
-                    (cb) => cb.dataset.group,
+        updateAllGroupStates() {
+            const groups = [
+                ...new Set(
+                    Array.from(document.querySelectorAll("[data-group]")).map(
+                        (cb) => cb.dataset.group,
+                    ),
                 ),
-            ),
-        ];
-        groups.forEach((group) => this.updateGroupState(group));
-    },
-}));
+            ];
+            groups.forEach((group) => this.updateGroupState(group));
+        },
+    }));
 
-// Register repeaterField component for dynamic form fields
-window.Alpine.data("repeaterField", (initialData = []) => ({
-    items: [],
+    // Register repeaterField component for dynamic form fields
+    window.Alpine.data("repeaterField", (initialData = []) => ({
+        items: [],
 
-    init() {
-        const data = Array.isArray(initialData) ? initialData : [];
-        this.items = data.map((value) => ({
-            value: value || "",
-            id:
-                crypto.randomUUID?.() ||
-                Math.random().toString(36).slice(2, 11),
-        }));
+        init() {
+            const data = Array.isArray(initialData) ? initialData : [];
+            this.items = data.map((value) => ({
+                value: value || "",
+                id:
+                    crypto.randomUUID?.() ||
+                    Math.random().toString(36).slice(2, 11),
+            }));
 
-        if (this.items.length === 0) {
-            this.addItem();
-        }
-    },
+            if (this.items.length === 0) {
+                this.addItem();
+            }
+        },
 
-    addItem() {
-        this.items.push({
-            value: "",
-            id:
-                crypto.randomUUID?.() ||
-                Math.random().toString(36).slice(2, 11),
-        });
-    },
+        addItem() {
+            this.items.push({
+                value: "",
+                id:
+                    crypto.randomUUID?.() ||
+                    Math.random().toString(36).slice(2, 11),
+            });
+        },
 
-    removeItem(index) {
-        if (this.items.length > 1) {
-            this.items.splice(index, 1);
-        }
-    },
-}));
+        removeItem(index) {
+            if (this.items.length > 1) {
+                this.items.splice(index, 1);
+            }
+        },
+    }));
 
-// Register imagePicker component for image upload with storage browser
-window.Alpine.data("imagePicker", (config = {}) => ({
-    showModal: false,
-    loading: false,
-    currentPath: "",
-    items: [],
-    breadcrumbs: [],
-    selectedItem: null,
-    previewUrl: config.initialPreview || "",
-    fromStorage: false,
-    storagePath: "",
-    inputId: config.inputId || "",
-    hasExistingImage: config.hasExistingImage || false,
-    shouldDelete: false,
+    // Register imagePicker component for image upload with storage browser
+    window.Alpine.data("imagePicker", (config = {}) => ({
+        showModal: false,
+        loading: false,
+        currentPath: "",
+        items: [],
+        breadcrumbs: [],
+        selectedItem: null,
+        previewUrl: config.initialPreview || "",
+        fromStorage: false,
+        storagePath: "",
+        inputId: config.inputId || "",
+        hasExistingImage: config.hasExistingImage || false,
+        shouldDelete: false,
 
-    handleFileSelect(event) {
-        const file = event.target.files[0];
-        if (file) {
-            this.previewUrl = URL.createObjectURL(file);
+        handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.previewUrl = URL.createObjectURL(file);
+                this.fromStorage = false;
+                this.storagePath = "";
+                this.shouldDelete = false; // Reset delete flag when new file is selected
+            }
+        },
+
+        clearSelection() {
+            this.previewUrl = "";
             this.fromStorage = false;
             this.storagePath = "";
-            this.shouldDelete = false; // Reset delete flag when new file is selected
-        }
-    },
-
-    clearSelection() {
-        this.previewUrl = "";
-        this.fromStorage = false;
-        this.storagePath = "";
-        // Set shouldDelete to true if there was an existing image
-        if (this.hasExistingImage) {
-            this.shouldDelete = true;
-        }
-        if (this.inputId) {
-            const input = document.getElementById(this.inputId);
-            if (input) input.value = "";
-        }
-    },
-
-    openStorageModal() {
-        this.showModal = true;
-        this.selectedItem = null;
-        this.loadDirectory("");
-    },
-
-    closeStorageModal() {
-        this.showModal = false;
-    },
-
-    async loadDirectory(path) {
-        this.loading = true;
-        this.currentPath = path;
-        this.updateBreadcrumbs(path);
-
-        try {
-            const csrfToken = document.querySelector(
-                'meta[name="csrf-token"]',
-            )?.content;
-            const response = await fetch(
-                `/admin/storage/api/browse?path=${encodeURIComponent(path)}`,
-                {
-                    credentials: "same-origin",
-                    headers: {
-                        Accept: "application/json",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": csrfToken || "",
-                    },
-                },
-            );
-
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-            const data = await response.json();
-            this.items = data.items.filter(
-                (item) => item.type === "folder" || item.isImage,
-            );
-        } catch (error) {
-            console.error("Error loading directory:", error);
-            this.items = [];
-        }
-
-        this.loading = false;
-    },
-
-    navigateTo(path) {
-        this.selectedItem = null;
-        this.loadDirectory(path);
-    },
-
-    updateBreadcrumbs(path) {
-        if (!path) {
-            this.breadcrumbs = [];
-            return;
-        }
-
-        let currentPath = "";
-        this.breadcrumbs = path.split("/").map((part) => {
-            currentPath = currentPath ? `${currentPath}/${part}` : part;
-            return { name: part, path: currentPath };
-        });
-    },
-
-    selectImage(item) {
-        if (item.type === "file" && item.isImage) {
-            this.selectedItem = item;
-        }
-    },
-
-    confirmSelection() {
-        if (this.selectedItem) {
-            this.previewUrl = this.selectedItem.url;
-            this.fromStorage = true;
-            this.storagePath = this.selectedItem.path;
-            this.shouldDelete = false; // Reset delete flag when selecting from storage
+            // Set shouldDelete to true if there was an existing image
+            if (this.hasExistingImage) {
+                this.shouldDelete = true;
+            }
             if (this.inputId) {
                 const input = document.getElementById(this.inputId);
                 if (input) input.value = "";
             }
-            this.closeStorageModal();
-        }
-    },
-}));
+        },
 
-// Register reportForm component for report pages
-window.Alpine.data("reportForm", (initialPostingMode = "auto") => ({
-    postingMode: initialPostingMode,
-}));
+        openStorageModal() {
+            this.showModal = true;
+            this.selectedItem = null;
+            this.loadDirectory("");
+        },
 
-// Register auctionForm component for auction pages
-window.Alpine.data("auctionForm", (initialStatus = "upcoming") => ({
-    status: initialStatus,
-}));
+        closeStorageModal() {
+            this.showModal = false;
+        },
 
-// Register mapPicker component for office location picker
-window.Alpine.data("mapPicker", (initialLat = "", initialLng = "") => ({
+        async loadDirectory(path) {
+            this.loading = true;
+            this.currentPath = path;
+            this.updateBreadcrumbs(path);
+
+            try {
+                const csrfToken = document.querySelector(
+                    'meta[name="csrf-token"]',
+                )?.content;
+                const response = await fetch(
+                    `/admin/storage/api/browse?path=${encodeURIComponent(path)}`,
+                    {
+                        credentials: "same-origin",
+                        headers: {
+                            Accept: "application/json",
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRF-TOKEN": csrfToken || "",
+                        },
+                    },
+                );
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorMessage = `HTTP ${response.status}`;
+
+                    try {
+                        const errorData = JSON.parse(errorText);
+                        errorMessage =
+                            errorData.message ||
+                            errorData.error ||
+                            errorMessage;
+                    } catch (e) {
+                        // If not JSON, use status text
+                        errorMessage = response.statusText || errorMessage;
+                    }
+
+                    throw new Error(errorMessage);
+                }
+
+                const data = await response.json();
+                this.items = data.items.filter(
+                    (item) => item.type === "folder" || item.isImage,
+                );
+            } catch (error) {
+                console.error("Error loading directory:", error);
+
+                // Show user-friendly error message
+                const errorMessage = error.message || "Unknown error occurred";
+                if (
+                    errorMessage.includes("401") ||
+                    errorMessage.includes("Authentication")
+                ) {
+                    alert(
+                        "Session expired. Please refresh the page and login again.",
+                    );
+                } else if (
+                    errorMessage.includes("403") ||
+                    errorMessage.includes("Access")
+                ) {
+                    alert(
+                        "Access denied. You do not have permission to browse storage.",
+                    );
+                } else if (
+                    errorMessage.includes("404") ||
+                    errorMessage.includes("not found")
+                ) {
+                    alert("Directory not found: " + path);
+                } else {
+                    alert("Error loading directory: " + errorMessage);
+                }
+
+                this.items = [];
+            }
+
+            this.loading = false;
+        },
+
+        navigateTo(path) {
+            this.selectedItem = null;
+            this.loadDirectory(path);
+        },
+
+        updateBreadcrumbs(path) {
+            if (!path) {
+                this.breadcrumbs = [];
+                return;
+            }
+
+            let currentPath = "";
+            this.breadcrumbs = path.split("/").map((part) => {
+                currentPath = currentPath ? `${currentPath}/${part}` : part;
+                return { name: part, path: currentPath };
+            });
+        },
+
+        selectImage(item) {
+            if (item.type === "file" && item.isImage) {
+                this.selectedItem = item;
+            }
+        },
+
+        confirmSelection() {
+            if (this.selectedItem) {
+                this.previewUrl = this.selectedItem.url;
+                this.fromStorage = true;
+                this.storagePath = this.selectedItem.path;
+                this.shouldDelete = false; // Reset delete flag when selecting from storage
+                if (this.inputId) {
+                    const input = document.getElementById(this.inputId);
+                    if (input) input.value = "";
+                }
+                this.closeStorageModal();
+            }
+        },
+    }));
+
+    // Register reportForm component for report pages
+    window.Alpine.data("reportForm", (initialPostingMode = "auto") => ({
+        postingMode: initialPostingMode,
+    }));
+
+    // Register auctionForm component for auction pages
+    window.Alpine.data("auctionForm", (initialStatus = "upcoming") => ({
+        status: initialStatus,
+    }));
+
+    // Register mapPicker component for office location picker
+    window.Alpine.data("mapPicker", (initialLat = "", initialLng = "") => ({
         latitude: initialLat,
         longitude: initialLng,
 
@@ -333,7 +383,7 @@ window.Alpine.data("mapPicker", (initialLat = "", initialLng = "") => ({
             return `https://www.google.com/maps/dir/?api=1&destination=${this.latitude},${this.longitude}`;
         },
 
-updateMap() {
+        updateMap() {
             // Map updates automatically via Alpine.js reactivity
         },
     }));

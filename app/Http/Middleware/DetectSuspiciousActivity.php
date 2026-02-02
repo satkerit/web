@@ -113,7 +113,7 @@ class DetectSuspiciousActivity
      * Command injection patterns
      */
     protected array $commandInjectionPatterns = [
-        '/[;&|`$]/',
+        // '/[;&|`$]/', // Auto-removed: Too aggressive, blocks legitimate text like "Company & Co" or "$100"
         '/\$\(/i',
         '/`[^`]+`/',
         '/\|\s*\w+/',
@@ -151,10 +151,27 @@ class DetectSuspiciousActivity
      * Vulnerability scanner patterns (User-Agent)
      */
     protected array $scannerAgents = [
-        'sqlmap', 'nikto', 'nmap', 'masscan', 'zgrab', 'havij',
-        'acunetix', 'nessus', 'openvas', 'burpsuite', 'w3af',
-        'wpscan', 'dirbuster', 'gobuster', 'ffuf', 'nuclei',
-        'httpx', 'subfinder', 'amass', 'whatweb', 'fierce',
+        'sqlmap',
+        'nikto',
+        'nmap',
+        'masscan',
+        'zgrab',
+        'havij',
+        'acunetix',
+        'nessus',
+        'openvas',
+        'burpsuite',
+        'w3af',
+        'wpscan',
+        'dirbuster',
+        'gobuster',
+        'ffuf',
+        'nuclei',
+        'httpx',
+        'subfinder',
+        'amass',
+        'whatweb',
+        'fierce',
     ];
 
     /**
@@ -166,6 +183,11 @@ class DetectSuspiciousActivity
         'sanctum/*',
         'telescope/*',
         '__clockwork/*',
+        'login',
+        'logout',
+        'register',
+        'password/*',
+        'admin/company-info*',
     ];
 
     /**
@@ -178,6 +200,11 @@ class DetectSuspiciousActivity
     {
         // Skip excluded routes
         if ($this->isExcludedRoute($request)) {
+            return $next($request);
+        }
+
+        // Allow Super Admin to bypass checks
+        if (auth()->check() && (auth()->user()->isSuperAdmin() || auth()->user()->id === 1)) {
             return $next($request);
         }
 

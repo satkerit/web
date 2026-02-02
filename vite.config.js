@@ -10,6 +10,7 @@ export default defineConfig({
                 "resources/css/frontend-fixes.css",
                 "resources/js/app.js",
                 "resources/js/admin.js",
+                "resources/js/alpine-components.js",
                 "resources/js/pagination-fix.js",
                 "resources/js/quill-editor.js",
                 "resources/js/idle-timeout.js",

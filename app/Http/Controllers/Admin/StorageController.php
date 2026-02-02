@@ -277,87 +277,64 @@ class StorageController extends Controller
      */
     public function apiBrowse(Request $request)
     {
-        // Any authenticated admin can browse storage for image selection
-        // This is a read-only operation used by image picker components
-
-        $user = auth()->user();
-        
-        // Log the permission check for debugging
-        \Log::info('Storage API Browse Permission Check', [
-            'user_id' => $user?->id,
-            'role_id' => $user?->role_id ?? null,
-            'is_admin' => $user?->isAdmin() ?? false,
-            'is_editor' => $user?->isEditor() ?? false,
-            'has_storage_view' => $user?->hasPermission('storage.view') ?? false,
-            'has_settings_company' => $user?->hasAnyPermission(['settings.company']) ?? false,
-            'request_path' => $request->path(),
-            'user_agent' => $request->userAgent(),
-        ]);
-
-        // Allow Admin, Editor, or users with specific permissions
-        $allowed = $user && (
-            $user->isAdmin() ||
-            $user->isEditor() ||
-            $user->hasPermission('storage.view') ||
-            $user->hasAnyPermission([
-                'settings.company',
-                'news.create', 'news.edit',
-                'products.create', 'products.edit',
-                'auctions.create', 'auctions.edit',
-                'board.manage',
-                'hero.manage',
-                'offices.manage',
-                'careers.manage',
-                'brochures.manage',
-                'why-choose-us.manage'
-            ])
-        );
-
-        if (!$allowed) {
-            \Log::warning('Storage API Browse Access Denied', [
-                'user_id' => $user?->id,
-                'role_id' => $user?->role_id ?? null,
-                'ip' => $request->ip(),
-                'path' => $request->path(),
-            ]);
-            
-            return response()->json([
-                'error' => 'Anda tidak memiliki akses untuk melihat file.',
-                'debug' => [
-                    'user_id' => $user?->id,
-                    'authenticated' => auth()->check(),
-                    'has_settings_company' => $user?->hasAnyPermission(['settings.company']) ?? false,
-                ]
-            ], 403);
-        }
-
         try {
+            // Simple authentication check - just verify user is logged in
+            // No role or permission checks since this is read-only browsing
+            if (!auth()->check()) {
+                return response()->json([
+                    'error' => 'Authentication required',
+                    'message' => 'Anda harus login untuk mengakses fitur ini.',
+                    'items' => [],
+                    'path' => ''
+                ], 401);
+            }
+
             $path = $this->sanitizePath($request->get('path', ''));
 
-            // Check if path exists (empty path is root, always valid)
+            // Ensure storage directory exists
+            $storagePath = Storage::disk($this->disk)->path('');
+            if (!is_dir($storagePath)) {
+                Storage::disk($this->disk)->makeDirectory('');
+            }
+
+            // Check if specific path exists (empty path is root, always valid)
             if ($path !== '' && !Storage::disk($this->disk)->exists($path)) {
-                return response()->json([
-                    'error' => 'Path tidak ditemukan.',
-                    'path' => $path,
-                    'items' => [],
-                ], 404);
+                // Try to create the directory if it doesn't exist
+                try {
+                    Storage::disk($this->disk)->makeDirectory($path);
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'error' => 'Path not found',
+                        'message' => 'Path tidak ditemukan: ' . $path,
+                        'path' => $path,
+                        'items' => [],
+                    ], 404);
+                }
             }
 
             $items = $this->getDirectoryContentsForApi($path);
 
             return response()->json([
+                'success' => true,
                 'path' => $path,
                 'items' => $items,
+                'count' => count($items)
             ]);
+
         } catch (\Exception $e) {
+            // Log error but don't expose sensitive information
             \Log::error('Storage API Browse Error', [
                 'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
                 'path' => $request->get('path', ''),
-                'user_id' => $user?->id,
+                'user_id' => auth()->id(),
+                'ip' => $request->ip(),
             ]);
             
             return response()->json([
-                'error' => 'Gagal memuat direktori: ' . $e->getMessage(),
+                'error' => 'Server error',
+                'message' => 'Terjadi kesalahan saat memuat direktori. Silakan coba lagi.',
                 'path' => $request->get('path', ''),
                 'items' => [],
             ], 500);

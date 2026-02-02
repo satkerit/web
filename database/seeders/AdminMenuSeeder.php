@@ -20,8 +20,9 @@ class AdminMenuSeeder extends Seeder
             ['key' => 'hero-slides', 'name' => 'Slides', 'route' => 'admin.hero-slides.index', 'section' => 'Konten', 'order' => 10],
             ['key' => 'news', 'name' => 'Berita', 'route' => 'admin.news.index', 'section' => 'Konten', 'order' => 11],
             ['key' => 'products', 'name' => 'Produk', 'route' => 'admin.products.index', 'section' => 'Konten', 'order' => 12],
-            ['key' => 'auctions', 'name' => 'Lelang Agunan', 'route' => 'admin.auctions.index', 'section' => 'Konten', 'order' => 13],
-            ['key' => 'reports', 'name' => 'Laporan', 'route' => 'admin.reports.index', 'section' => 'Konten', 'order' => 14],
+            ['key' => 'brochures', 'name' => 'Brosur Pembiayaan', 'route' => 'admin.brochures.index', 'section' => 'Konten', 'order' => 13],
+            ['key' => 'auctions', 'name' => 'Lelang Agunan', 'route' => 'admin.auctions.index', 'section' => 'Konten', 'order' => 14],
+            ['key' => 'reports', 'name' => 'Laporan', 'route' => 'admin.reports.index', 'section' => 'Konten', 'order' => 15],
 
             // Perusahaan
             ['key' => 'company-info', 'name' => 'Profil Perusahaan', 'route' => 'admin.company-info.edit', 'section' => 'Perusahaan', 'order' => 20],

@@ -15,6 +15,11 @@ trait AuthorizesAdminActions
             return;
         }
 
+        // Admin role has access to most settings including company info
+        if ($user->isAdmin() && str_starts_with($permission, 'settings.')) {
+            return;
+        }
+
         if (!$user->hasPermission($permission)) {
             if (request()->expectsJson()) {
                 abort(403, 'Anda tidak memiliki akses untuk melihat halaman ini.');
@@ -50,6 +55,11 @@ trait AuthorizesAdminActions
             return;
         }
 
+        // Admin role has access to most settings including company info
+        if ($user->isAdmin() && str_starts_with($permission, 'settings.')) {
+            return;
+        }
+
         if (!$user->hasPermission($permission)) {
             if (request()->expectsJson()) {
                 abort(403, 'Anda tidak memiliki akses untuk mengedit data.');
@@ -66,6 +76,11 @@ trait AuthorizesAdminActions
         $user = auth()->user();
 
         if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        // Admin role has access to most settings including company info
+        if ($user->isAdmin() && str_starts_with($permission, 'settings.')) {
             return;
         }
 

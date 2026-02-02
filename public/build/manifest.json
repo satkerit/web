@@ -46,7 +46,7 @@
     ]
   },
   "resources/css/admin.css": {
-    "file": "assets/css/admin-BCFvoJfT.css",
+    "file": "assets/css/admin-Dgz2x73Z.css",
     "src": "resources/css/admin.css",
     "isEntry": true,
     "name": "admin",
@@ -55,7 +55,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/css/app-SDatxjYW.css",
+    "file": "assets/css/app-BG3BEw1i.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -73,7 +73,7 @@
     ]
   },
   "resources/js/admin.js": {
-    "file": "assets/js/admin-DKeB8cfT.js",
+    "file": "assets/js/admin-DG16Ikq7.js",
     "name": "admin",
     "src": "resources/js/admin.js",
     "isEntry": true,
@@ -85,6 +85,12 @@
     "dynamicImports": [
       "node_modules/sweetalert2/dist/sweetalert2.esm.all.js"
     ]
+  },
+  "resources/js/alpine-components.js": {
+    "file": "assets/js/alpine-components-DZDipnRz.js",
+    "name": "alpine-components",
+    "src": "resources/js/alpine-components.js",
+    "isEntry": true
   },
   "resources/js/app.js": {
     "file": "assets/js/app-lPwRVB49.js",

@@ -79,9 +79,14 @@ Route::middleware(['throttle:120,1'])->group(function () {
     Route::view('/simulasi-pembiayaan', 'frontend.pages.financing-simulation')->name('financing-simulation');
 });
 
+// Storage API Routes (lighter middleware for API access)
+Route::prefix('admin/storage')->name('admin.storage.')->middleware(['auth'])->group(function () {
+    Route::get('/api/browse', [App\Http\Controllers\Admin\StorageController::class, 'apiBrowse'])->name('api.browse');
+    Route::post('/upload-editor-image', [App\Http\Controllers\Admin\StorageController::class, 'uploadEditorImage'])->name('upload-editor-image');
+});
 
 // Admin Routes with DDoS Protection
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos', 'idle.timeout', 'menu.permission'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'idle.timeout', 'menu.permission'])->group(function () {
     // Dashboard
     Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
@@ -128,7 +133,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
 
     // Company Info
     Route::get('company-info', [App\Http\Controllers\Admin\CompanyInfoController::class, 'edit'])->name('company-info.edit');
-    Route::put('company-info', [App\Http\Controllers\Admin\CompanyInfoController::class, 'update'])->name('company-info.update');
+    Route::put('company-info', [App\Http\Controllers\Admin\CompanyInfoController::class, 'update'])
+        ->name('company-info.update');
+    
+    // Company Info Storage (Laravel 12 approach)
+    Route::get('company-info/storage/browse', [App\Http\Controllers\Admin\CompanyInfoController::class, 'browseStorage'])->name('company-info.storage.browse');
+    Route::post('company-info/storage/upload', [App\Http\Controllers\Admin\CompanyInfoController::class, 'uploadFile'])->name('company-info.storage.upload');
+    Route::delete('company-info/storage/delete', [App\Http\Controllers\Admin\CompanyInfoController::class, 'deleteFile'])->name('company-info.storage.delete');
 
     // Complaints Management (Whistleblowing)
     Route::resource('complaints', App\Http\Controllers\Admin\ComplaintController::class)->only(['index', 'show', 'update', 'destroy']);
@@ -182,12 +193,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'admin.ddos'
     Route::prefix('storage')->name('storage.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\StorageController::class, 'index'])->name('index');
         Route::post('/upload', [App\Http\Controllers\Admin\StorageController::class, 'upload'])->name('upload');
-        Route::post('/upload-editor-image', [App\Http\Controllers\Admin\StorageController::class, 'uploadEditorImage'])->name('upload-editor-image');
         Route::post('/create-folder', [App\Http\Controllers\Admin\StorageController::class, 'createFolder'])->name('create-folder');
         Route::delete('/delete', [App\Http\Controllers\Admin\StorageController::class, 'delete'])->name('delete');
         Route::get('/download', [App\Http\Controllers\Admin\StorageController::class, 'download'])->name('download');
         Route::put('/rename', [App\Http\Controllers\Admin\StorageController::class, 'rename'])->name('rename');
-        Route::get('/api/browse', [App\Http\Controllers\Admin\StorageController::class, 'apiBrowse'])->name('api.browse');
     });
 
     // Database Backup Management

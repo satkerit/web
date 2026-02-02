@@ -36,7 +36,7 @@
 
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    @vite(['resources/css/admin.css', 'resources/js/admin.js', 'resources/js/idle-timeout.js'])
+    @vite(['resources/css/admin.css', 'resources/js/alpine-components.js', 'resources/js/admin.js', 'resources/js/idle-timeout.js'])
     @livewireStyles
     @stack('styles')
     <style>

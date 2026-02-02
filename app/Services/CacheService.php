@@ -27,6 +27,12 @@ class CacheService
      */
     public static function getCompanyInfo(): ?CompanyInfo
     {
+        // Clear cache if it might be stale (doesn't have profile_image)
+        $cached = Cache::get('company_info');
+        if ($cached && !array_key_exists('profile_image', $cached->getAttributes())) {
+            Cache::forget('company_info');
+        }
+        
         return Cache::remember('company_info', self::CACHE_LONG, fn() => CompanyInfo::first());
     }
 

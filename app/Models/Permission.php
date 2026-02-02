@@ -2,16 +2,31 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Permission extends Model
 {
+    use Auditable;
+
+    protected static function getAuditModelName(): string
+    {
+        return 'Permission';
+    }
+
     protected $fillable = [
         'name',
         'display_name',
-        'group',
         'description',
+        'group',
+        'is_system',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_system' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function roles(): BelongsToMany
@@ -20,27 +35,12 @@ class Permission extends Model
             ->withTimestamps();
     }
 
-    public static function getGrouped()
+    public static function getGroupedPermissions()
     {
-        return static::orderBy('group')->orderBy('display_name')->get()->groupBy('group');
-    }
-
-    public static function getGroups(): array
-    {
-        return [
-            'dashboard' => 'Dashboard',
-            'users' => 'Manajemen Pengguna',
-            'roles' => 'Manajemen Role',
-            'content' => 'Konten',
-            'news' => 'Berita',
-            'products' => 'Produk',
-            'auctions' => 'Lelang',
-            'reports' => 'Laporan',
-            'offices' => 'Kantor',
-            'careers' => 'Karir',
-            'complaints' => 'Pengaduan',
-            'settings' => 'Pengaturan',
-            'audit' => 'Audit & Log',
-        ];
+        return static::where('is_active', true)
+            ->orderBy('group')
+            ->orderBy('display_name')
+            ->get()
+            ->groupBy('group');
     }
 }

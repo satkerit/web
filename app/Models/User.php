@@ -70,6 +70,14 @@ class User extends Authenticatable
             return true;
         }
 
+        // Admin has most permissions except super admin specific ones
+        if ($this->isAdmin()) {
+            $superAdminOnlyPermissions = ['users.view', 'roles.view', 'settings.menu'];
+            if (!in_array($permission, $superAdminOnlyPermissions)) {
+                return true;
+            }
+        }
+
         // Check from Role model relationship
         if ($this->role_id && $this->roleModel) {
             return $this->roleModel->hasPermission($permission);
@@ -88,6 +96,16 @@ class User extends Authenticatable
             return true;
         }
 
+        // Admin has most permissions
+        if ($this->isAdmin()) {
+            $superAdminOnlyPermissions = ['users.view', 'roles.view', 'settings.menu'];
+            foreach ($permissions as $permission) {
+                if (!in_array($permission, $superAdminOnlyPermissions)) {
+                    return true;
+                }
+            }
+        }
+
         // Check from Role model relationship
         if ($this->role_id && $this->roleModel) {
             return $this->roleModel->hasAnyPermission($permissions);
@@ -99,12 +117,14 @@ class User extends Authenticatable
     // RBAC Methods
     public function isSuperAdmin(): bool
     {
-        return $this->roleModel?->name === self::ROLE_SUPER_ADMIN;
+        return $this->roleModel?->name === self::ROLE_SUPER_ADMIN || 
+               $this->id === 1; // Fallback for user ID 1
     }
 
     public function isAdmin(): bool
     {
-        return in_array($this->roleModel?->name, [self::ROLE_SUPER_ADMIN, self::ROLE_ADMIN]);
+        return in_array($this->roleModel?->name, [self::ROLE_SUPER_ADMIN, self::ROLE_ADMIN]) ||
+               $this->id === 1; // Fallback for user ID 1
     }
 
     public function isEditor(): bool

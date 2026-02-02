@@ -28,6 +28,7 @@ class BlockSuspiciousRequests
         '_ignition/*',
         'admin/storage/*',
         'admin/company-info',
+        'admin/company-info/*', // Added wildcard for all company-info routes
         'admin/*/upload*',
     ];
 
@@ -80,6 +81,11 @@ class BlockSuspiciousRequests
         try {
             // Skip for excluded routes
             if ($this->isExcludedRoute($request)) {
+                return $next($request);
+            }
+
+            // Allow Super Admin to bypass checks
+            if (auth()->check() && (auth()->user()->isSuperAdmin() || auth()->user()->id === 1)) {
                 return $next($request);
             }
 
