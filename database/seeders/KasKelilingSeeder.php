@@ -5,12 +5,18 @@ namespace Database\Seeders;
 use App\Models\KasKeliling;
 use App\Models\KasKelilingSchedule;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
 class KasKelilingSeeder extends Seeder
 {
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        KasKelilingSchedule::truncate();
+        KasKeliling::truncate();
+        Schema::enableForeignKeyConstraints();
+
         // Data Kas Keliling
         $kasKelilingData = [
             [
@@ -157,10 +163,10 @@ class KasKelilingSeeder extends Seeder
             // Create schedules for next 4 weeks
             foreach ($schedules as $scheduleData) {
                 $dayName = $scheduleData['day'];
-                
+
                 // Get next 4 occurrences of this day
                 $startDate = Carbon::now()->startOfDay();
-                
+
                 for ($week = 0; $week < 4; $week++) {
                     // Find next occurrence of this day
                     if ($week == 0) {
@@ -170,7 +176,7 @@ class KasKelilingSeeder extends Seeder
                         // For subsequent weeks, add weeks
                         $date = Carbon::now()->next($dayName)->addWeeks($week);
                     }
-                    
+
                     // Skip if date is in the past
                     if ($date->isPast()) {
                         continue;

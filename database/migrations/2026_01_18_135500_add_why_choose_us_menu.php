@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use App\Models\AdminMenu;
 use App\Models\AdminMenuPermission;
 
@@ -26,15 +27,7 @@ return new class extends Migration
             'is_active' => true,
         ]);
 
-        // Add default permissions for roles (Super Admin, Admin)
-        $roles = ['super_admin', 'admin'];
-        foreach ($roles as $role) {
-            AdminMenuPermission::create([
-                'admin_menu_id' => $menu->id,
-                'role' => $role,
-                'can_access' => true,
-            ]);
-        }
+        // Permissions will be handled by AdminMenuSeeder
 
         // Clear cache
         AdminMenu::clearCache();

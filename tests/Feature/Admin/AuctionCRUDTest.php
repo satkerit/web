@@ -28,10 +28,7 @@ class AuctionCRUDTest extends TestCase
         ]);
 
         // Create admin user
-        $this->admin = User::factory()->create([
-            'role' => 'super_admin',
-            'is_active' => true,
-        ]);
+        $this->admin = $this->createSuperAdmin();
 
         Storage::fake('public');
     }

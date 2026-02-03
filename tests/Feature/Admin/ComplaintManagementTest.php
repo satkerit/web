@@ -19,12 +19,7 @@ class ComplaintManagementTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->create([
-            'email' => 'admin@test.com',
-            'password' => bcrypt('password'),
-            'role' => 'admin',
-            'is_active' => true,
-        ]);
+        $this->admin = $this->createAdmin();
     }
 
     #[Test]

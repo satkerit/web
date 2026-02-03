@@ -9,6 +9,9 @@ class AuctionSeeder extends Seeder
 {
     public function run(): void
     {
+        // Truncate the table first to prevent duplicates
+        Auction::truncate();
+
         // Create regular auctions
         Auction::factory(15)->create();
 

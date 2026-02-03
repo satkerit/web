@@ -86,13 +86,12 @@ Route::prefix('admin/storage')->name('admin.storage.')->middleware(['auth'])->gr
 });
 
 // Admin Routes with DDoS Protection
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'idle.timeout', 'menu.permission'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeout', 'menu.permission'])->group(function () {
     // Dashboard
     Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // News Management
-    Route::resource('news', App\Http\Controllers\Admin\NewsControllerSecure::class);
-    Route::delete('news/image/{image}', [App\Http\Controllers\Admin\NewsControllerSecure::class, 'destroyImage'])->name('news.delete-image');
+    Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
 
     // Products Management
     Route::resource('products', App\Http\Controllers\Admin\ProductController::class);

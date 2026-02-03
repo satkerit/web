@@ -43,12 +43,11 @@ class GrantFullAccess extends Command
         $user->save();
         $this->info("✓ Role ID diset ke: {$superAdminRole->id} ({$superAdminRole->display_name})");
 
-            // Grant all permissions to this role
-            $allPermissions = Permission::all();
-            if ($allPermissions->count() > 0) {
-                $superAdminRole->syncPermissions($allPermissions->pluck('id')->toArray());
-                $this->info("✓ Semua permissions ({$allPermissions->count()}) diberikan ke role super_admin");
-            }
+        // Grant all permissions to this role
+        $allPermissions = Permission::all();
+        if ($allPermissions->count() > 0) {
+            $superAdminRole->syncPermissions($allPermissions->pluck('id')->toArray());
+            $this->info("✓ Semua permissions ({$allPermissions->count()}) diberikan ke role super_admin");
         }
 
         // 4. Set all AdminMenuPermission for super_admin
@@ -65,7 +64,7 @@ class GrantFullAccess extends Command
                 AdminMenuPermission::updateOrCreate(
                     [
                         'admin_menu_id' => $menu->id,
-                        'role' => 'super_admin',
+                        'role_id' => $superAdminRole->id,
                     ],
                     [
                         'can_access' => true,

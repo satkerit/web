@@ -23,11 +23,11 @@ return new class extends Migration
         Schema::create('admin_menu_permissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('admin_menu_id')->constrained()->onDelete('cascade');
-            $table->string('role'); // super_admin, admin, editor
+            $table->unsignedBigInteger('role_id');
             $table->boolean('can_access')->default(true);
             $table->timestamps();
 
-            $table->unique(['admin_menu_id', 'role']);
+            $table->unique(['admin_menu_id', 'role_id']);
         });
     }
 

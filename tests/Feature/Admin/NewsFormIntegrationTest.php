@@ -23,18 +23,8 @@ class NewsFormIntegrationTest extends TestCase
 
         Storage::fake('public');
 
-        // Create super admin role
-        $role = Role::create([
-            'name' => 'super_admin',
-            'display_name' => 'Super Admin',
-            'description' => 'Super Administrator'
-        ]);
-
-        // Create user with super admin role
-        $this->user = User::factory()->create([
-            'role_id' => $role->id,
-            'role' => 'super_admin'
-        ]);
+        // Use helper from TestCase or find existing role
+        $this->user = $this->createSuperAdmin();
     }
 
     #[Test]

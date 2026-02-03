@@ -68,13 +68,18 @@ class FixKasKelilingMenu extends Command
             $this->error('No permissions found! Creating permissions...');
             
             $roles = ['super_admin', 'admin', 'editor'];
-            foreach ($roles as $role) {
-                AdminMenuPermission::create([
-                    'admin_menu_id' => $menu->id,
-                    'role' => $role,
-                    'can_access' => true
-                ]);
-                $this->line('   ✅ Created permission for: ' . $role);
+            foreach ($roles as $roleName) {
+                $role = \App\Models\Role::where('name', $roleName)->first();
+                if ($role) {
+                    AdminMenuPermission::create([
+                        'admin_menu_id' => $menu->id,
+                        'role_id' => $role->id,
+                        'can_access' => true
+                    ]);
+                    $this->line('   ✅ Created permission for: ' . $roleName);
+                } else {
+                    $this->error('   ❌ Role not found: ' . $roleName);
+                }
             }
         } else {
             $this->info('✅ Permissions found:');

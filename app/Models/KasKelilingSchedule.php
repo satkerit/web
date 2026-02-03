@@ -23,22 +23,29 @@ class KasKelilingSchedule extends Model
     protected $table = 'kas_keliling_schedules';
 
     protected $fillable = [
+        'kas_keliling_id',
         'schedule_date',
         'day_name',
         'start_time',
         'end_time',
         'location',
-        'facility',
-        'pic_name',
-        'pic_phone',
+        'route',
+        'services_offered',
         'notes',
         'is_active'
     ];
 
     protected $casts = [
         'schedule_date' => 'date',
+        'route' => 'array',
+        'services_offered' => 'array',
         'is_active' => 'boolean'
     ];
+
+    public function kasKeliling()
+    {
+        return $this->belongsTo(KasKeliling::class);
+    }
 
     // Scopes
     public function scopeActive($query)

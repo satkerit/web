@@ -165,7 +165,7 @@
                         @endif
                         @if($selectedProduct->description)
                             <div class="prose prose-sm max-w-none text-gray-600">
-                                {!! $selectedProduct->description !!}
+                                {!! nl2br(e($selectedProduct->description)) !!}
                             </div>
                         @endif
                     </div>

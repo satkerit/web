@@ -20,14 +20,14 @@ class CompanyInfoController extends Controller
         $this->authorizeView('settings.company');
 
         $company = CompanyInfo::first() ?? new CompanyInfo();
-        
+
         return view('admin.company-info.form', compact('company'));
     }
 
     public function update(Request $request)
     {
         // Bypass authorization check for Super Admin to prevent 403 errors
-        if (auth()->check() && auth()->user()->isSuperAdmin()) {
+        if (auth()->user() && auth()->user()->isSuperAdmin()) {
             // Super admin is always authorized
         } else {
             try {
@@ -39,14 +39,14 @@ class CompanyInfoController extends Controller
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
-                
+
                 if ($request->expectsJson()) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Authorization failed: ' . $e->getMessage()
                     ], 403);
                 }
-                
+
                 return back()->withErrors(['error' => 'Anda tidak memiliki akses untuk mengedit data perusahaan.']);
             }
         }
@@ -60,7 +60,7 @@ class CompanyInfoController extends Controller
                 'tagline' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
                 'established_year' => 'nullable|integer|min:1900|max:' . date('Y'),
-                
+
                 // Contact Information
                 'address' => 'nullable|string',
                 'phone' => 'nullable|string|max:50',
@@ -71,7 +71,7 @@ class CompanyInfoController extends Controller
                 'email_complaint' => 'nullable|email|max:255',
                 'email_whistleblowing' => 'nullable|email|max:255',
                 'website' => 'nullable|url|max:255',
-                
+
                 // Visual Assets
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
                 'logo_footer' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
@@ -80,12 +80,12 @@ class CompanyInfoController extends Controller
                 'favicon' => 'nullable|file|mimes:ico,png,jpg,jpeg|max:512',
                 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
                 'organization_structure' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
-                
+
                 // Company Profile
                 'vision' => 'nullable|string',
                 'mission' => 'nullable|string',
                 'history' => 'nullable|string',
-                
+
                 // Statistics
                 'stat_years_experience' => 'nullable|integer|min:0',
                 'stat_branch_offices' => 'nullable|integer|min:0',
@@ -93,7 +93,7 @@ class CompanyInfoController extends Controller
                 'stat_cash_offices' => 'nullable|integer|min:0',
                 'stat_mobile_cash_offices' => 'nullable|integer|min:0',
                 'legacy_visitor_count' => 'nullable|integer|min:0',
-                
+
                 // Social Media
                 'facebook' => 'nullable|url|max:255',
                 'instagram' => 'nullable|url|max:255',
@@ -101,18 +101,18 @@ class CompanyInfoController extends Controller
                 'youtube' => 'nullable|url|max:255',
                 'linkedin' => 'nullable|url|max:255',
                 'tiktok' => 'nullable|url|max:255',
-                
+
                 // Regulatory Information
                 'ojk_license' => 'nullable|string|max:255',
                 'ojk_tagline' => 'nullable|string',
                 'lps_tagline' => 'nullable|string',
                 'lps_guarantee_amount' => 'nullable|string|max:100',
-                
+
                 // SEO & Footer
                 'footer_description' => 'nullable|string|max:500',
                 'meta_description' => 'nullable|string|max:255',
                 'meta_keywords' => 'nullable|string|max:500',
-                
+
                 // Operational Hours
                 'operational_hours' => 'nullable|array',
                 'operational_hours.*.active' => 'nullable|boolean',
@@ -141,7 +141,7 @@ class CompanyInfoController extends Controller
 
             return redirect()->route('admin.company-info.edit')
                 ->with('success', 'Informasi perusahaan berhasil diperbarui.');
-                
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Company Info Validation Failed', [
                 'user_id' => auth()->id(),
@@ -154,7 +154,7 @@ class CompanyInfoController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()])
                 ->withInput();
         }
@@ -208,7 +208,7 @@ class CompanyInfoController extends Controller
         $extension = $file->getClientOriginalExtension();
         $timestamp = now()->format('Y-m-d_H-i-s');
         $random = Str::random(8);
-        
+
         return "{$prefix}_{$timestamp}_{$random}.{$extension}";
     }
 
@@ -260,7 +260,7 @@ class CompanyInfoController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Storage browse error: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error browsing storage',
@@ -275,7 +275,7 @@ class CompanyInfoController extends Controller
     private function isValidFileType(string $filePath, string $type): bool
     {
         $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-        
+
         return match($type) {
             'image' => in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']),
             'icon' => in_array($extension, ['ico', 'png', 'jpg', 'jpeg']),
@@ -322,7 +322,7 @@ class CompanyInfoController extends Controller
 
         } catch (\Exception $e) {
             Log::error('File upload error: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Upload failed: ' . $e->getMessage(),
@@ -343,10 +343,10 @@ class CompanyInfoController extends Controller
 
         try {
             $path = $request->get('path');
-            
+
             if (Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
-                
+
                 return response()->json([
                     'success' => true,
                     'message' => 'File deleted successfully',
@@ -360,7 +360,7 @@ class CompanyInfoController extends Controller
 
         } catch (\Exception $e) {
             Log::error('File delete error: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Delete failed: ' . $e->getMessage(),

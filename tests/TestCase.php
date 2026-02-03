@@ -14,6 +14,9 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        // Seed Roles and Permissions first
+        $this->seed(\Database\Seeders\RolePermissionSeeder::class);
+
         // Clear cache to reset rate limiters for each test
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
 
@@ -28,8 +31,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function createAdmin(): User
     {
-        return User::factory()->create([
-            'role' => 'admin',
+        return User::factory()->admin()->create([
             'is_active' => true,
         ]);
     }
@@ -39,8 +41,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function createSuperAdmin(): User
     {
-        return User::factory()->create([
-            'role' => 'super_admin',
+        return User::factory()->superAdmin()->create([
             'is_active' => true,
         ]);
     }
@@ -50,8 +51,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function createEditor(): User
     {
-        return User::factory()->create([
-            'role' => 'editor',
+        return User::factory()->editor()->create([
             'is_active' => true,
         ]);
     }

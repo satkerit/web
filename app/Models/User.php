@@ -26,6 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
         'role_id',
         'is_active',
     ];
@@ -117,14 +118,12 @@ class User extends Authenticatable
     // RBAC Methods
     public function isSuperAdmin(): bool
     {
-        return $this->roleModel?->name === self::ROLE_SUPER_ADMIN || 
-               $this->id === 1; // Fallback for user ID 1
+        return $this->roleModel?->name === self::ROLE_SUPER_ADMIN;
     }
 
     public function isAdmin(): bool
     {
-        return in_array($this->roleModel?->name, [self::ROLE_SUPER_ADMIN, self::ROLE_ADMIN]) ||
-               $this->id === 1; // Fallback for user ID 1
+        return in_array($this->roleModel?->name, [self::ROLE_SUPER_ADMIN, self::ROLE_ADMIN]);
     }
 
     public function isEditor(): bool

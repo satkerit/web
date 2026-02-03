@@ -5,8 +5,96 @@
 
 import "./bootstrap";
 
+// jQuery & Summernote (Required for WYSIWYG Editor)
+import $ from "jquery";
+window.jQuery = window.$ = $;
+
+import "summernote/dist/summernote-lite.css";
+import "summernote/dist/summernote-lite.js";
+
+// Initialize Summernote and other jQuery scripts
+$(document).ready(function () {
+    // Summernote Initialization
+    if ($("#summernote").length > 0) {
+        try {
+            $("#summernote").summernote({
+                placeholder: "Tulis konten berita di sini...",
+                tabsize: 2,
+                height: 400,
+                toolbar: [
+                    ["style", ["style"]],
+                    ["font", ["bold", "underline", "clear"]],
+                    ["color", ["color"]],
+                    ["para", ["ul", "ol", "paragraph"]],
+                    ["table", ["table"]],
+                    ["insert", ["link", "picture", "video"]],
+                    ["view", ["fullscreen", "codeview", "help"]],
+                ],
+                callbacks: {
+                    onInit: function () {
+                        console.log("Summernote initialized successfully");
+                    },
+                    onChange: function (contents, $editable) {
+                        $("#summernote").val(contents);
+                    },
+                },
+            });
+        } catch (e) {
+            console.error("Summernote initialization error:", e);
+        }
+    }
+
+    // Slug Generator for News Form
+    if ($("#title").length > 0 && $("#slug").length > 0) {
+        $("#title").on("input", function () {
+            var title = $(this).val();
+            var slug = title
+                .toLowerCase()
+                .replace(/[^\w ]+/g, "")
+                .replace(/ +/g, "-");
+            $("#slug").val(slug);
+        });
+    }
+
+    // Featured Image Preview
+    if ($('#featured_image_input').length > 0) {
+        $('#featured_image_input').change(function() {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                $('#featured-preview').attr('src', e.target.result);
+                $('#featured-image-preview-container').removeClass('hidden');
+            }
+            if(this.files && this.files[0]) {
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
+    // Gallery Images Preview
+    if ($('#slide_images_input').length > 0) {
+        $('#slide_images_input').change(function() {
+            let container = $('#gallery-preview');
+            container.empty();
+            if(this.files) {
+                [...this.files].forEach(file => {
+                    let reader = new FileReader();
+                    reader.onload = (e) => {
+                        let html = `
+                            <div class="relative group">
+                                <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200 shadow-sm">
+                            </div>
+                        `;
+                        container.append(html);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+    }
+});
+
 // Alpine.js - Core functionality (handled by Livewire)
-import Alpine from "alpinejs";
+// import Alpine from "alpinejs"; // Removed to avoid conflict with Livewire's Alpine
 import collapse from "@alpinejs/collapse";
 
 // Wait for Livewire to be ready, then register components
@@ -451,44 +539,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
-// Register reportForm component for report pages
-window.Alpine.data("reportForm", (initialPostingMode = "auto") => ({
-    postingMode: initialPostingMode,
-}));
-
-// Register auctionForm component for auction pages
-window.Alpine.data("auctionForm", (initialStatus = "upcoming") => ({
-    status: initialStatus,
-}));
-
-// Register mapPicker component for office location picker
-window.Alpine.data("mapPicker", (initialLat = "", initialLng = "") => ({
-    latitude: initialLat,
-    longitude: initialLng,
-
-    get hasCoordinates() {
-        return (
-            this.latitude &&
-            this.longitude &&
-            !isNaN(parseFloat(this.latitude)) &&
-            !isNaN(parseFloat(this.longitude))
-        );
-    },
-
-    get mapUrl() {
-        if (!this.hasCoordinates) return "";
-        const lat = parseFloat(this.latitude);
-        const lng = parseFloat(this.longitude);
-        return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sid!2sid!4v1234567890!5m2!1sid!2sid&markers=color:red%7C${lat},${lng}`;
-    },
-
-    get directionsUrl() {
-        if (!this.hasCoordinates) return "#";
-        return `https://www.google.com/maps/dir/?api=1&destination=${this.latitude},${this.longitude}`;
-    },
-
-    updateMap() {
-        // Map updates automatically via Alpine.js reactivity
-    },
-}));

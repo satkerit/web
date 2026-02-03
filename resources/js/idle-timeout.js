@@ -42,7 +42,7 @@ class IdleTimeoutHandler {
                 () => {
                     this.updateActivity();
                 },
-                true
+                true,
             );
         });
 
@@ -62,7 +62,7 @@ class IdleTimeoutHandler {
                         this.handleIdleLogout(error.response.data.message);
                     }
                     return Promise.reject(error);
-                }
+                },
             );
         }
     }
@@ -214,31 +214,52 @@ class IdleTimeoutHandler {
         // Show logout message
         this.showNotification(
             "Sesi berakhir karena tidak ada aktivitas",
-            "warning"
+            "warning",
         );
 
         // Redirect to logout
         setTimeout(() => {
-            window.location.href = this.logoutUrl;
+            this.submitLogout();
         }, 2000);
     }
 
     handleIdleLogout(message) {
         this.showNotification(
             message || "Sesi berakhir karena tidak ada aktivitas",
-            "warning"
+            "warning",
         );
 
         setTimeout(() => {
-            window.location.href = this.logoutUrl;
+            this.submitLogout();
         }, 2000);
+    }
+
+    submitLogout() {
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = this.logoutUrl;
+        form.style.display = "none";
+
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content");
+        if (csrfToken) {
+            const csrfInput = document.createElement("input");
+            csrfInput.type = "hidden";
+            csrfInput.name = "_token";
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
     showNotification(message, type = "info") {
         // Create notification element
         const notification = document.createElement("div");
         notification.className = `fixed top-4 right-4 p-4 rounded-md shadow-lg z-50 ${this.getNotificationClass(
-            type
+            type,
         )}`;
         notification.innerHTML = `
             <div class="flex">

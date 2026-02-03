@@ -11,15 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('company_infos')) {
+            return;
+        }
+
         Schema::create('company_infos', function (Blueprint $table) {
             $table->id();
-            
+
             // Basic Information
             $table->string('name')->comment('Nama perusahaan');
             $table->string('tagline')->nullable()->comment('Tagline perusahaan');
             $table->text('description')->nullable()->comment('Deskripsi perusahaan');
             $table->integer('established_year')->nullable()->comment('Tahun berdiri');
-            
+
             // Contact Information
             $table->text('address')->nullable()->comment('Alamat lengkap');
             $table->string('phone', 50)->nullable()->comment('Nomor telepon');
@@ -30,7 +34,7 @@ return new class extends Migration
             $table->string('email_complaint')->nullable()->comment('Email pengaduan');
             $table->string('email_whistleblowing')->nullable()->comment('Email whistleblowing');
             $table->string('website')->nullable()->comment('Website URL');
-            
+
             // Visual Assets
             $table->string('logo')->nullable()->comment('Logo utama');
             $table->string('logo_footer')->nullable()->comment('Logo untuk footer');
@@ -39,12 +43,12 @@ return new class extends Migration
             $table->string('favicon')->nullable()->comment('Favicon');
             $table->string('profile_image')->nullable()->comment('Gambar profil perusahaan');
             $table->string('organization_structure')->nullable()->comment('Struktur organisasi');
-            
+
             // Company Profile
             $table->text('vision')->nullable()->comment('Visi perusahaan');
             $table->text('mission')->nullable()->comment('Misi perusahaan');
             $table->text('history')->nullable()->comment('Sejarah perusahaan');
-            
+
             // Statistics
             $table->integer('stat_years_experience')->nullable()->comment('Tahun pengalaman');
             $table->integer('stat_branch_offices')->nullable()->comment('Jumlah kantor cabang');
@@ -52,7 +56,7 @@ return new class extends Migration
             $table->integer('stat_cash_offices')->nullable()->comment('Jumlah kantor kas');
             $table->integer('stat_mobile_cash_offices')->nullable()->comment('Jumlah kas keliling');
             $table->unsignedBigInteger('legacy_visitor_count')->default(0)->comment('Jumlah pengunjung legacy');
-            
+
             // Social Media
             $table->string('facebook')->nullable()->comment('Facebook URL');
             $table->string('instagram')->nullable()->comment('Instagram URL');
@@ -60,23 +64,23 @@ return new class extends Migration
             $table->string('youtube')->nullable()->comment('YouTube URL');
             $table->string('linkedin')->nullable()->comment('LinkedIn URL');
             $table->string('tiktok')->nullable()->comment('TikTok URL');
-            
+
             // Regulatory Information
             $table->string('ojk_license')->nullable()->comment('Nomor izin OJK');
             $table->text('ojk_tagline')->nullable()->comment('Tagline OJK');
             $table->text('lps_tagline')->nullable()->comment('Tagline LPS');
             $table->string('lps_guarantee_amount')->nullable()->comment('Jumlah jaminan LPS');
-            
+
             // SEO & Footer
             $table->text('footer_description')->nullable()->comment('Deskripsi footer');
             $table->string('meta_description')->nullable()->comment('Meta description');
             $table->text('meta_keywords')->nullable()->comment('Meta keywords');
-            
+
             // Operational Hours (JSON)
             $table->json('operational_hours')->nullable()->comment('Jam operasional dalam format JSON');
-            
+
             $table->timestamps();
-            
+
             // Indexes
             $table->index('name');
             $table->index('established_year');

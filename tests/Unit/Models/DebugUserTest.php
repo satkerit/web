@@ -11,12 +11,12 @@ class DebugUserTest extends TestCase
     #[Test]
     public function debug_can_manage_settings()
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        
-        dump('Role: ' . $admin->role);
+        $admin = User::factory()->admin()->create();
+
+        dump('Role: ' . $admin->roleModel->name);
         dump('Is Admin: ' . ($admin->isAdmin() ? 'true' : 'false'));
         dump('Can Manage Settings: ' . ($admin->canManageSettings() ? 'true' : 'false'));
-        
+
         $this->assertTrue($admin->isAdmin());
         $this->assertTrue($admin->canManageSettings());
     }

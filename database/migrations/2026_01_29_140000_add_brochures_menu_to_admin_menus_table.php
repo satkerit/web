@@ -43,15 +43,8 @@ return new class extends Migration
             ]);
         }
 
-        // Add Permissions
-        $roles = ['super_admin', 'admin', 'editor'];
-        
-        foreach ($roles as $role) {
-            DB::table('admin_menu_permissions')->updateOrInsert(
-                ['admin_menu_id' => $id, 'role' => $role],
-                ['can_access' => true, 'created_at' => now(), 'updated_at' => now()]
-            );
-        }
+        // Permissions will be handled by AdminMenuSeeder
+
 
         Cache::forget('admin_menus_all_with_permissions');
     }

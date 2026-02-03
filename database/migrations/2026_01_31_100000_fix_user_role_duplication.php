@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (!Schema::hasColumn('admin_menu_permissions', 'role')) {
+            return;
+        }
+
         // Drop foreign key constraint first
         Schema::table('admin_menu_permissions', function (Blueprint $table) {
             $table->dropForeign(['admin_menu_id']);

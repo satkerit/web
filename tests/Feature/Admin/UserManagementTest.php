@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -30,13 +31,14 @@ class UserManagementTest extends TestCase
     public function super_admin_can_create_user(): void
     {
         $superAdmin = $this->createSuperAdmin();
+        $role = Role::where('name', 'editor')->firstOrFail();
 
         $userData = [
             'name' => 'New User',
             'email' => 'newuser@example.com',
             'password' => 'Password123!',
             'password_confirmation' => 'Password123!',
-            'role' => 'editor',
+            'role_id' => $role->id,
             'is_active' => true,
         ];
 
@@ -50,7 +52,7 @@ class UserManagementTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'New User',
             'email' => 'newuser@example.com',
-            'role' => 'editor',
+            'role_id' => $role->id,
             'is_active' => true,
         ]);
     }
@@ -62,13 +64,14 @@ class UserManagementTest extends TestCase
         $user = User::factory()->create([
             'name' => 'Original Name',
             'email' => 'original@example.com',
-            'role' => 'editor',
         ]);
+
+        $role = Role::where('name', 'admin')->firstOrFail();
 
         $updateData = [
             'name' => 'Updated Name',
             'email' => 'updated@example.com',
-            'role' => 'admin',
+            'role_id' => $role->id,
             'is_active' => true,
         ];
 
@@ -83,7 +86,7 @@ class UserManagementTest extends TestCase
             'id' => $user->id,
             'name' => 'Updated Name',
             'email' => 'updated@example.com',
-            'role' => 'admin',
+            'role_id' => $role->id,
         ]);
     }
 
@@ -109,12 +112,13 @@ class UserManagementTest extends TestCase
     public function super_admin_can_change_user_role(): void
     {
         $superAdmin = $this->createSuperAdmin();
-        $user = User::factory()->create(['role' => 'editor']);
+        $user = User::factory()->editor()->create();
+        $adminRole = Role::where('name', 'admin')->firstOrFail();
 
         $updateData = [
             'name' => $user->name,
             'email' => $user->email,
-            'role' => 'admin',
+            'role_id' => $adminRole->id,
             'is_active' => true,
         ];
 
@@ -125,19 +129,19 @@ class UserManagementTest extends TestCase
         $response->assertRedirect(route('admin.users.index'));
 
         $user->refresh();
-        $this->assertEquals('admin', $user->role);
+        $this->assertEquals('admin', $user->roleModel->name);
     }
 
     #[Test]
     public function super_admin_can_toggle_user_active_status(): void
     {
         $superAdmin = $this->createSuperAdmin();
-        $user = User::factory()->create(['is_active' => true]);
+        $user = User::factory()->editor()->create(['is_active' => true]);
 
         $updateData = [
             'name' => $user->name,
             'email' => $user->email,
-            'role' => $user->role,
+            'role_id' => $user->role_id,
             'is_active' => false,
         ];
 
