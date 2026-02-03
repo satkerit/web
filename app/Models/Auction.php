@@ -21,83 +21,164 @@ class Auction extends Model
 
     protected $fillable = [
         // Basic Information
-        'title', 'slug', 'description', 'auction_number', 'object_number',
-        
+        'title',
+        'slug',
+        'description',
+        'auction_number',
+        'object_number',
+
         // Asset Information
-        'asset_type', 'asset_category', 'asset_description',
-        
+        'asset_type',
+        'asset_category',
+        'asset_description',
+
         // Certificate Information
-        'certificate_type', 'certificate_number', 'certificate_date', 'certificate_issued_by',
-        
+        'certificate_type',
+        'certificate_number',
+        'certificate_date',
+        'certificate_issued_by',
+
         // Property Details
-        'land_area', 'building_area', 'building_condition', 'floors', 'bedrooms', 
-        'bathrooms', 'parking_spaces', 'year_built',
-        
+        'land_area',
+        'building_area',
+        'building_condition',
+        'floors',
+        'bedrooms',
+        'bathrooms',
+        'parking_spaces',
+        'year_built',
+
         // Location Details
-        'address', 'village', 'district', 'city', 'province', 'postal_code', 
-        'latitude', 'longitude',
-        
+        'address',
+        'village',
+        'district',
+        'city',
+        'province',
+        'postal_code',
+        'latitude',
+        'longitude',
+
         // Debtor Information
-        'debtor_name', 'debtor_id_number', 'debtor_address',
-        
+        'debtor_name',
+        'debtor_id_number',
+        'debtor_address',
+
         // Auction Information
-        'auction_type', 'auction_method', 'auction_date', 'auction_time', 
-        'auction_location', 'auction_address',
-        
+        'auction_type',
+        'auction_method',
+        'auction_date',
+        'auction_time',
+        'auction_location',
+        'auction_address',
+        'auction_url',
+
         // Registration
-        'registration_start', 'registration_end', 'registration_requirements', 
+        'registration_start',
+        'registration_end',
+        'registration_requirements',
         'registration_procedure',
-        
+
         // Pricing
-        'limit_price', 'estimated_price', 'deposit_amount', 'deposit_percentage', 
+        'limit_price',
+        'estimated_price',
+        'deposit_amount',
+        'deposit_percentage',
         'increment_amount',
-        
+
         // Bank Information
-        'bank_name', 'bank_branch', 'account_number', 'account_holder', 'swift_code',
-        
+        'bank_name',
+        'bank_branch',
+        'account_number',
+        'account_holder',
+        'swift_code',
+
         // Legal Information
-        'creditor_name', 'creditor_address', 'legal_basis', 'court_decision', 
-        'court_decision_date', 'debt_amount', 'encumbrance_details',
-        
+        'creditor_name',
+        'creditor_address',
+        'legal_basis',
+        'court_decision',
+        'court_decision_date',
+        'debt_amount',
+        'encumbrance_details',
+
         // Viewing Information
-        'viewing_start', 'viewing_end', 'viewing_schedule', 'viewing_contact', 
+        'viewing_start',
+        'viewing_end',
+        'viewing_schedule',
+        'viewing_contact',
         'viewing_notes',
-        
+
         // Terms & Conditions
-        'terms_conditions', 'special_conditions', 'payment_terms', 
-        'payment_deadline_days', 'delivery_terms',
-        
+        'terms_conditions',
+        'special_conditions',
+        'payment_terms',
+        'payment_deadline_days',
+        'delivery_terms',
+
         // Organizer Information
-        'organizer_name', 'organizer_type', 'organizer_address', 'organizer_phone', 
-        'organizer_email', 'organizer_website',
-        
+        'organizer_name',
+        'organizer_type',
+        'organizer_address',
+        'organizer_phone',
+        'organizer_email',
+        'organizer_website',
+
         // Contact Information
-        'contact_person', 'contact_position', 'contact_phone', 'contact_email', 
-        'contact_whatsapp', 'contact_office_hours',
-        
+        'contact_person',
+        'contact_position',
+        'contact_phone',
+        'contact_email',
+        'contact_whatsapp',
+        'contact_office_hours',
+        'contacts',
+
         // Documents & Media
-        'images', 'documents', 'floor_plans', 'certificates', 'virtual_tour_url', 
+        'images',
+        'documents',
+        'floor_plans',
+        'certificates',
+        'virtual_tour_url',
         'video_url',
-        
+
         // Status & Results
-        'status', 'status_notes',
-        
+        'status',
+        'status_notes',
+
         // Auction Results
-        'winning_bid', 'winner_name', 'winner_id_number', 'winner_address', 
-        'winner_phone', 'sold_at', 'auction_notes', 'total_bidders', 'total_bids',
-        
+        'winning_bid',
+        'winner_name',
+        'winner_id_number',
+        'winner_address',
+        'winner_phone',
+        'sold_at',
+        'auction_notes',
+        'total_bidders',
+        'total_bids',
+
         // Additional Information
-        'facilities', 'nearby_facilities', 'transportation_access', 
-        'investment_potential', 'market_analysis', 'risk_factors',
-        
+        'facilities',
+        'nearby_facilities',
+        'transportation_access',
+        'investment_potential',
+        'market_analysis',
+        'risk_factors',
+
         // SEO & Meta
-        'meta_title', 'meta_description', 'meta_keywords',
-        
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+
         // Tracking
-        'view_count', 'interest_count', 'download_count',
-        
+        'view_count',
+        'interest_count',
+        'download_count',
+
         // Publishing
-        'published_at', 'featured_until', 'is_featured', 'is_urgent', 'sort_order'
+        'published_at',
+        'featured_until',
+        'is_featured',
+        'is_urgent',
+        'sort_order'
     ];
 
     protected $casts = [
@@ -127,6 +208,7 @@ class Auction extends Model
         'documents' => 'array',
         'floor_plans' => 'array',
         'certificates' => 'array',
+        'contacts' => 'array',
         'is_featured' => 'boolean',
         'is_urgent' => 'boolean',
         'view_count' => 'integer',
@@ -216,31 +298,34 @@ class Auction extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status', '!=', 'draft')
-                    ->whereNotNull('published_at')
-                    ->where('published_at', '<=', now());
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
     }
 
     public function scopeActive(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            'published', 'registration_open', 'registration_closed', 
-            'auction_scheduled', 'auction_ongoing'
+            'published',
+            'registration_open',
+            'registration_closed',
+            'auction_scheduled',
+            'auction_ongoing'
         ]);
     }
 
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true)
-                    ->where(function($q) {
-                        $q->whereNull('featured_until')
-                          ->orWhere('featured_until', '>', now());
-                    });
+            ->where(function ($q) {
+                $q->whereNull('featured_until')
+                    ->orWhere('featured_until', '>', now());
+            });
     }
 
     public function scopeUpcoming(Builder $query): Builder
     {
         return $query->where('auction_date', '>', now())
-                    ->whereIn('status', ['published', 'registration_open', 'registration_closed', 'auction_scheduled']);
+            ->whereIn('status', ['published', 'registration_open', 'registration_closed', 'auction_scheduled']);
     }
 
     public function scopeByAssetType(Builder $query, string $type): Builder
@@ -292,7 +377,10 @@ class Auction extends Model
 
     public function getFormattedLimitPriceAttribute(): string
     {
-        return 'Rp ' . number_format($this->limit_price ?? 0, 0, ',', '.');
+        if (!$this->limit_price) {
+            return 'Hubungi Kami';
+        }
+        return 'Rp ' . number_format($this->limit_price, 0, ',', '.');
     }
 
     public function getFormattedEstimatedPriceAttribute(): ?string
@@ -326,11 +414,11 @@ class Auction extends Model
         if ($this->deposit_amount) {
             return $this->deposit_amount;
         }
-        
+
         if ($this->deposit_percentage && $this->limit_price) {
             return ($this->deposit_percentage / 100) * $this->limit_price;
         }
-        
+
         return null;
     }
 
@@ -345,7 +433,7 @@ class Auction extends Model
         if (!$this->registration_start || !$this->registration_end) {
             return false;
         }
-        
+
         $now = now();
         return $now >= $this->registration_start && $now <= $this->registration_end;
     }
@@ -355,7 +443,7 @@ class Auction extends Model
         if (!$this->viewing_start || !$this->viewing_end) {
             return false;
         }
-        
+
         $now = now();
         return $now >= $this->viewing_start && $now <= $this->viewing_end;
     }
@@ -370,9 +458,9 @@ class Auction extends Model
         if (!$this->auction_date) {
             return 'Tanggal belum ditentukan';
         }
-        
+
         $diff = now()->diff($this->auction_date);
-        
+
         if ($diff->days > 0) {
             return $diff->days . ' hari lagi';
         } elseif ($diff->h > 0) {
@@ -402,7 +490,7 @@ class Auction extends Model
             $this->province,
             $this->postal_code
         ]);
-        
+
         return implode(', ', $parts);
     }
 
