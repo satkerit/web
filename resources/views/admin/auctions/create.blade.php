@@ -482,6 +482,67 @@
                 </div>
             </x-admin.card>
 
+            {{-- Open House Information --}}
+            <x-admin.card title="Informasi Open House" subtitle="Jadwal aanwijzing/open house">
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="viewing_start" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Mulai Viewing
+                            </label>
+                            <input type="datetime-local" name="viewing_start" id="viewing_start" value="{{ old('viewing_start') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_start') border-red-500 @enderror">
+                            @error('viewing_start')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="viewing_end" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Akhir Viewing
+                            </label>
+                            <input type="datetime-local" name="viewing_end" id="viewing_end" value="{{ old('viewing_end') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_end') border-red-500 @enderror">
+                            @error('viewing_end')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="viewing_schedule" class="block text-sm font-semibold text-gray-700 mb-2">Jadwal Lengkap</label>
+                        <textarea name="viewing_schedule" id="viewing_schedule" rows="3"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('viewing_schedule') border-red-500 @enderror"
+                                  placeholder="Contoh: Senin - Jumat, Pukul 09.00 - 15.00 WIB">{{ old('viewing_schedule') }}</textarea>
+                        @error('viewing_schedule')
+                            <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="viewing_contact" class="block text-sm font-semibold text-gray-700 mb-2">Kontak Viewing</label>
+                            <input type="text" name="viewing_contact" id="viewing_contact" value="{{ old('viewing_contact') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_contact') border-red-500 @enderror"
+                                   placeholder="Nama dan No. HP petugas">
+                            @error('viewing_contact')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="viewing_notes" class="block text-sm font-semibold text-gray-700 mb-2">Catatan Tambahan</label>
+                            <input type="text" name="viewing_notes" id="viewing_notes" value="{{ old('viewing_notes') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_notes') border-red-500 @enderror"
+                                   placeholder="Catatan khusus untuk viewing">
+                            @error('viewing_notes')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </x-admin.card>
+
             {{-- Contact Information --}}
             <x-admin.card title="Informasi Kontak" subtitle="Detail kontak person lelang">
                 <div x-data="{
