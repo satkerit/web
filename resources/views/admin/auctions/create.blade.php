@@ -304,6 +304,77 @@
                 </div>
             </x-admin.card>
 
+            {{-- Legal Information --}}
+            <x-admin.card title="Informasi Hukum" subtitle="Detail legalitas dan status hukum aset">
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="creditor_name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Kreditur</label>
+                            <input type="text" name="creditor_name" id="creditor_name" value="{{ old('creditor_name') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('creditor_name') border-red-500 @enderror"
+                                   placeholder="Contoh: PT. Bank Central Asia Tbk">
+                            @error('creditor_name')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="debt_amount" class="block text-sm font-semibold text-gray-700 mb-2">Jumlah Hutang</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">Rp</span>
+                                <input type="number" name="debt_amount" id="debt_amount" value="{{ old('debt_amount') }}"
+                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('debt_amount') border-red-500 @enderror"
+                                       placeholder="500000000">
+                            </div>
+                            @error('debt_amount')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="legal_basis" class="block text-sm font-semibold text-gray-700 mb-2">Dasar Hukum</label>
+                        <textarea name="legal_basis" id="legal_basis" rows="3"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('legal_basis') border-red-500 @enderror"
+                                  placeholder="Dasar hukum pelaksanaan lelang...">{{ old('legal_basis') }}</textarea>
+                        @error('legal_basis')
+                            <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="court_decision" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Putusan Pengadilan</label>
+                            <input type="text" name="court_decision" id="court_decision" value="{{ old('court_decision') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('court_decision') border-red-500 @enderror"
+                                   placeholder="Contoh: 123/Pdt.G/2023/PN Pgp">
+                            @error('court_decision')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="court_decision_date" class="block text-sm font-semibold text-gray-700 mb-2">Tanggal Putusan</label>
+                            <input type="date" name="court_decision_date" id="court_decision_date" value="{{ old('court_decision_date') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('court_decision_date') border-red-500 @enderror">
+                            @error('court_decision_date')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="encumbrance_details" class="block text-sm font-semibold text-gray-700 mb-2">Hak Tanggungan</label>
+                        <textarea name="encumbrance_details" id="encumbrance_details" rows="3"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('encumbrance_details') border-red-500 @enderror"
+                                  placeholder="Detail hak tanggungan...">{{ old('encumbrance_details') }}</textarea>
+                        @error('encumbrance_details')
+                            <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </x-admin.card>
+
             {{-- Pricing Information --}}
             <x-admin.card title="Informasi Harga" subtitle="Detail harga dan biaya lelang">
                 <div class="space-y-5">
