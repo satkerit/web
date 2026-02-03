@@ -660,11 +660,11 @@
                                         <img src="{{ \App\Helpers\StorageHelper::url($image) }}"
                                              alt="Auction Image"
                                              class="w-full h-24 object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow">
-                                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                            </svg>
+                                        <div class="absolute top-2 right-2">
+                                            <label class="flex items-center space-x-1 bg-white bg-opacity-95 rounded-md px-2 py-1 shadow-sm cursor-pointer hover:bg-red-50 transition-colors border border-gray-200">
+                                                <input type="checkbox" name="delete_images[]" value="{{ $image }}" class="rounded text-red-600 focus:ring-red-500 border-gray-300 w-4 h-4">
+                                                <span class="text-xs font-bold text-red-600">Hapus</span>
+                                            </label>
                                         </div>
                                     </div>
                                 @endforeach

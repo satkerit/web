@@ -320,22 +320,36 @@ class AuctionController extends Controller
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
-        // Handle image uploads
-        if ($request->hasFile('images')) {
-            // Delete old images
-            if ($auction->images) {
-                foreach ($auction->images as $oldImage) {
-                    Storage::disk('public')->delete($oldImage);
-                }
-            }
+        // Handle image updates (Delete & Upload)
+        $currentImages = $auction->images ?? [];
+        $hasImageUpdates = false;
 
-            $images = [];
+        // 1. Handle Deletions
+        if ($request->has('delete_images')) {
+            $imagesToDelete = $request->delete_images;
+            $currentImages = array_values(array_filter($currentImages, function($img) use ($imagesToDelete) {
+                if (in_array($img, $imagesToDelete)) {
+                    Storage::disk('public')->delete($img);
+                    return false;
+                }
+                return true;
+            }));
+            $hasImageUpdates = true;
+        }
+
+        // 2. Handle New Uploads
+        if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $filename = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
                 $path = $image->storeAs('auctions', $filename, 'public');
-                $images[] = $path;
+                $currentImages[] = $path;
             }
-            $validated['images'] = $images;
+            $hasImageUpdates = true;
+        }
+
+        // Update images field if there were changes
+        if ($hasImageUpdates) {
+            $validated['images'] = $currentImages;
         }
 
         // Set published_at if status changed from draft to published
