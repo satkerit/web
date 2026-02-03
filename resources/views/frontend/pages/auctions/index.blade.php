@@ -322,6 +322,15 @@
                                         @endif
                                     </div>
                                     
+                                    <!-- Sold Watermark -->
+                                    @if($auction->status === 'sold')
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black/30 z-20 pointer-events-none">
+                                        <div class="transform -rotate-12 bg-red-600/90 text-white px-10 py-3 text-2xl md:text-3xl font-black tracking-widest border-4 border-white shadow-2xl uppercase backdrop-blur-sm">
+                                            TERJUAL
+                                        </div>
+                                    </div>
+                                    @endif
+                                    
                                     <!-- Status -->
                                     <div class="absolute top-4 right-4">
                                         <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold 

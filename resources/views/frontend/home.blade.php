@@ -708,6 +708,15 @@
                         </div>
                         @endif
 
+                        <!-- Sold Watermark -->
+                        @if($auction->status === 'sold')
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/30 z-20 pointer-events-none">
+                            <div class="transform -rotate-12 bg-red-600/90 text-white px-8 py-2 text-xl md:text-2xl font-black tracking-widest border-4 border-white shadow-2xl uppercase backdrop-blur-sm">
+                                TERJUAL
+                            </div>
+                        </div>
+                        @endif
+
                         <!-- Status Badge -->
                         <div class="absolute top-4 left-4">
                             <span class="px-3 py-1.5 text-xs font-semibold rounded-lg {{ $auction->status === 'published' ? 'bg-blue-500 text-white' : ($auction->status === 'registration_open' ? 'bg-green-500 text-white' : ($auction->status === 'auction_scheduled' ? 'bg-yellow-500 text-white' : 'bg-gray-500 text-white')) }}">

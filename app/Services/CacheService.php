@@ -123,11 +123,13 @@ class CacheService
             self::CACHE_SHORT,
             function () use ($limit) {
                 try {
-                    return Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled'])
+                    return Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled', 'sold'])
                         ->where(function($query) {
                             $query->whereNull('auction_date')
-                                  ->orWhere('auction_date', '>', now());
+                                  ->orWhere('auction_date', '>', now())
+                                  ->orWhere('status', 'sold');
                         })
+                        ->orderByRaw("CASE WHEN status = 'sold' THEN 1 ELSE 0 END")
                         ->orderBy('auction_date', 'asc')
                         ->orderBy('created_at', 'desc')
                         ->limit($limit)
