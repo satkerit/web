@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HeroSlide;
+use App\Models\SiteSetting;
 use App\Traits\AuthorizesAdminActions;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\Request;
