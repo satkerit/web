@@ -435,6 +435,55 @@
                 </div>
             </x-admin.card>
 
+            {{-- Bank Information --}}
+            <x-admin.card title="Informasi Rekening Jaminan" subtitle="Rekening tujuan transfer uang jaminan">
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="bank_name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Bank</label>
+                            <input type="text" name="bank_name" id="bank_name" value="{{ old('bank_name') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bank_name') border-red-500 @enderror"
+                                   placeholder="Contoh: Bank Mandiri">
+                            @error('bank_name')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="bank_branch" class="block text-sm font-semibold text-gray-700 mb-2">Cabang</label>
+                            <input type="text" name="bank_branch" id="bank_branch" value="{{ old('bank_branch') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bank_branch') border-red-500 @enderror"
+                                   placeholder="Contoh: KCU Jakarta Sudirman">
+                            @error('bank_branch')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="account_number" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Rekening</label>
+                            <input type="text" name="account_number" id="account_number" value="{{ old('account_number') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('account_number') border-red-500 @enderror"
+                                   placeholder="Contoh: 123-456-7890">
+                            @error('account_number')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="account_holder" class="block text-sm font-semibold text-gray-700 mb-2">Atas Nama</label>
+                            <input type="text" name="account_holder" id="account_holder" value="{{ old('account_holder') }}"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('account_holder') border-red-500 @enderror"
+                                   placeholder="Contoh: PT. Balai Lelang">
+                            @error('account_holder')
+                                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </x-admin.card>
+
             {{-- Auction Information --}}
             <x-admin.card title="Informasi Lelang" subtitle="Detail pelaksanaan lelang">
                 <div class="space-y-5">
