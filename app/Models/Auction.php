@@ -285,6 +285,11 @@ class Auction extends Model
         'postponed' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-700', 'dot' => 'bg-amber-500']
     ];
 
+    public static function statuses(): array
+    {
+        return array_keys(self::$statusLabels);
+    }
+
     // Slug configuration
     public function getSlugOptions(): SlugOptions
     {

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use App\Rules\MinimumImages;
+use App\Services\CacheService;
 use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class AuctionController extends Controller
 {
@@ -158,7 +160,7 @@ class AuctionController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:255',
-            'status' => 'required|in:draft,published,registration_open,registration_closed,auction_scheduled,auction_ongoing,auction_completed,sold,unsold,cancelled,postponed',
+            'status' => ['required', Rule::in(array_keys(Auction::$statusLabels))],
             'is_featured' => 'boolean',
             'featured_until' => 'nullable|date',
             'is_urgent' => 'boolean',
@@ -195,6 +197,8 @@ class AuctionController extends Controller
         }
 
         $auction = Auction::create($validated);
+
+        CacheService::clear('auctions_home_3');
 
         return redirect()->route('admin.auctions.index')
             ->with('success', 'Lelang berhasil dibuat.');
@@ -308,7 +312,7 @@ class AuctionController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:255',
-            'status' => 'required|in:draft,published,registration_open,registration_closed,auction_scheduled,auction_ongoing,auction_completed,sold,unsold,cancelled,postponed',
+            'status' => ['required', Rule::in(array_keys(Auction::$statusLabels))],
             'is_featured' => 'boolean',
             'featured_until' => 'nullable|date',
             'is_urgent' => 'boolean',
@@ -359,6 +363,8 @@ class AuctionController extends Controller
 
         $auction->update($validated);
 
+        CacheService::clear('auctions_home_3');
+
         return redirect()->route('admin.auctions.index')
             ->with('success', 'Lelang berhasil diperbarui.');
     }
@@ -375,6 +381,8 @@ class AuctionController extends Controller
         }
 
         $auction->delete();
+
+        CacheService::clear('auctions_home_3');
 
         return redirect()->route('admin.auctions.index')
             ->with('success', 'Lelang berhasil dihapus.');
@@ -407,6 +415,7 @@ class AuctionController extends Controller
                 }
 
                 $auctions->delete();
+                CacheService::clear('auctions_home_3');
                 return back()->with('success', "{$count} lelang berhasil dihapus.");
 
             case 'publish':
@@ -414,10 +423,12 @@ class AuctionController extends Controller
                     'status' => 'published',
                     'published_at' => now()
                 ]);
+                CacheService::clear('auctions_home_3');
                 return back()->with('success', 'Lelang terpilih berhasil dipublikasi.');
 
             case 'unpublish':
                 $auctions->update(['status' => 'draft']);
+                CacheService::clear('auctions_home_3');
                 return back()->with('success', 'Lelang terpilih berhasil di-unpublish.');
 
             case 'feature':

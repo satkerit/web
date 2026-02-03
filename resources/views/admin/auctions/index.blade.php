@@ -78,19 +78,11 @@
                         <p class="text-xs text-gray-500">{{ $auction->auction_number }}</p>
                     </div>
                 </div>
-                <div class="flex flex-wrap items-center gap-2 mb-3">
-                    <x-admin.badge>{{ \App\Models\Auction::$assetTypes[$auction->asset_type] ?? $auction->asset_type }}</x-admin.badge>
-                    @if($auction->status === 'active')
-                        <x-admin.badge variant="success">Aktif</x-admin.badge>
-                    @elseif($auction->status === 'upcoming')
-                        <x-admin.badge variant="warning">Akan Datang</x-admin.badge>
-                    @elseif($auction->status === 'closed')
-                        <x-admin.badge variant="secondary">Ditutup</x-admin.badge>
-                    @else
-                        <x-admin.badge variant="danger">Terjual</x-admin.badge>
-                    @endif
-                    <span class="text-xs text-gray-500">{{ $auction->auction_date?->format('d M Y') ?? $auction->created_at->format('d M Y') }}</span>
-                </div>
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <x-admin.badge>{{ \App\Models\Auction::$assetTypes[$auction->asset_type] ?? $auction->asset_type }}</x-admin.badge>
+                        <x-admin.badge variant="info">{{ $auction->status_label }}</x-admin.badge>
+                        <span class="text-xs text-gray-500">{{ $auction->auction_date?->format('d M Y') ?? $auction->created_at->format('d M Y') }}</span>
+                    </div>
                 <div class="text-sm text-gray-600 mb-3">
                     <p class="font-medium">Rp {{ number_format($auction->limit_price, 0, ',', '.') }}</p>
                     <p class="text-xs">{{ $auction->city }}</p>
@@ -139,15 +131,7 @@
                         <x-admin.badge>{{ \App\Models\Auction::$assetTypes[$auction->asset_type] ?? $auction->asset_type }}</x-admin.badge>
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">
-                        @if($auction->status === 'active')
-                            <x-admin.badge variant="success">Aktif</x-admin.badge>
-                        @elseif($auction->status === 'upcoming')
-                            <x-admin.badge variant="warning">Akan Datang</x-admin.badge>
-                        @elseif($auction->status === 'closed')
-                            <x-admin.badge variant="secondary">Ditutup</x-admin.badge>
-                        @else
-                            <x-admin.badge variant="danger">Terjual</x-admin.badge>
-                        @endif
+                        <x-admin.badge variant="info">{{ $auction->status_label }}</x-admin.badge>
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">
                         {{ $auction->formatted_limit_price }}

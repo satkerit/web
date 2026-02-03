@@ -696,8 +696,8 @@
                 <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-amber-200 hover:-translate-y-2">
                     <!-- Auction Image -->
                     <div class="relative h-48 overflow-hidden">
-                        @if($auction->images && count($auction->images) > 0)
-                        <img src="{{ \App\Helpers\StorageHelper::url($auction->images[0]) }}"
+                        @if($auction->main_image)
+                        <img src="{{ $auction->main_image }}"
                              alt="{{ $auction->title }}"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         @else
