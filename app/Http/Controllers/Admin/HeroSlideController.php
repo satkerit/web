@@ -32,7 +32,7 @@ class HeroSlideController extends Controller
 
     public function updateSettings(Request $request)
     {
-        $this->authorizeUpdate('settings.hero');
+        $this->authorizeEdit('settings.hero');
 
         $validated = $request->validate([
             'hero_slider_delay' => 'required|integer|min:1000|max:20000',
@@ -42,7 +42,11 @@ class HeroSlideController extends Controller
         if ($settings) {
             $settings->update($validated);
         } else {
-            SiteSetting::create($validated);
+            // Create default settings if not exists
+            SiteSetting::create(array_merge([
+                'maintenance_mode' => false,
+                'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
+            ], $validated));
         }
 
         // Clear cache
