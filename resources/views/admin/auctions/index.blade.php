@@ -150,10 +150,14 @@
                         @endif
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">
-                        Rp {{ number_format($auction->limit_price, 0, ',', '.') }}
+                        {{ $auction->formatted_limit_price }}
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                        {{ $auction->auction_date?->format('d M Y') ?? $auction->created_at->format('d M Y') }}
+                        @if($auction->auction_date)
+                            {{ $auction->auction_date->format('d M Y') }}
+                        @else
+                            Belum ditentukan
+                        @endif
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         <div class="flex items-center gap-1">

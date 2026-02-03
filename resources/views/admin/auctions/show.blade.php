@@ -27,7 +27,7 @@
 
         <!-- Action Buttons -->
         <div class="flex flex-wrap gap-3 mb-6">
-            <a href="{{ route('admin.auctions.edit', $auction) }}" 
+            <a href="{{ route('admin.auctions.edit', $auction) }}"
                class="btn-auction-admin-primary inline-flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -42,7 +42,7 @@
                 </svg>
                 Lihat di Frontend
             </a>
-            <a href="{{ route('admin.auctions.index') }}" 
+            <a href="{{ route('admin.auctions.index') }}"
                class="btn-auction-admin-secondary inline-flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -100,7 +100,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($auction->images as $index => $image)
                                 <div class="relative group cursor-pointer" onclick="openImageModal({{ $index }})">
-                                    <img src="{{ \App\Helpers\StorageHelper::url($image) }}" 
+                                    <img src="{{ \App\Helpers\StorageHelper::url($image) }}"
                                          alt="Foto {{ $auction->title }} - {{ $index + 1 }}"
                                          class="w-full h-48 object-cover rounded-lg shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 rounded-lg flex items-center justify-center">
@@ -194,27 +194,46 @@
                         Kontak
                     </h3>
                     <div class="space-y-3">
-                        <div>
-                            <span class="text-sm text-gray-600">Kontak Person:</span>
-                            <div class="font-medium text-gray-900">{{ $auction->contact_person }}</div>
-                        </div>
-                        <div>
-                            <span class="text-sm text-gray-600">Telepon:</span>
-                            <div class="font-medium text-gray-900">
-                                <a href="tel:{{ $auction->contact_phone }}" class="text-blue-600 hover:text-blue-800">
-                                    {{ $auction->contact_phone }}
-                                </a>
-                            </div>
-                        </div>
-                        @if($auction->contact_email)
+                        @if($auction->contacts && is_array($auction->contacts) && count($auction->contacts) > 0)
+                            @foreach($auction->contacts as $index => $contact)
+                                <div class="{{ $index > 0 ? 'pt-3 border-t border-gray-100' : '' }}">
+                                    <div class="font-medium text-gray-900">{{ $contact['name'] ?? '-' }}</div>
+                                    <div class="text-sm text-gray-600 mb-1">{{ $contact['position'] ?? 'Staf Lelang' }}</div>
+                                    <div class="space-y-1">
+                                        @if(isset($contact['phone']) && $contact['phone'])
+                                            <a href="tel:{{ $contact['phone'] }}" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                                </svg>
+                                                {{ $contact['phone'] }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
                             <div>
-                                <span class="text-sm text-gray-600">Email:</span>
+                                <span class="text-sm text-gray-600">Kontak Person:</span>
+                                <div class="font-medium text-gray-900">{{ $auction->contact_person }}</div>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-600">Telepon:</span>
                                 <div class="font-medium text-gray-900">
-                                    <a href="mailto:{{ $auction->contact_email }}" class="text-blue-600 hover:text-blue-800">
-                                        {{ $auction->contact_email }}
+                                    <a href="tel:{{ $auction->contact_phone }}" class="text-blue-600 hover:text-blue-800">
+                                        {{ $auction->contact_phone }}
                                     </a>
                                 </div>
                             </div>
+                            @if($auction->contact_email)
+                                <div>
+                                    <span class="text-sm text-gray-600">Email:</span>
+                                    <div class="font-medium text-gray-900">
+                                        <a href="mailto:{{ $auction->contact_email }}" class="text-blue-600 hover:text-blue-800">
+                                            {{ $auction->contact_email }}
+                                        </a>
+                                    </div>
+                                </div>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -225,28 +244,28 @@
         <div class="admin-auction-card">
             <div class="border-b border-gray-200 px-6 pt-6">
                 <nav class="-mb-px flex space-x-8">
-                    <button class="tab-button active border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" 
+                    <button class="tab-button active border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
                             data-tab="property">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
                         Properti
                     </button>
-                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" 
+                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
                             data-tab="auction">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h3a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h3z"></path>
                         </svg>
                         Lelang Agunan
                     </button>
-                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" 
+                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
                             data-tab="legal">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                         Legal
                     </button>
-                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" 
+                    <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
                             data-tab="contact">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
@@ -592,22 +611,22 @@
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', function() {
                 const tabId = this.dataset.tab;
-                
+
                 // Remove active class from all buttons
                 document.querySelectorAll('.tab-button').forEach(btn => {
                     btn.classList.remove('active', 'border-orange-500', 'text-orange-600');
                     btn.classList.add('border-transparent', 'text-gray-500');
                 });
-                
+
                 // Add active class to clicked button
                 this.classList.add('active', 'border-orange-500', 'text-orange-600');
                 this.classList.remove('border-transparent', 'text-gray-500');
-                
+
                 // Hide all tab contents
                 document.querySelectorAll('.tab-content').forEach(content => {
                     content.classList.add('hidden');
                 });
-                
+
                 // Show selected tab content
                 document.getElementById(tabId).classList.remove('hidden');
             });
@@ -620,15 +639,15 @@
         // Image modal functions
         function openImageModal(index) {
             if (images.length === 0) return;
-            
+
             currentImageIndex = index;
             const modal = document.getElementById('imageModal');
             const modalImage = document.getElementById('modalImage');
-            
+
             modalImage.src = images[currentImageIndex];
             modalImage.alt = `{{ $auction->title }} - Foto ${currentImageIndex + 1}`;
             modal.classList.remove('hidden');
-            
+
             // Prevent body scroll
             document.body.style.overflow = 'hidden';
         }
@@ -636,14 +655,14 @@
         function closeImageModal() {
             const modal = document.getElementById('imageModal');
             modal.classList.add('hidden');
-            
+
             // Restore body scroll
             document.body.style.overflow = 'auto';
         }
 
         function nextImage() {
             if (images.length === 0) return;
-            
+
             currentImageIndex = (currentImageIndex + 1) % images.length;
             const modalImage = document.getElementById('modalImage');
             modalImage.src = images[currentImageIndex];
@@ -652,7 +671,7 @@
 
         function previousImage() {
             if (images.length === 0) return;
-            
+
             currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
             const modalImage = document.getElementById('modalImage');
             modalImage.src = images[currentImageIndex];
