@@ -173,7 +173,17 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                                     </svg>
-                                    <span>No. {{ $auction->auction_number }}</span>
+                                    <span>No. Lelang: {{ $auction->auction_number }}</span>
+                                </div>
+                            @endif
+                            @if($auction->object_number)
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                    <span>No. Objek: {{ $auction->object_number }}</span>
                                 </div>
                             @endif
                         </div>
@@ -362,6 +372,12 @@
                                         {{ number_format($auction->building_area, 0, ',', '.') }} m²</p>
                                 </div>
                             @endif
+                            @if($auction->building_condition)
+                                <div class="p-4 md:p-5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                                    <p class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">Kondisi Bangunan</p>
+                                    <p class="font-bold text-gray-900 text-sm md:text-base">{{ $auction->building_condition }}</p>
+                                </div>
+                            @endif
                             @if($auction->bedrooms)
                                 <div class="p-4 md:p-5 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl">
                                     <p class="text-xs text-emerald-600 uppercase tracking-wide font-semibold mb-2">Kamar
@@ -461,7 +477,7 @@
                     @endif
 
                     <!-- Legal Information -->
-                    @if($auction->legal_basis || $auction->court_decision || $auction->debt_amount)
+                    @if($auction->legal_basis || $auction->court_decision || $auction->debt_amount || $auction->creditor_name || $auction->encumbrance_details)
                         <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
                             <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                                 <span
@@ -475,6 +491,18 @@
                                 Informasi Hukum
                             </h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                @if($auction->creditor_name)
+                                    <div class="bg-gray-50 rounded-xl p-4 md:p-5">
+                                        <h4 class="font-semibold text-gray-900 mb-2">Nama Kreditur</h4>
+                                        <p class="text-gray-700 text-sm md:text-base">{{ $auction->creditor_name }}</p>
+                                    </div>
+                                @endif
+                                @if($auction->encumbrance_details)
+                                    <div class="bg-gray-50 rounded-xl p-4 md:p-5">
+                                        <h4 class="font-semibold text-gray-900 mb-2">Hak Tanggungan</h4>
+                                        <p class="text-gray-700 text-sm md:text-base">{!! nl2br(e($auction->encumbrance_details)) !!}</p>
+                                    </div>
+                                @endif
                                 @if($auction->legal_basis)
                                     <div class="bg-gray-50 rounded-xl p-4 md:p-5">
                                         <h4 class="font-semibold text-gray-900 mb-2">Dasar Hukum</h4>
@@ -714,6 +742,25 @@
                                     </div>
                                 </div>
                             @endif
+
+                            @if($auction->auction_method)
+                                <div class="flex items-start gap-3 md:gap-4">
+                                    <div
+                                        class="w-9 h-9 md:w-10 md:h-10 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 md:w-5 md:h-5 text-primary-600" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide font-semibold">Metode Lelang
+                                        </p>
+                                        <p class="font-bold text-gray-900 text-sm md:text-base">
+                                            {{ $auction->auction_method }}</p>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         <!-- Countdown Timer -->
@@ -776,16 +823,28 @@
                                     @if($auction->organizer_address)
                                         <p class="text-sm text-gray-600">{{ $auction->organizer_address }}</p>
                                     @endif
-                                    @if($auction->organizer_website)
-                                        <a href="{{ $auction->organizer_website }}" target="_blank"
-                                            class="inline-flex items-center text-primary-600 hover:text-primary-700 text-sm">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                            </svg>
-                                            Website
-                                        </a>
-                                    @endif
+                                    <div class="flex flex-col gap-1">
+                                        @if($auction->organizer_email)
+                                            <a href="mailto:{{ $auction->organizer_email }}"
+                                                class="inline-flex items-center text-primary-600 hover:text-primary-700 text-sm">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                                {{ $auction->organizer_email }}
+                                            </a>
+                                        @endif
+                                        @if($auction->organizer_website)
+                                            <a href="{{ $auction->organizer_website }}" target="_blank"
+                                                class="inline-flex items-center text-primary-600 hover:text-primary-700 text-sm">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
+                                                Website
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -799,9 +858,12 @@
                                     @if($auction->contacts && count($auction->contacts) > 0)
                                         @foreach($auction->contacts as $contact)
                                             <div class="bg-gray-50 rounded-xl p-4">
-                                                <p class="font-bold text-gray-900 text-base md:text-lg mb-2">
+                                                <p class="font-bold text-gray-900 text-base md:text-lg {{ !empty($contact['position']) ? 'mb-1' : 'mb-3' }}">
                                                     {{ $contact['name'] }}
                                                 </p>
+                                                @if(!empty($contact['position']))
+                                                    <p class="text-sm text-gray-600 mb-3">{{ $contact['position'] }}</p>
+                                                @endif
                                                 @if(!empty($contact['phone']))
                                                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $contact['phone']) }}"
                                                         class="inline-flex items-center gap-2 w-full justify-center py-2 px-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
@@ -847,7 +909,7 @@
                                             WhatsApp: {{ $auction->organizer_phone }}
                                         </a>
                                     @endif
-                                    
+
                                     @if($auction->contact_email)
                                         <a href="mailto:{{ $auction->contact_email }}"
                                             class="inline-flex items-center gap-2 w-full justify-center py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl transition-all duration-300">
