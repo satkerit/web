@@ -45,6 +45,7 @@
                 active: 0,
                 total: {{ $heroSlides->count() }},
                 autoplay: null,
+                delay: {{ $heroSliderDelay ?? 5000 }},
                 isAnimating: false,
                 direction: 'next',
                 transitions: {{ $slidesData }},
@@ -52,7 +53,7 @@
                     this.startAutoplay();
                 },
                 startAutoplay() {
-                    this.autoplay = setInterval(() => this.next(), 5000);
+                    this.autoplay = setInterval(() => this.next(), this.delay);
                 },
                 stopAutoplay() {
                     if (this.autoplay) clearInterval(this.autoplay);

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Services\CacheService;
+use App\Models\SiteSetting;
 
 class HomeController extends Controller
 {
     public function index()
     {
         $heroSlides = CacheService::getHeroSlides(5);
+        $settings = SiteSetting::getSettings();
 
         // Preload first hero image for better performance
         $firstHeroImage = $heroSlides->first()?->image;
@@ -16,6 +18,7 @@ class HomeController extends Controller
         return view('frontend.home', [
             'companyInfo' => CacheService::getCompanyInfo(),
             'heroSlides' => $heroSlides,
+            'heroSliderDelay' => $settings->hero_slider_delay ?? 5000,
             'firstHeroImage' => $firstHeroImage,
             'products' => CacheService::getHomeProducts(6),
             'news' => CacheService::getHomeNews(3),

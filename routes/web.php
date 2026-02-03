@@ -107,6 +107,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::resource('reports', App\Http\Controllers\Admin\ReportController::class);
 
     // Hero Slides Management
+    Route::get('hero-slides/settings', [App\Http\Controllers\Admin\HeroSlideController::class, 'settings'])->name('hero-slides.settings');
+    Route::put('hero-slides/settings', [App\Http\Controllers\Admin\HeroSlideController::class, 'updateSettings'])->name('hero-slides.settings.update');
     Route::post('hero-slides/reorder', [App\Http\Controllers\Admin\HeroSlideController::class, 'reorder'])->name('hero-slides.reorder');
     Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class);
 

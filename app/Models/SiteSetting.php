@@ -21,6 +21,7 @@ class SiteSetting extends Model
     }
 
     protected $fillable = [
+        'hero_slider_delay',
         'maintenance_mode',
         'maintenance_message',
         'maintenance_allowed_ips',
@@ -29,6 +30,7 @@ class SiteSetting extends Model
     ];
 
     protected $casts = [
+        'hero_slider_delay' => 'integer',
         'maintenance_mode' => 'boolean',
         'maintenance_end_time' => 'datetime',
         'maintenance_pages' => 'array',
@@ -42,7 +44,7 @@ class SiteSetting extends Model
         return [
             // Beranda
             'home' => ['name' => 'Beranda', 'route' => 'home', 'pattern' => '/'],
-            
+
             // Tentang Kami (semua sub-menu)
             'about' => ['name' => 'Tentang Kami (Semua)', 'route' => 'about.*', 'pattern' => 'tentang-kami/*'],
             'about_company' => ['name' => 'Profil Perusahaan', 'route' => 'about.company', 'pattern' => 'tentang-kami/perusahaan'],
@@ -51,36 +53,36 @@ class SiteSetting extends Model
             'about_dps' => ['name' => 'Dewan Pengawas Syariah', 'route' => 'about.pengawas-syariah', 'pattern' => 'tentang-kami/dewan-pengawas-syariah'],
             'about_struktur' => ['name' => 'Struktur Organisasi', 'route' => 'about.struktur', 'pattern' => 'tentang-kami/struktur-organisasi'],
             'about_offices' => ['name' => 'Kantor', 'route' => 'about.offices', 'pattern' => 'tentang-kami/kantor'],
-            
+
             // Produk & Layanan (semua sub-menu)
             'products' => ['name' => 'Produk & Layanan (Semua)', 'route' => 'products.*', 'pattern' => 'produk-layanan/*'],
             'products_simpanan' => ['name' => 'Simpanan Syariah', 'route' => 'products.simpanan-syariah', 'pattern' => 'produk-layanan/simpanan-syariah'],
             'products_pembiayaan' => ['name' => 'Pembiayaan Syariah', 'route' => 'products.pembiayaan-syariah', 'pattern' => 'produk-layanan/pembiayaan-syariah'],
             'products_deposito' => ['name' => 'Deposito Syariah', 'route' => 'products.deposito-syariah', 'pattern' => 'produk-layanan/deposito-syariah'],
             'products_kas_keliling' => ['name' => 'Kas Keliling', 'route' => 'products.kas-keliling', 'pattern' => 'produk-layanan/kas-keliling'],
-            
+
             // Lelang
             'auctions' => ['name' => 'Lelang', 'route' => 'auctions.*', 'pattern' => 'lelang/*'],
-            
+
             // Berita
             'news' => ['name' => 'Berita', 'route' => 'news.*', 'pattern' => 'berita/*'],
-            
+
             // Informasi Umum / Laporan (semua sub-menu)
             'reports' => ['name' => 'Informasi Umum (Semua)', 'route' => 'reports.*', 'pattern' => 'informasi-umum/*'],
             'reports_keuangan' => ['name' => 'Laporan Keuangan Publikasi', 'route' => 'reports.keuangan-publikasi', 'pattern' => 'informasi-umum/laporan-keuangan-publikasi'],
             'reports_tata_kelola' => ['name' => 'Laporan Tata Kelola', 'route' => 'reports.tata-kelola', 'pattern' => 'informasi-umum/laporan-tata-kelola'],
             'reports_tahunan' => ['name' => 'Laporan Tahunan', 'route' => 'reports.tahunan', 'pattern' => 'informasi-umum/laporan-tahunan'],
             'reports_berkelanjutan' => ['name' => 'Laporan Tahunan Berkelanjutan', 'route' => 'reports.tahunan-berkelanjutan', 'pattern' => 'informasi-umum/laporan-tahunan-berkelanjutan'],
-            
+
             // Karir
             'careers' => ['name' => 'Karir', 'route' => 'careers.*', 'pattern' => 'karir/*'],
-            
+
             // Halaman Statis
             'contact' => ['name' => 'Hubungi Kami', 'route' => 'contact', 'pattern' => 'hubungi-kami'],
             'whistleblowing' => ['name' => 'Whistleblowing', 'route' => 'whistleblowing', 'pattern' => 'whistleblowing'],
             'pengaduan_nasabah' => ['name' => 'Pengaduan Nasabah', 'route' => 'pengaduan-nasabah', 'pattern' => 'pengaduan-nasabah'],
             'download_logo' => ['name' => 'Download Logo', 'route' => 'download-logo', 'pattern' => 'download-logo'],
-            
+
             // Simulasi Pembiayaan
             'financing_simulation' => ['name' => 'Simulasi Pembiayaan', 'route' => 'financing-simulation', 'pattern' => 'simulasi-pembiayaan'],
         ];
@@ -90,6 +92,7 @@ class SiteSetting extends Model
     {
         return Cache::remember('site_settings', 3600, function () {
             return self::first() ?? self::create([
+                'hero_slider_delay' => 5000,
                 'maintenance_mode' => false,
                 'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
                 'maintenance_pages' => [],
@@ -249,7 +252,7 @@ class SiteSetting extends Model
         static::saved(function () {
             self::clearCache();
         });
-        
+
         static::updated(function () {
             self::clearCache();
         });

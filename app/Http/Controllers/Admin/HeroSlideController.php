@@ -22,6 +22,34 @@ class HeroSlideController extends Controller
         return view('admin.hero-slides.index', compact('slides'));
     }
 
+    public function settings()
+    {
+        $this->authorizeView('settings.hero');
+        $settings = SiteSetting::getSettings();
+        return view('admin.hero-slides.settings', compact('settings'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $this->authorizeUpdate('settings.hero');
+
+        $validated = $request->validate([
+            'hero_slider_delay' => 'required|integer|min:1000|max:20000',
+        ]);
+
+        $settings = SiteSetting::first();
+        if ($settings) {
+            $settings->update($validated);
+        } else {
+            SiteSetting::create($validated);
+        }
+
+        // Clear cache
+        SiteSetting::clearCache();
+
+        return redirect()->route('admin.hero-slides.index')->with('success', 'Pengaturan slider berhasil diperbarui.');
+    }
+
     public function create()
     {
         $this->authorizeCreate('settings.hero');
