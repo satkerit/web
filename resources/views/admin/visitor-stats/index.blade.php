@@ -5,16 +5,30 @@
 @section('content')
 <x-admin.page-header title="Statistik Pengunjung" subtitle="Analisis data pengunjung website">
     <x-slot:actions>
-        <form method="GET" class="flex items-center gap-2">
-            <select name="period" onchange="this.form.submit()"
-                    class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-emerald-500 text-sm">
-                <option value="today" {{ $period == 'today' ? 'selected' : '' }}>Hari Ini</option>
-                <option value="7days" {{ $period == '7days' ? 'selected' : '' }}>7 Hari Terakhir</option>
-                <option value="30days" {{ $period == '30days' ? 'selected' : '' }}>30 Hari Terakhir</option>
-                <option value="90days" {{ $period == '90days' ? 'selected' : '' }}>90 Hari Terakhir</option>
-                <option value="this_month" {{ $period == 'this_month' ? 'selected' : '' }}>Bulan Ini</option>
-                <option value="last_month" {{ $period == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
-            </select>
+        <form method="GET" class="flex items-center gap-2" x-data="{ period: '{{ $period }}' }">
+            <div class="flex items-center gap-2">
+                <select name="period" x-model="period" @change="period !== 'custom' ? $el.form.submit() : null"
+                        class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-emerald-500 text-sm">
+                    <option value="today">Hari Ini</option>
+                    <option value="7days">7 Hari Terakhir</option>
+                    <option value="30days">30 Hari Terakhir</option>
+                    <option value="90days">90 Hari Terakhir</option>
+                    <option value="this_month">Bulan Ini</option>
+                    <option value="last_month">Bulan Lalu</option>
+                    <option value="custom">Pilih Tanggal</option>
+                </select>
+            </div>
+
+            <div x-show="period === 'custom'" class="flex items-center gap-2" x-transition style="display: none;">
+                <input type="date" name="start_date" value="{{ $startDate->format('Y-m-d') }}"
+                       class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-emerald-500 text-sm">
+                <span class="text-slate-400">-</span>
+                <input type="date" name="end_date" value="{{ $endDate->format('Y-m-d') }}"
+                       class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-emerald-500 text-sm">
+                <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 transition shadow-sm">
+                    Filter
+                </button>
+            </div>
         </form>
     </x-slot:actions>
 </x-admin.page-header>

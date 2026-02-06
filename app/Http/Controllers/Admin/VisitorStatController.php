@@ -95,7 +95,9 @@ class VisitorStatController extends Controller
             'platforms',
             'countries',
             'recentVisitors',
-            'period'
+            'period',
+            'startDate',
+            'endDate'
         ));
     }
 
