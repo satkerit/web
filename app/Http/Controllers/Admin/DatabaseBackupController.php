@@ -591,29 +591,39 @@ class DatabaseBackupController extends Controller
         $sql .= "START TRANSACTION;\n\n";
 
         // Get all tables
-        $tables = DB::select('SHOW TABLES');
+        $tables = DB::select('SHOW FULL TABLES');
         $tableKey = 'Tables_in_' . $dbName;
 
         foreach ($tables as $table) {
             $tableName = $table->$tableKey;
+            $tableType = $table->Table_type;
 
             // Get table structure
             if ($backupType !== 'data_only') {
                 $sql .= "-- --------------------------------------------------------\n";
-                $sql .= "-- Table structure for table `{$tableName}`\n";
+                $sql .= "-- Structure for `{$tableName}` ({$tableType})\n";
                 $sql .= "-- --------------------------------------------------------\n\n";
 
-                $sql .= "DROP TABLE IF EXISTS `{$tableName}`;\n";
+                if ($tableType === 'VIEW') {
+                    $sql .= "DROP VIEW IF EXISTS `{$tableName}`;\n";
+                } else {
+                    $sql .= "DROP TABLE IF EXISTS `{$tableName}`;\n";
+                }
 
                 $createTable = DB::select("SHOW CREATE TABLE `{$tableName}`");
                 if (!empty($createTable)) {
-                    $createSql = $createTable[0]->{'Create Table'};
-                    $sql .= $createSql . ";\n\n";
+                    $createRow = (array) $createTable[0];
+                    // Handle both Tables and Views, and different casing
+                    $createSql = $createRow['Create Table'] ?? $createRow['Create View'] ?? null;
+                    
+                    if ($createSql) {
+                        $sql .= $createSql . ";\n\n";
+                    }
                 }
             }
 
             // Get table data
-            if ($backupType !== 'structure_only') {
+            if ($backupType !== 'structure_only' && $tableType === 'BASE TABLE') {
                 $rows = DB::table($tableName)->get();
 
                 if ($rows->count() > 0) {

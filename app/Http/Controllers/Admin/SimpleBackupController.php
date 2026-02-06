@@ -61,7 +61,7 @@ class SimpleBackupController extends Controller
         $backupPath = $backupDir . '/' . $filename;
 
         // Get all tables
-        $tables = DB::select('SHOW TABLES');
+        $tables = DB::select('SHOW FULL TABLES');
         $tableKey = 'Tables_in_' . $dbConfig['database'];
 
         $sql = "-- Simple Backup Created: " . now()->toDateTimeString() . "\n";
@@ -69,29 +69,45 @@ class SimpleBackupController extends Controller
 
         foreach ($tables as $table) {
             $tableName = $table->$tableKey;
+            $tableType = $table->Table_type;
 
             // Get CREATE TABLE statement
             $createTable = DB::select("SHOW CREATE TABLE `{$tableName}`");
-            $sql .= "DROP TABLE IF EXISTS `{$tableName}`;\n";
-            $sql .= $createTable[0]->{'Create Table'} . ";\n\n";
+
+            if ($tableType === 'VIEW') {
+                $sql .= "DROP VIEW IF EXISTS `{$tableName}`;\n";
+            } else {
+                $sql .= "DROP TABLE IF EXISTS `{$tableName}`;\n";
+            }
+
+            if (!empty($createTable)) {
+                $createRow = (array) $createTable[0];
+                $createSql = $createRow['Create Table'] ?? $createRow['Create View'] ?? null;
+
+                if ($createSql) {
+                    $sql .= $createSql . ";\n\n";
+                }
+            }
 
             // Get table data
-            $rows = DB::table($tableName)->get();
-            if ($rows->count() > 0) {
-                $sql .= "INSERT INTO `{$tableName}` VALUES\n";
-                $values = [];
-                foreach ($rows as $row) {
-                    $rowData = [];
-                    foreach ($row as $value) {
-                        if (is_null($value)) {
-                            $rowData[] = 'NULL';
-                        } else {
-                            $rowData[] = "'" . addslashes($value) . "'";
+            if ($tableType === 'BASE TABLE') {
+                $rows = DB::table($tableName)->get();
+                if ($rows->count() > 0) {
+                    $sql .= "INSERT INTO `{$tableName}` VALUES\n";
+                    $values = [];
+                    foreach ($rows as $row) {
+                        $rowData = [];
+                        foreach ($row as $value) {
+                            if (is_null($value)) {
+                                $rowData[] = 'NULL';
+                            } else {
+                                $rowData[] = "'" . addslashes($value) . "'";
+                            }
                         }
+                        $values[] = '(' . implode(',', $rowData) . ')';
                     }
-                    $values[] = '(' . implode(',', $rowData) . ')';
+                    $sql .= implode(",\n", $values) . ";\n\n";
                 }
-                $sql .= implode(",\n", $values) . ";\n\n";
             }
         }
 
