@@ -101,7 +101,7 @@ class SimpleBackupController extends Controller
                             if (is_null($value)) {
                                 $rowData[] = 'NULL';
                             } else {
-                                $rowData[] = "'" . addslashes($value) . "'";
+                                $rowData[] = DB::getPdo()->quote($value);
                             }
                         }
                         $values[] = '(' . implode(',', $rowData) . ')';

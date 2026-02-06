@@ -346,16 +346,26 @@ class DatabaseBackupController extends Controller
     {
         $dbConfig = Config::get('database.connections.' . Config::get('database.default'));
 
-        // Read backup file
+        // Prepare source stream
         $isCompressed = pathinfo($filePath, PATHINFO_EXTENSION) === 'gz';
-        $sqlContent = $isCompressed ? gzdecode(File::get($filePath)) : File::get($filePath);
-
-        // Remove metadata header
-        $sqlContent = preg_replace('/^-- Backup Metadata:.*?\n-- End Metadata\n/ms', '', $sqlContent);
+        $sourcePath = $isCompressed ? 'compress.zlib://' . $filePath : $filePath;
 
         // Create temporary file for mysql import
         $tempFile = tempnam(sys_get_temp_dir(), 'db_restore_');
-        File::put($tempFile, $sqlContent);
+
+        // Stream content to temp file to avoid memory exhaustion
+        $src = fopen($sourcePath, 'rb');
+        $dest = fopen($tempFile, 'wb');
+
+        if ($src && $dest) {
+            stream_copy_to_stream($src, $dest);
+            fclose($src);
+            fclose($dest);
+        } else {
+            if ($src) fclose($src);
+            if ($dest) fclose($dest);
+            throw new \Exception("Failed to open streams for restoration");
+        }
 
         try {
             // Build mysql command
@@ -374,7 +384,7 @@ class DatabaseBackupController extends Controller
 
             // Execute mysql import
             $process = new Process($command);
-            $process->setInput(File::get($tempFile));
+            $process->setInput(fopen($tempFile, 'r')); // Stream from temp file
             $process->setTimeout(600); // 10 minutes timeout
             $process->run();
 
@@ -615,7 +625,7 @@ class DatabaseBackupController extends Controller
                     $createRow = (array) $createTable[0];
                     // Handle both Tables and Views, and different casing
                     $createSql = $createRow['Create Table'] ?? $createRow['Create View'] ?? null;
-                    
+
                     if ($createSql) {
                         $sql .= $createSql . ";\n\n";
                     }
@@ -638,7 +648,7 @@ class DatabaseBackupController extends Controller
                             if (is_null($value)) {
                                 return 'NULL';
                             }
-                            return "'" . addslashes($value) . "'";
+                            return DB::getPdo()->quote($value);
                         }, array_values($rowArray));
 
                         $sql .= "INSERT INTO `{$tableName}` (`" . implode('`, `', $columns) . "`) VALUES (" . implode(', ', $values) . ");\n";

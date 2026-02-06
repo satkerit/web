@@ -59,6 +59,11 @@ class News extends Model
         return $query->where('is_published', true)->where('published_at', '<=', now());
     }
 
+    public function setContentAttribute($value)
+    {
+        $this->attributes['content'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     protected static function booted(): void
     {
         static::saved(fn() => Cache::forget('news_home_3'));
