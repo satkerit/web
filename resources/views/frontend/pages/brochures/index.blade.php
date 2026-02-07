@@ -28,7 +28,7 @@
                                     </svg>
                                 </div>
                                 <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">
-                                    {{ number_format($brochure->file_size / 1024, 2) }} KB
+                                    {{ $brochure->file_size ? number_format($brochure->file_size / 1024, 2) . ' KB' : '-' }}
                                 </span>
                             </div>
 

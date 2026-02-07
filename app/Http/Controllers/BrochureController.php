@@ -24,6 +24,10 @@ class BrochureController extends Controller
             $brochure
         );
 
+        if (!Storage::disk('public')->exists($brochure->file_path)) {
+            abort(404, 'File brosur tidak ditemukan.');
+        }
+
         return Storage::disk('public')->download($brochure->file_path, $brochure->original_name);
     }
 
@@ -35,6 +39,10 @@ class BrochureController extends Controller
             'Melihat preview brosur: ' . $brochure->original_name,
             $brochure
         );
+
+        if (!Storage::disk('public')->exists($brochure->file_path)) {
+            abort(404, 'File brosur tidak ditemukan.');
+        }
 
         return Storage::disk('public')->response($brochure->file_path, $brochure->original_name, [
             'Content-Disposition' => 'inline; filename="' . $brochure->original_name . '"',
