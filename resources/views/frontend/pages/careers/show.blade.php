@@ -81,7 +81,7 @@
 
                     <!-- Requirements -->
                     @if($career->requirements)
-                    <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 p-6 md:p-8">
                         <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                             <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
@@ -96,7 +96,7 @@
 
                     <!-- Responsibilities -->
                     @if($career->responsibilities)
-                    <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
+                    <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 border border-gray-100">
                         <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                             <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
@@ -153,7 +153,7 @@
                     </div>
 
                     <!-- Share -->
-                    <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 p-6">
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Bagikan Lowongan</h3>
                         <div class="flex items-center gap-3">
                             <a href="https://wa.me/?text={{ urlencode($career->title . ' - ' . url()->current()) }}" target="_blank" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
@@ -173,10 +173,10 @@
             <!-- Related Careers -->
             @if($relatedCareers->count() > 0)
             <div class="mt-12">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Lowongan Lainnya</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 tracking-tight">Lowongan Lainnya</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach($relatedCareers as $related)
-                        <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 hover:shadow-2xl transition-all border border-gray-100">
                             <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">
                                 {{ $related->employment_type_label }}
                             </span>

@@ -1,165 +1,180 @@
 <x-frontend-layout>
     <x-slot name="title">Lelang Agunan - {{ config('app.name') }}</x-slot>
-    
+
     @push('head')
     <!-- SEO Meta Tags -->
     <meta name="description" content="Temukan berbagai lelang agunan terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.">
     <meta name="keywords" content="lelang agunan, lelang properti, BPRS Babel, auction, property auction, rumah lelang, tanah lelang">
     <meta name="author" content="BPRS Bangka Belitung">
-    
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Lelang Agunan - {{ config('app.name') }}">
     <meta property="og:description" content="Temukan berbagai lelang agunan terpercaya dengan harga terbaik. Rumah, tanah, ruko, dan properti komersial lainnya.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    
+
     <!-- Auction-specific styles -->
     <style>
         /* Auction-specific styling */
         .auction-hero {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #115e59 100%);
         }
-        
+
         .btn-auction-primary {
-            background: linear-gradient(135deg, #f97316, #ea580c);
+            background: linear-gradient(135deg, #059669, #10b981);
             color: white;
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        
+
         .btn-auction-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
         }
-        
+
         .auction-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .auction-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
-        
+
         .auction-price {
-            background: linear-gradient(135deg, #f97316, #ea580c);
+            background: linear-gradient(135deg, #059669, #10b981);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             font-weight: 800;
         }
-        
-        .status-active { 
+
+        .status-active {
             background: linear-gradient(135deg, #059669, #10b981);
             color: white;
         }
-        
-        .status-upcoming { 
-            background: linear-gradient(135deg, #f97316, #f59e0b);
+
+        .status-upcoming {
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
             color: white;
         }
-        
-        .status-closed { 
+
+        .status-closed {
             background: linear-gradient(135deg, #6b7280, #9ca3af);
             color: white;
         }
-        
-        .status-sold { 
+
+        .status-sold {
             background: linear-gradient(135deg, #dc2626, #ef4444);
             color: white;
         }
-        
+
         .auction-pulse {
             animation: pulse 2s ease-in-out infinite;
         }
-        
+
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.9; }
         }
-        
+
         .slide-up-auction {
             animation: slideUp 0.8s ease-out forwards;
         }
-        
+
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .scale-in-auction {
             animation: scaleIn 0.6s ease-out forwards;
         }
-        
+
         @keyframes scaleIn {
             from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
         }
-        
+
         .float-auction {
             animation: float 4s ease-in-out infinite;
         }
-        
+
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             33% { transform: translateY(-10px) rotate(1deg); }
             66% { transform: translateY(-5px) rotate(-1deg); }
         }
-        
+
         .glass-auction {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
+
         .auction-search-form {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(249, 115, 22, 0.2);
-            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1);
+        }
+
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
         }
     </style>
     @endpush
 
     <!-- Hero Section -->
-    <section class="relative auction-hero bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 text-white py-20 md:py-24 overflow-hidden">
+    <section class="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 pt-32 pb-24 overflow-hidden">
         <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+
+        <!-- Animated Gradient Orbs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-blob"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
         </div>
-        
-        <!-- Floating Elements -->
-        <div class="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl float-auction"></div>
-        <div class="absolute bottom-10 right-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-xl float-auction" style="animation-delay: 2s;"></div>
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-12">
                 <div class="inline-flex items-center px-6 py-3 glass-auction rounded-full text-sm font-semibold mb-6 scale-in-auction">
-                    <svg class="w-5 h-5 mr-3 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 mr-3 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    <span class="text-yellow-100">Lelang Agunan Terpercaya</span>
+                    <span class="text-emerald-50">Lelang Agunan Terpercaya</span>
                 </div>
-                <h1 class="text-4xl md:text-6xl font-bold mb-6 slide-up-auction">
-                    Temukan Agunan <span class="text-yellow-300 auction-pulse">Impian Anda</span>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 slide-up-auction tracking-tight text-white">
+                    Temukan Agunan <span class="text-emerald-300 auction-pulse">Impian Anda</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto slide-up-auction" style="animation-delay: 0.2s;">
+                <p class="text-xl md:text-2xl text-emerald-100 mb-8 max-w-3xl mx-auto slide-up-auction" style="animation-delay: 0.2s;">
                     Dapatkan agunan berkualitas dengan harga terbaik melalui lelang resmi dan terpercaya
                 </p>
-                
+
                 <!-- Search Form -->
                 <div class="max-w-5xl mx-auto slide-up-auction" style="animation-delay: 0.4s;">
                     <form method="GET" class="auction-search-form rounded-2xl p-6 md:p-8 shadow-2xl">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                            <div class="space-y-2">
-                                <label class="block text-sm font-semibold text-gray-700">Cari Agunan</label>
-                                <input type="text" name="search" value="{{ request('search') }}" 
+                            <div class="space-y-2 text-left">
+                                <label class="block text-sm font-bold tracking-tight text-gray-700">Cari Agunan</label>
+                                <input type="text" name="search" value="{{ request('search') }}"
                                        placeholder="Lokasi, jenis agunan..."
-                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 transition-all">
+                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all">
                             </div>
-                            <div class="space-y-2">
+                            <div class="space-y-2 text-left">
                                 <label class="block text-sm font-semibold text-gray-700">Jenis Aset</label>
-                                <select name="asset_type" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 transition-all">
+                                <select name="asset_type" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all">
                                     <option value="">Semua Jenis</option>
                                     @foreach($assetTypes as $value => $label)
                                         <option value="{{ $value }}" {{ request('asset_type') === $value ? 'selected' : '' }}>
@@ -168,9 +183,9 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="space-y-2">
+                            <div class="space-y-2 text-left">
                                 <label class="block text-sm font-semibold text-gray-700">Kota</label>
-                                <select name="city" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 transition-all">
+                                <select name="city" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all">
                                     <option value="">Semua Kota</option>
                                     @foreach($cities as $city)
                                         <option value="{{ $city }}" {{ request('city') === $city ? 'selected' : '' }}>
@@ -181,7 +196,7 @@
                             </div>
                             <div class="space-y-2">
                                 <label class="block text-sm font-semibold text-gray-700">&nbsp;</label>
-                                <button type="submit" class="w-full btn-auction-primary py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-bold">
+                                <button type="submit" class="w-full btn-auction-primary py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-bold tracking-tight">
                                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                     </svg>
@@ -202,43 +217,43 @@
                 <!-- Main Content -->
                 <div class="lg:w-3/4">
                     <!-- Advanced Filters -->
-                    <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 border border-gray-100">
+                    <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 mb-8 border border-gray-100">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-lg font-bold text-gray-900 flex items-center gap-3">
-                                <span class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <span class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
                                     </svg>
                                 </span>
                                 Filter Lanjutan
                             </h3>
-                            <button onclick="toggleFilters()" class="text-orange-600 hover:text-orange-700 font-medium text-sm">
+                            <button onclick="toggleFilters()" class="text-emerald-600 hover:text-emerald-700 font-medium text-sm">
                                 <span id="filter-toggle-text">Tampilkan</span>
                                 <svg id="filter-toggle-icon" class="w-4 h-4 inline ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
                         </div>
-                        
+
                         <div id="advanced-filters" class="hidden">
                             <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                                 <input type="hidden" name="search" value="{{ request('search') }}">
                                 <input type="hidden" name="asset_type" value="{{ request('asset_type') }}">
                                 <input type="hidden" name="city" value="{{ request('city') }}">
-                                
+
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-gray-700">Harga Minimum</label>
-                                    <input type="number" name="min_price" value="{{ request('min_price') }}" 
-                                           placeholder="0" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all">
+                                    <input type="number" name="min_price" value="{{ request('min_price') }}"
+                                           placeholder="0" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-gray-700">Harga Maksimum</label>
-                                    <input type="number" name="max_price" value="{{ request('max_price') }}" 
-                                           placeholder="Unlimited" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all">
+                                    <input type="number" name="max_price" value="{{ request('max_price') }}"
+                                           placeholder="Unlimited" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-gray-700">Status Lelang</label>
-                                    <select name="status" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all">
+                                    <select name="status" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all">
                                         <option value="">Semua Status</option>
                                         <option value="registration_open" {{ request('status') === 'registration_open' ? 'selected' : '' }}>Pendaftaran Dibuka</option>
                                         <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Dipublikasi</option>
@@ -247,7 +262,7 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-gray-700">Urutkan Berdasarkan</label>
-                                    <select name="sort_by" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all">
+                                    <select name="sort_by" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all">
                                         <option value="date" {{ request('sort_by') === 'date' ? 'selected' : '' }}>Tanggal Lelang</option>
                                         <option value="price" {{ request('sort_by') === 'price' ? 'selected' : '' }}>Harga</option>
                                         <option value="featured" {{ request('sort_by') === 'featured' ? 'selected' : '' }}>Featured</option>
@@ -270,19 +285,19 @@
                         <div class="text-gray-600">
                             <span class="font-semibold text-gray-900">{{ $auctions->total() }}</span> lelang ditemukan
                             @if(request()->hasAny(['search', 'asset_type', 'city', 'min_price', 'max_price', 'status']))
-                            <span class="text-sm text-orange-600 ml-2">
+                            <span class="text-sm text-emerald-600 ml-2">
                                     (dengan filter aktif)
                                 </span>
                             @endif
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-sm text-gray-600">Urutan:</span>
-                            <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'asc'])) }}" 
-                               class="px-3 py-2 text-sm border rounded-lg transition-all {{ request('sort_order') === 'asc' ? 'bg-orange-100 border-orange-300 text-orange-700' : 'border-gray-300 hover:border-orange-300' }}">
+                            <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'asc'])) }}"
+                               class="px-3 py-2 text-sm border rounded-lg transition-all {{ request('sort_order') === 'asc' ? 'bg-emerald-100 border-emerald-300 text-emerald-700' : 'border-gray-300 hover:border-emerald-300' }}">
                                 Ascending
                             </a>
-                            <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'desc'])) }}" 
-                               class="px-3 py-2 text-sm border rounded-lg transition-all {{ request('sort_order') === 'desc' ? 'bg-orange-100 border-orange-300 text-orange-700' : 'border-gray-300 hover:border-orange-300' }}">
+                            <a href="{{ route('auctions.index', array_merge(request()->query(), ['sort_order' => 'desc'])) }}"
+                               class="px-3 py-2 text-sm border rounded-lg transition-all {{ request('sort_order') === 'desc' ? 'bg-emerald-100 border-emerald-300 text-emerald-700' : 'border-gray-300 hover:border-emerald-300' }}">
                                 Descending
                             </a>
                         </div>
@@ -291,23 +306,23 @@
                     <!-- Auction Grid -->
                     <div class="auction-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
                         @forelse($auctions as $auction)
-                            <div class="auction-card rounded-2xl overflow-hidden shadow-xl border border-gray-100 group" x-intersect>
+                            <div class="auction-card rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 group" x-intersect>
                                 <!-- Image -->
                                 <div class="relative aspect-[4/3] overflow-hidden">
                                     @if($auction->main_image)
-                                        <img src="{{ $auction->main_image }}" alt="{{ $auction->title }}" 
+                                        <img src="{{ $auction->main_image }}" alt="{{ $auction->title }}"
                                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                                     @else
-                                        <div class="w-full h-full bg-gradient-to-br from-orange-100 via-orange-200 to-red-200 flex items-center justify-center">
+                                        <div class="w-full h-full bg-gradient-to-br from-emerald-100 via-emerald-200 to-teal-200 flex items-center justify-center">
                                             <div class="text-center">
-                                                <svg class="h-16 w-16 text-orange-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg class="h-16 w-16 text-emerald-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                                 </svg>
-                                                <p class="text-orange-600 font-medium text-sm">{{ $auction->asset_type_label }}</p>
+                                                <p class="text-emerald-600 font-medium text-sm">{{ $auction->asset_type_label }}</p>
                                             </div>
                                         </div>
                                     @endif
-                                    
+
                                     <!-- Badges -->
                                     <div class="absolute top-4 left-4 flex flex-col space-y-2">
                                         @if($auction->is_featured)
@@ -321,7 +336,7 @@
                                             </span>
                                         @endif
                                     </div>
-                                    
+
                                     <!-- Sold Watermark -->
                                     @if($auction->status === 'sold')
                                     <div class="absolute inset-0 flex items-center justify-center bg-black/30 z-20 pointer-events-none">
@@ -330,10 +345,10 @@
                                         </div>
                                     </div>
                                     @endif
-                                    
+
                                     <!-- Status -->
                                     <div class="absolute top-4 right-4">
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold 
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold
                                             @if($auction->status === 'registration_open') status-active
                                             @elseif($auction->status === 'auction_scheduled') status-upcoming
                                             @elseif($auction->status === 'sold') status-sold
@@ -347,17 +362,17 @@
                                     <!-- Quick Actions -->
                                     <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         <div class="flex space-x-2">
-                                            <button onclick="showInterestModal({{ $auction->id }})" 
+                                            <button onclick="showInterestModal({{ $auction->id }})"
                                                     class="w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
                                                     title="Nyatakan Minat">
                                                 <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
                                                     <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                                                 </svg>
                                             </button>
-                                            <a href="{{ route('auctions.show', $auction) }}" 
+                                            <a href="{{ route('auctions.show', $auction) }}"
                                                class="w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
                                                title="Lihat Detail">
-                                                <svg class="h-5 w-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg class="h-5 w-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                                 </svg>
@@ -369,17 +384,17 @@
                                 <!-- Content -->
                                 <div class="p-6">
                                     <div class="mb-3">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                                             {{ $auction->asset_type_label }}
                                         </span>
                                     </div>
-                                    
-                                    <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors">
+
+                                    <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-emerald-600 transition-colors">
                                         <a href="{{ route('auctions.show', $auction) }}">
                                             {{ $auction->title }}
                                         </a>
                                     </h3>
-                                    
+
                                     <div class="flex items-center text-sm text-gray-600 mb-4">
                                         <svg class="h-4 w-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -437,7 +452,7 @@
                                     @endif
 
                                     <!-- Action Button -->
-                                    <a href="{{ route('auctions.show', $auction) }}" 
+                                    <a href="{{ route('auctions.show', $auction) }}"
                                        class="block w-full btn-auction-primary text-center py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                                         Lihat Detail Lelang
                                     </a>
@@ -453,7 +468,7 @@
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-900 mb-2">Tidak ada lelang ditemukan</h3>
                                     <p class="text-gray-600 mb-6">Belum ada lelang yang sesuai dengan kriteria pencarian Anda.</p>
-                                    <a href="{{ route('auctions.index') }}" class="inline-flex items-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-all">
+                                    <a href="{{ route('auctions.index') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                         </svg>
@@ -492,7 +507,7 @@
                                     <div class="group border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
                                         <div class="flex gap-3">
                                             @if($featured->main_image)
-                                                <img src="{{ $featured->main_image }}" alt="{{ $featured->title }}" 
+                                                <img src="{{ $featured->main_image }}" alt="{{ $featured->title }}"
                                                      class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
                                             @else
                                                 <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -533,8 +548,8 @@
                     @if($upcomingAuctions->count() > 0)
                         <div class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
                             <h3 class="text-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
-                                <span class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <span class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                 </span>
@@ -545,7 +560,7 @@
                                     <div class="group border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
                                         <div class="flex gap-3">
                                             @if($upcoming->main_image)
-                                                <img src="{{ $upcoming->main_image }}" alt="{{ $upcoming->title }}" 
+                                                <img src="{{ $upcoming->main_image }}" alt="{{ $upcoming->title }}"
                                                      class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
                                             @else
                                                 <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -567,7 +582,13 @@
                                                     {{ $upcoming->city }}
                                                 </div>
                                                 <div class="text-sm font-bold text-emerald-600">{{ $upcoming->formatted_limit_price }}</div>
-                                                <div class="text-xs text-orange-600 font-semibold mt-1">{{ $upcoming->time_until_auction }}</div>
+                                                <div class="text-xs text-gray-500 mt-1">
+                                                    @if($upcoming->auction_date)
+                                                        {{ $upcoming->auction_date->format('d M Y') }}
+                                                    @else
+                                                        Belum ditentukan
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -575,90 +596,59 @@
                             </div>
                         </div>
                     @endif
-
-                    <!-- Quick Stats -->
-                    <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white">
-                        <h3 class="text-lg font-bold mb-4 flex items-center gap-3">
-                            <span class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                </svg>
-                            </span>
-                            Statistik Lelang
-                        </h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span class="text-white/80">Total Lelang</span>
-                                <span class="font-bold text-xl">{{ $auctions->total() }}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-white/80">Aktif</span>
-                                <span class="font-bold text-xl">{{ $auctions->where('status', '!=', 'sold')->count() }}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-white/80">Terjual</span>
-                                <span class="font-bold text-xl">{{ $auctions->where('status', 'sold')->count() }}</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Interest Modal -->
-    <div id="interest-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border-0 w-full max-w-md shadow-2xl rounded-2xl bg-white">
-            <div class="mt-3">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
-                        <span class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+    <div id="interestModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeInterestModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                             </svg>
-                        </span>
-                        Nyatakan Minat
-                    </h3>
-                    <button onclick="hideInterestModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Minat Lelang
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500 mb-4">
+                                    Silakan isi form di bawah ini untuk menyatakan minat Anda pada lelang ini. Tim kami akan segera menghubungi Anda.
+                                </p>
+                                <form id="interestForm" class="space-y-4">
+                                    <input type="hidden" id="auction_id" name="auction_id">
+                                    <div>
+                                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                                        <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block text-sm font-medium text-gray-700">Nomor WhatsApp</label>
+                                        <input type="tel" name="phone" id="phone" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="message" class="block text-sm font-medium text-gray-700">Pesan (Opsional)</label>
+                                        <textarea name="message" id="message" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"></textarea>
+                                    </div>
+                                    <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                            Kirim Minat
+                                        </button>
+                                        <button type="button" onclick="closeInterestModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                            Batal
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <form id="interest-form" method="POST" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
-                        <input type="text" name="name" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                        <input type="email" name="email" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label>
-                        <input type="tel" name="phone" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pesan (Opsional)</label>
-                        <textarea name="message" rows="3" 
-                                  class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"></textarea>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit" 
-                                class="flex-1 btn-auction-primary py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 font-bold">
-                            Kirim Minat
-                        </button>
-                        <button type="button" onclick="hideInterestModal()" 
-                                class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-xl transition-all duration-300">
-                            Batal
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -669,7 +659,7 @@
             const filters = document.getElementById('advanced-filters');
             const toggleText = document.getElementById('filter-toggle-text');
             const toggleIcon = document.getElementById('filter-toggle-icon');
-            
+
             if (filters.classList.contains('hidden')) {
                 filters.classList.remove('hidden');
                 toggleText.textContent = 'Sembunyikan';
@@ -682,29 +672,21 @@
         }
 
         function showInterestModal(auctionId) {
-            document.getElementById('interest-form').action = `/auctions/${auctionId}/interest`;
-            document.getElementById('interest-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+            document.getElementById('auction_id').value = auctionId;
+            document.getElementById('interestModal').classList.remove('hidden');
         }
 
-        function hideInterestModal() {
-            document.getElementById('interest-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
+        function closeInterestModal() {
+            document.getElementById('interestModal').classList.add('hidden');
         }
 
         // Close modal when clicking outside
-        document.getElementById('interest-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideInterestModal();
+        window.onclick = function(event) {
+            const modal = document.getElementById('interestModal');
+            if (event.target == modal) {
+                closeInterestModal();
             }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                hideInterestModal();
-            }
-        });
+        }
     </script>
     @endpush
 </x-frontend-layout>

@@ -47,6 +47,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\LogVisitor::class,
             \App\Http\Middleware\OptimizeResponse::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: []);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

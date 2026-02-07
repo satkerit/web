@@ -63,7 +63,7 @@
 
                 <!-- Quick Links -->
                 <div>
-                    <h4 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center">
+                    <h4 class="text-base sm:text-lg font-bold tracking-tight mb-4 sm:mb-6 flex items-center">
                         <span class="w-6 sm:w-8 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded mr-2 sm:mr-3"></span>
                         Tautan Cepat
                     </h4>
@@ -79,7 +79,7 @@
 
                 <!-- Informasi -->
                 <div>
-                    <h4 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center">
+                    <h4 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center tracking-tight">
                         <span class="w-6 sm:w-8 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded mr-2 sm:mr-3"></span>
                         Informasi
                     </h4>
@@ -94,7 +94,7 @@
 
                 <!-- Contact -->
                 <div>
-                    <h4 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center">
+                    <h4 class="text-base sm:text-lg font-bold tracking-tight mb-4 sm:mb-6 flex items-center">
                         <span class="w-6 sm:w-8 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded mr-2 sm:mr-3"></span>
                         Hubungi Kami
                     </h4>

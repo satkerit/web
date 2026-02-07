@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             NewsSeeder::class,
             FinancingConfigSeeder::class,
             KasKelilingSeeder::class,
+            BrochureSeeder::class,
         ]);
     }
 }

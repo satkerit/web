@@ -15,7 +15,7 @@
                 </svg>
                 Layanan Mobile
             </span>
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Kas Keliling</h1>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">Kas Keliling</h1>
             <p class="text-lg text-white/80 max-w-2xl mx-auto">Layanan perbankan yang mendatangi Anda di lokasi-lokasi strategis</p>
         </div>
     </section>
@@ -60,7 +60,7 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">Jadwal 5 Hari Terdekat</h2>
+                        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Jadwal 5 Hari Terdekat</h2>
                         <p class="text-gray-600 mt-1">Temukan jadwal kas keliling di area Anda</p>
                     </div>
                     <div class="hidden sm:flex items-center gap-2 text-sm text-gray-500">

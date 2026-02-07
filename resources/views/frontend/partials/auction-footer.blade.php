@@ -26,7 +26,7 @@
                             </div>
                         @endif
                         <div>
-                            <h3 class="text-xl font-bold text-white">Lelang Agunan</h3>
+                            <h3 class="text-xl font-bold text-white tracking-tight">Lelang Agunan</h3>
                             <p class="text-orange-300 font-medium">{{ $company->name ?? 'BPRS Bangka Belitung' }}</p>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
 
                 <!-- Quick Links -->
                 <div>
-                    <h4 class="text-lg font-bold text-white mb-6">Navigasi Cepat</h4>
+                    <h4 class="text-lg font-bold text-white mb-6 tracking-tight">Navigasi Cepat</h4>
                     <ul class="space-y-3">
                         <li>
                             <a href="{{ route('auctions.index') }}" class="text-gray-300 hover:text-orange-300 transition-colors flex items-center space-x-2">

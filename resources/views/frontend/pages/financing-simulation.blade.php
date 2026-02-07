@@ -2,19 +2,15 @@
     <x-slot name="title">Simulasi Pembiayaan - {{ $companyInfo->name ?? 'BPRS Bangka Belitung' }}</x-slot>
 
     <!-- Hero Section -->
-    <section class="relative pt-28 pb-16 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
-            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.03\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+    <section class="relative py-20 md:py-24 overflow-hidden">
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+            <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
         </div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-emerald-300 text-sm font-medium mb-4">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                </svg>
-                Simulasi
-            </span>
-            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Simulasi Pembiayaan</h1>
-            <p class="text-lg text-white/80 max-w-2xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Simulasi Pembiayaan</h1>
+            <p class="text-xl text-emerald-50 max-w-2xl mx-auto">
                 Hitung estimasi angsuran pembiayaan Anda dengan mudah dan cepat.
                 Rencanakan keuangan Anda sebelum mengajukan pembiayaan.
             </p>
@@ -22,18 +18,20 @@
     </section>
 
     <!-- Main Content -->
-    <section class="py-12 -mt-8">
+    <section class="py-16 md:py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Calculator -->
                 <div class="lg:col-span-2">
-                    <livewire:frontend.financing-simulation.calculator />
+                    <div class="bg-white rounded-2xl p-6 md:p-8 shadow-lg shadow-gray-200/50 border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                        <livewire:frontend.financing-simulation.calculator />
+                    </div>
                 </div>
 
                 <!-- Info Sidebar -->
                 <div class="space-y-6">
                     <!-- How It Works -->
-                    <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg shadow-gray-200/50 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         <h3 class="font-bold text-gray-900 mb-4 flex items-center">
                             <span class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mr-3">
                                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,10 +61,10 @@
                     </div>
 
                     <!-- Benefits -->
-                    <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg shadow-gray-200/50 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         <h3 class="font-bold text-gray-900 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <span class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3 text-blue-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </span>
@@ -107,12 +105,12 @@
                     </div>
 
                     <!-- Contact CTA -->
-                    <div class="bg-gradient-to-br from-emerald-600 to-teal-600 rounded-2xl p-6 text-white">
-                        <h3 class="font-bold mb-2">Tertarik dengan Pembiayaan?</h3>
-                        <p class="text-emerald-100 text-sm mb-4">
+                    <div class="bg-gradient-to-br from-emerald-600 to-teal-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <h3 class="font-bold mb-2 text-lg">Tertarik dengan Pembiayaan?</h3>
+                        <p class="text-emerald-50 text-sm mb-6 leading-relaxed">
                             Hubungi kami untuk informasi lebih lanjut atau kunjungi kantor terdekat.
                         </p>
-                        <a href="{{ route('contact') }}" class="inline-flex items-center px-4 py-2 bg-white text-emerald-700 rounded-lg font-semibold text-sm hover:bg-emerald-50 transition-colors">
+                        <a href="{{ route('contact') }}" class="inline-flex items-center justify-center w-full px-4 py-3 bg-white text-emerald-700 rounded-xl font-semibold text-sm hover:bg-emerald-50 transition-all duration-300 shadow-sm">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>

@@ -2,44 +2,53 @@
     <x-slot name="title">Kantor Kami - BPRS Bangka Belitung</x-slot>
 
     <!-- Hero -->
-    <section class="relative pt-32 pb-20 overflow-hidden">
+    <section class="relative py-20 md:py-24 overflow-hidden">
         <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
-            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+            <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
         </div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl font-bold text-white mb-4">Kantor Kami</h1>
-            <p class="text-lg text-white/80">Temukan kantor BPRS Bangka Belitung terdekat dari lokasi Anda</p>
+            <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-6 ring-1 ring-white/20">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                Jaringan Kantor
+            </span>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Kantor Kami</h1>
+            <p class="text-xl text-emerald-50 max-w-2xl mx-auto">Temukan kantor BPRS Bangka Belitung terdekat dari lokasi Anda untuk kemudahan bertransaksi.</p>
         </div>
     </section>
 
     <section class="py-16 -mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Filter -->
-            <div class="bg-white rounded-2xl shadow-lg p-4 mb-8">
-                <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('about.offices') }}" class="px-5 py-2.5 rounded-xl font-medium transition {{ !request('type') ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+            <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-2 mb-8 border border-gray-100 max-w-4xl mx-auto">
+                <div class="flex flex-wrap justify-center gap-2">
+                    <a href="{{ route('about.offices') }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ !request('type') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-600 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-emerald-600' }}">
                         Semua Kantor
                     </a>
-                    <a href="{{ route('about.offices', ['type' => 'pusat']) }}" class="px-5 py-2.5 rounded-xl font-medium transition {{ request('type') === 'pusat' ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <a href="{{ route('about.offices', ['type' => 'pusat']) }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request('type') === 'pusat' ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30 ring-2 ring-amber-500 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-amber-500' }}">
                         Kantor Pusat
                     </a>
-                    <a href="{{ route('about.offices', ['type' => 'cabang']) }}" class="px-5 py-2.5 rounded-xl font-medium transition {{ request('type') === 'cabang' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <a href="{{ route('about.offices', ['type' => 'cabang']) }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request('type') === 'cabang' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30 ring-2 ring-blue-500 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-blue-500' }}">
                         Kantor Cabang
                     </a>
-                    <a href="{{ route('about.offices', ['type' => 'kas']) }}" class="px-5 py-2.5 rounded-xl font-medium transition {{ request('type') === 'kas' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <a href="{{ route('about.offices', ['type' => 'kas']) }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request('type') === 'kas' ? 'bg-gray-700 text-white shadow-lg shadow-gray-700/30 ring-2 ring-gray-700 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-700' }}">
                         Kantor Kas
                     </a>
-                    <a href="{{ route('about.offices', ['type' => 'kas_keliling']) }}" class="px-5 py-2.5 rounded-xl font-medium transition {{ request('type') === 'kas_keliling' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <a href="{{ route('about.offices', ['type' => 'kas_keliling']) }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request('type') === 'kas_keliling' ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30 ring-2 ring-teal-600 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-teal-600' }}">
                         Kas Keliling
                     </a>
                 </div>
             </div>
 
             @if($offices->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($offices as $office)
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all group">
-                    <div class="relative h-64 overflow-hidden">
+                <div class="group bg-white rounded-2xl shadow-xl shadow-gray-200/50 overflow-hidden hover:shadow-2xl hover:shadow-emerald-900/10 transition-all duration-300 hover:-translate-y-1">
+                    <div class="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
+                    <div class="relative h-56 overflow-hidden">
                         @if($office->photo)
                         <img src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         @else

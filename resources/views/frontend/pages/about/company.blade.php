@@ -13,7 +13,7 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                 Tentang Kami
             </span>
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 animate-slide-up delay-100">Profil Perusahaan</h1>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 animate-slide-up delay-100 tracking-tight">Profil Perusahaan</h1>
             <p class="text-xl text-white/80 max-w-2xl mx-auto animate-slide-up delay-200">Mengenal lebih dekat BPRS Bangka Belitung, bank perekonomian rakyat berbasis syariah yang terpercaya</p>
         </div>
     </section>

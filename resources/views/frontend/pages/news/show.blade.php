@@ -24,7 +24,7 @@
             </span>
             @endif
 
-            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">{{ $news->title }}</h1>
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight tracking-tight">{{ $news->title }}</h1>
             <div class="flex flex-wrap items-center text-white/80 gap-3 text-sm md:text-base">
                 <time datetime="{{ $news->published_at->toISOString() }}">
                     {{ $news->published_at->translatedFormat('d F Y') }}
@@ -40,7 +40,7 @@
     <!-- Main Content -->
     <article class="py-12 md:py-16 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 lg:p-10">
+            <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 lg:p-10 border border-gray-100">
 
             <!-- Image Slideshow -->
             @php

@@ -39,7 +39,7 @@
             ];
         })->toJson();
     @endphp
-    <section class="py-12 md:py-16 bg-gray-50">
+    <section class="py-12 md:py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div x-data="{
                 active: 0,
@@ -183,7 +183,7 @@
 
                             <!-- Overlay Gradient - Only show if any content is visible -->
                             @if(($slide->show_title ?? true) || ($slide->show_subtitle ?? true) || (($slide->show_button ?? true) && $slide->link_url))
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent backdrop-blur-[1px]"></div>
                             @endif
 
                             <!-- Content Overlay - Left side for title/subtitle -->
@@ -192,7 +192,7 @@
                                 <div class="max-w-xl">
                                     <!-- Title -->
                                     @if(($slide->show_title ?? true) && $slide->title)
-                                    <h2 class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 drop-shadow-md
+                                    <h2 class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold tracking-tight text-white mb-1 drop-shadow-lg
                                                transform transition-all duration-500 delay-100"
                                         :class="active === {{ $index }} ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'">
                                         {{ $slide->title }}
@@ -295,167 +295,6 @@
     </section>
     @endif
 
-    <!-- Stats Section -->
-    @php
-        $hasStats = $companyInfo && (
-            ($companyInfo->stat_years_experience && $companyInfo->stat_years_experience > 0) ||
-            ($companyInfo->stat_branch_offices && $companyInfo->stat_branch_offices > 0) ||
-            ($companyInfo->stat_total_assets && $companyInfo->stat_total_assets !== 'N/A') ||
-            ($companyInfo->stat_cash_offices && $companyInfo->stat_cash_offices > 0) ||
-            ($companyInfo->stat_mobile_cash_offices && $companyInfo->stat_mobile_cash_offices > 0)
-        );
-    @endphp
-    @if($hasStats)
-    <section class="relative py-16 bg-white overflow-hidden">
-        <!-- Animated Background Elements -->
-        <div class="absolute inset-0">
-            <div class="absolute top-10 left-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl animate-float"></div>
-            <div class="absolute bottom-10 right-10 w-40 h-40 bg-teal-500/10 rounded-full blur-xl animate-float-delayed"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 rounded-full blur-3xl"></div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div class="flex flex-wrap justify-center gap-6 lg:gap-10 stagger-container">
-                <!-- Tahun Pengalaman -->
-                @if($companyInfo->stat_years_experience && $companyInfo->stat_years_experience > 0)
-                <div class="stats-card text-center group stagger-item fade-in-section w-36 sm:w-40">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_years_experience }}" data-suffix="+">0+</div>
-                    <div class="text-gray-600 text-sm">Tahun Pengalaman</div>
-                </div>
-                @endif
-
-                <!-- Kantor Cabang -->
-                @if($companyInfo->stat_branch_offices && $companyInfo->stat_branch_offices > 0)
-                <div class="stats-card text-center group stagger-item fade-in-section delay-100 w-36 sm:w-40">
-                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                        </svg>
-                    </div>
-                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_branch_offices }}" data-suffix="+">0+</div>
-                    <div class="text-gray-600 text-sm">Kantor Cabang</div>
-                </div>
-                @endif
-
-                <!-- Total Aset -->
-                @if($companyInfo->stat_total_assets && $companyInfo->stat_total_assets !== 'N/A')
-                <div class="stats-card text-center group stagger-item fade-in-section delay-200 w-36 sm:w-40">
-                    <div class="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <div class="text-3xl font-bold text-gray-900 mb-2">{{ $companyInfo->stat_total_assets }}</div>
-                    <div class="text-gray-600 text-sm">Total Aset</div>
-                </div>
-                @endif
-
-                <!-- Kantor Kas -->
-                @if($companyInfo->stat_cash_offices && $companyInfo->stat_cash_offices > 0)
-                <div class="stats-card text-center group stagger-item fade-in-section delay-300 w-36 sm:w-40">
-                    <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
-                        </svg>
-                    </div>
-                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_cash_offices }}" data-suffix="+">0+</div>
-                    <div class="text-gray-600 text-sm">Kantor Kas</div>
-                </div>
-                @endif
-
-                <!-- Kantor Kas Keliling -->
-                @if($companyInfo->stat_mobile_cash_offices && $companyInfo->stat_mobile_cash_offices > 0)
-                <div class="stats-card text-center group stagger-item fade-in-section delay-400 w-36 sm:w-40">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                        </svg>
-                    </div>
-                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_mobile_cash_offices }}" data-suffix="+">0+</div>
-                    <div class="text-gray-600 text-sm">Kantor Kas Keliling</div>
-                </div>
-                @endif
-            </div>
-        </div>
-    </section>
-    @endif
-
-
-    <!-- Products Section -->
-    <section class="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30 relative overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-5">
-            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23000000\" fill-opacity=\"0.1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <!-- Section Header -->
-            <div class="text-center mb-16 fade-in-section">
-                <div class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4 animate-bounce-in">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                    </svg>
-                    Produk & Layanan
-                </div>
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-fade-in-up delay-200">Solusi Keuangan Syariah Terbaik</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto text-lg animate-fade-in-up delay-300">Berbagai produk simpanan dan pembiayaan syariah yang dirancang untuk memenuhi kebutuhan finansial Anda</p>
-            </div>
-
-            <!-- Products Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-container">
-                @forelse($products as $index => $product)
-                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 stagger-item scale-in" style="animation-delay: {{ $index * 0.1 }}s">
-                    <!-- Product Image -->
-                    <div class="relative aspect-[4/3] overflow-hidden">
-                        @if($product->image)
-                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
-                             alt="{{ $product->name }}"
-                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                        @else
-                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center">
-                            <svg class="w-20 h-20 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        </div>
-                        @endif
-                        <span class="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-3 sm:py-1.5 text-xs font-semibold rounded-lg bg-primary-500 text-white shadow-lg">
-                            {{ $product->type === 'simpanan_syariah' ? 'Simpanan' : ($product->type === 'deposito' ? 'Deposito' : 'Pembiayaan') }}
-                        </span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-lg lg:text-xl font-bold text-gray-900 mb-3 line-clamp-2">{{ $product->name }}</h3>
-                        <p class="text-gray-600 mb-4 line-clamp-2">{{ $product->short_description }}</p>
-                        <a href="{{ route('products.show', $product->slug) }}" class="btn-shine inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors group">
-                            Selengkapnya
-                            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                        </a>
-                    </div>
-                </div>
-                @empty
-                <div class="col-span-full text-center py-16 fade-in-section">
-                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-in">
-                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-                    </div>
-                    <p class="text-gray-500 text-lg">Belum ada produk tersedia</p>
-                </div>
-                @endforelse
-            </div>
-
-            <div class="text-center mt-12 fade-in-section">
-                <a href="{{ route('products.simpanan-syariah') }}" class="btn-shine inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                    Lihat Semua Produk
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
-            </div>
-        </div>
-    </section>
-
-
-
-
     <!-- Why Choose Us Section -->
     @if($whyChooseUsSettings?->is_active)
     <section class="py-20 bg-white relative overflow-hidden">
@@ -475,7 +314,7 @@
                         </svg>
                         Mengapa Memilih Kami
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-6">
                         {!! $whyChooseUsSettings->section_title ?? 'Bank Syariah yang <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Terpercaya</span> dan Amanah' !!}
                     </h2>
                     <p class="text-gray-600 text-lg mb-8 leading-relaxed">
@@ -486,7 +325,7 @@
                     <div class="space-y-6">
                         @forelse($whyChooseUs as $index => $item)
                         <div class="flex items-start group fade-in-section" style="animation-delay: {{ $index * 100 }}ms">
-                            <div class="w-12 h-12 {{ $item->bg_class }} rounded-xl flex items-center justify-center mr-4 flex-shrink-0 {{ $item->hover_bg_class }} group-hover:scale-110 transition-all duration-300 shadow-sm">
+                            <div class="w-12 h-12 {{ $item->bg_class }} rounded-2xl flex items-center justify-center mr-5 flex-shrink-0 {{ $item->hover_bg_class }} group-hover:scale-110 transition-all duration-300 shadow-sm">
                                 @if($item->icon)
                                 <img src="{{ \App\Helpers\StorageHelper::url($item->icon) }}" class="w-6 h-6 object-contain transition-all duration-300 filter group-hover:brightness-0 group-hover:invert" alt="{{ $item->title }}">
                                 @else
@@ -503,7 +342,7 @@
                         @empty
                         <!-- Default content if no dynamic data -->
                         <div class="flex items-start group fade-in-section">
-                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-emerald-500 group-hover:scale-110 transition-all duration-300">
+                            <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mr-5 flex-shrink-0 group-hover:bg-emerald-500 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6 text-emerald-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                                 </svg>
@@ -514,7 +353,7 @@
                             </div>
                         </div>
                         <div class="flex items-start group fade-in-section delay-100">
-                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-300">
+                            <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mr-5 flex-shrink-0 group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
@@ -525,7 +364,7 @@
                             </div>
                         </div>
                         <div class="flex items-start group fade-in-section delay-200">
-                            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-amber-500 group-hover:scale-110 transition-all duration-300">
+                            <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center mr-5 flex-shrink-0 group-hover:bg-amber-500 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6 text-amber-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
@@ -583,8 +422,272 @@
     @endif
 
 
-    <!-- News Section -->
+    <!-- Products Section -->
+    <section class="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23000000\" fill-opacity=\"0.1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <!-- Section Header -->
+            <div class="text-center mb-16 fade-in-section">
+                <div class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4 animate-bounce-in">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    Produk & Layanan
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-4 animate-fade-in-up delay-200">Solusi Keuangan Syariah Terbaik</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg animate-fade-in-up delay-300">Berbagai produk simpanan dan pembiayaan syariah yang dirancang untuk memenuhi kebutuhan finansial Anda</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-container">
+                @forelse($products as $index => $product)
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 stagger-item scale-in" style="animation-delay: {{ $index * 0.1 }}s">
+                    <!-- Product Image -->
+                    <div class="relative aspect-[4/3] overflow-hidden">
+                        @if($product->image)
+                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
+                             alt="{{ $product->name }}"
+                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                        @else
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center">
+                            <svg class="w-20 h-20 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        @endif
+                        <span class="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-3 sm:py-1.5 text-xs font-semibold rounded-lg bg-primary-500 text-white shadow-lg">
+                            {{ $product->type === 'simpanan_syariah' ? 'Simpanan' : ($product->type === 'deposito' ? 'Deposito' : 'Pembiayaan') }}
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg lg:text-xl font-bold tracking-tight text-gray-900 mb-3 line-clamp-2">{{ $product->name }}</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">{{ $product->short_description }}</p>
+                        <a href="{{ route('products.show', $product->slug) }}" class="inline-flex items-center px-4 py-2 bg-primary-50 text-primary-600 rounded-full font-semibold hover:bg-primary-600 hover:text-white transition-all duration-300 group">
+                            Selengkapnya
+                            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+                @empty
+                <div class="col-span-full text-center py-20 fade-in-section">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-in">
+                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                    </div>
+                    <p class="text-gray-500 text-lg">Belum ada produk tersedia</p>
+                </div>
+                @endforelse
+            </div>
+
+            <div class="text-center mt-12 fade-in-section">
+                <a href="{{ route('products.simpanan-syariah') }}" class="btn-shine inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                    Lihat Semua Produk
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Stats Section -->
+    @php
+        $hasStats = $companyInfo && (
+            ($companyInfo->stat_years_experience && $companyInfo->stat_years_experience > 0) ||
+            ($companyInfo->stat_branch_offices && $companyInfo->stat_branch_offices > 0) ||
+            ($companyInfo->stat_total_assets && $companyInfo->stat_total_assets !== 'N/A') ||
+            ($companyInfo->stat_cash_offices && $companyInfo->stat_cash_offices > 0) ||
+            ($companyInfo->stat_mobile_cash_offices && $companyInfo->stat_mobile_cash_offices > 0)
+        );
+    @endphp
+    @if($hasStats)
+    <section class="relative py-20 bg-white overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0">
+            <div class="absolute top-10 left-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl animate-float"></div>
+            <div class="absolute bottom-10 right-10 w-40 h-40 bg-teal-500/10 rounded-full blur-xl animate-float-delayed"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="flex flex-wrap justify-center gap-6 lg:gap-10 stagger-container">
+                <!-- Tahun Pengalaman -->
+                @if($companyInfo->stat_years_experience && $companyInfo->stat_years_experience > 0)
+                <div class="stats-card text-center group stagger-item fade-in-section w-36 sm:w-40">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br shadow-lg ring-4 ring-white/50 from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_years_experience }}" data-suffix="+">0+</div>
+                    <div class="text-gray-600 text-sm">Tahun Pengalaman</div>
+                </div>
+                @endif
+
+                <!-- Kantor Cabang -->
+                @if($companyInfo->stat_branch_offices && $companyInfo->stat_branch_offices > 0)
+                <div class="stats-card text-center group stagger-item fade-in-section delay-100 w-36 sm:w-40">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br shadow-lg ring-4 ring-white/50 from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_branch_offices }}" data-suffix="+">0+</div>
+                    <div class="text-gray-600 text-sm">Kantor Cabang</div>
+                </div>
+                @endif
+
+                <!-- Total Aset -->
+                @if($companyInfo->stat_total_assets && $companyInfo->stat_total_assets !== 'N/A')
+                <div class="stats-card text-center group stagger-item fade-in-section delay-200 w-36 sm:w-40">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br shadow-lg ring-4 ring-white/50 from-amber-500 to-orange-500 rounded-full flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-900 mb-2">{{ $companyInfo->stat_total_assets }}</div>
+                    <div class="text-gray-600 text-sm">Total Aset</div>
+                </div>
+                @endif
+
+                <!-- Kantor Kas -->
+                @if($companyInfo->stat_cash_offices && $companyInfo->stat_cash_offices > 0)
+                <div class="stats-card text-center group stagger-item fade-in-section delay-300 w-36 sm:w-40">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br shadow-lg ring-4 ring-white/50 from-rose-500 to-pink-500 rounded-full flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                        </svg>
+                    </div>
+                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_cash_offices }}" data-suffix="+">0+</div>
+                    <div class="text-gray-600 text-sm">Kantor Kas</div>
+                </div>
+                @endif
+
+                <!-- Kantor Kas Keliling -->
+                @if($companyInfo->stat_mobile_cash_offices && $companyInfo->stat_mobile_cash_offices > 0)
+                <div class="stats-card text-center group stagger-item fade-in-section delay-400 w-36 sm:w-40">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br shadow-lg ring-4 ring-white/50 from-purple-500 to-indigo-500 rounded-full flex items-center justify-center mb-4 mx-auto group-hover:animate-pulse-glow transition-all duration-300 shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                        </svg>
+                    </div>
+                    <div class="stats-counter text-3xl font-bold text-gray-900 mb-2" data-target="{{ $companyInfo->stat_mobile_cash_offices }}" data-suffix="+">0+</div>
+                    <div class="text-gray-600 text-sm">Kantor Kas Keliling</div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </section>
+    @endif
+
+
+    <!-- Auctions Section -->
+    @if($auctions->count() > 0)
     <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-semibold mb-4">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    Lelang Agunan
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-4">Informasi Lelang Agunan Terbaru</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Temukan peluang investasi menarik melalui lelang agunan dari BPRS Bangka Belitung</p>
+            </div>
+
+            <!-- Auctions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($auctions as $index => $auction)
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2">
+                    <!-- Auction Image -->
+                    <div class="relative h-48 overflow-hidden">
+                        @if($auction->main_image)
+                        <img src="{{ $auction->main_image }}"
+                             alt="{{ $auction->title }}"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        @else
+                        <div class="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                        @endif
+
+                        <!-- Sold Watermark -->
+                        @if($auction->status === 'sold')
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/30 z-20 pointer-events-none">
+                            <div class="transform -rotate-12 bg-red-600/90 text-white px-8 py-2 text-xl md:text-2xl font-black tracking-widest border-4 border-white shadow-2xl uppercase backdrop-blur-sm">
+                                TERJUAL
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Status Badge -->
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1.5 text-xs font-semibold rounded-lg {{ $auction->status === 'published' ? 'bg-blue-500 text-white' : ($auction->status === 'registration_open' ? 'bg-green-500 text-white' : ($auction->status === 'auction_scheduled' ? 'bg-yellow-500 text-white' : 'bg-gray-500 text-white')) }}">
+                                {{ $auction->status_label }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Auction Content -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-3 group-hover:text-amber-600 transition-colors line-clamp-2">
+                            {{ $auction->title }}
+                        </h3>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                </svg>
+                                {{ $auction->city }}
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                @if($auction->auction_date)
+                                    {{ $auction->auction_date->format('d M Y') }}
+                                @else
+                                    Belum ditentukan
+                                @endif
+                            </div>
+                        </div>
+                        <a href="{{ route('auctions.show', $auction->slug) }}"
+                           class="inline-flex items-center px-4 py-2 bg-amber-50 text-amber-600 rounded-full font-semibold hover:bg-amber-600 hover:text-white transition-all duration-300 transition-colors">
+                            Lihat Detail
+                            <svg class="w-5 h-5 ml-2 group-hover/link:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <!-- View All Auctions Button -->
+            <div class="text-center mt-12">
+                <a href="{{ route('auctions.index') }}"
+                   class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    <span>Lihat Semua Lelang Agunan</span>
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+                <p class="text-gray-500 text-sm mt-3">Jelajahi {{ $auctions->count() > 0 ? 'lebih banyak' : 'semua' }} lelang agunan yang tersedia</p>
+            </div>
+        </div>
+    </section>
+    @endif
+<!-- News Section -->
+    <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Header -->
             <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
@@ -595,7 +698,7 @@
                         </svg>
                         Berita & Artikel
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Informasi Terkini</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">Informasi Terkini</h2>
                 </div>
                 <a href="{{ route('news.index') }}"
                    class="mt-4 md:mt-0 inline-flex items-center text-primary-600 font-bold hover:text-primary-700 group transition-colors">
@@ -609,7 +712,7 @@
             <!-- News Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($news as $index => $item)
-                <article class="group bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200 hover:-translate-y-1">
+                <article class="group bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1">
                     <!-- News Image -->
                     <div class="relative h-56 overflow-hidden bg-gray-100">
                         @if($item->featured_image)
@@ -644,14 +747,14 @@
                             </svg>
                             {{ $item->published_at->format('d M Y') }}
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2 h-[3.5rem]">
+                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2 h-[3.5rem]">
                             {{ $item->title }}
                         </h3>
                         <p class="text-gray-600 mb-4 line-clamp-2 text-sm">
                             {{ $item->excerpt }}
                         </p>
                         <a href="{{ route('news.show', $item->slug) }}"
-                           class="inline-flex items-center text-primary-600 font-bold group/link hover:text-primary-700 transition-colors">
+                           class="inline-flex items-center px-4 py-2 bg-primary-50 text-primary-600 rounded-full font-bold hover:bg-primary-600 hover:text-white transition-all duration-300 transition-colors">
                             Baca Selengkapnya
                             <svg class="w-5 h-5 ml-2 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -660,7 +763,7 @@
                     </div>
                 </article>
                 @empty
-                <div class="col-span-3 text-center py-16">
+                <div class="col-span-3 text-center py-20">
                     <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
@@ -674,107 +777,4 @@
     </section>
 
 
-    <!-- Auctions Section -->
-    @if($auctions->count() > 0)
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Section Header -->
-            <div class="text-center mb-12">
-                <div class="inline-flex items-center px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-semibold mb-4">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                    Lelang Agunan
-                </div>
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Informasi Lelang Agunan Terbaru</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Temukan peluang investasi menarik melalui lelang agunan dari BPRS Bangka Belitung</p>
-            </div>
-
-            <!-- Auctions Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($auctions as $index => $auction)
-                <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-amber-200 hover:-translate-y-2">
-                    <!-- Auction Image -->
-                    <div class="relative h-48 overflow-hidden">
-                        @if($auction->main_image)
-                        <img src="{{ $auction->main_image }}"
-                             alt="{{ $auction->title }}"
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        @else
-                        <div class="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
-                            <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                        </div>
-                        @endif
-
-                        <!-- Sold Watermark -->
-                        @if($auction->status === 'sold')
-                        <div class="absolute inset-0 flex items-center justify-center bg-black/30 z-20 pointer-events-none">
-                            <div class="transform -rotate-12 bg-red-600/90 text-white px-8 py-2 text-xl md:text-2xl font-black tracking-widest border-4 border-white shadow-2xl uppercase backdrop-blur-sm">
-                                TERJUAL
-                            </div>
-                        </div>
-                        @endif
-
-                        <!-- Status Badge -->
-                        <div class="absolute top-4 left-4">
-                            <span class="px-3 py-1.5 text-xs font-semibold rounded-lg {{ $auction->status === 'published' ? 'bg-blue-500 text-white' : ($auction->status === 'registration_open' ? 'bg-green-500 text-white' : ($auction->status === 'auction_scheduled' ? 'bg-yellow-500 text-white' : 'bg-gray-500 text-white')) }}">
-                                {{ $auction->status_label }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Auction Content -->
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition-colors line-clamp-2">
-                            {{ $auction->title }}
-                        </h3>
-                        <div class="space-y-2 mb-4">
-                            <div class="flex items-center text-sm text-gray-600">
-                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                </svg>
-                                {{ $auction->city }}
-                            </div>
-                            <div class="flex items-center text-sm text-gray-600">
-                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                @if($auction->auction_date)
-                                    {{ $auction->auction_date->format('d M Y') }}
-                                @else
-                                    Belum ditentukan
-                                @endif
-                            </div>
-                        </div>
-                        <a href="{{ route('auctions.show', $auction->slug) }}"
-                           class="inline-flex items-center text-amber-600 font-semibold group/link hover:text-amber-700 transition-colors">
-                            Lihat Detail
-                            <svg class="w-5 h-5 ml-2 group-hover/link:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-            <!-- View All Auctions Button -->
-            <div class="text-center mt-12">
-                <a href="{{ route('auctions.index') }}"
-                   class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                    <span>Lihat Semua Lelang Agunan</span>
-                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                </a>
-                <p class="text-gray-500 text-sm mt-3">Jelajahi {{ $auctions->count() > 0 ? 'lebih banyak' : 'semua' }} lelang agunan yang tersedia</p>
-            </div>
-        </div>
-    </section>
-    @endif
-</x-frontend-layout>
+    </x-frontend-layout>
