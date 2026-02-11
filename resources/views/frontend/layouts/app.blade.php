@@ -7,7 +7,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? config('app.name', 'BPRS Bangka Belitung') }}</title>
+    
+    {{-- SEO Meta Tags --}}
+    {!! \App\Services\Seo\SeoMeta::generate() !!}
 
     {{-- DNS Prefetch & Preconnect for performance --}}
     <link rel="dns-prefetch" href="https://fonts.bunny.net">

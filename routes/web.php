@@ -8,6 +8,9 @@ use App\Http\Controllers\ReportController;
 
 // Public Routes with general rate limiting
 Route::middleware(['throttle:120,1'])->group(function () {
+    // Sitemap
+    Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
     // Home
     Route::get('/', [HomeController::class, 'index'])->name('home');
 

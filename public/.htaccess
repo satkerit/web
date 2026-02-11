@@ -13,6 +13,14 @@
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
+    # Force WWW and HTTPS for production domain (bprsbabel.id)
+    RewriteCond %{HTTP_HOST} ^bprsbabel\.id [NC]
+    RewriteRule ^ https://www.bprsbabel.id%{REQUEST_URI} [L,R=301]
+    
+    RewriteCond %{HTTP_HOST} ^www\.bprsbabel\.id [NC]
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://www.bprsbabel.id%{REQUEST_URI} [L,R=301]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

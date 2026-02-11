@@ -1,2 +1,11 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /storage/*.php
+Disallow: /dev/storage/*.php
+
+Sitemap: https://www.bprsbabel.id/sitemap.xml

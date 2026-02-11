@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use App\Services\Seo\SeoMeta;
 
 class AuctionController extends Controller
 {
     public function index(Request $request)
     {
+        SeoMeta::setTitle('Lelang Agunan')
+            ->setDescription('Temukan berbagai aset lelang berkualitas dari BPRS Bangka Belitung. Tanah, rumah, ruko, dan kendaraan dengan harga menarik.');
+
         $query = Auction::published();
 
         // Search
@@ -114,6 +118,30 @@ class AuctionController extends Controller
 
         // Increment view count
         $auction->incrementViewCount();
+
+        // SEO Implementation
+        SeoMeta::setTitle($auction->title)
+            ->setDescription($auction->meta_description ?? $auction->description)
+            ->setKeywords($auction->meta_keywords)
+            ->setImage($auction->main_image)
+            ->setType('product')
+            ->setPublishedTime($auction->published_at)
+            ->setModifiedTime($auction->updated_at)
+            ->addSchema([
+                '@context' => 'https://schema.org',
+                '@type' => 'Product',
+                'name' => $auction->title,
+                'description' => strip_tags($auction->description),
+                'image' => $auction->main_image,
+                'offers' => [
+                    '@type' => 'Offer',
+                    'url' => route('auctions.show', $auction->slug),
+                    'priceCurrency' => 'IDR',
+                    'price' => $auction->limit_price,
+                    'availability' => $auction->status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+                    'validFrom' => $auction->auction_date ? $auction->auction_date->toIso8601String() : null
+                ]
+            ]);
 
         // Get related auctions (same asset type or city)
         $relatedAuctions = Auction::published()
