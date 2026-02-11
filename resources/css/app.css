@@ -431,8 +431,77 @@
 
 /* Print styles */
 @media print {
-    .no-print {
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background-color: white !important;
+        color: black !important;
+    }
+
+    .no-print,
+    header,
+    footer,
+    nav,
+    .hero-nav,
+    .hero-indicators,
+    button:not(.print-visible),
+    [role="dialog"],
+    .fixed {
         display: none !important;
+    }
+
+    /* Layout Adjustments */
+    .print-break-inside-avoid {
+        break-inside: avoid;
+    }
+
+    .print-break-before {
+        break-before: page;
+    }
+
+    /* Typography */
+    h1 { font-size: 24pt !important; line-height: 1.2 !important; }
+    h2 { font-size: 18pt !important; line-height: 1.2 !important; margin-top: 15pt !important; }
+    h3 { font-size: 14pt !important; margin-top: 10pt !important; }
+    p, li, td { font-size: 11pt !important; line-height: 1.4 !important; }
+
+    /* Containers */
+    .container {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Grid Resets */
+    .grid {
+        display: block !important;
+    }
+
+    .grid > * {
+        margin-bottom: 15px !important;
+    }
+
+    /* Colors & Shadows */
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    .bg-white, .bg-gray-50, .bg-gray-100 {
+        background-color: transparent !important;
+        border: none !important;
+    }
+
+    /* Links */
+    a {
+        text-decoration: none !important;
+        color: black !important;
     }
 }
 

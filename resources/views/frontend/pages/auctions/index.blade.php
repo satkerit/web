@@ -362,13 +362,6 @@
                                     <!-- Quick Actions -->
                                     <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         <div class="flex space-x-2">
-                                            <button onclick="showInterestModal({{ $auction->id }})"
-                                                    class="w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
-                                                    title="Nyatakan Minat">
-                                                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                                </svg>
-                                            </button>
                                             <a href="{{ route('auctions.show', $auction) }}"
                                                class="w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
                                                title="Lihat Detail">
@@ -601,57 +594,6 @@
         </div>
     </section>
 
-    <!-- Interest Modal -->
-    <div id="interestModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeInterestModal()"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                Minat Lelang
-                            </h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500 mb-4">
-                                    Silakan isi form di bawah ini untuk menyatakan minat Anda pada lelang ini. Tim kami akan segera menghubungi Anda.
-                                </p>
-                                <form id="interestForm" class="space-y-4">
-                                    <input type="hidden" id="auction_id" name="auction_id">
-                                    <div>
-                                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                                        <input type="text" name="name" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
-                                    </div>
-                                    <div>
-                                        <label for="phone" class="block text-sm font-medium text-gray-700">Nomor WhatsApp</label>
-                                        <input type="tel" name="phone" id="phone" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
-                                    </div>
-                                    <div>
-                                        <label for="message" class="block text-sm font-medium text-gray-700">Pesan (Opsional)</label>
-                                        <textarea name="message" id="message" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"></textarea>
-                                    </div>
-                                    <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                            Kirim Minat
-                                        </button>
-                                        <button type="button" onclick="closeInterestModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
-                                            Batal
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     @push('scripts')
     <script>
@@ -668,23 +610,6 @@
                 filters.classList.add('hidden');
                 toggleText.textContent = 'Tampilkan';
                 toggleIcon.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        function showInterestModal(auctionId) {
-            document.getElementById('auction_id').value = auctionId;
-            document.getElementById('interestModal').classList.remove('hidden');
-        }
-
-        function closeInterestModal() {
-            document.getElementById('interestModal').classList.add('hidden');
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('interestModal');
-            if (event.target == modal) {
-                closeInterestModal();
             }
         }
     </script>

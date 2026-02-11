@@ -183,23 +183,6 @@ class AuctionController extends Controller
                         ->with('info', 'Fitur download brosur akan segera tersedia.');
     }
 
-    public function expressInterest(Request $request, Auction $auction)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'message' => 'nullable|string|max:1000'
-        ]);
-
-        // Increment interest count
-        $auction->incrementInterestCount();
-
-        // Here you can save the interest to database or send email
-        // For now, just return success message
-
-        return back()->with('success', 'Terima kasih atas ketertarikan Anda. Tim kami akan segera menghubungi Anda.');
-    }
 
     public function search(Request $request)
     {
