@@ -36,7 +36,11 @@
 
     <!-- Main Content -->
     <main>
-        {{ $slot }}
+        @if(isset($slot) && $slot->isNotEmpty())
+            {{ $slot }}
+        @else
+            @yield('content')
+        @endif
     </main>
 
     <!-- Footer -->
