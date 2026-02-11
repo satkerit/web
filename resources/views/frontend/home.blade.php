@@ -183,7 +183,7 @@
 
                             <!-- Overlay Gradient - Only show if any content is visible -->
                             @if(($slide->show_title ?? true) || ($slide->show_subtitle ?? true) || (($slide->show_button ?? true) && $slide->link_url))
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            <!-- <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div> -->
                             @endif
 
                             <!-- Content Overlay - Left side for title/subtitle -->
