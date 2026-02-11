@@ -44,8 +44,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Inter", ...defaultTheme.fontFamily.sans],
-                heading: ["Montserrat", ...defaultTheme.fontFamily.sans],
+                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                heading: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 primary: {
