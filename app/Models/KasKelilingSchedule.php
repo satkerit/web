@@ -29,6 +29,9 @@ class KasKelilingSchedule extends Model
         'start_time',
         'end_time',
         'location',
+        'facility',
+        'pic_name',
+        'pic_phone',
         'route',
         'services_offered',
         'notes',
@@ -84,8 +87,8 @@ class KasKelilingSchedule extends Model
 
     public function getTimeRangeAttribute(): string
     {
-        return \Carbon\Carbon::parse($this->start_time)->format('H:i') . ' - ' . 
-               \Carbon\Carbon::parse($this->end_time)->format('H:i');
+        return \Carbon\Carbon::parse($this->start_time)->format('H:i') . ' - ' .
+            \Carbon\Carbon::parse($this->end_time)->format('H:i');
     }
 
     public function getFacilityListAttribute(): array
