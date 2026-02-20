@@ -23,11 +23,11 @@
     <section class="py-16 md:py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if($members->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+            <div class="flex flex-wrap justify-center gap-8">
                 @foreach($members as $member)
-                <div class="group bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                    <div class="relative overflow-hidden h-80 bg-gray-100">
+                <div class="group bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative w-full max-w-sm flex flex-col">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
+                    <div class="relative overflow-hidden h-80 bg-gray-100 flex-shrink-0">
                         @if($member->photo)
                         <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" alt="{{ $member->name }}" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105">
                         @else
@@ -40,18 +40,20 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
 
-                    <div class="p-6 text-center relative">
+                    <div class="p-6 text-center relative flex flex-col flex-1">
                         <h3 class="text-xl font-bold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors">{{ $member->name }}</h3>
                         <p class="text-emerald-600 font-medium mb-4">{{ $member->position }}</p>
 
                         @if($member->biography)
-                        <p class="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed">{{ Str::limit(strip_tags($member->biography), 150) }}</p>
+                        <p class="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed flex-1">{{ Str::limit(strip_tags($member->biography), 150) }}</p>
+                        @else
+                        <div class="flex-1"></div>
                         @endif
 
                         <button
                             x-data
                             @click="$dispatch('open-modal', { member: {{ json_encode($member) }} })"
-                            class="inline-flex items-center justify-center px-6 py-2.5 bg-white text-emerald-600 text-sm font-semibold rounded-xl border border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 w-full group/btn shadow-sm"
+                            class="inline-flex items-center justify-center px-6 py-2.5 bg-white text-emerald-600 text-sm font-semibold rounded-xl border border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 w-full group/btn shadow-sm mt-auto"
                         >
                             Lihat Profil Lengkap
                             <svg class="w-4 h-4 ml-2 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
