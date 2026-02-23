@@ -114,6 +114,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::post('hero-slides/reorder', [App\Http\Controllers\Admin\HeroSlideController::class, 'reorder'])->name('hero-slides.reorder');
     Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class);
 
+    // Site Settings Management
+    Route::get('site-settings', [App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('site-settings.index');
+    Route::put('site-settings', [App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('site-settings.update');
+    Route::put('site-settings/hero-slide-limit', [App\Http\Controllers\Admin\SiteSettingController::class, 'updateHeroSlideLimit'])->name('site-settings.hero-slide-limit.update');
+
     // Why Choose Us Management
     Route::get('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'editSettings'])->name('why-choose-us.settings');
     Route::put('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'updateSettings'])->name('why-choose-us.settings.update');

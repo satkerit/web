@@ -22,6 +22,7 @@ class SiteSetting extends Model
 
     protected $fillable = [
         'hero_slider_delay',
+        'hero_slide_limit',
         'maintenance_mode',
         'maintenance_message',
         'maintenance_allowed_ips',
@@ -31,6 +32,7 @@ class SiteSetting extends Model
 
     protected $casts = [
         'hero_slider_delay' => 'integer',
+        'hero_slide_limit' => 'integer',
         'maintenance_mode' => 'boolean',
         'maintenance_end_time' => 'datetime',
         'maintenance_pages' => 'array',
@@ -93,6 +95,7 @@ class SiteSetting extends Model
         return Cache::remember('site_settings', 3600, function () {
             return self::first() ?? self::create([
                 'hero_slider_delay' => 5000,
+                'hero_slide_limit' => 5,
                 'maintenance_mode' => false,
                 'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
                 'maintenance_pages' => [],
@@ -107,6 +110,8 @@ class SiteSetting extends Model
     {
         self::clearCache();
         return self::first() ?? self::create([
+            'hero_slider_delay' => 5000,
+            'hero_slide_limit' => 5,
             'maintenance_mode' => false,
             'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
             'maintenance_pages' => [],

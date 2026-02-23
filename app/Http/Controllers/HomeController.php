@@ -9,8 +9,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $heroSlides = CacheService::getHeroSlides(5);
         $settings = SiteSetting::getSettings();
+        $heroSlides = CacheService::getHeroSlidesDynamic();
 
         // Preload first hero image for better performance
         $firstHeroImage = $heroSlides->first()?->image;

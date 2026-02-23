@@ -32,12 +32,26 @@ class CacheService
         if ($cached && !array_key_exists('profile_image', $cached->getAttributes())) {
             Cache::forget('company_info');
         }
-        
+
         return Cache::remember('company_info', self::CACHE_LONG, fn() => CompanyInfo::first());
     }
 
     /**
-     * Get hero slides for homepage
+     * Get hero slides for homepage with dynamic limit from settings
+     */
+    public static function getHeroSlidesDynamic()
+    {
+        // Get limit from site settings, default to 5 if not set
+        $limit = SiteSetting::getSettings()->hero_slide_limit ?? 5;
+
+        // Ensure limit is within valid range (1-20)
+        $limit = max(1, min(20, $limit));
+
+        return self::getHeroSlides($limit);
+    }
+
+    /**
+     * Get hero slides for homepage with specific limit
      */
     public static function getHeroSlides(int $limit = 5)
     {
@@ -124,10 +138,10 @@ class CacheService
             function () use ($limit) {
                 try {
                     return Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled', 'sold'])
-                        ->where(function($query) {
+                        ->where(function ($query) {
                             $query->whereNull('auction_date')
-                                  ->orWhere('auction_date', '>', now())
-                                  ->orWhere('status', 'sold');
+                                ->orWhere('auction_date', '>', now())
+                                ->orWhere('status', 'sold');
                         })
                         ->orderByRaw("CASE WHEN status = 'sold' THEN 1 ELSE 0 END")
                         ->orderBy('auction_date', 'asc')
@@ -244,7 +258,6 @@ class CacheService
     {
         $keys = [
             'company_info',
-            'hero_slides_5',
             'products_home_6',
             'products_simpanan_syariah',
             'products_pembiayaan_syariah',
@@ -265,6 +278,11 @@ class CacheService
 
         foreach ($keys as $key) {
             Cache::forget($key);
+        }
+
+        // Clear hero slides cache for all possible limits (1-20)
+        for ($i = 1; $i <= 20; $i++) {
+            Cache::forget("hero_slides_{$i}");
         }
 
         // Clear report years
