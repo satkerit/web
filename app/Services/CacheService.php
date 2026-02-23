@@ -13,6 +13,7 @@ use App\Models\Report;
 use App\Models\KasKeliling;
 use App\Models\WhyChooseUs;
 use App\Models\WhyChooseUsSetting;
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Cache;
 
 class CacheService
