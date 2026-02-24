@@ -36,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::shouldBeStrict(! $this->app->isProduction());
+        
+        // Prevent lazy loading in development
+        if (! $this->app->isProduction()) {
+            Model::preventLazyLoading();
+        }
 
         $this->loadSmtpSettings();
         $this->registerBladeDirectives();

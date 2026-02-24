@@ -1,43 +1,40 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 
-// Public Routes with general rate limiting
-Route::middleware(['throttle:120,1'])->group(function () {
-    // Sitemap
-    Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+// Home Route
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    // Home
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+// Authentication Routes (Using Breeze)
+Route::get('/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
+Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // About Routes
-    Route::prefix('tentang-kami')->name('about.')->group(function () {
-        Route::get('/perusahaan', [AboutController::class, 'company'])->name('company');
-        Route::get('/dewan-komisaris', [AboutController::class, 'komisaris'])->name('komisaris');
-        Route::get('/dewan-direksi', [AboutController::class, 'direksi'])->name('direksi');
-        Route::get('/dewan-pengawas-syariah', [AboutController::class, 'pengawasSyariah'])->name('pengawas-syariah');
-        Route::get('/struktur-organisasi', [AboutController::class, 'struktur'])->name('struktur');
-        Route::get('/kantor', [AboutController::class, 'offices'])->name('offices');
-        Route::get('/kantor/{office}', [AboutController::class, 'officeShow'])->name('offices.show');
-    });
+// Admin Authentication Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login']);
+    Route::post('/logout', [App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name('logout');
+});
 
+// Public Routes
+Route::middleware(['web', 'throttle:120,1'])->group(function () {
     // Product Routes
-    Route::prefix('produk-layanan')->name('products.')->group(function () {
-        Route::get('/simpanan-syariah', [ProductController::class, 'simpananSyariah'])->name('simpanan-syariah');
-        Route::get('/pembiayaan-syariah', [ProductController::class, 'pembiayaanSyariah'])->name('pembiayaan-syariah');
-        Route::get('/deposito-syariah', [ProductController::class, 'depositoSyariah'])->name('deposito-syariah');
-        Route::get('/kas-keliling', [ProductController::class, 'kasKeliling'])->name('kas-keliling');
-        Route::get('/detail/{slug}', [ProductController::class, 'show'])->name('show');
+    Route::prefix('produk')->name('products.')->group(function () {
+        Route::get('/simpanan-syariah', [App\Http\Controllers\ProductController::class, 'simpananSyariah'])->name('simpanan-syariah');
+        Route::get('/pembiayaan-syariah', [App\Http\Controllers\ProductController::class, 'pembiayaanSyariah'])->name('pembiayaan-syariah');
+        Route::get('/deposito-syariah', [App\Http\Controllers\ProductController::class, 'depositoSyariah'])->name('deposito-syariah');
+        Route::get('/kas-keliling', [App\Http\Controllers\ProductController::class, 'kasKeliling'])->name('kas-keliling');
+        Route::get('/{product:slug}', [App\Http\Controllers\ProductController::class, 'show'])->name('show');
     });
 
     // Brochure Library
     Route::get('/brosur-pembiayaan-syariah', [App\Http\Controllers\BrochureController::class, 'index'])->name('brochures.index');
     Route::get('/brosur-pembiayaan-syariah/{brochure}/download', [App\Http\Controllers\BrochureController::class, 'download'])->name('brochures.download');
     Route::get('/brosur-pembiayaan-syariah/{brochure}/preview', [App\Http\Controllers\BrochureController::class, 'preview'])->name('brochures.preview');
+    Route::get('/brosur-pembiayaan-syariah/produk/{product}/download', [App\Http\Controllers\BrochureController::class, 'downloadProduct'])->name('brochures.download-product');
+    Route::get('/brosur-pembiayaan-syariah/produk/{product}/preview', [App\Http\Controllers\BrochureController::class, 'previewProduct'])->name('brochures.preview-product');
 
     // Auction Routes
     Route::prefix('lelang')->name('auctions.')->group(function () {
@@ -66,6 +63,17 @@ Route::middleware(['throttle:120,1'])->group(function () {
     Route::get('/karir', [App\Http\Controllers\CareerController::class, 'index'])->name('careers.index');
     Route::get('/karir/{career:slug}', [App\Http\Controllers\CareerController::class, 'show'])->name('careers.show');
 
+    // About Pages
+    Route::prefix('tentang-kami')->name('about.')->group(function () {
+        Route::get('/perusahaan', [App\Http\Controllers\AboutController::class, 'company'])->name('company');
+        Route::get('/dewan-komisaris', [App\Http\Controllers\AboutController::class, 'komisaris'])->name('komisaris');
+        Route::get('/dewan-direksi', [App\Http\Controllers\AboutController::class, 'direksi'])->name('direksi');
+        Route::get('/pengawas-syariah', [App\Http\Controllers\AboutController::class, 'pengawasSyariah'])->name('pengawas-syariah');
+        Route::get('/struktur-organisasi', [App\Http\Controllers\AboutController::class, 'struktur'])->name('struktur');
+        Route::get('/kantor-cabang', [App\Http\Controllers\AboutController::class, 'offices'])->name('offices');
+        Route::get('/kantor-cabang/{office:slug}', [App\Http\Controllers\AboutController::class, 'officeShow'])->name('offices.show');
+    });
+
     // Static Pages
     Route::view('/hubungi-kami', 'frontend.pages.contact')->name('contact');
     Route::view('/whistleblowing', 'frontend.pages.whistleblowing')->name('whistleblowing');
@@ -91,6 +99,11 @@ Route::prefix('admin/storage')->name('admin.storage.')->middleware(['auth'])->gr
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeout', 'menu.permission'])->group(function () {
     // Dashboard
     Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Profile Management
+    Route::get('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // News Management
     Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
@@ -127,150 +140,69 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     // Offices Management
     Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class);
 
+    // Kas Keliling Management
+    Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
+
     // Careers Management
     Route::resource('careers', App\Http\Controllers\Admin\CareerController::class);
 
-    // Kas Keliling Management
-    Route::post('kas-keliling/bulk-delete', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkDelete'])->name('kas-keliling.bulk-delete');
-    Route::post('kas-keliling/bulk-status', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkUpdateStatus'])->name('kas-keliling.bulk-status');
-    Route::get('kas-keliling-export', [App\Http\Controllers\Admin\KasKelilingController::class, 'export'])->name('kas-keliling.export');
-    Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
+    // Company Info Management
+    Route::get('company-info/edit', [App\Http\Controllers\Admin\CompanyInfoController::class, 'edit'])->name('company-info.edit');
+    Route::put('company-info', [App\Http\Controllers\Admin\CompanyInfoController::class, 'update'])->name('company-info.update');
 
     // Board Members Management
     Route::resource('board-members', App\Http\Controllers\Admin\BoardMemberController::class);
 
-    // Company Info
-    Route::get('company-info', [App\Http\Controllers\Admin\CompanyInfoController::class, 'edit'])->name('company-info.edit');
-    Route::put('company-info', [App\Http\Controllers\Admin\CompanyInfoController::class, 'update'])
-        ->name('company-info.update');
-    
-    // Company Info Storage (Laravel 12 approach)
-    Route::get('company-info/storage/browse', [App\Http\Controllers\Admin\CompanyInfoController::class, 'browseStorage'])->name('company-info.storage.browse');
-    Route::post('company-info/storage/upload', [App\Http\Controllers\Admin\CompanyInfoController::class, 'uploadFile'])->name('company-info.storage.upload');
-    Route::delete('company-info/storage/delete', [App\Http\Controllers\Admin\CompanyInfoController::class, 'deleteFile'])->name('company-info.storage.delete');
-
-    // Complaints Management (Whistleblowing)
-    Route::resource('complaints', App\Http\Controllers\Admin\ComplaintController::class)->only(['index', 'show', 'update', 'destroy']);
-
-    // Customer Complaints Management (Pengaduan Nasabah)
-    Route::resource('customer-complaints', App\Http\Controllers\Admin\CustomerComplaintController::class)->only(['index', 'show', 'update', 'destroy']);
-
-    // Users Management (Super Admin only)
-    Route::resource('users', App\Http\Controllers\Admin\UserController::class);
-
-    // Settings
-    Route::get('settings/maintenance', [App\Http\Controllers\Admin\SettingController::class, 'maintenance'])->name('settings.maintenance');
-    Route::put('settings/maintenance', [App\Http\Controllers\Admin\SettingController::class, 'updateMaintenance'])->name('settings.maintenance.update');
-
-    // Email Settings
-    Route::get('settings/email', [App\Http\Controllers\Admin\EmailSettingController::class, 'index'])->name('settings.email');
-    Route::put('settings/email', [App\Http\Controllers\Admin\EmailSettingController::class, 'update'])->name('settings.email.update');
-    Route::post('settings/email/test', [App\Http\Controllers\Admin\EmailSettingController::class, 'sendTest'])->name('settings.email.test');
-
-    // Security Settings
-    Route::get('settings/security', [App\Http\Controllers\Admin\SecuritySettingController::class, 'index'])->name('settings.security');
-    Route::put('settings/security', [App\Http\Controllers\Admin\SecuritySettingController::class, 'update'])->name('settings.security.update');
-    Route::get('settings/blocked-ips', [App\Http\Controllers\Admin\SecuritySettingController::class, 'blockedIps'])->name('settings.blocked-ips');
-    Route::post('settings/security/block-ip', [App\Http\Controllers\Admin\SecuritySettingController::class, 'blockIp'])->name('settings.security.block-ip');
-    Route::delete('settings/security/unblock/{blockedIp}', [App\Http\Controllers\Admin\SecuritySettingController::class, 'unblockIp'])->name('settings.security.unblock');
-    Route::post('settings/security/clear-expired', [App\Http\Controllers\Admin\SecuritySettingController::class, 'clearExpiredBlocks'])->name('settings.security.clear-expired');
-    Route::get('settings/security/test', [App\Http\Controllers\Admin\SecuritySettingController::class, 'testSecurity'])->name('settings.security.test');
-
-    // Audit Trails / Log Aktivitas
-    Route::get('audit-trails', [App\Http\Controllers\Admin\AuditTrailController::class, 'index'])->name('audit-trails.index');
-    Route::get('audit-trails/{auditTrail}', [App\Http\Controllers\Admin\AuditTrailController::class, 'show'])->name('audit-trails.show');
-    Route::post('audit-trails/clear', [App\Http\Controllers\Admin\AuditTrailController::class, 'clear'])->name('audit-trails.clear');
-
-    // Security Monitoring
-    Route::prefix('security-monitor')->name('security-monitor.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'index'])->name('index');
-        Route::get('/export', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'export'])->name('export');
-        Route::get('/chart-data', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'chartData'])->name('chart-data');
-        Route::get('/threats/{ip}', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'threatsByIp'])->name('threats-by-ip');
-        Route::get('/{securityLog}', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'show'])->name('show');
-        Route::post('/block-ip', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'blockIp'])->name('block-ip');
-        Route::delete('/unblock/{ip}', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'unblockIp'])->name('unblock');
-        Route::post('/cleanup', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'cleanup'])->name('cleanup');
-        Route::post('/clear-expired', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'clearExpiredBlocks'])->name('clear-expired');
-    });
-
-    // Visitor Statistics
-    Route::get('visitor-stats', [App\Http\Controllers\Admin\VisitorStatController::class, 'index'])->name('visitor-stats.index');
-
-    // Storage / File Manager
-    Route::prefix('storage')->name('storage.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\StorageController::class, 'index'])->name('index');
-        Route::post('/upload', [App\Http\Controllers\Admin\StorageController::class, 'upload'])->name('upload');
-        Route::post('/create-folder', [App\Http\Controllers\Admin\StorageController::class, 'createFolder'])->name('create-folder');
-        Route::delete('/delete', [App\Http\Controllers\Admin\StorageController::class, 'delete'])->name('delete');
-        Route::get('/download', [App\Http\Controllers\Admin\StorageController::class, 'download'])->name('download');
-        Route::put('/rename', [App\Http\Controllers\Admin\StorageController::class, 'rename'])->name('rename');
-    });
-
-    // Database Backup Management
-    Route::prefix('database-backup')->name('database-backup.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'create'])->name('create');
-        Route::get('/download/{filename}', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'download'])->name('download');
-        Route::delete('/delete/{filename}', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'delete'])->name('delete');
-        Route::post('/restore/{filename}', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'restore'])->name('restore');
-        Route::post('/cleanup', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'cleanup'])->name('cleanup');
-    });
+    // Settings Management
+    Route::get('settings/maintenance', [App\Http\Controllers\Admin\SiteSettingController::class, 'maintenance'])->name('settings.maintenance');
+    Route::put('settings/maintenance', [App\Http\Controllers\Admin\SiteSettingController::class, 'updateMaintenance'])->name('settings.maintenance.update');
+    Route::get('settings/security', [App\Http\Controllers\Admin\SiteSettingController::class, 'security'])->name('settings.security');
+    Route::put('settings/security', [App\Http\Controllers\Admin\SiteSettingController::class, 'updateSecurity'])->name('settings.security.update');
+    Route::get('settings/email', [App\Http\Controllers\Admin\SiteSettingController::class, 'email'])->name('settings.email');
+    Route::put('settings/email', [App\Http\Controllers\Admin\SiteSettingController::class, 'updateEmail'])->name('settings.email.update');
 
     // Financing Config Management
-    Route::prefix('financing-config')->name('financing-config.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\FinancingConfigController::class, 'index'])->name('index');
-        Route::get('/create', [App\Http\Controllers\Admin\FinancingConfigController::class, 'create'])->name('create');
-        Route::post('/', [App\Http\Controllers\Admin\FinancingConfigController::class, 'store'])->name('store');
-        Route::get('/{financingConfig}/edit', [App\Http\Controllers\Admin\FinancingConfigController::class, 'edit'])->name('edit');
-        Route::put('/{financingConfig}', [App\Http\Controllers\Admin\FinancingConfigController::class, 'update'])->name('update');
-        Route::delete('/{financingConfig}', [App\Http\Controllers\Admin\FinancingConfigController::class, 'destroy'])->name('destroy');
-    });
+    Route::get('financing-config', [App\Http\Controllers\Admin\FinancingConfigController::class, 'index'])->name('financing-config.index');
+    Route::put('financing-config', [App\Http\Controllers\Admin\FinancingConfigController::class, 'update'])->name('financing-config.update');
 
-    // Menu Permissions (Super Admin only)
-    Route::prefix('menu-permissions')->name('menu-permissions.')->middleware('role:super_admin')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\MenuPermissionController::class, 'index'])->name('index');
-        Route::put('/', [App\Http\Controllers\Admin\MenuPermissionController::class, 'update'])->name('update');
-    });
+    // Customer Complaints Management
+    Route::resource('customer-complaints', App\Http\Controllers\Admin\CustomerComplaintController::class);
 
-    // Role Management (Super Admin only)
-    Route::resource('roles', App\Http\Controllers\Admin\RoleController::class)->middleware('role:super_admin');
+    // Whistleblowing Management
+    Route::resource('complaints', App\Http\Controllers\Admin\ComplaintController::class);
 
-    // User Profile (All authenticated users)
-    Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('edit');
-        Route::put('/', [App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('update');
-        Route::put('/password', [App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('password');
-    });
+    // Database Backup Management
+    Route::get('database-backup', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'index'])->name('database-backup.index');
+    Route::post('database-backup/create', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'create'])->name('database-backup.create');
+    Route::get('database-backup/download/{filename}', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'download'])->name('database-backup.download');
+    Route::delete('database-backup/delete/{filename}', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'delete'])->name('database-backup.delete');
+
+    // Storage Management
+    Route::get('storage', [App\Http\Controllers\Admin\StorageController::class, 'index'])->name('storage.index');
+    Route::post('storage/upload', [App\Http\Controllers\Admin\StorageController::class, 'upload'])->name('storage.upload');
+    Route::delete('storage/delete', [App\Http\Controllers\Admin\StorageController::class, 'delete'])->name('storage.delete');
+    Route::post('storage/create-folder', [App\Http\Controllers\Admin\StorageController::class, 'createFolder'])->name('storage.create-folder');
+
+    // Audit Trails Management
+    Route::get('audit-trails', [App\Http\Controllers\Admin\AuditTrailController::class, 'index'])->name('audit-trails.index');
+    Route::get('audit-trails/export', [App\Http\Controllers\Admin\AuditTrailController::class, 'export'])->name('audit-trails.export');
+
+    // Visitor Statistics Management
+    Route::get('visitor-stats', [App\Http\Controllers\Admin\VisitorStatController::class, 'index'])->name('visitor-stats.index');
+    Route::get('visitor-stats/export', [App\Http\Controllers\Admin\VisitorStatController::class, 'export'])->name('visitor-stats.export');
+
+    // Role Management
+    Route::resource('roles', App\Http\Controllers\Admin\RoleController::class);
+
+    // User Management
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+
+    // Menu Permissions Management
+    Route::get('menu-permissions', [App\Http\Controllers\Admin\MenuPermissionController::class, 'index'])->name('menu-permissions.index');
+    Route::post('menu-permissions/update', [App\Http\Controllers\Admin\MenuPermissionController::class, 'update'])->name('menu-permissions.update');
 });
 
-// Authentication Routes with strict rate limiting
-require __DIR__ . '/auth.php';
-
-// Dashboard alias (compatibility for auth tests)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return redirect()->route('admin.dashboard');
-    })->name('dashboard');
+// Fallback route for 404
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
 });
-
-
-
-// Session Management Routes
-Route::middleware(['auth'])->group(function () {
-    Route::post('/extend-session', [App\Http\Controllers\SessionController::class, 'extend'])->name('session.extend');
-    Route::get('/session-status', [App\Http\Controllers\SessionController::class, 'status'])->name('session.status');
-});
-
-// Storage Serve Routes (for both standard and /dev paths)
-// Standard storage path
-Route::get('/storage/{path}', [App\Http\Controllers\StorageServeController::class, 'serve'])
-    ->where('path', '.*')
-    ->name('storage.serve')
-    ->middleware('throttle:120,1');
-
-// Dev storage path (for development/production compatibility)
-Route::get('/dev/storage/{path}', [App\Http\Controllers\StorageServeController::class, 'serve'])
-    ->where('path', '.*')
-    ->name('dev.storage.serve')
-    ->middleware('throttle:120,1');

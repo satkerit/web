@@ -44,7 +44,7 @@ class RoleController extends Controller
     {
         $this->authorizeCreate('roles.create');
 
-        $permissions = Permission::getGrouped();
+        $permissions = Permission::getGroupedPermissions();
         $permissionGroups = Permission::getGroups();
 
         return view('admin.roles.form', compact('permissions', 'permissionGroups'));
@@ -84,7 +84,7 @@ class RoleController extends Controller
     {
         $this->authorizeEdit('roles.edit');
 
-        $permissions = Permission::getGrouped();
+        $permissions = Permission::getGroupedPermissions();
         $permissionGroups = Permission::getGroups();
         $rolePermissions = $role->permissions->pluck('id')->toArray();
 
@@ -136,16 +136,18 @@ class RoleController extends Controller
         $this->authorizeDelete('roles.delete');
 
         if ($role->is_system) {
-            return redirect()->route('admin.roles.index')->with('error', 'Role sistem tidak dapat dihapus.');
+            return redirect()->route('admin.roles.index')
+                ->with('error', 'Role sistem tidak dapat dihapus.');
         }
 
-        if ($role->users()->count() > 0) {
-            return redirect()->route('admin.roles.index')->with('error', 'Role tidak dapat dihapus karena masih digunakan oleh pengguna.');
+        if ($role->users()->exists()) {
+            return redirect()->route('admin.roles.index')
+                ->with('error', 'Role ini masih digunakan oleh user dan tidak dapat dihapus.');
         }
 
-        $role->permissions()->detach();
         $role->delete();
 
-        return redirect()->route('admin.roles.index')->with('success', 'Role berhasil dihapus.');
+        return redirect()->route('admin.roles.index')
+            ->with('success', 'Role berhasil dihapus.');
     }
 }

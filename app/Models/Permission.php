@@ -43,4 +43,15 @@ class Permission extends Model
             ->get()
             ->groupBy('group');
     }
+
+    public static function getGroups()
+    {
+        return static::where('is_active', true)
+            ->distinct()
+            ->orderBy('group')
+            ->pluck('group')
+            ->filter()
+            ->values()
+            ->toArray();
+    }
 }
