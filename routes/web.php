@@ -185,6 +185,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
 
     // Audit Trails Management
     Route::get('audit-trails', [App\Http\Controllers\Admin\AuditTrailController::class, 'index'])->name('audit-trails.index');
+    Route::get('audit-trails/{auditTrail}', [App\Http\Controllers\Admin\AuditTrailController::class, 'show'])->name('audit-trails.show');
+    Route::post('audit-trails/clear', [App\Http\Controllers\Admin\AuditTrailController::class, 'clear'])->name('audit-trails.clear');
     Route::get('audit-trails/export', [App\Http\Controllers\Admin\AuditTrailController::class, 'export'])->name('audit-trails.export');
 
     // Visitor Statistics Management
