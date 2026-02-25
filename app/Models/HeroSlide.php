@@ -63,7 +63,14 @@ class HeroSlide extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn() => Cache::forget('hero_slides_5'));
-        static::deleted(fn() => Cache::forget('hero_slides_5'));
+        $clearCache = function () {
+            // Clear all possible hero slide caches (1-20)
+            for ($i = 1; $i <= 20; $i++) {
+                Cache::forget("hero_slides_{$i}");
+            }
+        };
+
+        static::saved($clearCache);
+        static::deleted($clearCache);
     }
 }
