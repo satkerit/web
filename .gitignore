@@ -5,7 +5,9 @@
 /.vscode
 /node_modules
 /public/hot
+/public/storage
 /vendor
 *.log
 .DS_Store
 Thumbs.db
+/storage
