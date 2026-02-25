@@ -141,6 +141,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class);
 
     // Kas Keliling Management
+    Route::get('kas-keliling/export', [App\Http\Controllers\Admin\KasKelilingController::class, 'export'])->name('kas-keliling.export');
+    Route::post('kas-keliling/bulk-delete', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkDelete'])->name('kas-keliling.bulk-delete');
+    Route::post('kas-keliling/bulk-status', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkUpdateStatus'])->name('kas-keliling.bulk-status');
     Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
 
     // Careers Management
