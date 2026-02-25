@@ -157,16 +157,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::resource('board-members', App\Http\Controllers\Admin\BoardMemberController::class);
 
     // Settings Management
-    Route::get('settings/maintenance', [App\Http\Controllers\Admin\SiteSettingController::class, 'maintenance'])->name('settings.maintenance');
-    Route::put('settings/maintenance', [App\Http\Controllers\Admin\SiteSettingController::class, 'updateMaintenance'])->name('settings.maintenance.update');
-    Route::get('settings/security', [App\Http\Controllers\Admin\SiteSettingController::class, 'security'])->name('settings.security');
-    Route::put('settings/security', [App\Http\Controllers\Admin\SiteSettingController::class, 'updateSecurity'])->name('settings.security.update');
-    Route::get('settings/email', [App\Http\Controllers\Admin\SiteSettingController::class, 'email'])->name('settings.email');
-    Route::put('settings/email', [App\Http\Controllers\Admin\SiteSettingController::class, 'updateEmail'])->name('settings.email.update');
+    Route::get('settings/maintenance', [App\Http\Controllers\Admin\SettingController::class, 'maintenance'])->name('settings.maintenance');
+    Route::put('settings/maintenance', [App\Http\Controllers\Admin\SettingController::class, 'updateMaintenance'])->name('settings.maintenance.update');
+    Route::get('settings/security', [App\Http\Controllers\Admin\SecuritySettingController::class, 'index'])->name('settings.security');
+    Route::put('settings/security', [App\Http\Controllers\Admin\SecuritySettingController::class, 'update'])->name('settings.security.update');
+    Route::get('settings/blocked-ips', [App\Http\Controllers\Admin\SecuritySettingController::class, 'blockedIps'])->name('settings.blocked-ips');
+    Route::delete('settings/blocked-ips/{blockedIp}', [App\Http\Controllers\Admin\SecuritySettingController::class, 'unblockIp'])->name('settings.blocked-ips.unblock');
+    Route::post('settings/blocked-ips/block', [App\Http\Controllers\Admin\SecuritySettingController::class, 'blockIp'])->name('settings.blocked-ips.block');
+    Route::post('settings/blocked-ips/clear-expired', [App\Http\Controllers\Admin\SecuritySettingController::class, 'clearExpiredBlocks'])->name('settings.blocked-ips.clear-expired');
+    Route::get('settings/email', [App\Http\Controllers\Admin\EmailSettingController::class, 'index'])->name('settings.email');
+    Route::put('settings/email', [App\Http\Controllers\Admin\EmailSettingController::class, 'update'])->name('settings.email.update');
+    Route::post('settings/email/test', [App\Http\Controllers\Admin\EmailSettingController::class, 'sendTest'])->name('settings.email.test');
 
     // Financing Config Management
-    Route::get('financing-config', [App\Http\Controllers\Admin\FinancingConfigController::class, 'index'])->name('financing-config.index');
-    Route::put('financing-config', [App\Http\Controllers\Admin\FinancingConfigController::class, 'update'])->name('financing-config.update');
+    Route::resource('financing-config', App\Http\Controllers\Admin\FinancingConfigController::class);
 
     // Customer Complaints Management
     Route::resource('customer-complaints', App\Http\Controllers\Admin\CustomerComplaintController::class);
@@ -184,6 +188,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::get('storage', [App\Http\Controllers\Admin\StorageController::class, 'index'])->name('storage.index');
     Route::post('storage/upload', [App\Http\Controllers\Admin\StorageController::class, 'upload'])->name('storage.upload');
     Route::delete('storage/delete', [App\Http\Controllers\Admin\StorageController::class, 'delete'])->name('storage.delete');
+    Route::put('storage/rename', [App\Http\Controllers\Admin\StorageController::class, 'rename'])->name('storage.rename');
     Route::post('storage/create-folder', [App\Http\Controllers\Admin\StorageController::class, 'createFolder'])->name('storage.create-folder');
 
     // Audit Trails Management

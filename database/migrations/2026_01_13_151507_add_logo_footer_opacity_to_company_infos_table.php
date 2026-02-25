@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('company_infos', function (Blueprint $table) {
-            $table->integer('logo_footer_opacity')->default(100)->after('logo_footer_remove_bg');
+            if (!Schema::hasColumn('company_infos', 'logo_footer_opacity')) {
+                $table->integer('logo_footer_opacity')->default(100)->after('logo_footer_remove_bg');
+            }
         });
     }
 
