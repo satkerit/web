@@ -36,6 +36,7 @@ class HeroSlideController extends Controller
 
         $validated = $request->validate([
             'hero_slider_delay' => 'required|integer|min:1000|max:20000',
+            'hero_slide_limit' => 'required|integer|min:1|max:20',
         ]);
 
         $settings = SiteSetting::first();

@@ -31,6 +31,7 @@ class Product extends Model
         'image',
         'image_alt',
         'brochure',
+        'brochure_id',
         'is_active',
         'order_position'
     ];
@@ -40,8 +41,14 @@ class Product extends Model
         'requirements' => 'array',
         'benefits' => 'array',
         'is_active' => 'boolean',
-        'order_position' => 'integer'
+        'order_position' => 'integer',
+        'brochure_id' => 'integer'
     ];
+
+    public function brochure()
+    {
+        return $this->belongsTo(Brochure::class);
+    }
 
     public function getSlugOptions(): SlugOptions
     {

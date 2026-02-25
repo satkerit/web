@@ -16,7 +16,7 @@
         @csrf
         @method('PUT')
 
-        <div class="max-w-xl">
+        <div class="max-w-xl space-y-6">
             <x-admin.input 
                 label="Delay Slider (ms)" 
                 name="hero_slider_delay" 
@@ -26,6 +26,17 @@
                 required
                 min="1000"
                 max="20000"
+            />
+
+            <x-admin.input 
+                label="Jumlah Slide Ditampilkan" 
+                name="hero_slide_limit" 
+                type="number" 
+                :value="old('hero_slide_limit', $settings->hero_slide_limit ?? 5)" 
+                helper="Jumlah maksimal slide hero yang ditampilkan di halaman utama. Slide akan diambil berdasarkan urutan."
+                required
+                min="1"
+                max="20"
             />
         </div>
 

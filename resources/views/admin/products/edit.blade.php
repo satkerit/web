@@ -307,35 +307,68 @@
                         hint="Membantu aksesibilitas dan SEO"
                     />
 
-                    <div x-show="type === 'pembiayaan_syariah'" x-transition class="pt-4 border-t border-slate-100">
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Brosur Produk</label>
+                    <div x-show="type === 'pembiayaan_syariah'" x-transition class="pt-4 border-t border-slate-100 space-y-4">
+                        <div>
+                            <label for="brochure_id" class="block text-sm font-semibold text-slate-700 mb-2">Pilih Brosur dari Library</label>
+                            <select name="brochure_id" id="brochure_id" class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                                <option value="">-- Pilih Brosur (Opsional) --</option>
+                                @foreach($brochures as $brochure)
+                                    <option value="{{ $brochure->id }}" {{ old('brochure_id', $product->brochure_id) == $brochure->id ? 'selected' : '' }}>
+                                        {{ $brochure->original_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="mt-1 text-xs text-slate-500">Pilih brosur yang sudah diupload di library brosur</p>
+                        </div>
 
-                        @if($product->brochure)
-                            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl mb-3 border border-slate-200">
+                        @if($product->brochure || $product->brochure_id)
+                            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
                                 <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 text-red-600">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                     </svg>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-slate-900 truncate">Brosur Tersedia</p>
-                                    <a href="{{ Storage::url($product->brochure) }}" target="_blank" class="text-xs text-emerald-600 hover:text-emerald-700 hover:underline">Lihat File</a>
+                                    <p class="text-sm font-medium text-slate-900 truncate">
+                                        @if($product->brochure_id && $product->brochure)
+                                            Brosur Library: {{ $product->brochure->original_name }}
+                                        @elseif($product->brochure)
+                                            Brosur Upload Manual
+                                        @endif
+                                    </p>
+                                    @if($product->brochure_id && $product->brochure)
+                                        <a href="{{ route('brochures.download', $product->brochure) }}" target="_blank" class="text-xs text-emerald-600 hover:text-emerald-700 hover:underline">Lihat File</a>
+                                    @elseif($product->brochure)
+                                        <a href="{{ Storage::url($product->brochure) }}" target="_blank" class="text-xs text-emerald-600 hover:text-emerald-700 hover:underline">Lihat File</a>
+                                    @endif
                                 </div>
                             </div>
                         @endif
 
-                        <input type="file" name="brochure" accept=".pdf"
-                               class="block w-full text-sm text-slate-500
-                                      file:mr-4 file:py-2 file:px-4
-                                      file:rounded-full file:border-0
-                                      file:text-sm file:font-semibold
-                                      file:bg-emerald-50 file:text-emerald-700
-                                      hover:file:bg-emerald-100
-                                      transition-all"/>
-                        <p class="mt-1 text-xs text-slate-500">Format: PDF. Maksimal 10MB.</p>
-                        @error('brochure')
-                            <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
-                        @enderror
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-slate-200"></div>
+                            </div>
+                            <div class="relative flex justify-center text-xs">
+                                <span class="bg-white px-2 text-slate-500">atau upload baru</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Upload Brosur Baru (PDF)</label>
+                            <input type="file" name="brochure" accept=".pdf"
+                                   class="block w-full text-sm text-slate-500
+                                          file:mr-4 file:py-2 file:px-4
+                                          file:rounded-full file:border-0
+                                          file:text-sm file:font-semibold
+                                          file:bg-emerald-50 file:text-emerald-700
+                                          hover:file:bg-emerald-100
+                                          transition-all"/>
+                            <p class="mt-1 text-xs text-slate-500">Format: PDF. Maksimal 10MB. Akan mengganti brosur yang ada.</p>
+                            @error('brochure')
+                                <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                 </div>
             </x-admin.card>

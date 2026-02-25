@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('news', function (Blueprint $table) {
-            $table->text('meta_description')->nullable()->after('excerpt');
-            $table->string('tags')->nullable()->after('meta_description');
+            if (!Schema::hasColumn('news', 'meta_description')) {
+                $table->text('meta_description')->nullable()->after('excerpt');
+            }
+            if (!Schema::hasColumn('news', 'tags')) {
+                $table->string('tags')->nullable()->after('meta_description');
+            }
         });
     }
 

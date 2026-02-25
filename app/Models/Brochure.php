@@ -23,6 +23,11 @@ class Brochure extends Model
         return $this->belongsTo(User::class, 'uploaded_by');
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function getDownloadUrlAttribute()
     {
         return route('brochures.download', $this);

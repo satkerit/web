@@ -268,16 +268,42 @@
                     />
 
                     <div x-show="type === 'pembiayaan_syariah'" x-transition class="pt-4 border-t border-slate-100">
-                        <label for="brochure" class="block text-sm font-semibold text-slate-700 mb-2">Brosur Pembiayaan (PDF)</label>
-                        <input type="file" name="brochure" id="brochure" accept=".pdf"
-                               class="block w-full text-sm text-slate-500
-                                      file:mr-4 file:py-2.5 file:px-4
-                                      file:rounded-full file:border-0
-                                      file:text-sm file:font-semibold
-                                      file:bg-emerald-50 file:text-emerald-700
-                                      hover:file:bg-emerald-100
-                                      transition-all duration-200 ease-in-out"/>
-                        <p class="mt-1 text-xs text-slate-500">Format: PDF. Maksimal 10MB.</p>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="brochure_id" class="block text-sm font-semibold text-slate-700 mb-2">Pilih Brosur dari Library</label>
+                                <select name="brochure_id" id="brochure_id" class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                                    <option value="">-- Pilih Brosur (Opsional) --</option>
+                                    @foreach($brochures as $brochure)
+                                        <option value="{{ $brochure->id }}" {{ old('brochure_id') == $brochure->id ? 'selected' : '' }}>
+                                            {{ $brochure->original_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <p class="mt-1 text-xs text-slate-500">Pilih brosur yang sudah diupload di library brosur</p>
+                            </div>
+
+                            <div class="relative">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-slate-200"></div>
+                                </div>
+                                <div class="relative flex justify-center text-xs">
+                                    <span class="bg-white px-2 text-slate-500">atau</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="brochure" class="block text-sm font-semibold text-slate-700 mb-2">Upload Brosur Baru (PDF)</label>
+                                <input type="file" name="brochure" id="brochure" accept=".pdf"
+                                       class="block w-full text-sm text-slate-500
+                                              file:mr-4 file:py-2.5 file:px-4
+                                              file:rounded-full file:border-0
+                                              file:text-sm file:font-semibold
+                                              file:bg-emerald-50 file:text-emerald-700
+                                              hover:file:bg-emerald-100
+                                              transition-all duration-200 ease-in-out"/>
+                                <p class="mt-1 text-xs text-slate-500">Format: PDF. Maksimal 10MB. Akan disimpan terpisah dari library.</p>
+                            </div>
+                        </div>
                         @error('brochure')
                             <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
                         @enderror

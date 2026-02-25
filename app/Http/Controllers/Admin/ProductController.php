@@ -37,7 +37,9 @@ class ProductController extends Controller
     {
         $this->authorizeCreate('products.create');
 
-        return view('admin.products.create');
+        $brochures = \App\Models\Brochure::orderBy('original_name')->get();
+
+        return view('admin.products.create', compact('brochures'));
     }
 
     public function show(Product $product)
@@ -62,6 +64,7 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'image_alt' => 'nullable|string|max:255',
             'brochure' => 'nullable|file|mimes:pdf|max:10240',
+            'brochure_id' => 'nullable|exists:brochures,id',
             'is_active' => 'boolean',
             'order_position' => 'nullable|integer|min:0',
         ]);
@@ -104,7 +107,9 @@ class ProductController extends Controller
     {
         $this->authorizeEdit('products.edit');
 
-        return view('admin.products.edit', compact('product'));
+        $brochures = \App\Models\Brochure::orderBy('original_name')->get();
+
+        return view('admin.products.edit', compact('product', 'brochures'));
     }
 
     public function update(Request $request, Product $product)
@@ -122,6 +127,7 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'image_alt' => 'nullable|string|max:255',
             'brochure' => 'nullable|file|mimes:pdf|max:10240',
+            'brochure_id' => 'nullable|exists:brochures,id',
             'is_active' => 'boolean',
             'order_position' => 'nullable|integer|min:0',
         ]);
