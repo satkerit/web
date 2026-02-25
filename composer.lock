@@ -1246,16 +1246,16 @@
         },
         {
             "name": "intervention/image",
-            "version": "3.11.6",
+            "version": "3.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "5f6d27d9fd56312c47f347929e7ac15345c605a1"
+                "reference": "2159bcccff18f09d2a392679b81a82c5a003f9bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/5f6d27d9fd56312c47f347929e7ac15345c605a1",
-                "reference": "5f6d27d9fd56312c47f347929e7ac15345c605a1",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/2159bcccff18f09d2a392679b81a82c5a003f9bb",
+                "reference": "2159bcccff18f09d2a392679b81a82c5a003f9bb",
                 "shasum": ""
             },
             "require": {
@@ -1302,7 +1302,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/3.11.6"
+                "source": "https://github.com/Intervention/image/tree/3.11.7"
             },
             "funding": [
                 {
@@ -1318,20 +1318,20 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2025-12-17T13:38:29+00:00"
+            "time": "2026-02-19T13:11:17+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v12.52.0",
+            "version": "v12.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "d5511fa74f4608dbb99864198b1954042aa8d5a7"
+                "reference": "f57f035c0d34503d9ff30be76159bb35a003cd1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/d5511fa74f4608dbb99864198b1954042aa8d5a7",
-                "reference": "d5511fa74f4608dbb99864198b1954042aa8d5a7",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f57f035c0d34503d9ff30be76159bb35a003cd1f",
+                "reference": "f57f035c0d34503d9ff30be76159bb35a003cd1f",
                 "shasum": ""
             },
             "require": {
@@ -1540,7 +1540,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-02-17T17:07:04+00:00"
+            "time": "2026-02-24T14:35:15+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -1603,16 +1603,16 @@
         },
         {
             "name": "laravel/serializable-closure",
-            "version": "v2.0.9",
+            "version": "v2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/serializable-closure.git",
-                "reference": "8f631589ab07b7b52fead814965f5a800459cb3e"
+                "reference": "870fc81d2f879903dfc5b60bf8a0f94a1609e669"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/8f631589ab07b7b52fead814965f5a800459cb3e",
-                "reference": "8f631589ab07b7b52fead814965f5a800459cb3e",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/870fc81d2f879903dfc5b60bf8a0f94a1609e669",
+                "reference": "870fc81d2f879903dfc5b60bf8a0f94a1609e669",
                 "shasum": ""
             },
             "require": {
@@ -1660,7 +1660,7 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
-            "time": "2026-02-03T06:55:34+00:00"
+            "time": "2026-02-20T19:59:49+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -2573,16 +2573,16 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.3.4",
+            "version": "v1.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "086497a2f34b82fede9b5a41cc8e131d087cd8f7"
+                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/086497a2f34b82fede9b5a41cc8e131d087cd8f7",
-                "reference": "086497a2f34b82fede9b5a41cc8e131d087cd8f7",
+                "url": "https://api.github.com/repos/nette/schema/zipball/f0ab1a3cda782dbc5da270d28545236aa80c4002",
+                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002",
                 "shasum": ""
             },
             "require": {
@@ -2590,8 +2590,10 @@
                 "php": "8.1 - 8.5"
             },
             "require-dev": {
+                "nette/phpstan-rules": "^1.0",
                 "nette/tester": "^2.6",
-                "phpstan/phpstan": "^2.0@stable",
+                "phpstan/extension-installer": "^1.4@stable",
+                "phpstan/phpstan": "^2.1.39@stable",
                 "tracy/tracy": "^2.8"
             },
             "type": "library",
@@ -2632,9 +2634,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/schema/issues",
-                "source": "https://github.com/nette/schema/tree/v1.3.4"
+                "source": "https://github.com/nette/schema/tree/v1.3.5"
             },
-            "time": "2026-02-08T02:54:00+00:00"
+            "time": "2026-02-23T03:47:12+00:00"
         },
         {
             "name": "nette/utils",
@@ -3721,26 +3723,26 @@
         },
         {
             "name": "spatie/laravel-sluggable",
-            "version": "3.7.5",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-sluggable.git",
-                "reference": "e4fdd519e043a2af02b52eec2c3be2dd2e262e27"
+                "reference": "8050bf38a6e03ac4974e1f7bc722983242abfae0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-sluggable/zipball/e4fdd519e043a2af02b52eec2c3be2dd2e262e27",
-                "reference": "e4fdd519e043a2af02b52eec2c3be2dd2e262e27",
+                "url": "https://api.github.com/repos/spatie/laravel-sluggable/zipball/8050bf38a6e03ac4974e1f7bc722983242abfae0",
+                "reference": "8050bf38a6e03ac4974e1f7bc722983242abfae0",
                 "shasum": ""
             },
             "require": {
-                "illuminate/database": "^8.0|^9.0|^10.0|^11.0|^12.0",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
-                "php": "^8.0"
+                "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.2"
             },
             "require-dev": {
-                "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0",
-                "pestphp/pest": "^1.20|^2.0|^3.7",
+                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.7|^4.0",
                 "spatie/laravel-translatable": "^5.0|^6.0"
             },
             "type": "library",
@@ -3768,7 +3770,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-sluggable/tree/3.7.5"
+                "source": "https://github.com/spatie/laravel-sluggable/tree/3.8.0"
             },
             "funding": [
                 {
@@ -3776,7 +3778,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-24T09:21:00+00:00"
+            "time": "2026-02-21T14:25:10+00:00"
         },
         {
             "name": "symfony/clock",
@@ -6951,22 +6953,82 @@
             "time": "2026-02-06T12:16:02+00:00"
         },
         {
-            "name": "laravel/telescope",
-            "version": "v5.17.0",
+            "name": "laravel/sentinel",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laravel/telescope.git",
-                "reference": "1000b2d994a3cc1ee893f97f9cc2f554352ebc76"
+                "url": "https://github.com/laravel/sentinel.git",
+                "reference": "7a98db53e0d9d6f61387f3141c07477f97425603"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/telescope/zipball/1000b2d994a3cc1ee893f97f9cc2f554352ebc76",
-                "reference": "1000b2d994a3cc1ee893f97f9cc2f554352ebc76",
+                "url": "https://api.github.com/repos/laravel/sentinel/zipball/7a98db53e0d9d6f61387f3141c07477f97425603",
+                "reference": "7a98db53e0d9d6f61387f3141c07477f97425603",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "laravel/framework": "^8.37|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/container": "^8.37|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.27",
+                "orchestra/testbench": "^6.47.1|^7.56|^8.37|^9.16|^10.9|^11.0",
+                "phpstan/phpstan": "^2.1.33"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Sentinel\\SentinelServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Sentinel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "mior@laravel.com"
+                }
+            ],
+            "support": {
+                "source": "https://github.com/laravel/sentinel/tree/v1.0.1"
+            },
+            "time": "2026-02-12T13:32:54+00:00"
+        },
+        {
+            "name": "laravel/telescope",
+            "version": "5.18.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/telescope.git",
+                "reference": "8bbc1d839317cef7106cabf028e407416e5a1dad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/telescope/zipball/8bbc1d839317cef7106cabf028e407416e5a1dad",
+                "reference": "8bbc1d839317cef7106cabf028e407416e5a1dad",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^8.37|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "laravel/sentinel": "^1.0",
                 "php": "^8.0",
                 "symfony/console": "^5.3|^6.0|^7.0",
                 "symfony/var-dumper": "^5.0|^6.0|^7.0"
@@ -6975,7 +7037,7 @@
                 "ext-gd": "*",
                 "guzzlehttp/guzzle": "^6.0|^7.0",
                 "laravel/octane": "^1.4|^2.0",
-                "orchestra/testbench": "^6.47.1|^7.55|^8.36|^9.15|^10.8",
+                "orchestra/testbench": "^6.47.1|^7.55|^8.36|^9.15|^10.8|^11.0",
                 "phpstan/phpstan": "^1.10"
             },
             "type": "library",
@@ -7014,9 +7076,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/telescope/issues",
-                "source": "https://github.com/laravel/telescope/tree/v5.17.0"
+                "source": "https://github.com/laravel/telescope/tree/5.18.0"
             },
-            "time": "2026-01-30T22:52:46+00:00"
+            "time": "2026-02-20T19:55:06+00:00"
         },
         {
             "name": "mockery/mockery",
