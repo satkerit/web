@@ -17,7 +17,7 @@
     <div class="p-4 border-b border-gray-100">
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari role..."
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             <div class="flex gap-3">
                 <x-admin.button type="submit" variant="secondary">Filter</x-admin.button>
                 @if(request('search'))
@@ -56,7 +56,7 @@
                 </div>
                 <div class="flex items-center gap-2 pt-3 border-t border-gray-100">
                     @if(auth()->user()->isSuperAdmin() || auth()->user()->roleModel?->hasPermission('roles.edit'))
-                    <a href="{{ route('admin.roles.edit', $role) }}" class="flex-1 text-center py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.roles.edit', $role) }}" class="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-green-50 rounded-lg transition-colors">
                         Edit
                     </a>
                     @endif
@@ -118,7 +118,7 @@
                                 </svg>
                             </a>
                             @if(auth()->user()->isSuperAdmin() || auth()->user()->roleModel?->hasPermission('roles.edit'))
-                            <a href="{{ route('admin.roles.edit', $role) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg" title="Edit">
+                            <a href="{{ route('admin.roles.edit', $role) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>

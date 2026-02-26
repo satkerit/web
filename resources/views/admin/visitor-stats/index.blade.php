@@ -8,7 +8,7 @@
         <form method="GET" class="flex items-center gap-2" x-data="{ period: '{{ $period }}' }">
             <div class="flex items-center gap-2">
                 <select name="period" x-model="period" @change="period !== 'custom' ? $el.form.submit() : null"
-                        class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-emerald-500 text-sm">
+                        class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue-500 text-sm">
                     <option value="today">Hari Ini</option>
                     <option value="7days">7 Hari Terakhir</option>
                     <option value="30days">30 Hari Terakhir</option>
@@ -21,11 +21,11 @@
 
             <div x-show="period === 'custom'" class="flex items-center gap-2" x-transition style="display: none;">
                 <input type="date" name="start_date" value="{{ $startDate->format('Y-m-d') }}"
-                       class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-emerald-500 text-sm">
+                       class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue-500 text-sm">
                 <span class="text-slate-400">-</span>
                 <input type="date" name="end_date" value="{{ $endDate->format('Y-m-d') }}"
-                       class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-emerald-500 text-sm">
-                <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 transition shadow-sm">
+                       class="rounded-xl border-0 py-2 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue-500 text-sm">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition shadow-sm">
                     Filter
                 </button>
             </div>
@@ -56,8 +56,8 @@
                 <p class="text-sm font-medium text-slate-500">Pengunjung Unik</p>
                 <p class="text-3xl font-bold text-slate-900 mt-1">{{ number_format($stats['unique_visitors']) }}</p>
             </div>
-            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
             </div>
@@ -181,7 +181,7 @@
                     <span class="text-slate-500">{{ number_format($percentage, 1) }}%</span>
                 </div>
                 <div class="w-full bg-slate-100 rounded-full h-2">
-                    <div class="bg-emerald-500 h-2 rounded-full" style="width: {{ $percentage }}%"></div>
+                    <div class="bg-blue-500 h-2 rounded-full" style="width: {{ $percentage }}%"></div>
                 </div>
             </div>
             @empty

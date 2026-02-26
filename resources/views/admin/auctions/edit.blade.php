@@ -32,7 +32,7 @@
                                 Judul Lelang <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="title" id="title" value="{{ old('title', $auction->title) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('title') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('title') border-red-500 @enderror"
                                    required placeholder="Contoh: Rumah Mewah 2 Lantai di Pangkalpinang">
                             @error('title')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -44,7 +44,7 @@
                                 Nomor Lelang <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="auction_number" id="auction_number" value="{{ old('auction_number', $auction->auction_number) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('auction_number') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('auction_number') border-red-500 @enderror"
                                    required placeholder="Contoh: LA-2026-001">
                             @error('auction_number')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -57,7 +57,7 @@
                             <label for="asset_type" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Jenis Aset <span class="text-red-500">*</span>
                             </label>
-                            <select name="asset_type" id="asset_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('asset_type') border-red-500 @enderror" required>
+                            <select name="asset_type" id="asset_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('asset_type') border-red-500 @enderror" required>
                                 <option value="">Pilih Jenis Aset</option>
                                 @foreach(\App\Models\Auction::$assetTypes as $value => $label)
                                     <option value="{{ $value }}" {{ old('asset_type', $auction->asset_type) === $value ? 'selected' : '' }}>
@@ -73,7 +73,7 @@
                         <div>
                             <label for="city" class="block text-sm font-semibold text-gray-700 mb-2">Kota</label>
                             <input type="text" name="city" id="city" value="{{ old('city', $auction->city) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('city') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('city') border-red-500 @enderror"
                                    placeholder="Contoh: Pangkalpinang">
                             @error('city')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -84,7 +84,7 @@
                     <div>
                         <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi</label>
                         <textarea name="description" id="description" rows="4"
-                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('description') border-red-500 @enderror"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('description') border-red-500 @enderror"
                                   placeholder="Deskripsi detail tentang aset yang dilelang...">{{ old('description', $auction->description) }}</textarea>
                         @error('description')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -102,7 +102,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="certificate_type" class="block text-sm font-semibold text-gray-700 mb-2">Jenis Sertifikat</label>
-                                <select name="certificate_type" id="certificate_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('certificate_type') border-red-500 @enderror">
+                                <select name="certificate_type" id="certificate_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('certificate_type') border-red-500 @enderror">
                                     <option value="">Pilih Jenis Sertifikat</option>
                                     @foreach(\App\Models\Auction::$certificateTypes as $value => $label)
                                         <option value="{{ $value }}" {{ old('certificate_type', $auction->certificate_type) === $value ? 'selected' : '' }}>
@@ -118,7 +118,7 @@
                             <div>
                                 <label for="certificate_number" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Sertifikat</label>
                                 <input type="text" name="certificate_number" id="certificate_number" value="{{ old('certificate_number', $auction->certificate_number) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('certificate_number') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('certificate_number') border-red-500 @enderror"
                                        placeholder="Contoh: 12345/2023">
                                 @error('certificate_number')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -134,7 +134,7 @@
                             <div>
                                 <label for="land_area" class="block text-sm font-semibold text-gray-700 mb-2">Luas Tanah (m²)</label>
                                 <input type="number" name="land_area" id="land_area" value="{{ old('land_area', $auction->land_area) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('land_area') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('land_area') border-red-500 @enderror"
                                        step="0.01" placeholder="120">
                                 @error('land_area')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -144,7 +144,7 @@
                             <div>
                                 <label for="building_area" class="block text-sm font-semibold text-gray-700 mb-2">Luas Bangunan (m²)</label>
                                 <input type="number" name="building_area" id="building_area" value="{{ old('building_area', $auction->building_area) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('building_area') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('building_area') border-red-500 @enderror"
                                        step="0.01" placeholder="80">
                                 @error('building_area')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -154,7 +154,7 @@
                             <div>
                                 <label for="year_built" class="block text-sm font-semibold text-gray-700 mb-2">Tahun Dibangun</label>
                                 <input type="number" name="year_built" id="year_built" value="{{ old('year_built', $auction->year_built) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('year_built') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('year_built') border-red-500 @enderror"
                                        min="1900" max="{{ date('Y') }}" placeholder="2020">
                                 @error('year_built')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -166,7 +166,7 @@
                             <div>
                                 <label for="floors" class="block text-sm font-semibold text-gray-700 mb-2">Jumlah Lantai</label>
                                 <input type="number" name="floors" id="floors" value="{{ old('floors', $auction->floors) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('floors') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('floors') border-red-500 @enderror"
                                        min="1" placeholder="2">
                                 @error('floors')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -176,7 +176,7 @@
                             <div>
                                 <label for="bedrooms" class="block text-sm font-semibold text-gray-700 mb-2">Kamar Tidur</label>
                                 <input type="number" name="bedrooms" id="bedrooms" value="{{ old('bedrooms', $auction->bedrooms) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bedrooms') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('bedrooms') border-red-500 @enderror"
                                        min="0" placeholder="3">
                                 @error('bedrooms')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -186,7 +186,7 @@
                             <div>
                                 <label for="bathrooms" class="block text-sm font-semibold text-gray-700 mb-2">Kamar Mandi</label>
                                 <input type="number" name="bathrooms" id="bathrooms" value="{{ old('bathrooms', $auction->bathrooms) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bathrooms') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('bathrooms') border-red-500 @enderror"
                                        min="0" placeholder="2">
                                 @error('bathrooms')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -196,7 +196,7 @@
                             <div>
                                 <label for="parking_spaces" class="block text-sm font-semibold text-gray-700 mb-2">Tempat Parkir</label>
                                 <input type="number" name="parking_spaces" id="parking_spaces" value="{{ old('parking_spaces', $auction->parking_spaces) }}"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('parking_spaces') border-red-500 @enderror"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('parking_spaces') border-red-500 @enderror"
                                        min="0" placeholder="1">
                                 @error('parking_spaces')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -206,7 +206,7 @@
 
                         <div class="mt-4">
                             <label for="building_condition" class="block text-sm font-semibold text-gray-700 mb-2">Kondisi Bangunan</label>
-                            <select name="building_condition" id="building_condition" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('building_condition') border-red-500 @enderror">
+                            <select name="building_condition" id="building_condition" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('building_condition') border-red-500 @enderror">
                                 <option value="">Pilih Kondisi Bangunan</option>
                                 <option value="sangat_baik" {{ old('building_condition', $auction->building_condition) === 'sangat_baik' ? 'selected' : '' }}>Sangat Baik</option>
                                 <option value="baik" {{ old('building_condition', $auction->building_condition) === 'baik' ? 'selected' : '' }}>Baik</option>
@@ -227,7 +227,7 @@
                             <div>
                                 <label for="facilities" class="block text-sm font-semibold text-gray-700 mb-2">Fasilitas</label>
                                 <textarea name="facilities" id="facilities" rows="3"
-                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('facilities') border-red-500 @enderror"
+                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('facilities') border-red-500 @enderror"
                                           placeholder="Contoh: Listrik PLN, Air PDAM, Telepon, Internet, Taman, Pagar, dll">{{ old('facilities', $auction->facilities) }}</textarea>
                                 @error('facilities')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -237,7 +237,7 @@
                             <div>
                                 <label for="nearby_facilities" class="block text-sm font-semibold text-gray-700 mb-2">Fasilitas Sekitar</label>
                                 <textarea name="nearby_facilities" id="nearby_facilities" rows="3"
-                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('nearby_facilities') border-red-500 @enderror"
+                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('nearby_facilities') border-red-500 @enderror"
                                           placeholder="Contoh: Sekolah, Rumah Sakit, Mall, Pasar, Masjid, dll">{{ old('nearby_facilities', $auction->nearby_facilities) }}</textarea>
                                 @error('nearby_facilities')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -247,7 +247,7 @@
                             <div>
                                 <label for="transportation_access" class="block text-sm font-semibold text-gray-700 mb-2">Akses Transportasi</label>
                                 <textarea name="transportation_access" id="transportation_access" rows="2"
-                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('transportation_access') border-red-500 @enderror"
+                                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('transportation_access') border-red-500 @enderror"
                                           placeholder="Contoh: 5 menit ke jalan raya, 10 menit ke terminal, dll">{{ old('transportation_access', $auction->transportation_access) }}</textarea>
                                 @error('transportation_access')
                                     <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -266,7 +266,7 @@
                             Alamat Lengkap <span class="text-red-500">*</span>
                         </label>
                         <textarea name="address" id="address" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('address') border-red-500 @enderror"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('address') border-red-500 @enderror"
                                   required placeholder="Alamat lengkap aset...">{{ old('address', $auction->address) }}</textarea>
                         @error('address')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -277,7 +277,7 @@
                         <div>
                             <label for="village" class="block text-sm font-semibold text-gray-700 mb-2">Kelurahan/Desa</label>
                             <input type="text" name="village" id="village" value="{{ old('village', $auction->village) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('village') border-red-500 @enderror">
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('village') border-red-500 @enderror">
                             @error('village')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -286,7 +286,7 @@
                         <div>
                             <label for="district" class="block text-sm font-semibold text-gray-700 mb-2">Kecamatan</label>
                             <input type="text" name="district" id="district" value="{{ old('district', $auction->district) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('district') border-red-500 @enderror">
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('district') border-red-500 @enderror">
                             @error('district')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -295,7 +295,7 @@
                         <div>
                             <label for="province" class="block text-sm font-semibold text-gray-700 mb-2">Provinsi</label>
                             <input type="text" name="province" id="province" value="{{ old('province', $auction->province) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('province') border-red-500 @enderror">
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('province') border-red-500 @enderror">
                             @error('province')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -311,7 +311,7 @@
                         <div>
                             <label for="creditor_name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Kreditur</label>
                             <input type="text" name="creditor_name" id="creditor_name" value="{{ old('creditor_name', $auction->creditor_name) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('creditor_name') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('creditor_name') border-red-500 @enderror"
                                    placeholder="Contoh: PT. Bank Central Asia Tbk">
                             @error('creditor_name')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -323,7 +323,7 @@
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                                 <input type="number" name="debt_amount" id="debt_amount" value="{{ old('debt_amount', $auction->debt_amount) }}"
-                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('debt_amount') border-red-500 @enderror"
+                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('debt_amount') border-red-500 @enderror"
                                        placeholder="500000000">
                             </div>
                             @error('debt_amount')
@@ -335,7 +335,7 @@
                     <div>
                         <label for="legal_basis" class="block text-sm font-semibold text-gray-700 mb-2">Dasar Hukum</label>
                         <textarea name="legal_basis" id="legal_basis" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('legal_basis') border-red-500 @enderror"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('legal_basis') border-red-500 @enderror"
                                   placeholder="Dasar hukum pelaksanaan lelang...">{{ old('legal_basis', $auction->legal_basis) }}</textarea>
                         @error('legal_basis')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -346,7 +346,7 @@
                         <div>
                             <label for="court_decision" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Putusan Pengadilan</label>
                             <input type="text" name="court_decision" id="court_decision" value="{{ old('court_decision', $auction->court_decision) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('court_decision') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('court_decision') border-red-500 @enderror"
                                    placeholder="Contoh: 123/Pdt.G/2023/PN Pgp">
                             @error('court_decision')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -356,7 +356,7 @@
                         <div>
                             <label for="court_decision_date" class="block text-sm font-semibold text-gray-700 mb-2">Tanggal Putusan</label>
                             <input type="date" name="court_decision_date" id="court_decision_date" value="{{ old('court_decision_date', isset($auction->court_decision_date) ? $auction->court_decision_date->format('Y-m-d') : '') }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('court_decision_date') border-red-500 @enderror">
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('court_decision_date') border-red-500 @enderror">
                             @error('court_decision_date')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -366,7 +366,7 @@
                     <div>
                         <label for="encumbrance_details" class="block text-sm font-semibold text-gray-700 mb-2">Hak Tanggungan</label>
                         <textarea name="encumbrance_details" id="encumbrance_details" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('encumbrance_details') border-red-500 @enderror"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('encumbrance_details') border-red-500 @enderror"
                                   placeholder="Detail hak tanggungan...">{{ old('encumbrance_details', $auction->encumbrance_details) }}</textarea>
                         @error('encumbrance_details')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -386,7 +386,7 @@
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                                 <input type="number" name="limit_price" id="limit_price" value="{{ old('limit_price', $auction->limit_price) }}"
-                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('limit_price') border-red-500 @enderror"
+                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('limit_price') border-red-500 @enderror"
                                        placeholder="850000000">
                             </div>
                             @error('limit_price')
@@ -399,7 +399,7 @@
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                                 <input type="number" name="estimated_price" id="estimated_price" value="{{ old('estimated_price', $auction->estimated_price) }}"
-                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('estimated_price') border-red-500 @enderror"
+                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('estimated_price') border-red-500 @enderror"
                                        placeholder="1000000000">
                             </div>
                             @error('estimated_price')
@@ -414,7 +414,7 @@
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                                 <input type="number" name="deposit_amount" id="deposit_amount" value="{{ old('deposit_amount', $auction->deposit_amount) }}"
-                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('deposit_amount') border-red-500 @enderror"
+                                       class="w-full pl-12 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('deposit_amount') border-red-500 @enderror"
                                        placeholder="170000000">
                             </div>
                             @error('deposit_amount')
@@ -425,7 +425,7 @@
                         <div>
                             <label for="deposit_percentage" class="block text-sm font-semibold text-gray-700 mb-2">Persentase Jaminan (%)</label>
                             <input type="number" name="deposit_percentage" id="deposit_percentage" value="{{ old('deposit_percentage', $auction->deposit_percentage ?? 20) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('deposit_percentage') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('deposit_percentage') border-red-500 @enderror"
                                    min="0" max="100" step="0.01" placeholder="20">
                             @error('deposit_percentage')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -442,7 +442,7 @@
                         <div>
                             <label for="bank_name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Bank</label>
                             <input type="text" name="bank_name" id="bank_name" value="{{ old('bank_name', $auction->bank_name) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bank_name') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('bank_name') border-red-500 @enderror"
                                    placeholder="Contoh: Bank Mandiri">
                             @error('bank_name')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -452,7 +452,7 @@
                         <div>
                             <label for="bank_branch" class="block text-sm font-semibold text-gray-700 mb-2">Cabang</label>
                             <input type="text" name="bank_branch" id="bank_branch" value="{{ old('bank_branch', $auction->bank_branch) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('bank_branch') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('bank_branch') border-red-500 @enderror"
                                    placeholder="Contoh: KCU Jakarta Sudirman">
                             @error('bank_branch')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -464,7 +464,7 @@
                         <div>
                             <label for="account_number" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Rekening</label>
                             <input type="text" name="account_number" id="account_number" value="{{ old('account_number', $auction->account_number) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('account_number') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('account_number') border-red-500 @enderror"
                                    placeholder="Contoh: 123-456-7890">
                             @error('account_number')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -474,7 +474,7 @@
                         <div>
                             <label for="account_holder" class="block text-sm font-semibold text-gray-700 mb-2">Atas Nama</label>
                             <input type="text" name="account_holder" id="account_holder" value="{{ old('account_holder', $auction->account_holder) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('account_holder') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('account_holder') border-red-500 @enderror"
                                    placeholder="Contoh: PT. Balai Lelang">
                             @error('account_holder')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -494,7 +494,7 @@
                             </label>
                             <input type="datetime-local" name="auction_date" id="auction_date"
                                    value="{{ old('auction_date', $auction->auction_date ? $auction->auction_date->format('Y-m-d\TH:i') : '') }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('auction_date') border-red-500 @enderror">
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('auction_date') border-red-500 @enderror">
                             @error('auction_date')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -504,7 +504,7 @@
                             <label for="auction_type" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Jenis Lelang <span class="text-red-500">*</span>
                             </label>
-                            <select name="auction_type" id="auction_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('auction_type') border-red-500 @enderror" required>
+                            <select name="auction_type" id="auction_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('auction_type') border-red-500 @enderror" required>
                                 <option value="">Pilih Jenis Lelang</option>
                                 @foreach(\App\Models\Auction::$auctionTypes as $value => $label)
                                     <option value="{{ $value }}" {{ old('auction_type', $auction->auction_type) === $value ? 'selected' : '' }}>
@@ -523,7 +523,7 @@
                             Lokasi Lelang <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="auction_location" id="auction_location" value="{{ old('auction_location', $auction->auction_location) }}"
-                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('auction_location') border-red-500 @enderror"
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('auction_location') border-red-500 @enderror"
                                required placeholder="Contoh: Kantor BPRS Bangka Belitung">
                         @error('auction_location')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -541,7 +541,7 @@
                                 Mulai Viewing
                             </label>
                             <input type="datetime-local" name="viewing_start" id="viewing_start" value="{{ old('viewing_start', $auction->viewing_start ? $auction->viewing_start->format('Y-m-d\TH:i') : '') }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_start') border-red-500 @enderror">
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('viewing_start') border-red-500 @enderror">
                             @error('viewing_start')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -552,7 +552,7 @@
                                 Akhir Viewing
                             </label>
                             <input type="datetime-local" name="viewing_end" id="viewing_end" value="{{ old('viewing_end', $auction->viewing_end ? $auction->viewing_end->format('Y-m-d\TH:i') : '') }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_end') border-red-500 @enderror">
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('viewing_end') border-red-500 @enderror">
                             @error('viewing_end')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -562,7 +562,7 @@
                     <div>
                         <label for="viewing_schedule" class="block text-sm font-semibold text-gray-700 mb-2">Jadwal Lengkap</label>
                         <textarea name="viewing_schedule" id="viewing_schedule" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('viewing_schedule') border-red-500 @enderror"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('viewing_schedule') border-red-500 @enderror"
                                   placeholder="Contoh: Senin - Jumat, Pukul 09.00 - 15.00 WIB">{{ old('viewing_schedule', $auction->viewing_schedule) }}</textarea>
                         @error('viewing_schedule')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -573,7 +573,7 @@
                         <div>
                             <label for="viewing_contact" class="block text-sm font-semibold text-gray-700 mb-2">Kontak Viewing</label>
                             <input type="text" name="viewing_contact" id="viewing_contact" value="{{ old('viewing_contact', $auction->viewing_contact) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_contact') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('viewing_contact') border-red-500 @enderror"
                                    placeholder="Nama dan No. HP petugas">
                             @error('viewing_contact')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -583,7 +583,7 @@
                         <div>
                             <label for="viewing_notes" class="block text-sm font-semibold text-gray-700 mb-2">Catatan Tambahan</label>
                             <input type="text" name="viewing_notes" id="viewing_notes" value="{{ old('viewing_notes', $auction->viewing_notes) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('viewing_notes') border-red-500 @enderror"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('viewing_notes') border-red-500 @enderror"
                                    placeholder="Catatan khusus untuk viewing">
                             @error('viewing_notes')
                                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -609,7 +609,7 @@
                                         Kontak Person
                                     </label>
                                     <input type="text" :name="'contacts[' + index + '][name]'" :id="'contact_name_' + index" x-model="contact.name"
-                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                            placeholder="Nama lengkap kontak person">
                                 </div>
                                 <div>
@@ -617,14 +617,14 @@
                                         Telepon Kontak
                                     </label>
                                     <input type="text" :name="'contacts[' + index + '][phone]'" :id="'contact_phone_' + index" x-model="contact.phone"
-                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                            placeholder="Contoh: 0717-123456">
                                 </div>
                             </div>
                         </div>
                     </template>
 
-                    <button type="button" @click="contacts.push({name: '', phone: ''})" class="flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors">
+                    <button type="button" @click="contacts.push({name: '', phone: ''})" class="flex items-center text-sm font-medium text-blue-600 hover:text-green-700 transition-colors">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -634,7 +634,7 @@
                     <div>
                         <label for="contact_email" class="block text-sm font-semibold text-gray-700 mb-2">Email Kontak (Opsional)</label>
                         <input type="email" name="contact_email" id="contact_email" value="{{ old('contact_email', $auction->contact_email) }}"
-                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('contact_email') border-red-500 @enderror"
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('contact_email') border-red-500 @enderror"
                                placeholder="email@example.com">
                         @error('contact_email')
                             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -651,7 +651,7 @@
                 <div class="space-y-4">
                     <div>
                         <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                        <select name="status" id="status" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
+                        <select name="status" id="status" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                             @foreach(\App\Models\Auction::$statusLabels as $value => $label)
                                 <option value="{{ $value }}" {{ old('status', $auction->status) === $value ? 'selected' : '' }}>
                                     {{ $label }}
@@ -663,14 +663,14 @@
                     <div class="flex items-center">
                         <input type="checkbox" name="is_featured" id="is_featured" value="1"
                                {{ old('is_featured', $auction->is_featured) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <label for="is_featured" class="ml-2 text-sm text-gray-700">Jadikan Unggulan</label>
                     </div>
 
                     <div class="flex items-center">
                         <input type="checkbox" name="is_urgent" id="is_urgent" value="1"
                                {{ old('is_urgent', $auction->is_urgent) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <label for="is_urgent" class="ml-2 text-sm text-gray-700">Mendesak</label>
                     </div>
                 </div>
@@ -681,7 +681,7 @@
                 <div>
                     <div class="relative">
                         <input type="file" name="images[]" id="images" accept="image/*" multiple class="hidden" onchange="previewImages(event)">
-                        <label for="images" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all">
+                        <label for="images" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 hover:bg-green-50 transition-all">
                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                 <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>

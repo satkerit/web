@@ -6,7 +6,7 @@
 
 <a @click="closeSidebarOnMobile()" href="{{ route($menu->route) }}"
    class="group flex items-center gap-3 px-3 py-2.5 rounded-xl mb-1 transition-all duration-200 {{ $isActive ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
-    <div class="relative flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0 {{ $isActive ? 'bg-emerald-500' : 'bg-white/10 group-hover:bg-white/20' }} transition-colors">
+    <div class="relative flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0 {{ $isActive ? 'bg-blue-500' : 'bg-white/10 group-hover:bg-white/20' }} transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {!! $icon !!}
         </svg>

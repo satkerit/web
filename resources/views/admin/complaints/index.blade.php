@@ -9,9 +9,9 @@
     <div class="p-4 border-b border-gray-100">
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari tiket/nama/subjek..."
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             <div class="flex flex-wrap gap-3">
-                <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Status</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
                     <option value="in_review" {{ request('status') == 'in_review' ? 'selected' : '' }}>Dalam Review</option>
@@ -19,7 +19,7 @@
                     <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Selesai</option>
                     <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Ditutup</option>
                 </select>
-                <select name="type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Tipe</option>
                     <option value="fraud" {{ request('type') == 'fraud' ? 'selected' : '' }}>Kecurangan</option>
                     <option value="violation" {{ request('type') == 'violation' ? 'selected' : '' }}>Pelanggaran</option>
@@ -79,7 +79,7 @@
                     <span class="text-xs text-gray-500">{{ $complaint->created_at->format('d M Y') }}</span>
                 </div>
                 <div class="flex items-center gap-2 pt-3 border-t border-gray-100">
-                    <a href="{{ route('admin.complaints.show', $complaint) }}" class="flex-1 text-center py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.complaints.show', $complaint) }}" class="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-green-50 rounded-lg transition-colors">
                         Lihat Detail
                     </a>
                     <form action="{{ route('admin.complaints.destroy', $complaint) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengaduan ini?')" class="flex-1">
@@ -141,7 +141,7 @@
                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $complaint->created_at->format('d M Y') }}</td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('admin.complaints.show', $complaint) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
+                            <a href="{{ route('admin.complaints.show', $complaint) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>

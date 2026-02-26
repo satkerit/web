@@ -15,9 +15,9 @@
     <div class="p-4 border-b border-gray-100">
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..."
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             <div class="flex gap-3">
-                <select name="type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Tipe</option>
                     <option value="komisaris" {{ request('type') == 'komisaris' ? 'selected' : '' }}>Dewan Komisaris</option>
                     <option value="direksi" {{ request('type') == 'direksi' ? 'selected' : '' }}>Dewan Direksi</option>
@@ -41,8 +41,8 @@
                     @if($member->photo)
                         <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" alt="" class="w-14 h-14 rounded-full object-cover flex-shrink-0">
                     @else
-                        <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                            <span class="text-emerald-600 font-semibold text-lg">{{ strtoupper(substr($member->name, 0, 2)) }}</span>
+                        <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <span class="text-blue-600 font-semibold text-lg">{{ strtoupper(substr($member->name, 0, 2)) }}</span>
                         </div>
                     @endif
                     <div class="flex-1 min-w-0">
@@ -65,7 +65,7 @@
                     <span class="text-xs text-gray-500">Urutan: {{ $member->order_position ?? '-' }}</span>
                 </div>
                 <div class="flex items-center gap-2 pt-3 border-t border-gray-100">
-                    <a href="{{ route('admin.board-members.edit', $member) }}" class="flex-1 text-center py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.board-members.edit', $member) }}" class="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-green-50 rounded-lg transition-colors">
                         Edit
                     </a>
                     <form action="{{ route('admin.board-members.destroy', $member) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus anggota ini?')" class="flex-1">
@@ -91,8 +91,8 @@
                             @if($member->photo)
                                 <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" alt="" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
                             @else
-                                <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                                    <span class="text-emerald-600 font-semibold">{{ strtoupper(substr($member->name, 0, 2)) }}</span>
+                                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-blue-600 font-semibold">{{ strtoupper(substr($member->name, 0, 2)) }}</span>
                                 </div>
                             @endif
                             <div class="min-w-0">
@@ -117,7 +117,7 @@
                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $member->order_position ?? '-' }}</td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('admin.board-members.edit', $member) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
+                            <a href="{{ route('admin.board-members.edit', $member) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>

@@ -46,7 +46,7 @@
     {{-- Buttons --}}
     <div class="flex flex-wrap gap-2">
         {{-- Upload from PC --}}
-        <label class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 text-sm font-medium rounded-lg hover:bg-emerald-100 cursor-pointer transition-colors">
+        <label class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 cursor-pointer transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
             </svg>
@@ -92,7 +92,7 @@
 
                 {{-- Breadcrumb --}}
                 <div class="flex items-center gap-2 p-4 bg-gray-50 border-b text-sm">
-                    <button type="button" @click="navigateTo('')" class="text-emerald-600 hover:text-emerald-700">
+                    <button type="button" @click="navigateTo('')" class="text-blue-600 hover:text-blue-700">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
@@ -100,7 +100,7 @@
                     <template x-for="(crumb, index) in breadcrumbs" :key="index">
                         <div class="flex items-center gap-2">
                             <span class="text-gray-400">/</span>
-                            <button type="button" @click="navigateTo(crumb.path)" class="text-emerald-600 hover:text-emerald-700" x-text="crumb.name"></button>
+                            <button type="button" @click="navigateTo(crumb.path)" class="text-blue-600 hover:text-blue-700" x-text="crumb.name"></button>
                         </div>
                     </template>
                 </div>
@@ -112,8 +112,8 @@
                     <div x-show="!loading" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
                         <template x-for="item in items" :key="item.path">
                             <div @click="item.type === 'folder' ? navigateTo(item.path) : selectImage(item)"
-                                 :class="{'ring-2 ring-emerald-500': selectedItem?.path === item.path}"
-                                 class="relative group cursor-pointer rounded-lg border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all overflow-hidden">
+                                 :class="{'ring-2 ring-blue-500': selectedItem?.path === item.path}"
+                                 class="relative group cursor-pointer rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all overflow-hidden">
                                 <template x-if="item.type === 'folder'">
                                     <div class="aspect-square flex flex-col items-center justify-center bg-gray-50 p-2">
                                         <svg class="w-12 h-12 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@
                 {{-- Footer --}}
                 <div class="flex items-center justify-end gap-3 p-4 border-t bg-gray-50">
                     <button type="button" @click="closeStorageModal()" class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-lg">Batal</button>
-                    <button type="button" @click="confirmSelection()" :disabled="!selectedItem" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">Pilih</button>
+                    <button type="button" @click="confirmSelection()" :disabled="!selectedItem" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">Pilih</button>
                 </div>
             </div>
         </div>

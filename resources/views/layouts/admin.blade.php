@@ -160,14 +160,14 @@
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3.5"
                     @click="closeSidebarOnMobile()">
                     <div
-                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20 ring-1 ring-white/10">
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20 ring-1 ring-white/10">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-white font-bold text-lg leading-tight tracking-tight">Admin<span class="text-emerald-400">Panel</span></span>
+                        <span class="text-white font-bold text-lg leading-tight tracking-tight">Admin<span class="text-blue-400">Panel</span></span>
                         <span class="text-slate-400 text-xs font-medium tracking-wide">Management System</span>
                     </div>
                 </a>
@@ -190,13 +190,13 @@
             <div class="p-4 border-t border-white/5 flex-shrink-0 bg-slate-900/50">
                 <div class="flex items-center gap-3.5 px-3 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
                     <div
-                        class="w-10 h-10 rounded-lg bg-emerald-500/10 ring-1 ring-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm flex-shrink-0">
+                        class="w-10 h-10 rounded-lg bg-blue-500/10 ring-1 ring-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm flex-shrink-0">
                         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
                         <div class="flex items-center gap-1.5 mt-0.5">
-                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
                             <p class="text-xs text-slate-400 truncate">
                                 {{ auth()->user()->getRoleDisplayName() }}</p>
                         </div>
@@ -228,8 +228,8 @@
                     <div class="flex items-center gap-3 sm:gap-4">
                         {{-- View Website --}}
                         <a href="{{ route('home') }}" target="_blank"
-                            class="hidden sm:flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all group">
-                            <svg class="w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="hidden sm:flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all group">
+                            <svg class="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
@@ -241,9 +241,9 @@
                         {{-- User Menu --}}
                         <div x-data="{ open: false }" class="relative">
                             <button @click.stop="open = !open"
-                                class="flex items-center gap-3 p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50 group">
+                                class="flex items-center gap-3 p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50 group">
                                 <div
-                                    class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-emerald-500/20 group-hover:shadow-lg transition-all">
+                                    class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-blue-500/20 group-hover:shadow-lg transition-all">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 </div>
                                 <div class="hidden md:block text-left mr-1">
@@ -319,21 +319,21 @@
                         x-transition:leave="transition ease-in duration-200"
                         x-transition:leave-start="opacity-100 translate-y-0"
                         x-transition:leave-end="opacity-0 -translate-y-2"
-                        class="mb-6 p-4 bg-emerald-50/80 backdrop-blur border border-emerald-200 text-emerald-800 rounded-2xl flex items-center justify-between shadow-sm">
+                        class="mb-6 p-4 bg-green-50/80 backdrop-blur border border-green-200 text-green-800 rounded-2xl flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-600">
+                            <div class="w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0 text-green-600">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-semibold text-sm sm:text-base text-emerald-900">Berhasil</h3>
-                                <p class="text-sm text-emerald-700">{{ session('success') }}</p>
+                                <h3 class="font-semibold text-sm sm:text-base text-green-900">Berhasil</h3>
+                                <p class="text-sm text-green-700">{{ session('success') }}</p>
                             </div>
                         </div>
                         <button @click="show = false"
-                            class="text-emerald-500 hover:text-emerald-700 p-2 rounded-xl hover:bg-emerald-100 transition-colors flex-shrink-0">
+                            class="text-green-500 hover:text-green-700 p-2 rounded-xl hover:bg-green-100 transition-colors flex-shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M6 18L18 6M6 6l12 12" />

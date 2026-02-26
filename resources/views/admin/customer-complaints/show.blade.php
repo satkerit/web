@@ -59,7 +59,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                            <select name="status" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                            <select name="status" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                 <option value="pending" {{ $customerComplaint->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
                                 <option value="in_progress" {{ $customerComplaint->status == 'in_progress' ? 'selected' : '' }}>Diproses</option>
                                 <option value="resolved" {{ $customerComplaint->status == 'resolved' ? 'selected' : '' }}>Selesai</option>
@@ -68,7 +68,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
-                            <select name="priority" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                            <select name="priority" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                 <option value="low" {{ $customerComplaint->priority == 'low' ? 'selected' : '' }}>Rendah</option>
                                 <option value="medium" {{ $customerComplaint->priority == 'medium' ? 'selected' : '' }}>Sedang</option>
                                 <option value="high" {{ $customerComplaint->priority == 'high' ? 'selected' : '' }}>Tinggi</option>
@@ -77,11 +77,11 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Resolusi/Penyelesaian</label>
-                        <textarea name="resolution" rows="4" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm" placeholder="Jelaskan penyelesaian yang diberikan...">{{ old('resolution', $customerComplaint->resolution) }}</textarea>
+                        <textarea name="resolution" rows="4" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Jelaskan penyelesaian yang diberikan...">{{ old('resolution', $customerComplaint->resolution) }}</textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Catatan Internal</label>
-                        <textarea name="admin_notes" rows="3" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm" placeholder="Catatan internal (tidak dilihat nasabah)...">{{ old('admin_notes', $customerComplaint->admin_notes) }}</textarea>
+                        <textarea name="admin_notes" rows="3" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Catatan internal (tidak dilihat nasabah)...">{{ old('admin_notes', $customerComplaint->admin_notes) }}</textarea>
                     </div>
                     <x-admin.button type="submit">Simpan Perubahan</x-admin.button>
                 </div>

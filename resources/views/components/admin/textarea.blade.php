@@ -27,7 +27,7 @@
             rows="{{ $rows }}"
             placeholder="{{ $placeholder }}"
             {{ $attributes->merge([
-                'class' => 'block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm sm:leading-6 transition-all duration-200 ease-in-out resize-none ' . ($error ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300')
+                'class' => 'block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 transition-all duration-200 ease-in-out resize-none ' . ($error ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300')
             ]) }}
         >{{ $attributes->whereStartsWith('value')->first() ?? '' }}</textarea>
         @if($error)

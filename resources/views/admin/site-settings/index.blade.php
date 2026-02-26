@@ -29,7 +29,7 @@
                            name="hero_slider_delay" 
                            id="hero_slider_delay" 
                            value="{{ old('hero_slider_delay', $settings->hero_slider_delay ?? 5000) }}"
-                           class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                            min="1000" 
                            max="20000" 
                            step="500"
@@ -45,7 +45,7 @@
                            name="hero_slide_limit" 
                            id="hero_slide_limit" 
                            value="{{ old('hero_slide_limit', $settings->hero_slide_limit ?? 5) }}"
-                           class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                            min="1" 
                            max="20"
                            required>
@@ -65,7 +65,7 @@
                            id="maintenance_mode" 
                            value="1"
                            {{ old('maintenance_mode', $settings->maintenance_mode ?? false) ? 'checked' : '' }}
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <label for="maintenance_mode" class="ml-2 text-sm font-medium text-gray-700">
                         Aktifkan Mode Pemeliharaan
                     </label>
@@ -79,7 +79,7 @@
                         <textarea name="maintenance_message" 
                                   id="maintenance_message" 
                                   rows="3"
-                                  class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">{{ old('maintenance_message', $settings->maintenance_message ?? '') }}</textarea>
+                                  class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('maintenance_message', $settings->maintenance_message ?? '') }}</textarea>
                     </div>
 
                     <div>
@@ -90,7 +90,7 @@
                                name="maintenance_end_time" 
                                id="maintenance_end_time" 
                                value="{{ old('maintenance_end_time', $settings->maintenance_end_time ? $settings->maintenance_end_time->format('Y-m-d\\TH:i') : '') }}"
-                               class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                               class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
                     <div class="md:col-span-2">
@@ -101,7 +101,7 @@
                                   id="maintenance_allowed_ips" 
                                   rows="3"
                                   placeholder="192.168.1.1&#10;10.0.0.1&#10;contoh.com"
-                                  class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">{{ old('maintenance_allowed_ips', $settings->maintenance_allowed_ips ?? '') }}</textarea>
+                                  class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('maintenance_allowed_ips', $settings->maintenance_allowed_ips ?? '') }}</textarea>
                         <p class="mt-1 text-sm text-gray-500">Kosongkan untuk memblokir semua IP</p>
                     </div>
 
@@ -116,7 +116,7 @@
                                            name="maintenance_pages[]" 
                                            value="{{ $key }}"
                                            {{ in_array($key, old('maintenance_pages', $settings->maintenance_pages ?? [])) ? 'checked' : '' }}
-                                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                     <label class="ml-2 text-sm text-gray-700">{{ $page['name'] }}</label>
                                 </div>
                             @endforeach

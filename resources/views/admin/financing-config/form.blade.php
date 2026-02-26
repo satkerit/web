@@ -86,7 +86,7 @@
                                     min="0.01"
                                     max="100"
                                     required
-                                    class="block w-full rounded-xl border-0 py-2.5 px-4 pr-12 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm {{ $errors->has('margin_rate') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
+                                    class="block w-full rounded-xl border-0 py-2.5 px-4 pr-12 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm {{ $errors->has('margin_rate') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
                                     placeholder="12.00"
                                 >
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -111,7 +111,7 @@
                                     value="{{ old('min_principal', $config?->min_principal) }}"
                                     min="1"
                                     required
-                                    class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm {{ $errors->has('min_principal') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
+                                    class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm {{ $errors->has('min_principal') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
                                     placeholder="5000000"
                                 >
                                 @error('min_principal')
@@ -130,7 +130,7 @@
                                     value="{{ old('max_principal', $config?->max_principal) }}"
                                     min="1"
                                     required
-                                    class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm {{ $errors->has('max_principal') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
+                                    class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm {{ $errors->has('max_principal') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
                                     placeholder="500000000"
                                 >
                                 @error('max_principal')
@@ -153,16 +153,16 @@
 
                         <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
                             @foreach($tenorOptions as $tenor)
-                                <label class="relative flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all {{ in_array($tenor, $selectedTenors) ? 'border-emerald-500 bg-emerald-50' : 'border-slate-200 bg-white hover:border-slate-300' }}">
+                                <label class="relative flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all {{ in_array($tenor, $selectedTenors) ? 'border-blue-500 bg-green-50' : 'border-slate-200 bg-white hover:border-slate-300' }}">
                                     <input
                                         type="checkbox"
                                         name="available_tenors[]"
                                         value="{{ $tenor }}"
                                         {{ in_array($tenor, $selectedTenors) ? 'checked' : '' }}
                                         class="sr-only peer"
-                                        onchange="this.closest('label').classList.toggle('border-emerald-500', this.checked); this.closest('label').classList.toggle('bg-emerald-50', this.checked); this.closest('label').classList.toggle('border-slate-200', !this.checked);"
+                                        onchange="this.closest('label').classList.toggle('border-blue-500', this.checked); this.closest('label').classList.toggle('bg-green-50', this.checked); this.closest('label').classList.toggle('border-slate-200', !this.checked);"
                                     >
-                                    <span class="text-sm font-medium {{ in_array($tenor, $selectedTenors) ? 'text-emerald-700' : 'text-slate-700' }}">{{ $tenor }} bln</span>
+                                    <span class="text-sm font-medium {{ in_array($tenor, $selectedTenors) ? 'text-green-700' : 'text-slate-700' }}">{{ $tenor }} bln</span>
                                 </label>
                             @endforeach
                         </div>
@@ -196,7 +196,7 @@
                                     {{ old('dp_enabled', $config?->dp_enabled ?? false) ? 'checked' : '' }}
                                     class="sr-only peer"
                                 >
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                             </label>
                         </div>
 
@@ -214,7 +214,7 @@
                                         step="0.01"
                                         min="0"
                                         max="100"
-                                        class="block w-full rounded-xl border-0 py-2.5 px-4 pr-12 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm {{ $errors->has('dp_min_percentage') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
+                                        class="block w-full rounded-xl border-0 py-2.5 px-4 pr-12 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm {{ $errors->has('dp_min_percentage') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
                                         placeholder="10"
                                     >
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -240,7 +240,7 @@
                                         step="0.01"
                                         min="0"
                                         max="100"
-                                        class="block w-full rounded-xl border-0 py-2.5 px-4 pr-12 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm {{ $errors->has('dp_max_percentage') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
+                                        class="block w-full rounded-xl border-0 py-2.5 px-4 pr-12 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm {{ $errors->has('dp_max_percentage') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
                                         placeholder="50"
                                     >
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -272,7 +272,7 @@
                                 {{ old('is_active', $config?->is_active ?? true) ? 'checked' : '' }}
                                 class="sr-only peer"
                             >
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         </label>
                     </div>
                 </x-admin.card>
@@ -323,7 +323,7 @@
                     @endphp
                     <div class="flex justify-between text-sm">
                         <span class="text-slate-500">Total Margin:</span>
-                        <span class="font-medium text-emerald-600">Rp {{ number_format($totalMargin, 0, ',', '.') }}</span>
+                        <span class="font-medium text-blue-600">Rp {{ number_format($totalMargin, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-slate-500">Total Pembayaran:</span>
@@ -331,7 +331,7 @@
                     </div>
                     <div class="flex justify-between text-sm font-semibold">
                         <span class="text-slate-700">Angsuran/Bulan:</span>
-                        <span class="text-emerald-600">Rp {{ number_format($monthlyInstallment, 0, ',', '.') }}</span>
+                        <span class="text-blue-600">Rp {{ number_format($monthlyInstallment, 0, ',', '.') }}</span>
                     </div>
                 </div>
             </div>
@@ -341,9 +341,9 @@
         {{-- Formula Info --}}
         <x-admin.card title="Formula Perhitungan">
             <div class="space-y-3 text-sm">
-                <div class="p-3 bg-emerald-50 rounded-lg">
-                    <p class="font-medium text-emerald-800 mb-2">Flat Rate Formula:</p>
-                    <code class="text-xs text-emerald-700 block">
+                <div class="p-3 bg-green-50 rounded-lg">
+                    <p class="font-medium text-blue-800 mb-2">Flat Rate Formula:</p>
+                    <code class="text-xs text-green-700 block">
                         Angsuran = (P + (P × M × T/12)) / T
                     </code>
                 </div>

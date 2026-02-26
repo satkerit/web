@@ -150,7 +150,7 @@
         <!-- User Info -->
         <x-admin.card title="Informasi User">
             <div class="flex items-center mb-4">
-                <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-green-700 font-bold text-lg">
                     {{ strtoupper(substr($auditTrail->user_name ?? 'S', 0, 1)) }}
                 </div>
                 <div class="ml-3">

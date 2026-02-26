@@ -37,7 +37,7 @@
 /* Custom Scrollbar */
 .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgba(16, 185, 129, 0.5) transparent;
+    scrollbar-color: rgba(59, 130, 246, 0.5) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -50,12 +50,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(16, 185, 129, 0.5);
+    background: rgba(59, 130, 246, 0.5);
     border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(16, 185, 129, 0.7);
+    background: rgba(59, 130, 246, 0.7);
 }
 
 /* ========================================
@@ -75,7 +75,7 @@
 
     /* Gradients */
     .gradient-primary {
-        background: linear-gradient(135deg, #3bdacb 0%, #2dd4bf 100%);
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     }
     .gradient-blue {
         background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
@@ -117,7 +117,7 @@
 
     .form-input:focus {
         @apply shadow-lg;
-        box-shadow: 0 0 0 3px rgba(59, 218, 203, 0.1);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
     .form-label {
@@ -196,7 +196,7 @@
     }
 
     .alert-success {
-        @apply bg-gradient-to-r from-primary-50 to-primary-100 border-l-4 border-primary-500 text-primary-800;
+        @apply bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-500 text-green-800;
     }
     .alert-error {
         @apply bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 text-red-800;
@@ -266,7 +266,7 @@
     }
 
     .hover-glow:hover {
-        box-shadow: 0 0 20px rgba(59, 218, 203, 0.3);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
     }
 }
 

@@ -22,10 +22,10 @@
                     </svg>
                 </div>
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama produk..."
-                       class="w-full pl-10 rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm sm:leading-6">
+                       class="w-full pl-10 rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
             </div>
             <div class="flex gap-3">
-                <select name="type" class="flex-1 sm:flex-none rounded-xl border-0 py-2.5 px-4 pr-10 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm sm:leading-6">
+                <select name="type" class="flex-1 sm:flex-none rounded-xl border-0 py-2.5 px-4 pr-10 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
                     <option value="">Semua Tipe</option>
                     <option value="simpanan_syariah" {{ request('type') == 'simpanan_syariah' ? 'selected' : '' }}>Simpanan Syariah</option>
                     <option value="pembiayaan_syariah" {{ request('type') == 'pembiayaan_syariah' ? 'selected' : '' }}>Pembiayaan Syariah</option>
@@ -67,8 +67,8 @@
                     {{-- Status Badge --}}
                     <div class="absolute top-3 right-3">
                         @if($product->is_active)
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-green-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>
                                 Aktif
                             </span>
                         @else
@@ -104,7 +104,7 @@
 
                     {{-- Actions --}}
                     <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
-                        <a href="{{ route('admin.products.edit', $product) }}" class="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors">
+                        <a href="{{ route('admin.products.edit', $product) }}" class="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-blue-600 bg-green-50 hover:bg-blue-100 rounded-xl transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
@@ -175,8 +175,8 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         @if($product->is_active)
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-green-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>
                                 Aktif
                             </span>
                         @else
@@ -199,7 +199,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                 </svg>
                             </a>
-                            <a href="{{ route('admin.products.edit', $product) }}" class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all" title="Edit">
+                            <a href="{{ route('admin.products.edit', $product) }}" class="p-2 text-slate-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-all" title="Edit">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>

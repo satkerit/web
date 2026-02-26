@@ -70,7 +70,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select name="status" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                        <select name="status" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <option value="pending" {{ $complaint->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
                             <option value="in_review" {{ $complaint->status == 'in_review' ? 'selected' : '' }}>Dalam Review</option>
                             <option value="investigating" {{ $complaint->status == 'investigating' ? 'selected' : '' }}>Investigasi</option>
@@ -80,7 +80,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Catatan Admin</label>
-                        <textarea name="admin_notes" rows="4" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">{{ old('admin_notes', $complaint->admin_notes) }}</textarea>
+                        <textarea name="admin_notes" rows="4" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('admin_notes', $complaint->admin_notes) }}</textarea>
                     </div>
                     <x-admin.button type="submit">Update Status</x-admin.button>
                 </div>

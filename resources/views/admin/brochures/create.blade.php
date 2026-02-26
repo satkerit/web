@@ -15,7 +15,7 @@
     <div x-data="fileUpload()" class="max-w-xl mx-auto py-8">
         <div 
             class="relative border-2 border-dashed rounded-xl p-10 text-center transition-all duration-200"
-            :class="{ 'border-emerald-500 bg-emerald-50': isDropping, 'border-slate-300 hover:border-emerald-400': !isDropping }"
+            :class="{ 'border-blue-500 bg-green-50': isDropping, 'border-slate-300 hover:border-blue-400': !isDropping }"
             @dragover.prevent="isDropping = true"
             @dragleave.prevent="isDropping = false"
             @drop.prevent="handleDrop($event)"
@@ -30,7 +30,7 @@
                 </div>
                 <h3 class="text-lg font-semibold text-slate-900 mb-1">Upload File Brosur</h3>
                 <p class="text-slate-500 mb-4 text-sm">Drag & drop file PDF di sini atau klik untuk memilih</p>
-                <button type="button" @click="$refs.fileInput.click()" class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 focus:bg-emerald-700 active:bg-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                <button type="button" @click="$refs.fileInput.click()" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     Pilih File
                 </button>
                 <p class="mt-4 text-xs text-slate-400">Hanya format PDF. Maksimal 10MB.</p>
@@ -50,7 +50,7 @@
                 </div>
 
                 <div x-show="isUploading" class="w-full bg-slate-200 rounded-full h-2.5 mb-4">
-                    <div class="bg-emerald-600 h-2.5 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
+                    <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
                 </div>
 
                 <div class="flex justify-center gap-3">
@@ -65,7 +65,7 @@
                     <button 
                         type="button" 
                         @click="uploadFile()"
-                        class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 disabled:opacity-50"
+                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
                         :disabled="isUploading"
                     >
                         <span x-show="!isUploading">Upload Sekarang</span>

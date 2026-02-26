@@ -32,7 +32,7 @@
                 <div class="grid grid-cols-1 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Role <span class="text-red-500">*</span></label>
-                        <select name="role_id" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                        <select name="role_id" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <option value="">-- Pilih Role --</option>
                             @foreach($roles as $roleModel)
                                 <option value="{{ $roleModel->id }}" {{ old('role_id', $user->role_id ?? '') == $roleModel->id ? 'selected' : '' }}>{{ $roleModel->display_name }}</option>
@@ -46,7 +46,7 @@
                 <div class="flex items-center gap-2">
                     <input type="checkbox" name="is_active" id="is_active" value="1"
                            {{ old('is_active', $user->is_active ?? true) ? 'checked' : '' }}
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <label for="is_active" class="text-sm text-gray-700">Akun Aktif</label>
                 </div>
 

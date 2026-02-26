@@ -5,7 +5,7 @@
 @section('content')
 <x-admin.page-header title="File Manager" subtitle="Kelola file dan folder di storage">
     <x-slot:actions>
-        <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+        <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
             </svg>
@@ -28,7 +28,7 @@
     </div>
     <div class="bg-white rounded-xl p-4 border border-gray-200">
         <p class="text-sm text-gray-500">Terpakai</p>
-        <p class="text-xl font-semibold text-emerald-600">{{ number_format($storageInfo['used'] / 1024 / 1024 / 1024, 2) }} GB</p>
+        <p class="text-xl font-semibold text-blue-600">{{ number_format($storageInfo['used'] / 1024 / 1024 / 1024, 2) }} GB</p>
     </div>
     <div class="bg-white rounded-xl p-4 border border-gray-200">
         <p class="text-sm text-gray-500">Tersedia</p>
@@ -38,14 +38,14 @@
 
 {{-- Breadcrumbs --}}
 <div class="mb-4 flex items-center gap-2 text-sm">
-    <a href="{{ route('admin.storage.index') }}" class="text-emerald-600 hover:text-emerald-700 font-medium">
+    <a href="{{ route('admin.storage.index') }}" class="text-blue-600 hover:text-green-700 font-medium">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
         </svg>
     </a>
     @foreach($breadcrumbs as $crumb)
         <span class="text-gray-400">/</span>
-        <a href="{{ route('admin.storage.index', ['path' => $crumb['path']]) }}" class="text-emerald-600 hover:text-emerald-700">
+        <a href="{{ route('admin.storage.index', ['path' => $crumb['path']]) }}" class="text-blue-600 hover:text-green-700">
             {{ $crumb['name'] }}
         </a>
     @endforeach
@@ -75,7 +75,7 @@
                 @endif
                 <div class="flex-1 min-w-0">
                     @if($item['type'] === 'folder')
-                        <a href="{{ route('admin.storage.index', ['path' => $item['path']]) }}" class="font-medium text-gray-900 hover:text-emerald-600 truncate block">
+                        <a href="{{ route('admin.storage.index', ['path' => $item['path']]) }}" class="font-medium text-gray-900 hover:text-blue-600 truncate block">
                             {{ $item['name'] }}
                         </a>
                     @else
@@ -116,7 +116,7 @@
                                         <path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
                                     </svg>
                                 </div>
-                                <a href="{{ route('admin.storage.index', ['path' => $item['path']]) }}" class="font-medium text-gray-900 hover:text-emerald-600">
+                                <a href="{{ route('admin.storage.index', ['path' => $item['path']]) }}" class="font-medium text-gray-900 hover:text-blue-600">
                                     {{ $item['name'] }}
                                 </a>
                             @else
@@ -161,7 +161,7 @@
                                         </svg>
                                     </a>
                                 @endif
-                                <a href="{{ route('admin.storage.download', ['file' => $item['path']]) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg" title="Download">
+                                <a href="{{ route('admin.storage.download', ['file' => $item['path']]) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg" title="Download">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                     </svg>
@@ -197,12 +197,12 @@
             <input type="hidden" name="path" value="{{ $path }}">
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Pilih File</label>
-                <input type="file" name="files[]" multiple required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                <input type="file" name="files[]" multiple required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-blue-100">
                 <p class="text-xs text-gray-500 mt-1">Maksimal 50MB per file</p>
             </div>
             <div class="flex justify-end gap-3">
                 <button type="button" onclick="document.getElementById('uploadModal').classList.add('hidden')" class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">Batal</button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg">Upload</button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">Upload</button>
             </div>
         </form>
     </div>
@@ -217,7 +217,7 @@
             <input type="hidden" name="path" value="{{ $path }}">
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama Folder</label>
-                <input type="text" name="folder_name" required pattern="[a-zA-Z0-9\-_]+" class="w-full rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" placeholder="nama-folder">
+                <input type="text" name="folder_name" required pattern="[a-zA-Z0-9\-_]+" class="w-full rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="nama-folder">
                 <p class="text-xs text-gray-500 mt-1">Hanya huruf, angka, dash, dan underscore</p>
             </div>
             <div class="flex justify-end gap-3">
@@ -257,11 +257,11 @@
             <input type="hidden" name="type" id="renameItemType">
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama Baru</label>
-                <input type="text" name="new_name" id="renameNewName" required class="w-full rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <input type="text" name="new_name" id="renameNewName" required class="w-full rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             </div>
             <div class="flex justify-end gap-3">
                 <button type="button" onclick="document.getElementById('renameModal').classList.add('hidden')" class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">Batal</button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg">Simpan</button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">Simpan</button>
             </div>
         </form>
     </div>

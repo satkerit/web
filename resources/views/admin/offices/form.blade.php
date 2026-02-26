@@ -21,7 +21,7 @@
                         <x-admin.input name="name" label="Nama Kantor" :value="old('name', $office->name ?? '')" required :error="$errors->first('name')"/>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Kantor <span class="text-red-500">*</span></label>
-                            <select name="type" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                            <select name="type" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                 <option value="pusat" {{ old('type', $office->type ?? '') == 'pusat' ? 'selected' : '' }}>Kantor Pusat</option>
                                 <option value="cabang" {{ old('type', $office->type ?? '') == 'cabang' ? 'selected' : '' }}>Kantor Cabang</option>
                                 <option value="kas" {{ old('type', $office->type ?? '') == 'kas' ? 'selected' : '' }}>Kantor Kas</option>
@@ -32,12 +32,12 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Alamat <span class="text-red-500">*</span></label>
-                        <textarea name="address" rows="2" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm" required>{{ old('address', $office->address ?? '') }}</textarea>
+                        <textarea name="address" rows="2" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" required>{{ old('address', $office->address ?? '') }}</textarea>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <textarea name="description" rows="3" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">{{ old('description', $office->description ?? '') }}</textarea>
+                        <textarea name="description" rows="3" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('description', $office->description ?? '') }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -54,14 +54,14 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
                             <input type="number" name="latitude" id="latitude" x-model="latitude" @input="updateMap()"
                                    value="{{ old('latitude', $office->latitude ?? '') }}" step="any" placeholder="-2.123456"
-                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <p class="text-xs text-gray-500 mt-1">Contoh: -2.131629</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
                             <input type="number" name="longitude" id="longitude" x-model="longitude" @input="updateMap()"
                                    value="{{ old('longitude', $office->longitude ?? '') }}" step="any" placeholder="106.123456"
-                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <p class="text-xs text-gray-500 mt-1">Contoh: 106.116504</p>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             </iframe>
                         </div>
                         <div class="flex items-center gap-4 text-sm">
-                            <a :href="directionsUrl" target="_blank" class="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700">
+                            <a :href="directionsUrl" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-green-700">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -103,7 +103,7 @@
                             <div>
                                 <p class="text-sm font-medium text-gray-700">Cara mendapatkan koordinat:</p>
                                 <ol class="text-sm text-gray-500 mt-1 list-decimal list-inside space-y-1">
-                                    <li>Buka <a href="https://www.google.com/maps" target="_blank" class="text-emerald-600 hover:underline">Google Maps</a></li>
+                                    <li>Buka <a href="https://www.google.com/maps" target="_blank" class="text-blue-600 hover:underline">Google Maps</a></li>
                                     <li>Cari lokasi kantor</li>
                                     <li>Klik kanan pada lokasi</li>
                                     <li>Klik koordinat yang muncul untuk menyalin</li>
@@ -121,7 +121,7 @@
                 <div class="flex items-center gap-2">
                     <input type="checkbox" name="is_active" id="is_active" value="1"
                            {{ old('is_active', $office->is_active ?? true) ? 'checked' : '' }}
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <label for="is_active" class="text-sm text-gray-700">Kantor Aktif</label>
                 </div>
             </x-admin.card>

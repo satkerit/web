@@ -39,7 +39,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Laporan <span class="text-red-500">*</span></label>
-                            <select name="type" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm @error('type') border-red-500 @enderror">
+                            <select name="type" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm @error('type') border-red-500 @enderror">
                                 <option value="keuangan_publikasi" {{ old('type', $report->type ?? '') == 'keuangan_publikasi' ? 'selected' : '' }}>Laporan Keuangan Publikasi</option>
                                 <option value="tata_kelola" {{ old('type', $report->type ?? '') == 'tata_kelola' ? 'selected' : '' }}>Laporan Tata Kelola</option>
                                 <option value="tahunan" {{ old('type', $report->type ?? '') == 'tahunan' ? 'selected' : '' }}>Laporan Tahunan</option>
@@ -55,7 +55,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Kuartal</label>
-                            <select name="quarter" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                            <select name="quarter" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                 <option value="">Tidak Ada (Tahunan)</option>
                                 <option value="1" {{ old('quarter', $report->quarter ?? '') == '1' ? 'selected' : '' }}>Q1 (Januari - Maret)</option>
                                 <option value="2" {{ old('quarter', $report->quarter ?? '') == '2' ? 'selected' : '' }}>Q2 (April - Juni)</option>
@@ -67,7 +67,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Publish <span class="text-red-500">*</span></label>
                             <input type="date" name="published_date"
                                    value="{{ old('published_date', isset($report) && $report->posted_at ? $report->posted_at->format('Y-m-d') : date('Y-m-d')) }}"
-                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm @error('published_date') border-red-500 @enderror"
+                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm @error('published_date') border-red-500 @enderror"
                                    required>
                             <p class="text-xs text-gray-500 mt-1">Tanggal yang akan ditampilkan di halaman publik</p>
                             @error('published_date')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
@@ -77,7 +77,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Mode Posting <span class="text-red-500">*</span></label>
-                            <select name="posting_mode" x-model="postingMode" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm @error('posting_mode') border-red-500 @enderror">
+                            <select name="posting_mode" x-model="postingMode" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm @error('posting_mode') border-red-500 @enderror">
                                 <option value="auto">Langsung Publish</option>
                                 <option value="manual">Jadwalkan</option>
                             </select>
@@ -87,7 +87,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Jadwal Tayang <span class="text-red-500" x-show="postingMode === 'manual'">*</span></label>
                             <input type="datetime-local" name="scheduled_at"
                                    value="{{ old('scheduled_at', isset($report) && $report->scheduled_at ? $report->scheduled_at->format('Y-m-d\TH:i') : '') }}"
-                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm @error('scheduled_at') border-red-500 @enderror">
+                                   class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm @error('scheduled_at') border-red-500 @enderror">
                             <p class="text-xs text-gray-500 mt-1">Waktu laporan akan ditampilkan di website</p>
                             @error('scheduled_at')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -95,7 +95,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <textarea name="description" rows="3" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm @error('description') border-red-500 @enderror">{{ old('description', $report->description ?? '') }}</textarea>
+                        <textarea name="description" rows="3" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm @error('description') border-red-500 @enderror">{{ old('description', $report->description ?? '') }}</textarea>
                         @error('description')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                 <div class="flex items-center gap-2">
                     <input type="checkbox" name="is_published" id="is_published" value="1"
                            {{ old('is_published', $report->is_published ?? true) ? 'checked' : '' }}
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <label for="is_published" class="text-sm text-gray-700">Publikasikan</label>
                 </div>
             </x-admin.card>
@@ -117,13 +117,13 @@
                     @if(isset($report) && $report->file_path)
                         <div class="p-3 bg-gray-50 rounded-lg">
                             <p class="text-sm text-gray-600">File saat ini:</p>
-                            <a href="{{ \App\Helpers\StorageHelper::url($report->file_path) }}" target="_blank" class="text-sm text-emerald-600 hover:underline">
+                            <a href="{{ \App\Helpers\StorageHelper::url($report->file_path) }}" target="_blank" class="text-sm text-blue-600 hover:underline">
                                 📄 Lihat File ({{ number_format($report->file_size / 1024 / 1024, 2) }} MB)
                             </a>
                         </div>
                     @endif
                     <input type="file" name="file" accept=".pdf" {{ isset($report) ? '' : 'required' }}
-                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-blue-100">
                     <p class="text-xs text-gray-500">Format PDF. Maks 50MB</p>
                     @error('file')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>

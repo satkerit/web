@@ -15,9 +15,9 @@
     <div class="p-4 border-b border-gray-100">
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama/email..."
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             <div class="flex gap-3">
-                <select name="role" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="role" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Role</option>
                     <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                     <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
@@ -38,8 +38,8 @@
         @forelse($users as $user)
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <div class="flex items-start gap-3 mb-3">
-                    <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                        <span class="text-emerald-600 font-semibold text-lg">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <span class="text-blue-600 font-semibold text-lg">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="font-semibold text-gray-900 truncate">{{ $user->name }}</p>
@@ -71,7 +71,7 @@
                     <span class="text-xs text-gray-500">{{ $user->created_at->format('d M Y') }}</span>
                 </div>
                 <div class="flex items-center gap-2 pt-3 border-t border-gray-100">
-                    <a href="{{ route('admin.users.edit', $user) }}" class="flex-1 text-center py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.users.edit', $user) }}" class="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-green-50 rounded-lg transition-colors">
                         Edit
                     </a>
                     @if($user->id !== auth()->id())
@@ -98,8 +98,8 @@
                 <tr>
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                                <span class="text-emerald-600 font-semibold">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <span class="text-blue-600 font-semibold">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                             </div>
                             <div class="min-w-0">
                                 <p class="font-medium text-gray-900 truncate">{{ $user->name }}</p>
@@ -137,7 +137,7 @@
                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $user->created_at->format('d M Y') }}</td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('admin.users.edit', $user) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
+                            <a href="{{ route('admin.users.edit', $user) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>

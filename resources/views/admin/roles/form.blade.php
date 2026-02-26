@@ -58,7 +58,7 @@
                         <textarea
                             name="description"
                             rows="3"
-                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm"
+                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                             placeholder="Deskripsi singkat tentang role ini"
                         >{{ old('description', $role->description ?? '') }}</textarea>
                         @error('description')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
@@ -67,7 +67,7 @@
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="is_active" id="is_active" value="1"
                                {{ old('is_active', $role->is_active ?? true) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <label for="is_active" class="text-sm text-gray-700">Role Aktif</label>
                     </div>
 
@@ -91,7 +91,7 @@
                 <div class="space-y-6" x-data="permissionManager()">
                     {{-- Quick Actions --}}
                     <div class="flex flex-wrap gap-2 pb-4 border-b border-gray-100">
-                        <button type="button" @click="selectAll()" class="px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors">
+                        <button type="button" @click="selectAll()" class="px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 hover:bg-blue-100 rounded-lg transition-colors">
                             Pilih Semua
                         </button>
                         <button type="button" @click="deselectAll()" class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
@@ -110,7 +110,7 @@
                                         @click="toggleGroup('{{ $group }}')"
                                         :checked="isGroupChecked('{{ $group }}')"
                                         :indeterminate="isGroupIndeterminate('{{ $group }}')"
-                                        class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                     >
                                     <label for="group_{{ $group }}" class="font-medium text-gray-900">
                                         {{ $permissionGroups[$group] ?? ucfirst($group) }}
@@ -128,7 +128,7 @@
                                             data-group="{{ $group }}"
                                             {{ in_array($permission->id, old('permissions', $rolePermissions ?? [])) ? 'checked' : '' }}
                                             @change="updateGroupState('{{ $group }}')"
-                                            class="permission-checkbox rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                            class="permission-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                         >
                                         <span class="text-sm text-gray-700 group-hover:text-gray-900">{{ $permission->display_name }}</span>
                                     </label>

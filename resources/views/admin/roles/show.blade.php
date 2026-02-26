@@ -46,8 +46,8 @@
 
         <x-admin.card title="Statistik">
             <div class="grid grid-cols-2 gap-4">
-                <div class="text-center p-4 bg-emerald-50 rounded-xl">
-                    <p class="text-2xl font-bold text-emerald-600">{{ $role->users->count() }}</p>
+                <div class="text-center p-4 bg-green-50 rounded-xl">
+                    <p class="text-2xl font-bold text-blue-600">{{ $role->users->count() }}</p>
                     <p class="text-xs text-gray-600">Pengguna</p>
                 </div>
                 <div class="text-center p-4 bg-blue-50 rounded-xl">
@@ -62,8 +62,8 @@
             <div class="space-y-2 max-h-64 overflow-y-auto">
                 @foreach($role->users->take(10) as $user)
                 <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg">
-                    <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                        <span class="text-emerald-600 font-semibold text-xs">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
+                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <span class="text-blue-600 font-semibold text-xs">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                     </div>
                     <div class="min-w-0">
                         <p class="text-sm font-medium text-gray-900 truncate">{{ $user->name }}</p>
@@ -97,7 +97,7 @@
                     <div class="p-4">
                         <div class="flex flex-wrap gap-2">
                             @foreach($permissions as $permission)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>

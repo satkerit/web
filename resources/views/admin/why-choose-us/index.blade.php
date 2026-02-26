@@ -23,7 +23,7 @@
                     Pengaturan Section
                 </a>
                 <a href="{{ route('admin.why-choose-us.create') }}"
-                    class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all">
+                    class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -36,7 +36,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($items as $item)
                 <div
-                    class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 border border-slate-100 relative overflow-hidden flex flex-col h-full">
+                    class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 border border-slate-100 relative overflow-hidden flex flex-col h-full">
                     <!-- Color Bar -->
                     <div class="absolute top-0 left-0 w-full h-1 {{ $item->bg_class }}"></div>
 
@@ -55,7 +55,7 @@
                         <div
                             class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0 duration-300">
                             <a href="{{ route('admin.why-choose-us.edit', $item->id) }}"
-                                class="p-2 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-colors"
+                                class="p-2 text-slate-400 hover:text-blue-500 hover:bg-green-50 rounded-lg transition-colors"
                                 title="Edit">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="flex-1">
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
                             {{ $item->title }}</h3>
                         <p class="text-slate-500 text-sm leading-relaxed mb-4">{{ $item->description }}</p>
                     </div>
@@ -92,17 +92,17 @@
                             Urutan: {{ $item->sort_order }}
                         </span>
                         <span
-                            class="text-xs font-semibold px-2.5 py-1 rounded-md {{ $item->is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-slate-50 text-slate-500 border border-slate-100' }}">
+                            class="text-xs font-semibold px-2.5 py-1 rounded-md {{ $item->is_active ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-slate-50 text-slate-500 border border-slate-100' }}">
                             {{ $item->is_active ? 'Aktif' : 'Tidak Aktif' }}
                         </span>
                     </div>
                 </div>
             @empty
                 <div
-                    class="col-span-full py-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 hover:border-emerald-200 transition-colors group">
+                    class="col-span-full py-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 hover:border-green-200 transition-colors group">
                     <div
                         class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-10 h-10 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none"
+                        <svg class="w-10 h-10 text-slate-400 group-hover:text-blue-500 transition-colors" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
@@ -114,7 +114,7 @@
                         untuk ditampilkan di halaman depan.</p>
                     <div class="mt-8">
                         <a href="{{ route('admin.why-choose-us.create') }}"
-                            class="inline-flex items-center px-6 py-3 bg-emerald-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 hover:-translate-y-1 transition-all">
+                            class="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:-translate-y-1 transition-all">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>

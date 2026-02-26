@@ -23,9 +23,9 @@
         <form method="GET" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari deskripsi, user, IP..."
-                       class="w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                       class="w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
 
-                <select name="action" class="rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                <select name="action" class="rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
                     <option value="">Semua Aksi</option>
                     @foreach($actions as $action)
                     <option value="{{ $action }}" {{ request('action') == $action ? 'selected' : '' }}>
@@ -34,7 +34,7 @@
                     @endforeach
                 </select>
 
-                <select name="user_id" class="rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                <select name="user_id" class="rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
                     <option value="">Semua User</option>
                     @foreach($users as $user)
                     <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
@@ -43,7 +43,7 @@
                     @endforeach
                 </select>
 
-                <select name="model_type" class="rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                <select name="model_type" class="rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
                     <option value="">Semua Model</option>
                     @foreach($modelTypes as $type)
                     <option value="{{ $type }}" {{ request('model_type') == $type ? 'selected' : '' }}>
@@ -56,12 +56,12 @@
                 <div class="flex items-center gap-2">
                     <label class="text-sm text-slate-600">Dari:</label>
                     <input type="date" name="date_from" value="{{ request('date_from') }}"
-                           class="rounded-xl border-0 py-2 px-3 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                           class="rounded-xl border-0 py-2 px-3 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-sm text-slate-600">Sampai:</label>
                     <input type="date" name="date_to" value="{{ request('date_to') }}"
-                           class="rounded-xl border-0 py-2 px-3 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm">
+                           class="rounded-xl border-0 py-2 px-3 text-slate-900 bg-white shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
                 </div>
                 <div class="flex gap-2">
                     <x-admin.button type="submit" variant="secondary">Filter</x-admin.button>
@@ -97,7 +97,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-semibold text-sm">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-green-700 font-semibold text-sm">
                                 {{ strtoupper(substr($audit->user_name ?? 'S', 0, 1)) }}
                             </div>
                             <div class="ml-3">
@@ -133,7 +133,7 @@
                         <span class="text-sm text-slate-500 font-mono">{{ $audit->ip_address }}</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                        <a href="{{ route('admin.audit-trails.show', $audit) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition">
+                        <a href="{{ route('admin.audit-trails.show', $audit) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-green-50 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -185,7 +185,7 @@
                             </p>
                             <div class="mt-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Hapus log lebih dari:</label>
-                                <select name="days" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                                <select name="days" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="30">30 hari</option>
                                     <option value="60">60 hari</option>
                                     <option value="90" selected>90 hari</option>

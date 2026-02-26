@@ -11,7 +11,7 @@
             <p class="text-slate-600 mt-1">Kelola backup database untuk keamanan data</p>
         </div>
         <button @click="showCreateModal = true"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-colors">
+            class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -53,8 +53,8 @@
         {{-- Storage Info --}}
         <div class="bg-white rounded-2xl border border-slate-200 p-6">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
@@ -148,7 +148,7 @@
                                 <td class="px-6 py-4">
                                     @php
                                         $typeLabels = [
-                                            'full' => ['Full Backup', 'bg-emerald-100 text-emerald-800'],
+                                            'full' => ['Full Backup', 'bg-blue-100 text-blue-800'],
                                             'structure_only' => ['Struktur Saja', 'bg-blue-100 text-blue-800'],
                                             'data_only' => ['Data Saja', 'bg-purple-100 text-purple-800'],
                                             'unknown' => ['Unknown', 'bg-gray-100 text-gray-800']
@@ -172,7 +172,7 @@
                                     <div class="flex items-center justify-end gap-2">
                                         {{-- Download --}}
                                         <a href="{{ route('admin.database-backup.download', $backup['filename']) }}"
-                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors">
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 hover:bg-blue-100 rounded-lg transition-colors">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
@@ -211,7 +211,7 @@
                 <h3 class="text-lg font-medium text-slate-900 mb-2">Belum Ada Backup</h3>
                 <p class="text-slate-600 mb-4">Buat backup pertama untuk mengamankan data database Anda.</p>
                 <button @click="showCreateModal = true"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-colors">
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
@@ -231,8 +231,8 @@
 
             <div x-show="showCreateModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
                         </svg>
                     </div>
@@ -249,15 +249,15 @@
                             <label class="block text-sm font-medium text-slate-700 mb-2">Jenis Backup</label>
                             <div class="space-y-2">
                                 <label class="flex items-center">
-                                    <input type="radio" x-model="backupForm.backup_type" value="full" class="text-emerald-600 focus:ring-emerald-500">
+                                    <input type="radio" x-model="backupForm.backup_type" value="full" class="text-blue-600 focus:ring-blue-500">
                                     <span class="ml-2 text-sm text-slate-700">Full Backup (Struktur + Data)</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="radio" x-model="backupForm.backup_type" value="structure_only" class="text-emerald-600 focus:ring-emerald-500">
+                                    <input type="radio" x-model="backupForm.backup_type" value="structure_only" class="text-blue-600 focus:ring-blue-500">
                                     <span class="ml-2 text-sm text-slate-700">Struktur Saja (Tanpa Data)</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="radio" x-model="backupForm.backup_type" value="data_only" class="text-emerald-600 focus:ring-emerald-500">
+                                    <input type="radio" x-model="backupForm.backup_type" value="data_only" class="text-blue-600 focus:ring-blue-500">
                                     <span class="ml-2 text-sm text-slate-700">Data Saja (Tanpa Struktur)</span>
                                 </label>
                             </div>
@@ -266,7 +266,7 @@
                         {{-- Compression --}}
                         <div>
                             <label class="flex items-center">
-                                <input type="checkbox" x-model="backupForm.compression" class="text-emerald-600 focus:ring-emerald-500 rounded">
+                                <input type="checkbox" x-model="backupForm.compression" class="text-blue-600 focus:ring-blue-500 rounded">
                                 <span class="ml-2 text-sm text-slate-700">Kompresi file (Gzip)</span>
                             </label>
                         </div>
@@ -275,7 +275,7 @@
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-2">Deskripsi (Opsional)</label>
                             <input type="text" x-model="backupForm.description"
-                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Contoh: Backup sebelum update sistem">
                         </div>
                     </div>
@@ -286,7 +286,7 @@
                             Batal
                         </button>
                         <button type="submit" :disabled="isCreating"
-                            class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white rounded-lg transition-colors">
+                            class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition-colors">
                             <span x-show="!isCreating">Buat Backup</span>
                             <span x-show="isCreating" class="flex items-center gap-2">
                                 <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">

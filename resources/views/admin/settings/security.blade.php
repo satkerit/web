@@ -15,7 +15,7 @@
 </x-admin.page-header>
 
 @if(session('success'))
-<div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
+<div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
     {{ session('success') }}
 </div>
 @endif
@@ -84,7 +84,7 @@
                     </label>
                     <input type="number" name="rate_limit_web" value="{{ old('rate_limit_web', $settings->rate_limit_web) }}" 
                            min="10" max="1000" required
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Jumlah maksimal request per menit untuk halaman publik</p>
                     @error('rate_limit_web')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -97,7 +97,7 @@
                     </label>
                     <input type="number" name="rate_limit_admin" value="{{ old('rate_limit_admin', $settings->rate_limit_admin) }}" 
                            min="10" max="500" required
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Jumlah maksimal request per menit untuk halaman admin</p>
                     @error('rate_limit_admin')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -110,7 +110,7 @@
                     </label>
                     <input type="number" name="rate_limit_login" value="{{ old('rate_limit_login', $settings->rate_limit_login) }}" 
                            min="1" max="20" required
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Jumlah maksimal percobaan login per menit</p>
                     @error('rate_limit_login')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -123,7 +123,7 @@
                     </label>
                     <input type="number" name="rate_limit_password_reset" value="{{ old('rate_limit_password_reset', $settings->rate_limit_password_reset) }}" 
                            min="1" max="10" required
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Jumlah maksimal request reset password per menit</p>
                     @error('rate_limit_password_reset')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -136,7 +136,7 @@
                     </label>
                     <input type="number" name="rate_limit_download" value="{{ old('rate_limit_download', $settings->rate_limit_download) }}" 
                            min="5" max="100" required
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Jumlah maksimal download per menit</p>
                     @error('rate_limit_download')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -159,7 +159,7 @@
                     </label>
                     <input type="number" name="block_threshold" value="{{ old('block_threshold', $settings->block_threshold) }}" 
                            min="3" max="50" required
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Jumlah percobaan gagal sebelum IP diblokir</p>
                     @error('block_threshold')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -172,7 +172,7 @@
                     </label>
                     <input type="number" name="block_duration_hours" value="{{ old('block_duration_hours', $settings->block_duration_hours) }}" 
                            min="1" max="168" required
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Durasi pemblokiran otomatis (1-168 jam / 1-7 hari)</p>
                     @error('block_duration_hours')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -184,7 +184,7 @@
                         IP Whitelist
                     </label>
                     <textarea name="ip_whitelist" rows="5" 
-                              class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 font-mono text-sm"
+                              class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
                               placeholder="Satu IP per baris&#10;192.168.1.1&#10;10.0.0.1">{{ old('ip_whitelist', $settings->ip_whitelist) }}</textarea>
                     <p class="mt-1 text-xs text-gray-500">IP yang tidak akan pernah diblokir (satu per baris)</p>
                     @error('ip_whitelist')
@@ -197,7 +197,7 @@
                         IP Blacklist
                     </label>
                     <textarea name="ip_blacklist" rows="5" 
-                              class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 font-mono text-sm"
+                              class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
                               placeholder="Satu IP per baris&#10;192.168.1.100&#10;10.0.0.100">{{ old('ip_blacklist', $settings->ip_blacklist) }}</textarea>
                     <p class="mt-1 text-xs text-gray-500">IP yang selalu diblokir (satu per baris)</p>
                     @error('ip_blacklist')
@@ -220,7 +220,7 @@
                 <div class="flex items-center h-5">
                     <input type="checkbox" name="enable_suspicious_blocking" id="enable_suspicious_blocking" value="1"
                            {{ old('enable_suspicious_blocking', $settings->enable_suspicious_blocking) ? 'checked' : '' }}
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                 </div>
                 <div class="ml-3">
                     <label for="enable_suspicious_blocking" class="font-medium text-gray-900">
@@ -234,7 +234,7 @@
                 <div class="flex items-center h-5">
                     <input type="checkbox" name="enable_rate_limiting" id="enable_rate_limiting" value="1"
                            {{ old('enable_rate_limiting', $settings->enable_rate_limiting) ? 'checked' : '' }}
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                 </div>
                 <div class="ml-3">
                     <label for="enable_rate_limiting" class="font-medium text-gray-900">
@@ -248,7 +248,7 @@
                 <div class="flex items-center h-5">
                     <input type="checkbox" name="log_security_events" id="log_security_events" value="1"
                            {{ old('log_security_events', $settings->log_security_events) ? 'checked' : '' }}
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                 </div>
                 <div class="ml-3">
                     <label for="log_security_events" class="font-medium text-gray-900">
@@ -327,7 +327,7 @@
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('admin.settings.blocked-ips') }}" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+        <a href="{{ route('admin.settings.blocked-ips') }}" class="text-sm text-blue-600 hover:text-green-700 font-medium">
             Lihat Semua IP Terblokir →
         </a>
     </div>

@@ -5,7 +5,7 @@
 @section('content')
 <x-admin.page-header title="Konfigurasi Simulasi Pembiayaan" subtitle="Kelola parameter perhitungan simulasi pembiayaan">
     <x-slot:actions>
-        <a href="{{ route('admin.financing-config.create') }}" class="inline-flex items-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300">
+        <a href="{{ route('admin.financing-config.create') }}" class="inline-flex items-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -42,7 +42,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="font-semibold text-emerald-600">{{ number_format($config->margin_rate * 100, 2) }}%</span>
+                        <span class="font-semibold text-blue-600">{{ number_format($config->margin_rate * 100, 2) }}%</span>
                         <p class="text-xs text-slate-500">per tahun</p>
                     </td>
                     <td class="px-6 py-4">
@@ -70,7 +70,7 @@
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('admin.financing-config.edit', $config) }}" class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all inline-flex" title="Edit">
+                            <a href="{{ route('admin.financing-config.edit', $config) }}" class="p-2 text-slate-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-all inline-flex" title="Edit">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>
@@ -90,8 +90,8 @@
             @empty
                 <tr>
                     <td colspan="6" class="px-6 py-12 text-center">
-                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                             </svg>
                         </div>
@@ -123,7 +123,7 @@
                     <div class="space-y-2 mb-4 text-sm">
                         <div class="flex items-center justify-between">
                             <span class="text-slate-500">Margin Rate:</span>
-                            <span class="font-semibold text-emerald-600">{{ number_format($config->margin_rate * 100, 2) }}% / tahun</span>
+                            <span class="font-semibold text-blue-600">{{ number_format($config->margin_rate * 100, 2) }}% / tahun</span>
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-slate-500">Plafon Min:</span>
@@ -154,7 +154,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('admin.financing-config.edit', $config) }}" class="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors w-full mb-2">
+                    <a href="{{ route('admin.financing-config.edit', $config) }}" class="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-blue-600 bg-green-50 hover:bg-blue-100 rounded-xl transition-colors w-full mb-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
@@ -174,8 +174,8 @@
             </div>
         @empty
             <div class="text-center py-12">
-                <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-10 h-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                     </svg>
                 </div>

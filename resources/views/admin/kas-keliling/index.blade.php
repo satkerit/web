@@ -20,7 +20,7 @@
 </x-admin.page-header>
 
 @if(session('success'))
-<div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
+<div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
     {{ session('success') }}
 </div>
 @endif
@@ -36,15 +36,15 @@
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
             <input type="text" name="search" value="{{ request('search') }}" 
                    placeholder="Cari lokasi, PIC, fasilitas..." 
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             <div class="flex flex-wrap gap-3">
                 <input type="date" name="date_from" value="{{ request('date_from') }}" 
                        placeholder="Dari Tanggal"
-                       class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                       class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                 <input type="date" name="date_to" value="{{ request('date_to') }}" 
                        placeholder="Sampai Tanggal"
-                       class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
-                <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                       class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Status</option>
                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
                     <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
@@ -65,7 +65,7 @@
             <div class="flex items-center gap-3">
                 <span id="selectedCount" class="text-sm font-medium text-blue-900">0 item dipilih</span>
                 <div class="flex items-center gap-2">
-                    <button id="bulkActivateBtn" class="px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 rounded-lg hover:bg-emerald-200 transition-colors">
+                    <button id="bulkActivateBtn" class="px-3 py-1.5 text-xs font-medium text-green-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors">
                         Aktifkan
                     </button>
                     <button id="bulkDeactivateBtn" class="px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-100 rounded-lg hover:bg-amber-200 transition-colors">
@@ -87,8 +87,8 @@
         @forelse($schedules as $schedule)
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <div class="flex items-start gap-3 mb-3">
-                    <div class="w-12 h-12 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
@@ -115,7 +115,7 @@
                     </div>
                 @endif
                 <div class="flex items-center gap-2 pt-3 border-t border-gray-100">
-                    <a href="{{ route('admin.kas-keliling.edit', $schedule) }}" class="flex-1 text-center py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.kas-keliling.edit', $schedule) }}" class="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-green-50 rounded-lg transition-colors">
                         Edit
                     </a>
                     <form action="{{ route('admin.kas-keliling.destroy', $schedule) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus jadwal ini?')" class="flex-1">
@@ -137,7 +137,7 @@
             @forelse($schedules as $schedule)
                 <tr>
                     <td class="px-4 py-3">
-                        <input type="checkbox" class="schedule-checkbox rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" 
+                        <input type="checkbox" class="schedule-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
                                value="{{ $schedule->id }}" data-id="{{ $schedule->id }}">
                     </td>
                     <td class="px-4 py-3">
@@ -178,7 +178,7 @@
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('admin.kas-keliling.edit', $schedule) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
+                            <a href="{{ route('admin.kas-keliling.edit', $schedule) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>

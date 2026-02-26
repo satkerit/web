@@ -28,7 +28,7 @@
 </x-admin.page-header>
 
 @if(session('success'))
-<div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
+<div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
     {{ session('success') }}
 </div>
 @endif
@@ -92,7 +92,7 @@
                         <form action="{{ route('admin.settings.security.unblock', $block) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-emerald-600 hover:text-emerald-900"
+                            <button type="submit" class="text-blue-600 hover:text-blue-900"
                                     onclick="return confirm('Unblock IP {{ $block->ip_address }}?')">
                                 Unblock
                             </button>
@@ -139,7 +139,7 @@
                     </label>
                     <input type="text" name="ip_address" required
                            placeholder="192.168.1.1"
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 font-mono">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-mono">
                     <p class="mt-1 text-xs text-gray-500">Masukkan IP address yang ingin diblokir</p>
                 </div>
                 
@@ -149,7 +149,7 @@
                     </label>
                     <input type="text" name="reason"
                            placeholder="Contoh: Suspicious activity, Brute force attempt"
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 
                 <div class="flex items-center">
@@ -157,7 +157,7 @@
                            x-data="{ checked: false }"
                            x-model="checked"
                            @change="document.getElementById('duration_field').style.display = checked ? 'none' : 'block'"
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <label for="is_permanent" class="ml-2 text-sm text-gray-700">Blokir Permanen</label>
                 </div>
                 
@@ -166,7 +166,7 @@
                         Durasi (jam)
                     </label>
                     <input type="number" name="duration_hours" value="24" min="1" max="168"
-                           class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                           class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Durasi pemblokiran dalam jam (1-168 jam / 1-7 hari)</p>
                 </div>
                 

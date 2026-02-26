@@ -61,7 +61,7 @@
                                         value="1"
                                         {{ $canAccess ? 'checked' : '' }}
                                         {{ $isDisabled ? 'disabled' : '' }}
-                                        class="w-5 h-5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 {{ $isDisabled ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                        class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 {{ $isDisabled ? 'opacity-50 cursor-not-allowed' : '' }}"
                                     >
                                     @if($isDisabled && $canAccess)
                                         <input type="hidden" name="permissions[{{ $menu->id }}][{{ $role }}]" value="1">
@@ -79,7 +79,7 @@
                 <p class="text-sm text-gray-500">
                     <span class="text-amber-600">⚠</span> Menu "Hak Akses Menu" dan "Pengguna" hanya dapat diakses oleh Super Admin
                 </p>
-                <button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+                <button type="submit" class="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
                     Simpan Perubahan
                 </button>
             </div>

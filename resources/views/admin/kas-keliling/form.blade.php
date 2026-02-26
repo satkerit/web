@@ -8,7 +8,7 @@
             <input type="date" name="schedule_date" id="schedule_date" 
                    value="{{ old('schedule_date', isset($kasKeliling) && $kasKeliling->schedule_date ? $kasKeliling->schedule_date->format('Y-m-d') : '') }}"
                    min="{{ date('Y-m-d') }}"
-                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('schedule_date') border-red-500 @enderror" 
+                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('schedule_date') border-red-500 @enderror" 
                    required>
             @error('schedule_date')
                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -25,7 +25,7 @@
             <input type="text" name="location" id="location" 
                    value="{{ old('location', $kasKeliling->location ?? '') }}"
                    list="location-suggestions"
-                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('location') border-red-500 @enderror" 
+                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('location') border-red-500 @enderror" 
                    required placeholder="Contoh: Pasar Pagi Sungailiat">
             <datalist id="location-suggestions">
                 <option value="Pasar Pagi Sungailiat">
@@ -51,7 +51,7 @@
             </label>
             <input type="time" name="start_time" id="start_time" 
                    value="{{ old('start_time', isset($kasKeliling) && $kasKeliling->start_time ? \Carbon\Carbon::parse($kasKeliling->start_time)->format('H:i') : '') }}"
-                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('start_time') border-red-500 @enderror" 
+                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('start_time') border-red-500 @enderror" 
                    required>
             @error('start_time')
                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -65,7 +65,7 @@
             </label>
             <input type="time" name="end_time" id="end_time" 
                    value="{{ old('end_time', isset($kasKeliling) && $kasKeliling->end_time ? \Carbon\Carbon::parse($kasKeliling->end_time)->format('H:i') : '') }}"
-                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('end_time') border-red-500 @enderror" 
+                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('end_time') border-red-500 @enderror" 
                    required>
             @error('end_time')
                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -81,26 +81,26 @@
         </label>
         <div class="mb-2">
             <div class="flex flex-wrap gap-2">
-                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition-colors" data-facility="Setoran Tabungan">
+                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-blue-100 hover:text-green-700 transition-colors" data-facility="Setoran Tabungan">
                     Setoran Tabungan
                 </button>
-                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition-colors" data-facility="Pembayaran Angsuran">
+                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-blue-100 hover:text-green-700 transition-colors" data-facility="Pembayaran Angsuran">
                     Pembayaran Angsuran
                 </button>
-                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition-colors" data-facility="Penarikan Tunai">
+                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-blue-100 hover:text-green-700 transition-colors" data-facility="Penarikan Tunai">
                     Penarikan Tunai
                 </button>
-                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition-colors" data-facility="Pembukaan Rekening">
+                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-blue-100 hover:text-green-700 transition-colors" data-facility="Pembukaan Rekening">
                     Pembukaan Rekening
                 </button>
-                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition-colors" data-facility="Transfer">
+                <button type="button" class="facility-tag px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-blue-100 hover:text-green-700 transition-colors" data-facility="Transfer">
                     Transfer
                 </button>
             </div>
             <p class="text-xs text-gray-500 mt-1">Klik untuk menambahkan ke daftar fasilitas</p>
         </div>
         <textarea name="facility" id="facility" rows="3" 
-                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('facility') border-red-500 @enderror" 
+                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('facility') border-red-500 @enderror" 
                   placeholder="Contoh: Setoran Tabungan, Pembayaran Angsuran, Penarikan Tunai">{{ old('facility', $kasKeliling->facility ?? '') }}</textarea>
         @error('facility')
             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -117,7 +117,7 @@
             </label>
             <input type="text" name="pic_name" id="pic_name" 
                    value="{{ old('pic_name', $kasKeliling->pic_name ?? '') }}"
-                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('pic_name') border-red-500 @enderror" 
+                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('pic_name') border-red-500 @enderror" 
                    placeholder="Nama petugas">
             @error('pic_name')
                 <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -131,7 +131,7 @@
             </label>
             <input type="text" name="pic_phone" id="pic_phone" 
                    value="{{ old('pic_phone', $kasKeliling->pic_phone ?? '') }}"
-                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors @error('pic_phone') border-red-500 @enderror" 
+                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('pic_phone') border-red-500 @enderror" 
                    placeholder="08xx-xxxx-xxxx"
                    pattern="[0-9+\-\s()]+"
                    title="Hanya angka, tanda +, -, spasi, dan tanda kurung yang diperbolehkan">
@@ -149,7 +149,7 @@
             Catatan Tambahan
         </label>
         <textarea name="notes" id="notes" rows="3" 
-                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none @error('notes') border-red-500 @enderror" 
+                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('notes') border-red-500 @enderror" 
                   placeholder="Catatan atau informasi tambahan (opsional)">{{ old('notes', $kasKeliling->notes ?? '') }}</textarea>
         @error('notes')
             <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
@@ -160,7 +160,7 @@
     <div class="flex items-center">
         <input type="checkbox" name="is_active" id="is_active" value="1" 
                {{ old('is_active', isset($kasKeliling) ? $kasKeliling->is_active : true) ? 'checked' : '' }}
-               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
         <label for="is_active" class="ml-2 text-sm text-gray-700">Aktif</label>
     </div>
 
@@ -241,9 +241,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Visual feedback
-            this.classList.add('bg-emerald-100', 'text-emerald-700');
+            this.classList.add('bg-blue-100', 'text-green-700');
             setTimeout(() => {
-                this.classList.remove('bg-emerald-100', 'text-emerald-700');
+                this.classList.remove('bg-blue-100', 'text-green-700');
             }, 300);
         });
     });

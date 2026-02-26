@@ -21,10 +21,10 @@
 
         <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-100 shadow-sm relative overflow-hidden">
             <!-- Decorative gradient -->
-            <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
 
             <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-                <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 </span>
                 Informasi Utama
@@ -34,19 +34,19 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="md:col-span-2 space-y-2">
                     <label class="text-sm font-semibold text-slate-700">Judul Item <span class="text-red-500">*</span></label>
-                    <input type="text" name="title" value="{{ old('title') }}" required class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-900 placeholder:text-slate-400 font-medium transition-all shadow-sm" placeholder="Contoh: Aman & Terpercaya">
+                    <input type="text" name="title" value="{{ old('title') }}" required class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 text-slate-900 placeholder:text-slate-400 font-medium transition-all shadow-sm" placeholder="Contoh: Aman & Terpercaya">
                     @error('title') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700">Urutan <span class="text-red-500">*</span></label>
-                    <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" min="0" required class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-900 font-medium transition-all shadow-sm">
+                    <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" min="0" required class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 text-slate-900 font-medium transition-all shadow-sm">
                 </div>
             </div>
 
             <!-- Description -->
             <div class="space-y-2 mb-6">
                 <label class="text-sm font-semibold text-slate-700">Deskripsi <span class="text-red-500">*</span></label>
-                <textarea name="description" rows="3" required class="w-full px-4 py-3 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-900 placeholder:text-slate-400 font-medium transition-all resize-none shadow-sm" placeholder="Jelaskan keunggulan secara detail namun ringkas...">{{ old('description') }}</textarea>
+                <textarea name="description" rows="3" required class="w-full px-4 py-3 rounded-xl border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 text-slate-900 placeholder:text-slate-400 font-medium transition-all resize-none shadow-sm" placeholder="Jelaskan keunggulan secara detail namun ringkas...">{{ old('description') }}</textarea>
                 @error('description') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -58,11 +58,11 @@
                         <span>Icon Image (Opsional)</span>
                         <span class="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Max: 2MB</span>
                      </label>
-                     <div x-data="{ preview: null }" class="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-emerald-400 hover:bg-emerald-50/20 transition-all cursor-pointer relative group bg-slate-50/50">
+                     <div x-data="{ preview: null }" class="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-blue-400 hover:bg-green-50/20 transition-all cursor-pointer relative group bg-slate-50/50">
                         <input type="file" name="icon" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/png, image/jpeg, image/svg+xml, image/webp" @change="preview = URL.createObjectURL($event.target.files[0])">
 
                         <div x-show="!preview" class="space-y-3">
-                             <div class="w-14 h-14 bg-white border border-slate-100 shadow-sm text-slate-400 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 group-hover:text-emerald-500 transition-all duration-300">
+                             <div class="w-14 h-14 bg-white border border-slate-100 shadow-sm text-slate-400 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 group-hover:text-blue-500 transition-all duration-300">
                                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                              </div>
                              <div>
@@ -102,13 +102,13 @@
 
             <!-- Active Toggle -->
             <div class="pt-6 mt-6 border-t border-slate-50">
-                 <label class="flex items-center gap-4 cursor-pointer group p-3 rounded-xl border border-transparent hover:border-emerald-100 hover:bg-emerald-50/30 transition-all">
+                 <label class="flex items-center gap-4 cursor-pointer group p-3 rounded-xl border border-transparent hover:border-blue-100 hover:bg-green-50/30 transition-all">
                     <div class="relative flex-shrink-0">
                         <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ old('is_active', true) ? 'checked' : '' }}>
-                        <div class="w-12 h-7 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 after:shadow-sm"></div>
+                        <div class="w-12 h-7 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500 after:shadow-sm"></div>
                     </div>
                     <div>
-                        <span class="text-sm font-bold text-slate-800 block group-hover:text-emerald-700 transition-colors">Aktifkan Item</span>
+                        <span class="text-sm font-bold text-slate-800 block group-hover:text-green-700 transition-colors">Aktifkan Item</span>
                         <span class="text-xs text-slate-500">Item akan ditampilkan di halaman depan jika aktif.</span>
                     </div>
                 </label>
@@ -118,7 +118,7 @@
         <!-- Submit -->
         <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4">
             <a href="{{ route('admin.why-choose-us.index') }}" class="px-6 py-3 bg-white text-slate-600 font-semibold rounded-xl border border-slate-200 hover:bg-slate-50 hover:text-slate-800 transition-all text-center shadow-sm">Batal</a>
-            <button type="submit" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all flex items-center justify-center">
+            <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 Simpan Item
             </button>

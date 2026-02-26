@@ -8,7 +8,7 @@
             <h1 class="text-2xl font-bold text-slate-800">Daftar Berita</h1>
             <p class="text-slate-500">Kelola berita dan artikel</p>
         </div>
-        <a href="{{ route('admin.news.create') }}" class="btn-primary flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition shadow-lg shadow-emerald-200">
+        <a href="{{ route('admin.news.create') }}" class="btn-primary flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -17,7 +17,7 @@
     </div>
 
     @if(session('success'))
-        <div class="mb-4 p-4 bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-200 flex items-center gap-2">
+        <div class="mb-4 p-4 bg-blue-100 text-green-700 rounded-lg border border-green-200 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -68,7 +68,7 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 @if($item->is_published)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Published</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Published</span>
                                 @else
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Draft</span>
                                 @endif

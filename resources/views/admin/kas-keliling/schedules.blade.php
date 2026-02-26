@@ -5,7 +5,7 @@
 @section('content')
 <x-admin.page-header title="Jadwal Kas Keliling" :subtitle="$kasKeliling->area_name">
     <x-slot:actions>
-        <button @click="$dispatch('open-modal', 'add-schedule')" class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors font-medium">
+        <button @click="$dispatch('open-modal', 'add-schedule')" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -18,7 +18,7 @@
 </x-admin.page-header>
 
 @if(session('success'))
-<div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
+<div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
     {{ session('success') }}
 </div>
 @endif
@@ -53,7 +53,7 @@
                     </td>
                     <td class="px-6 py-4">
                         @if($schedule->is_active)
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                             Aktif
                         </span>
                         @else
@@ -63,7 +63,7 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 text-right text-sm font-medium space-x-2">
-                        <button @click="editSchedule({{ $schedule->id }})" class="text-emerald-600 hover:text-emerald-900">Edit</button>
+                        <button @click="editSchedule({{ $schedule->id }})" class="text-blue-600 hover:text-blue-900">Edit</button>
                         <form action="{{ route('admin.kas-keliling.schedules.destroy', [$kasKeliling, $schedule]) }}" 
                               method="POST" class="inline">
                             @csrf
@@ -113,7 +113,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Hari</label>
-                        <select name="day_name" class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                        <select name="day_name" class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Pilih Hari</option>
                             <option value="Senin">Senin</option>
                             <option value="Selasa">Selasa</option>
@@ -140,7 +140,7 @@
                             <div class="flex gap-2 mb-2">
                                 <input type="text" :name="'route['+index+']'" x-model="routes[index]"
                                        placeholder="Contoh: Jl. Pasar Pagi"
-                                       class="flex-1 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                                       class="flex-1 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                                 <button type="button" @click="routes.splice(index, 1)" x-show="routes.length > 1"
                                         class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-xl">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,7 +149,7 @@
                                 </button>
                             </div>
                         </template>
-                        <button type="button" @click="routes.push('')" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                        <button type="button" @click="routes.push('')" class="text-sm text-blue-600 hover:text-green-700 font-medium">
                             + Tambah Rute
                         </button>
                     </div>
@@ -162,7 +162,7 @@
                             <div class="flex gap-2 mb-2">
                                 <input type="text" :name="'services_offered['+index+']'" x-model="services[index]"
                                        placeholder="Contoh: Setoran Tabungan"
-                                       class="flex-1 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                                       class="flex-1 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                                 <button type="button" @click="services.splice(index, 1)" x-show="services.length > 1"
                                         class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-xl">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +171,7 @@
                                 </button>
                             </div>
                         </template>
-                        <button type="button" @click="services.push('')" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                        <button type="button" @click="services.push('')" class="text-sm text-blue-600 hover:text-green-700 font-medium">
                             + Tambah Layanan
                         </button>
                     </div>
@@ -179,12 +179,12 @@
                 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan</label>
-                    <textarea name="notes" rows="3" class="w-full rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500" placeholder="Catatan tambahan (opsional)"></textarea>
+                    <textarea name="notes" rows="3" class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Catatan tambahan (opsional)"></textarea>
                 </div>
                 
                 <div class="flex items-center">
                     <input type="checkbox" name="is_active" id="is_active_add" value="1" checked
-                           class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <label for="is_active_add" class="ml-2 text-sm text-gray-700">Aktif</label>
                 </div>
                 

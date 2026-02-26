@@ -6,11 +6,11 @@
 <div class="space-y-8">
     {{-- Welcome Card --}}
     <div class="relative overflow-hidden bg-slate-900 rounded-3xl p-8 text-white shadow-xl ring-1 ring-white/10">
-        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-emerald-500/20 blur-3xl"></div>
+        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-blue-500/20 blur-3xl"></div>
         <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 rounded-full bg-blue-500/20 blur-3xl"></div>
 
         <div class="relative z-10">
-            <h1 class="text-3xl font-bold tracking-tight mb-2">Selamat Datang, <span class="text-emerald-400">{{ auth()->user()->name }}</span>!</h1>
+            <h1 class="text-3xl font-bold tracking-tight mb-2">Selamat Datang, <span class="text-blue-400">{{ auth()->user()->name }}</span>!</h1>
             <p class="text-slate-400/90 text-lg flex items-center gap-2">
                 <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -46,15 +46,15 @@
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-slate-500 mb-1">Total Produk</p>
-                    <p class="text-3xl font-bold text-slate-900 tracking-tight group-hover:text-emerald-600 transition-colors">{{ \App\Models\Product::count() }}</p>
+                    <p class="text-3xl font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">{{ \App\Models\Product::count() }}</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-600 transition-colors duration-300">
-                    <svg class="w-6 h-6 text-emerald-600 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-300">
+                    <svg class="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                     </svg>
                 </div>
             </div>
-            <div class="mt-4 flex items-center gap-1 text-xs font-medium text-emerald-600">
+            <div class="mt-4 flex items-center gap-1 text-xs font-medium text-blue-600">
                 <span>View Details</span>
                 <svg class="w-3 h-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </div>
@@ -106,7 +106,7 @@
                 <h2 class="text-lg font-bold text-slate-900">Statistik Pengunjung</h2>
                 <p class="text-sm text-slate-500">7 hari terakhir</p>
             </div>
-            <a href="{{ route('admin.visitor-stats.index') }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline flex items-center gap-1">
+            <a href="{{ route('admin.visitor-stats.index') }}" class="text-sm font-medium text-blue-600 hover:text-green-700 hover:underline flex items-center gap-1">
                 Lihat Detail
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
@@ -119,10 +119,10 @@
                 <p class="text-2xl font-bold text-blue-700">{{ number_format($visitorStats['todayVisits']) }}</p>
                 <p class="text-xs text-blue-500">kunjungan</p>
             </div>
-            <div class="bg-emerald-50 rounded-xl p-4">
-                <p class="text-xs font-medium text-emerald-600 mb-1">Unik Hari Ini</p>
-                <p class="text-2xl font-bold text-emerald-700">{{ number_format($visitorStats['todayUnique']) }}</p>
-                <p class="text-xs text-emerald-500">pengunjung</p>
+            <div class="bg-green-50 rounded-xl p-4">
+                <p class="text-xs font-medium text-blue-600 mb-1">Unik Hari Ini</p>
+                <p class="text-2xl font-bold text-green-700">{{ number_format($visitorStats['todayUnique']) }}</p>
+                <p class="text-xs text-blue-500">pengunjung</p>
             </div>
             <div class="bg-purple-50 rounded-xl p-4">
                 <p class="text-xs font-medium text-purple-600 mb-1">7 Hari</p>
@@ -147,7 +147,7 @@
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-900/5">
             <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                 <h2 class="font-bold text-slate-900">Berita Terbaru</h2>
-                <a href="{{ route('admin.news.index') }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline">Lihat Semua</a>
+                <a href="{{ route('admin.news.index') }}" class="text-sm font-medium text-blue-600 hover:text-green-700 hover:underline">Lihat Semua</a>
             </div>
             <div class="divide-y divide-slate-100">
                 @forelse(\App\Models\News::latest()->take(5)->get() as $news)
@@ -172,7 +172,7 @@
                             </div>
                         </div>
                         @if($news->is_published)
-                            <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-600 rounded-lg ring-1 ring-emerald-500/10">Published</span>
+                            <span class="px-2.5 py-1 text-xs font-semibold bg-green-50 text-blue-600 rounded-lg ring-1 ring-blue-500/10">Published</span>
                         @else
                             <span class="px-2.5 py-1 text-xs font-semibold bg-amber-50 text-amber-600 rounded-lg ring-1 ring-amber-500/10">Draft</span>
                         @endif
@@ -192,7 +192,7 @@
         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-900/5">
             <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                 <h2 class="font-bold text-slate-900">Pengaduan Terbaru</h2>
-                <a href="{{ route('admin.complaints.index') }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline">Lihat Semua</a>
+                <a href="{{ route('admin.complaints.index') }}" class="text-sm font-medium text-blue-600 hover:text-green-700 hover:underline">Lihat Semua</a>
             </div>
             <div class="divide-y divide-slate-100">
                 @forelse(\App\Models\Complaint::latest()->take(5)->get() as $complaint)
@@ -200,7 +200,7 @@
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-0.5">
                                 <span class="text-xs font-mono text-slate-400 bg-slate-100 px-1.5 rounded">{{ $complaint->ticket_number }}</span>
-                                <span class="text-sm font-medium text-slate-900 truncate group-hover:text-emerald-600 transition-colors">{{ $complaint->subject }}</span>
+                                <span class="text-sm font-medium text-slate-900 truncate group-hover:text-blue-600 transition-colors">{{ $complaint->subject }}</span>
                             </div>
                             <p class="text-xs text-slate-500 truncate">{{ Str::limit($complaint->description, 60) }}</p>
                         </div>
@@ -259,11 +259,11 @@
 
             <div class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
                 <div class="p-2 bg-white rounded-lg shadow-sm">
-                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Status Akun</p>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 ring-1 ring-emerald-500/20">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-green-700 ring-1 ring-blue-500/20">
                         Aktif
                     </span>
                 </div>

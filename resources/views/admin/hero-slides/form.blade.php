@@ -37,7 +37,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
-                        <textarea name="subtitle" rows="2" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">{{ old('subtitle', $heroSlide->subtitle ?? '') }}</textarea>
+                        <textarea name="subtitle" rows="2" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">{{ old('subtitle', $heroSlide->subtitle ?? '') }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -67,7 +67,7 @@
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="is_active" id="is_active" value="1"
                                {{ old('is_active', $heroSlide->is_active ?? true) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <label for="is_active" class="text-sm text-gray-700">Aktif</label>
                     </div>
 
@@ -75,7 +75,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Transisi</label>
-                        <select name="transition_type" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                        <select name="transition_type" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             @foreach($transitionTypes as $key => $label)
                                 <option value="{{ $key }}" {{ old('transition_type', $heroSlide->transition_type ?? 'slide') == $key ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
@@ -91,19 +91,19 @@
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="show_title" id="show_title" value="1"
                                {{ old('show_title', $heroSlide->show_title ?? true) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <label for="show_title" class="text-sm text-gray-700">Tampilkan Judul</label>
                     </div>
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="show_subtitle" id="show_subtitle" value="1"
                                {{ old('show_subtitle', $heroSlide->show_subtitle ?? true) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <label for="show_subtitle" class="text-sm text-gray-700">Tampilkan Subtitle</label>
                     </div>
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="show_button" id="show_button" value="1"
                                {{ old('show_button', $heroSlide->show_button ?? true) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                         <label for="show_button" class="text-sm text-gray-700">Tampilkan Tombol</label>
                     </div>
                 </div>

@@ -8,7 +8,7 @@
             <div class="mb-4">
                 <label for="title" class="block text-sm font-medium text-slate-700 mb-2">Judul Berita <span class="text-red-500">*</span></label>
                 <input type="text" name="title" id="title" value="{{ old('title', $news->title ?? '') }}"
-                       class="w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 transition duration-200 @error('title') border-red-500 @enderror"
+                       class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200 @error('title') border-red-500 @enderror"
                        placeholder="Masukkan judul berita" required>
                 @error('title') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
             </div>
@@ -20,7 +20,7 @@
                         {{ url('berita') }}/
                     </span>
                     <input type="text" name="slug" id="slug" value="{{ old('slug', $news->slug ?? '') }}"
-                           class="w-full rounded-r-lg border-slate-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 transition duration-200 rounded-l-none @error('slug') border-red-500 @enderror"
+                           class="w-full rounded-r-lg border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200 rounded-l-none @error('slug') border-red-500 @enderror"
                            placeholder="url-berita-otomatis">
                 </div>
                 <p class="text-xs text-slate-500 mt-1">Biarkan kosong untuk generate otomatis dari judul.</p>
@@ -42,7 +42,7 @@
             <div class="mb-4">
                 <label for="excerpt" class="block text-sm font-medium text-slate-700 mb-2">Kutipan Singkat (Excerpt)</label>
                 <textarea name="excerpt" id="excerpt" rows="3"
-                          class="w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 transition duration-200 @error('excerpt') border-red-500 @enderror"
+                          class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200 @error('excerpt') border-red-500 @enderror"
                           placeholder="Ringkasan singkat untuk tampilan kartu...">{{ old('excerpt', $news->excerpt ?? '') }}</textarea>
                 @error('excerpt') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
             </div>
@@ -54,12 +54,12 @@
             <div class="mb-4">
                 <label for="meta_description" class="block text-sm font-medium text-slate-700 mb-2">Meta Description</label>
                 <textarea name="meta_description" id="meta_description" rows="2"
-                          class="w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 transition duration-200">{{ old('meta_description', $news->meta_description ?? '') }}</textarea>
+                          class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200">{{ old('meta_description', $news->meta_description ?? '') }}</textarea>
             </div>
             <div>
                 <label for="tags" class="block text-sm font-medium text-slate-700 mb-2">Tags (pisahkan dengan koma)</label>
                 <input type="text" name="tags" id="tags" value="{{ old('tags', $news->tags ?? '') }}"
-                       class="w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 transition duration-200"
+                       class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200"
                        placeholder="contoh: ekonomi, syariah, berita terkini">
             </div>
         </div>
@@ -73,7 +73,7 @@
 
             <div class="mb-4">
                 <label for="category" class="block text-sm font-medium text-slate-700 mb-2">Kategori <span class="text-red-500">*</span></label>
-                <select name="category" id="category" class="form-select w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 transition duration-200" required>
+                <select name="category" id="category" class="form-select w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200" required>
                     <option value="">Pilih Kategori</option>
                     @foreach(['Berita', 'Artikel', 'Pengumuman'] as $cat)
                         <option value="{{ $cat }}" {{ (old('category', $news->category ?? '') == $cat) ? 'selected' : '' }}>{{ $cat }}</option>
@@ -86,12 +86,12 @@
                 <label for="published_at" class="block text-sm font-medium text-slate-700 mb-2">Tanggal Publikasi</label>
                 <input type="datetime-local" name="published_at" id="published_at"
                        value="{{ old('published_at', isset($news->published_at) ? $news->published_at->format('Y-m-d\TH:i') : now()->format('Y-m-d\TH:i')) }}"
-                       class="w-full rounded-lg border-slate-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 transition duration-200">
+                       class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200">
             </div>
 
             <div class="flex items-center gap-2">
                 <input type="checkbox" name="is_published" id="is_published" value="1"
-                       class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                       class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                        {{ (old('is_published', $news->is_published ?? false)) ? 'checked' : '' }}>
                 <label for="is_published" class="text-sm font-medium text-slate-700">Publikasikan Sekarang</label>
             </div>
@@ -117,7 +117,7 @@
                     {{ isset($news) && $news->featured_image ? 'Ganti Gambar' : 'Upload Gambar' }} <span class="text-red-500">*</span>
                 </label>
                 <input type="file" name="featured_image" id="featured_image_input" accept="image/*"
-                       class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition cursor-pointer"
+                       class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-blue-100 transition cursor-pointer"
                        {{ isset($news) && $news->featured_image ? '' : 'required' }}>
                 <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG, WEBP. Max: 2MB.</p>
                 @error('featured_image') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
@@ -148,7 +148,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-2">Upload Galeri</label>
-                <input type="file" name="slide_images[]" multiple accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition">
+                <input type="file" name="slide_images[]" multiple accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-blue-100 transition">
                 <p class="text-xs text-slate-500 mt-1">Bisa pilih banyak gambar sekaligus.</p>
                 @error('slide_images.*') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
             </div>
@@ -158,5 +158,5 @@
 
 <div class="mt-8 pt-6 border-t border-slate-200 flex justify-end gap-4">
     <a href="{{ route('admin.news.index') }}" class="px-6 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-medium hover:bg-slate-50 transition">Batal</a>
-    <button type="submit" class="px-6 py-2.5 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition shadow-lg shadow-emerald-200">Simpan Berita</button>
+    <button type="submit" class="px-6 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition shadow-lg shadow-blue-200">Simpan Berita</button>
 </div>

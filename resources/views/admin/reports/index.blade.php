@@ -15,16 +15,16 @@
     <div class="p-4 border-b border-gray-100">
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari laporan..."
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             <div class="flex flex-wrap gap-3">
-                <select name="type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Tipe</option>
                     <option value="keuangan_publikasi" {{ request('type') == 'keuangan_publikasi' ? 'selected' : '' }}>Keuangan Publikasi</option>
                     <option value="tata_kelola" {{ request('type') == 'tata_kelola' ? 'selected' : '' }}>Tata Kelola</option>
                     <option value="tahunan" {{ request('type') == 'tahunan' ? 'selected' : '' }}>Tahunan</option>
                     <option value="tahunan_berkelanjutan" {{ request('type') == 'tahunan_berkelanjutan' ? 'selected' : '' }}>Tahunan Berkelanjutan</option>
                 </select>
-                <select name="year" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="year" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Tahun</option>
                     @foreach($years as $year)
                         <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
@@ -74,7 +74,7 @@
                             Lihat
                         </a>
                     @endif
-                    <a href="{{ route('admin.reports.edit', $report) }}" class="flex-1 text-center py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.reports.edit', $report) }}" class="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-green-50 rounded-lg transition-colors">
                         Edit
                     </a>
                     <form action="{{ route('admin.reports.destroy', $report) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')" class="flex-1">
@@ -133,7 +133,7 @@
                                     </svg>
                                 </a>
                             @endif
-                            <a href="{{ route('admin.reports.edit', $report) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
+                            <a href="{{ route('admin.reports.edit', $report) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>

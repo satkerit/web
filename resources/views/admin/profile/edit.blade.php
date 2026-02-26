@@ -23,7 +23,7 @@
                     name="name"
                     id="name"
                     value="{{ old('name', $user->name) }}"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 @error('name') border-red-300 @enderror"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-300 @enderror"
                 >
                 @error('name')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -37,7 +37,7 @@
                     name="email"
                     id="email"
                     value="{{ old('email', $user->email) }}"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 @error('email') border-red-300 @enderror"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('email') border-red-300 @enderror"
                 >
                 @error('email')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="pt-4">
-                <button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+                <button type="submit" class="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
                     Simpan Profil
                 </button>
             </div>
@@ -77,7 +77,7 @@
                     name="current_password"
                     id="current_password"
                     autocomplete="current-password"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 @error('current_password') border-red-300 @enderror"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('current_password') border-red-300 @enderror"
                 >
                 @error('current_password')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -91,7 +91,7 @@
                     name="password"
                     id="password"
                     autocomplete="new-password"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 @error('password') border-red-300 @enderror"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('password') border-red-300 @enderror"
                 >
                 @error('password')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -105,12 +105,12 @@
                     name="password_confirmation"
                     id="password_confirmation"
                     autocomplete="new-password"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
             </div>
 
             <div class="pt-4">
-                <button type="submit" class="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+                <button type="submit" class="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
                     Ubah Password
                 </button>
             </div>

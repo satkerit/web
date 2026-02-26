@@ -12,7 +12,7 @@
 </x-admin.page-header>
 
 @if(session('success'))
-<div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
+<div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
     {{ session('success') }}
 </div>
 @endif
@@ -28,9 +28,9 @@
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
             <input type="text" name="search" value="{{ request('search') }}"
                    placeholder="Cari judul, nomor lelang, alamat..."
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
             <div class="flex flex-wrap gap-3">
-                <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Status</option>
                     @foreach(\App\Models\Auction::$statusLabels as $value => $label)
                         <option value="{{ $value }}" {{ request('status') === $value ? 'selected' : '' }}>
@@ -38,7 +38,7 @@
                         </option>
                     @endforeach
                 </select>
-                <select name="asset_type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <select name="asset_type" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Jenis</option>
                     @foreach(\App\Models\Auction::$assetTypes as $value => $label)
                         <option value="{{ $value }}" {{ request('asset_type') === $value ? 'selected' : '' }}>
@@ -48,7 +48,7 @@
                 </select>
                 <input type="text" name="city" value="{{ request('city') }}"
                        placeholder="Nama kota..."
-                       class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                       class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                 <x-admin.button type="submit" variant="secondary">Filter</x-admin.button>
                 @if(request('search') || request('status') || request('asset_type') || request('city'))
                     <a href="{{ route('admin.auctions.index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-white rounded-lg ring-1 ring-inset ring-slate-200 hover:bg-slate-50 transition-colors">
@@ -88,7 +88,7 @@
                     <p class="text-xs">{{ $auction->city }}</p>
                 </div>
                 <div class="flex items-center gap-2 pt-3 border-t border-gray-100">
-                    <a href="{{ route('admin.auctions.edit', $auction) }}" class="flex-1 text-center py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors">
+                    <a href="{{ route('admin.auctions.edit', $auction) }}" class="flex-1 text-center py-2 text-sm font-medium text-blue-600 hover:bg-green-50 rounded-lg transition-colors">
                         Edit
                     </a>
                     <form action="{{ route('admin.auctions.destroy', $auction) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus lelang ini?')" class="flex-1">
@@ -145,7 +145,7 @@
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('admin.auctions.edit', $auction) }}" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
+                            <a href="{{ route('admin.auctions.edit', $auction) }}" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-green-50 rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>
