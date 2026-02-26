@@ -59,6 +59,7 @@ class SecurityHeaders
             "form-action 'self'",
             "base-uri 'self'",
             "object-src 'none'",
+            "upgrade-insecure-requests",
         ];
 
         return implode('; ', $policies);
