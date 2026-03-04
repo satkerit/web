@@ -11,7 +11,7 @@
     @auth
     <meta name="idle-timeout" content="{{ config('security.idle_timeout', 30) }}">
     <meta name="idle-warning" content="{{ config('session.idle_warning', 5) }}">
-    <meta name="logout-url" content="{{ route('logout') }}">
+    <meta name="logout-url" content="{{ route('admin.logout') }}">
     <meta name="auto-extend" content="{{ config('session.auto_extend', 'true') }}">
     @endauth
 
@@ -290,7 +290,7 @@
                                     </a>
                                 </div>
                                 <div class="border-t border-slate-100 pt-1.5">
-                                    <form method="POST" action="{{ route('logout') }}">
+                                    <form method="POST" action="{{ route('admin.logout') }}" id="logout-form">
                                         @csrf
                                         <button type="submit"
                                             class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
@@ -407,7 +407,7 @@
                         // Create form and submit to handle POST request
                         const form = document.createElement('form');
                         form.method = 'POST';
-                        form.action = "{{ route('logout') }}";
+                        form.action = "{{ route('admin.logout') }}";
                         form.style.display = 'none';
 
                         const csrf = document.createElement('input');

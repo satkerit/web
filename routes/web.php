@@ -9,13 +9,13 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 // Authentication Routes (Using Breeze)
 Route::get('/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
-Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout')->middleware('auth');
 
 // Admin Authentication Routes
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login']);
-    Route::post('/logout', [App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name('logout');
+    Route::get('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
+    Route::post('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->middleware('guest');
+    Route::post('/logout', [App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name('logout')->middleware('auth');
 });
 
 // Public Routes

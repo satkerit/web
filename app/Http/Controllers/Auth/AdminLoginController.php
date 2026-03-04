@@ -78,7 +78,7 @@ class AdminLoginController extends Controller
 
             RateLimiter::clear($key);
 
-            return redirect()->intended('/admin/dashboard');
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         RateLimiter::hit($key, 60);
@@ -98,6 +98,6 @@ class AdminLoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('admin.login')->with('success', 'Anda telah berhasil keluar.');
     }
 }
