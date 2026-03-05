@@ -180,7 +180,7 @@
 
                 {{-- Down Payment --}}
                 <x-admin.card title="Down Payment (DP)">
-                    <div class="space-y-4" x-data="{ dpEnabled: {{ old('dp_enabled', $config?->dp_enabled ?? false) ? 'true' : 'false' }} }">
+                    <div class="space-y-4" x-data='{ dpEnabled: @js(old("dp_enabled", $config?->dp_enabled ?? false)) }'>
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-slate-900">Aktifkan Input DP</p>

@@ -47,7 +47,7 @@
                 </div>
             </x-admin.card>
 
-            <x-admin.card title="Lokasi" x-data="mapPicker()" x-init="init(@js(old('latitude', $office->latitude ?? '')), @js(old('longitude', $office->longitude ?? '')))">
+            <x-admin.card title="Lokasi" x-data='mapPicker({ lat: @js(old("latitude", $office->latitude ?? "")), lng: @js(old("longitude", $office->longitude ?? "")) })'>
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>

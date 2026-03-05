@@ -19,12 +19,12 @@
     }
 @endphp
 
-<div x-data="imagePicker({
-    inputId: '{{ $inputId }}',
-    initialPreview: '{{ $previewUrl }}',
-    hasExistingImage: {{ $hasExistingImage ? 'true' : 'false' }},
-    deleteFieldName: '{{ $deleteFieldName }}',
-})" class="group">
+<div x-data='imagePicker({
+    inputId: @js($inputId),
+    initialPreview: @js($previewUrl),
+    hasExistingImage: @js($hasExistingImage),
+    deleteFieldName: @js($deleteFieldName)
+})' class="group">
     @if($label)
         <label class="block text-sm font-semibold text-slate-700 mb-1.5 ml-0.5">
             {{ $label }}

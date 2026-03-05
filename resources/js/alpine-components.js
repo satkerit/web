@@ -432,17 +432,15 @@ window.reportForm = function (initialPostingMode = "auto") {
     };
 };
 
-window.mapPicker = function () {
+window.mapPicker = function (config = {}) {
+    console.log("[Alpine] mapPicker init with:", config);
     return {
-        mapLat: "",
-        mapLng: "",
-        init(initialLatitude, initialLongitude) {
-            console.log("[Alpine] mapPicker init with:", {
-                initialLatitude,
-                initialLongitude,
-            });
-            this.mapLat = initialLatitude || "";
-            this.mapLng = initialLongitude || "";
+        mapLat: config.lat || "",
+        mapLng: config.lng || "",
+
+        init() {
+            // This will be called automatically by Alpine
+            console.log("[Alpine] mapPicker component initialized");
         },
 
         get hasCoordinates() {
