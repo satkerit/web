@@ -433,9 +433,13 @@ window.reportForm = function (initialPostingMode = "auto") {
 };
 
 window.mapPicker = function (initialLatitude = "", initialLongitude = "") {
+    console.log("[Alpine] mapPicker init:", {
+        initialLatitude,
+        initialLongitude,
+    });
     return {
-        mapLat: initialLatitude,
-        mapLng: initialLongitude,
+        mapLat: initialLatitude || "",
+        mapLng: initialLongitude || "",
 
         get hasCoordinates() {
             const latNum = parseFloat(this.mapLat);
