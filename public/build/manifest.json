@@ -85,7 +85,7 @@
     ]
   },
   "resources/css/admin.css": {
-    "file": "assets/css/admin-Cf5-kyF4.css",
+    "file": "assets/css/admin-8lYiE7-f.css",
     "src": "resources/css/admin.css",
     "isEntry": true,
     "name": "admin",
@@ -94,7 +94,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/css/app-DgCUlgUE.css",
+    "file": "assets/css/app-D19tRnpt.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -148,7 +148,7 @@
     ]
   },
   "resources/js/alpine-components.js": {
-    "file": "assets/js/alpine-components-BMBHzrAD.js",
+    "file": "assets/js/alpine-components-BktcN5N6.js",
     "name": "alpine-components",
     "src": "resources/js/alpine-components.js",
     "isEntry": true
