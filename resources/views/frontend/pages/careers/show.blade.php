@@ -2,7 +2,7 @@
     <x-slot:title>{{ $career->title }} - Karir {{ config('app.name') }}</x-slot:title>
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 py-12 md:py-16">
+    <section class="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 py-12 md:py-16 overflow-hidden">
         <div class="absolute inset-0 bg-black/20"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div class="max-w-4xl">

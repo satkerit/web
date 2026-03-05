@@ -3,7 +3,7 @@
 
     <!-- Hero -->
     <section class="relative pt-32 pb-20 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-emerald-700 via-teal-600 to-emerald-800">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
             <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>'); background-size: 50px;"></div>
         </div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
