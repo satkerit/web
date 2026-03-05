@@ -434,13 +434,13 @@ window.reportForm = function (initialPostingMode = "auto") {
 
 window.mapPicker = function (initialLatitude = "", initialLongitude = "") {
     return {
-        latitude: initialLatitude,
-        longitude: initialLongitude,
+        lat: initialLatitude,
+        lng: initialLongitude,
 
         get hasCoordinates() {
-            const lat = parseFloat(this.latitude);
-            const lng = parseFloat(this.longitude);
-            return !Number.isNaN(lat) && !Number.isNaN(lng);
+            const latNum = parseFloat(this.lat);
+            const lngNum = parseFloat(this.lng);
+            return !Number.isNaN(latNum) && !Number.isNaN(lngNum);
         },
 
         get mapUrl() {
@@ -448,7 +448,7 @@ window.mapPicker = function (initialLatitude = "", initialLongitude = "") {
                 return "";
             }
             return `https://www.google.com/maps?q=${encodeURIComponent(
-                `${this.latitude},${this.longitude}`,
+                `${this.lat},${this.lng}`,
             )}&z=15&output=embed`;
         },
 
@@ -457,7 +457,7 @@ window.mapPicker = function (initialLatitude = "", initialLongitude = "") {
                 return "https://www.google.com/maps";
             }
             return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-                `${this.latitude},${this.longitude}`,
+                `${this.lat},${this.lng}`,
             )}`;
         },
 
