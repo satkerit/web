@@ -432,14 +432,18 @@ window.reportForm = function (initialPostingMode = "auto") {
     };
 };
 
-window.mapPicker = function (initialLatitude = "", initialLongitude = "") {
-    console.log("[Alpine] mapPicker init:", {
-        initialLatitude,
-        initialLongitude,
-    });
+window.mapPicker = function () {
     return {
-        mapLat: initialLatitude || "",
-        mapLng: initialLongitude || "",
+        mapLat: "",
+        mapLng: "",
+        init(initialLatitude, initialLongitude) {
+            console.log("[Alpine] mapPicker init with:", {
+                initialLatitude,
+                initialLongitude,
+            });
+            this.mapLat = initialLatitude || "";
+            this.mapLng = initialLongitude || "";
+        },
 
         get hasCoordinates() {
             const latNum = parseFloat(this.mapLat);
