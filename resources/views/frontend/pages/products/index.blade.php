@@ -33,9 +33,6 @@
                     <a href="{{ route('products.deposito-syariah') }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request()->routeIs('products.deposito-syariah') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-600 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-emerald-600' }}">
                         Deposito Syariah
                     </a>
-                    <a href="{{ route('products.kas-keliling') }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request()->routeIs('products.kas-keliling') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-600 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-emerald-600' }}">
-                        Kas Keliling
-                    </a>
                 </div>
             </div>
 

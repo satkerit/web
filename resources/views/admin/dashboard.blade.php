@@ -153,8 +153,8 @@
                 @forelse(\App\Models\News::latest()->take(5)->get() as $news)
                     <div class="px-6 py-4 flex items-center gap-4 hover:bg-slate-50/50 transition-colors">
                         @if($news->featured_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($news->featured_image))
-                            <img src="{{ \App\Helpers\StorageHelper::url($news->featured_image) }}" 
-                                 alt="{{ $news->title }}" 
+                            <img src="{{ \App\Helpers\StorageHelper::url($news->featured_image) }}"
+                                 alt="{{ $news->title }}"
                                  class="w-12 h-12 rounded-lg object-cover ring-1 ring-slate-200"
                                  onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-12 h-12 rounded-lg bg-slate-50 ring-1 ring-slate-200 flex items-center justify-center flex-shrink-0\'><svg class=\'w-6 h-6 text-slate-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'/></svg></div>';">
                         @else
@@ -276,15 +276,19 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    const ctx = document.getElementById('visitorChart').getContext('2d');
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('visitorChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: @json($visitorStats['labels']),
+            labels: @js($visitorStats['labels']),
             datasets: [
                 {
                     label: 'Total Kunjungan',
-                    data: @json($visitorStats['totalVisits']),
+                    data: @js($visitorStats['totalVisits']),
                     borderColor: 'rgb(59, 130, 246)',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     fill: true,
@@ -298,7 +302,7 @@
                 },
                 {
                     label: 'Pengunjung Unik',
-                    data: @json($visitorStats['uniqueVisitors']),
+                    data: @js($visitorStats['uniqueVisitors']),
                     borderColor: 'rgb(16, 185, 129)',
                     backgroundColor: 'rgba(16, 185, 129, 0.1)',
                     fill: true,
@@ -363,5 +367,6 @@
             }
         }
     });
+});
 </script>
 @endpush

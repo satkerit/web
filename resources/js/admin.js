@@ -1,9 +1,11 @@
-/**
- * Admin Panel Application - Optimized
- * Separate bundle for admin panel with lazy loading
- */
+// Admin Panel Application - Optimized
+// Note: Alpine components are now registered in alpine-components.js
+// This file handles jQuery plugins, SweetAlert, and other admin functionality
 
 import "./bootstrap";
+
+// Import Alpine.js bundle first to ensure it's available
+import "./alpine-bundle";
 
 // jQuery & Summernote (Required for WYSIWYG Editor)
 import $ from "jquery";
@@ -50,460 +52,442 @@ $(document).ready(function () {
             var title = $(this).val();
             var slug = title
                 .toLowerCase()
-                .replace(/[^\w ]+/g, "")
-                .replace(/ +/g, "-");
+                .replace(/[^a-z0-9\s-]/g, "")
+                .replace(/\s+/g, "-")
+                .replace(/-+/g, "-")
+                .trim();
             $("#slug").val(slug);
         });
     }
 
-    // Featured Image Preview
-    if ($('#featured_image_input').length > 0) {
-        $('#featured_image_input').change(function() {
-            let reader = new FileReader();
-            reader.onload = (e) => {
-                $('#featured-preview').attr('src', e.target.result);
-                $('#featured-image-preview-container').removeClass('hidden');
+    // Image Preview
+    $(".image-preview").on("change", ".custom-file-input", function () {
+        var file = this.files[0];
+        var $preview = $(this).closest(".image-preview").find(".preview");
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $preview.attr("src", e.target.result).show();
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Delete confirmation
+    $(document).on("click", ".btn-delete", function (e) {
+        e.preventDefault();
+        var form = $(this).closest("form");
+        var title = $(this).data("title") || "Apakah Anda yakin?";
+        var text =
+            $(this).data("text") ||
+            "Data yang dihapus tidak dapat dikembalikan!";
+        var confirmText = $(this).data("confirm") || "Ya, hapus!";
+        var cancelText = $(this).data("cancel") || "Batal";
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: confirmText,
+            cancelButtonText: cancelText,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
             }
-            if(this.files && this.files[0]) {
-                reader.readAsDataURL(this.files[0]);
-            }
+        });
+    });
+
+    // DataTable default options
+    if ($.fn.DataTable) {
+        $.extend(true, $.fn.dataTable.defaults, {
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/id.json",
+            },
+            responsive: true,
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+            pageLength: 10,
         });
     }
 
-    // Gallery Images Preview
-    if ($('#slide_images_input').length > 0) {
-        $('#slide_images_input').change(function() {
-            let container = $('#gallery-preview');
-            container.empty();
-            if(this.files) {
-                [...this.files].forEach(file => {
-                    let reader = new FileReader();
-                    reader.onload = (e) => {
-                        let html = `
-                            <div class="relative group">
-                                <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200 shadow-sm">
-                            </div>
-                        `;
-                        container.append(html);
-                    }
-                    reader.readAsDataURL(file);
-                });
-            }
+    // Initialize DataTable if exists
+    if ($(".datatable").length > 0) {
+        $(".datatable").DataTable();
+    }
+
+    // Select2 initialization
+    if ($.fn.select2) {
+        $(".select2").select2({
+            theme: "bootstrap-5",
+            width: "100%",
         });
     }
-});
 
-// Alpine.js - Core functionality (handled by Livewire)
-// import Alpine from "alpinejs"; // Removed to avoid conflict with Livewire's Alpine
-import collapse from "@alpinejs/collapse";
-
-// Wait for Livewire to be ready, then register components
-document.addEventListener("livewire:init", () => {
-    // Only register components if Alpine exists and not started
-    if (window.Alpine && !window.Alpine._started) {
-        window.Alpine.plugin(collapse);
-        registerAlpineComponents();
-        window.Alpine._started = true;
+    // Tooltip initialization
+    if ($('[data-bs-toggle="tooltip"]').length > 0) {
+        $('[data-bs-toggle="tooltip"]').tooltip();
     }
-});
 
-function registerAlpineComponents() {
-    // Register adminLayout component globally
-    window.Alpine.data("adminLayout", () => ({
-        sidebarOpen: false,
-        isMobile: false,
+    // Popover initialization
+    if ($('[data-bs-toggle="popover"]').length > 0) {
+        $('[data-bs-toggle="popover"]').popover();
+    }
 
-        init() {
-            this.checkMobile();
-            window.addEventListener("resize", this.handleResize.bind(this), {
-                passive: true,
+    // Sidebar toggle for mobile
+    $(".sidebar-toggle").on("click", function (e) {
+        e.preventDefault();
+        $("body").toggleClass("sidebar-open");
+    });
+
+    // Close sidebar when clicking outside on mobile
+    $(document).on("click", ".sidebar-overlay", function () {
+        $("body").removeClass("sidebar-open");
+    });
+
+    // Auto-hide alerts
+    $(".alert-auto-hide").each(function () {
+        var $alert = $(this);
+        var delay = $alert.data("delay") || 5000;
+        setTimeout(function () {
+            $alert.fadeOut("slow", function () {
+                $(this).remove();
             });
+        }, delay);
+    });
 
-            this.$watch("sidebarOpen", (value) => {
-                if (this.isMobile) {
-                    document.body.style.overflow = value ? "hidden" : "";
-                }
+    // Confirm form submission
+    $(".btn-confirm").on("click", function (e) {
+        e.preventDefault();
+        var form = $(this).closest("form");
+        var title = $(this).data("title") || "Konfirmasi";
+        var text = $(this).data("text") || "Apakah Anda yakin?";
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#198754",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+
+    // Status toggle
+    $(".btn-status").on("click", function (e) {
+        e.preventDefault();
+        var btn = $(this);
+        var form = btn.closest("form");
+        var title = btn.data("title") || "Ubah Status";
+        var text =
+            btn.data("text") || "Apakah Anda yakin ingin mengubah status?";
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#0d6efd",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+
+    // Bulk actions
+    $(".btn-bulk").on("click", function (e) {
+        e.preventDefault();
+        var btn = $(this);
+        var form = btn.closest("form");
+        var action = btn.data("action");
+        var title = btn.data("title") || "Konfirmasi";
+        var text = btn.data("text") || "Apakah Anda yakin?";
+
+        // Check if any checkbox is selected
+        if ($(".bulk-checkbox:checked").length === 0) {
+            Swal.fire({
+                title: "Peringatan",
+                text: "Pilih minimal satu data",
+                icon: "warning",
+                confirmButtonColor: "#198754",
             });
-        },
+            return;
+        }
 
-        checkMobile() {
-            this.isMobile = window.innerWidth < 1024;
-        },
-
-        handleResize() {
-            const wasMobile = this.isMobile;
-            this.checkMobile();
-
-            if (wasMobile && !this.isMobile) {
-                this.sidebarOpen = false;
-                document.body.style.overflow = "";
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#198754",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.attr("action", action);
+                form.submit();
             }
-        },
+        });
+    });
 
-        openSidebar() {
-            this.sidebarOpen = true;
-        },
+    // Select all checkboxes
+    $(".select-all").on("change", function () {
+        var isChecked = $(this).is(":checked");
+        $(this)
+            .closest("table")
+            .find(".bulk-checkbox")
+            .prop("checked", isChecked);
+    });
 
-        closeSidebar() {
-            this.sidebarOpen = false;
-        },
+    // Checkbox selection counter
+    $(".bulk-checkbox").on("change", function () {
+        var count = $(".bulk-checkbox:checked").length;
+        $(".selected-count").text(count + " data dipilih");
+    });
 
-        closeSidebarOnMobile() {
-            if (this.isMobile) {
-                this.sidebarOpen = false;
+    // Image gallery lightbox
+    $(".lightbox").on("click", function (e) {
+        e.preventDefault();
+        var src = $(this).attr("href") || $(this).attr("src");
+        Swal.fire({
+            imageUrl: src,
+            imageAlt: "Gambar",
+            showConfirmButton: false,
+            showCloseButton: true,
+            width: "90%",
+        });
+    });
+
+    // Character counter for textarea
+    $(".char-counter").on("input", function () {
+        var max = $(this).data("max") || 500;
+        var current = $(this).val().length;
+        var $counter = $(this).siblings(".counter");
+        $counter.text(current + "/" + max);
+    });
+
+    // Toggle password visibility
+    $(".toggle-password").on("click", function () {
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") === "password") {
+            input.attr("type", "text");
+            $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+        } else {
+            input.attr("type", "password");
+            $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+        }
+    });
+
+    // Initialize password toggles
+    $('[toggle="#password"]').each(function () {
+        $(this).on("click", function () {
+            var input = $($(this).attr("toggle"));
+            var icon = $(this).find("i");
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+                icon.removeClass("fa-eye").addClass("fa-eye-slash");
+            } else {
+                input.attr("type", "password");
+                icon.removeClass("fa-eye-slash").addClass("fa-eye");
             }
-        },
-    }));
+        });
+    });
 
-    // Register productForm component for product pages
-    window.Alpine.data("productForm", () => ({
-        // Add any form-specific logic here
-    }));
+    // Date picker
+    if ($.fn.datepicker) {
+        $(".datepicker").datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            todayHighlight: true,
+            language: "id",
+        });
+    }
 
-    // Register permissionManager component for role management pages
-    window.Alpine.data("permissionManager", () => ({
-        init() {
-            // Initialize group states on page load
-            document.querySelectorAll("[data-group]").forEach((checkbox) => {
-                const group = checkbox.dataset.group;
-                this.updateGroupState(group);
-            });
-        },
+    // Time picker
+    if ($.fn.timepicker) {
+        $(".timepicker").timepicker({
+            showMeridian: false,
+            minuteStep: 5,
+        });
+    }
 
-        selectAll() {
-            document
-                .querySelectorAll(".permission-checkbox")
-                .forEach((cb) => (cb.checked = true));
-            this.updateAllGroupStates();
-        },
+    // DateTime picker
+    if ($.fn.datetimepicker) {
+        $(".datetimepicker").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            autoclose: true,
+            todayHighlight: true,
+            language: "id",
+        });
+    }
 
-        deselectAll() {
-            document
-                .querySelectorAll(".permission-checkbox")
-                .forEach((cb) => (cb.checked = false));
-            this.updateAllGroupStates();
-        },
+    // Color picker
+    if ($.fn.colorpicker) {
+        $(".colorpicker").colorpicker({
+            format: "hex",
+        });
+    }
 
-        toggleGroup(group) {
-            const checkboxes = document.querySelectorAll(
-                `[data-group="${group}"]`,
-            );
-            const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
-            checkboxes.forEach((cb) => (cb.checked = !allChecked));
-        },
+    // Input mask
+    if ($.fn.inputmask) {
+        $(".date-mask").inputmask("yyyy-mm-dd");
+        $(".phone-mask").inputmask("+62 999-9999-9999");
+        $(".currency-mask").inputmask({
+            alias: "currency",
+            prefix: "Rp ",
+            digits: 0,
+            groupSeparator: ".",
+            radixPoint: ",",
+            autoGroup: true,
+            removeMaskOnSubmit: true,
+        });
+    }
 
-        isGroupChecked(group) {
-            const checkboxes = document.querySelectorAll(
-                `[data-group="${group}"]`,
-            );
-            return Array.from(checkboxes).every((cb) => cb.checked);
-        },
+    // AJAX form submission
+    $(".ajax-form").on("submit", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var submitBtn = form.find('button[type="submit"]');
+        var originalText = submitBtn.html();
 
-        isGroupIndeterminate(group) {
-            const checkboxes = document.querySelectorAll(
-                `[data-group="${group}"]`,
-            );
-            const checked = Array.from(checkboxes).filter(
-                (cb) => cb.checked,
-            ).length;
-            return checked > 0 && checked < checkboxes.length;
-        },
+        submitBtn
+            .prop("disabled", true)
+            .html('<i class="fas fa-spinner fa-spin"></i> Menyimpan...');
 
-        getGroupCount(group) {
-            const checkboxes = document.querySelectorAll(
-                `[data-group="${group}"]`,
-            );
-            const checked = Array.from(checkboxes).filter(
-                (cb) => cb.checked,
-            ).length;
-            return `${checked}/${checkboxes.length}`;
-        },
-
-        updateGroupState(group) {
-            // Force Alpine to re-evaluate
-            this.$nextTick(() => {});
-        },
-
-        updateAllGroupStates() {
-            const groups = [
-                ...new Set(
-                    Array.from(document.querySelectorAll("[data-group]")).map(
-                        (cb) => cb.dataset.group,
-                    ),
-                ),
-            ];
-            groups.forEach((group) => this.updateGroupState(group));
-        },
-    }));
-
-    // Register repeaterField component for dynamic form fields
-    window.Alpine.data("repeaterField", (initialData = []) => ({
-        items: [],
-
-        init() {
-            const data = Array.isArray(initialData) ? initialData : [];
-            this.items = data.map((value) => ({
-                value: value || "",
-                id:
-                    crypto.randomUUID?.() ||
-                    Math.random().toString(36).slice(2, 11),
-            }));
-
-            if (this.items.length === 0) {
-                this.addItem();
-            }
-        },
-
-        addItem() {
-            this.items.push({
-                value: "",
-                id:
-                    crypto.randomUUID?.() ||
-                    Math.random().toString(36).slice(2, 11),
-            });
-        },
-
-        removeItem(index) {
-            if (this.items.length > 1) {
-                this.items.splice(index, 1);
-            }
-        },
-    }));
-
-    // Register imagePicker component for image upload with storage browser
-    window.Alpine.data("imagePicker", (config = {}) => ({
-        showModal: false,
-        loading: false,
-        currentPath: "",
-        items: [],
-        breadcrumbs: [],
-        selectedItem: null,
-        previewUrl: config.initialPreview || "",
-        fromStorage: false,
-        storagePath: "",
-        inputId: config.inputId || "",
-        hasExistingImage: config.hasExistingImage || false,
-        shouldDelete: false,
-
-        handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.previewUrl = URL.createObjectURL(file);
-                this.fromStorage = false;
-                this.storagePath = "";
-                this.shouldDelete = false; // Reset delete flag when new file is selected
-            }
-        },
-
-        clearSelection() {
-            this.previewUrl = "";
-            this.fromStorage = false;
-            this.storagePath = "";
-            // Set shouldDelete to true if there was an existing image
-            if (this.hasExistingImage) {
-                this.shouldDelete = true;
-            }
-            if (this.inputId) {
-                const input = document.getElementById(this.inputId);
-                if (input) input.value = "";
-            }
-        },
-
-        openStorageModal() {
-            this.showModal = true;
-            this.selectedItem = null;
-            this.loadDirectory("");
-        },
-
-        closeStorageModal() {
-            this.showModal = false;
-        },
-
-        async loadDirectory(path) {
-            this.loading = true;
-            this.currentPath = path;
-            this.updateBreadcrumbs(path);
-
-            try {
-                const csrfToken = document.querySelector(
-                    'meta[name="csrf-token"]',
-                )?.content;
-                const response = await fetch(
-                    `/admin/storage/api/browse?path=${encodeURIComponent(path)}`,
-                    {
-                        credentials: "same-origin",
-                        headers: {
-                            Accept: "application/json",
-                            "X-Requested-With": "XMLHttpRequest",
-                            "X-CSRF-TOKEN": csrfToken || "",
-                        },
-                    },
-                );
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    let errorMessage = `HTTP ${response.status}`;
-
-                    try {
-                        const errorData = JSON.parse(errorText);
-                        errorMessage =
-                            errorData.message ||
-                            errorData.error ||
-                            errorMessage;
-                    } catch (e) {
-                        // If not JSON, use status text
-                        errorMessage = response.statusText || errorMessage;
-                    }
-
-                    throw new Error(errorMessage);
-                }
-
-                const data = await response.json();
-                this.items = data.items.filter(
-                    (item) => item.type === "folder" || item.isImage,
-                );
-            } catch (error) {
-                console.error("Error loading directory:", error);
-
-                // Show user-friendly error message
-                const errorMessage = error.message || "Unknown error occurred";
-                if (
-                    errorMessage.includes("401") ||
-                    errorMessage.includes("Authentication")
-                ) {
-                    alert(
-                        "Session expired. Please refresh the page and login again.",
-                    );
-                } else if (
-                    errorMessage.includes("403") ||
-                    errorMessage.includes("Access")
-                ) {
-                    alert(
-                        "Access denied. You do not have permission to browse storage.",
-                    );
-                } else if (
-                    errorMessage.includes("404") ||
-                    errorMessage.includes("not found")
-                ) {
-                    alert("Directory not found: " + path);
+        $.ajax({
+            url: form.attr("action"),
+            type: form.attr("method"),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Berhasil",
+                        text: response.message || "Data berhasil disimpan",
+                        icon: "success",
+                        confirmButtonColor: "#198754",
+                    }).then(() => {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    });
                 } else {
-                    alert("Error loading directory: " + errorMessage);
+                    Swal.fire({
+                        title: "Gagal",
+                        text: response.message || "Terjadi kesalahan",
+                        icon: "error",
+                        confirmButtonColor: "#dc3545",
+                    });
+                }
+            },
+            error: function (xhr) {
+                var errors = xhr.responseJSON?.errors;
+                var message = "Terjadi kesalahan";
+
+                if (errors) {
+                    message = Object.values(errors)[0][0];
+                } else if (xhr.responseJSON?.message) {
+                    message = xhr.responseJSON.message;
                 }
 
-                this.items = [];
+                Swal.fire({
+                    title: "Gagal",
+                    text: message,
+                    icon: "error",
+                    confirmButtonColor: "#dc3545",
+                });
+            },
+            complete: function () {
+                submitBtn.prop("disabled", false).html(originalText);
+            },
+        });
+    });
+
+    // AJAX link click
+    $(".ajax-link").on("click", function (e) {
+        e.preventDefault();
+        var url = $(this).attr("href");
+        var title = $(this).data("title") || "Konfirmasi";
+        var text = $(this).data("text") || "Apakah Anda yakin?";
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#198754",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
             }
+        });
+    });
 
-            this.loading = false;
-        },
+    // Initialize all tooltips
+    var tooltipTriggerList = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+    );
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
-        navigateTo(path) {
-            this.selectedItem = null;
-            this.loadDirectory(path);
-        },
+    // Initialize all popovers
+    var popoverTriggerList = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle="popover"]'),
+    );
+    popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl);
+    });
+});
 
-        updateBreadcrumbs(path) {
-            if (!path) {
-                this.breadcrumbs = [];
-                return;
-            }
+// Lazy load SweetAlert only when needed
+let swalLoaded = false;
+let swalPromise = null;
 
-            let currentPath = "";
-            this.breadcrumbs = path.split("/").map((part) => {
-                currentPath = currentPath ? `${currentPath}/${part}` : part;
-                return { name: part, path: currentPath };
-            });
-        },
+async function loadSwal() {
+    if (swalLoaded) {
+        return window.Swal;
+    }
 
-        selectImage(item) {
-            if (item.type === "file" && item.isImage) {
-                this.selectedItem = item;
-            }
-        },
+    if (swalPromise) {
+        return swalPromise;
+    }
 
-        confirmSelection() {
-            if (this.selectedItem) {
-                this.previewUrl = this.selectedItem.url;
-                this.fromStorage = true;
-                this.storagePath = this.selectedItem.path;
-                this.shouldDelete = false; // Reset delete flag when selecting from storage
-                if (this.inputId) {
-                    const input = document.getElementById(this.inputId);
-                    if (input) input.value = "";
-                }
-                this.closeStorageModal();
-            }
-        },
-    }));
+    swalPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src =
+            "https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js";
+        script.onload = () => {
+            swalLoaded = true;
+            resolve(window.Swal);
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
 
-    // Register reportForm component for report pages
-    window.Alpine.data("reportForm", (initialPostingMode = "auto") => ({
-        postingMode: initialPostingMode,
-    }));
-
-    // Register auctionForm component for auction pages
-    window.Alpine.data("auctionForm", (initialStatus = "upcoming") => ({
-        status: initialStatus,
-    }));
-
-    // Register mapPicker component for office location picker
-    window.Alpine.data("mapPicker", (initialLat = "", initialLng = "") => ({
-        latitude: initialLat,
-        longitude: initialLng,
-
-        get hasCoordinates() {
-            return (
-                this.latitude &&
-                this.longitude &&
-                !isNaN(parseFloat(this.latitude)) &&
-                !isNaN(parseFloat(this.longitude))
-            );
-        },
-
-        get mapUrl() {
-            if (!this.hasCoordinates) return "";
-            const lat = parseFloat(this.latitude);
-            const lng = parseFloat(this.longitude);
-            return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sid!2sid!4v1234567890!5m2!1sid!2sid&markers=color:red%7C${lat},${lng}`;
-        },
-
-        get directionsUrl() {
-            if (!this.hasCoordinates) return "#";
-            return `https://www.google.com/maps/dir/?api=1&destination=${this.latitude},${this.longitude}`;
-        },
-
-        updateMap() {
-            // Map updates automatically via Alpine.js reactivity
-        },
-    }));
+    return swalPromise;
 }
 
-// Lazy load SweetAlert2 only when needed
-let SwalPromise = null;
-const loadSwal = () => {
-    if (!SwalPromise) {
-        SwalPromise = import("sweetalert2").then(async (module) => {
-            // Load CSS
-            await import("sweetalert2/dist/sweetalert2.min.css");
-            window.Swal = module.default;
-            return module.default;
-        });
-    }
-    return SwalPromise;
-};
-
-window.Swal = new Proxy(
-    {},
-    {
-        get(_, prop) {
-            return async (...args) => {
-                const Swal = await loadSwal();
-                return Swal[prop](...args);
-            };
-        },
-    },
-);
-
-// Expose loadSwal for direct usage
+// Expose loadSwal globally
 window.loadSwal = loadSwal;
 
 // Initialize Idle Timeout Handler for authenticated users

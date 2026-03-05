@@ -53,6 +53,14 @@ class BoardMemberController extends Controller
             'order_position' => 'nullable|integer|min:0',
         ]);
 
+        // Filter empty values from arrays
+        if (isset($validated['education'])) {
+            $validated['education'] = array_values(array_filter($validated['education'], fn($v) => !empty(trim($v))));
+        }
+        if (isset($validated['experience'])) {
+            $validated['experience'] = array_values(array_filter($validated['experience'], fn($v) => !empty(trim($v))));
+        }
+
         $validated['photo'] = $this->handleImageUpload($request, 'photo', 'board-members');
 
         BoardMember::create($validated);
@@ -80,6 +88,14 @@ class BoardMemberController extends Controller
             'experience' => 'nullable|array',
             'order_position' => 'nullable|integer|min:0',
         ]);
+
+        // Filter empty values from arrays
+        if (isset($validated['education'])) {
+            $validated['education'] = array_values(array_filter($validated['education'], fn($v) => !empty(trim($v))));
+        }
+        if (isset($validated['experience'])) {
+            $validated['experience'] = array_values(array_filter($validated['experience'], fn($v) => !empty(trim($v))));
+        }
 
         $validated['photo'] = $this->handleImageUpload($request, 'photo', 'board-members', $boardMember->photo);
 

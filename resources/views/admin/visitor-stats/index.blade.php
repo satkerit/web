@@ -272,8 +272,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('visitsChart').getContext('2d');
-    const data = @json($visitsPerDay);
+    const canvas = document.getElementById('visitsChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const data = @js($visitsPerDay);
 
     new Chart(ctx, {
         type: 'line',

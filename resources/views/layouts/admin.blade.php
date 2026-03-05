@@ -36,7 +36,8 @@
 
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    @vite(['resources/css/admin.css', 'resources/js/alpine-components.js', 'resources/js/admin.js', 'resources/js/idle-timeout.js'])
+
+    @vite(['resources/css/admin.css', 'resources/js/alpine-bundle.js', 'resources/js/alpine-components.js', 'resources/js/alpine-init.js', 'resources/js/admin.js', 'resources/js/idle-timeout.js', 'resources/js/admin-layout-patch.js'])
     @stack('styles')
     <style>
         [x-cloak] {
@@ -390,41 +391,9 @@
             animation: fadeInUp 0.4s ease-out forwards;
         }
     </style>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Patch IdleTimeoutHandler to use POST for logout
-            // This is necessary because the default implementation uses GET, which causes MethodNotAllowedHttpException
-            const patchIdleTimeout = setInterval(() => {
-                if (window.idleTimeoutHandler) {
-                    clearInterval(patchIdleTimeout);
-
-                    window.idleTimeoutHandler.performLogout = function() {
-                        if (this.checkInterval) clearInterval(this.checkInterval);
-                        if (this.countdownInterval) clearInterval(this.countdownInterval);
-
-                        this.showNotification("Sesi berakhir karena tidak ada aktivitas", "warning");
-
-                        // Create form and submit to handle POST request
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = "{{ route('admin.logout') }}";
-                        form.style.display = 'none';
-
-                        const csrf = document.createElement('input');
-                        csrf.type = 'hidden';
-                        csrf.name = '_token';
-                        csrf.value = "{{ csrf_token() }}";
-                        form.appendChild(csrf);
-
-                        document.body.appendChild(form);
-
-                        setTimeout(() => {
-                            form.submit();
-                        }, 2000);
-                    };
-                }
-            }, 500);
-        });
+        window.adminLogoutUrl = "{{ route('admin.logout') }}";
     </script>
     @stack('scripts')
 </body>

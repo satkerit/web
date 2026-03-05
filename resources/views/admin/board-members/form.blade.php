@@ -42,32 +42,56 @@
             </x-admin.card>
 
             <x-admin.card title="Pendidikan">
-                <div class="space-y-4" x-data="{ items: {{ json_encode(old('education', $boardMember->education ?? [''])) }} }">
+                <div x-data="arrayItems({{ Js::from(old('education', $boardMember->education ?? [])) }})" class="space-y-4">
                     <template x-for="(item, index) in items" :key="index">
                         <div class="flex gap-2">
-                            <input type="text" :name="'education['+index+']'" x-model="items[index]"
-                                   class="flex-1 rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Contoh: S1 Ekonomi - Universitas Indonesia">
-                            <button type="button" @click="items.splice(index, 1)" class="p-2 text-red-500 hover:bg-red-50 rounded-lg" x-show="items.length > 1">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            <input type="text"
+                                   :name="'education[' + index + ']'"
+                                   x-model="items[index]"
+                                   class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                                   placeholder="Contoh: S1 Ekonomi - Universitas Indonesia">
+                            <button type="button"
+                                    @click="removeItem(index)"
+                                    x-show="items.length > 1"
+                                    class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
                             </button>
                         </div>
                     </template>
-                    <button type="button" @click="items.push('')" class="text-sm text-blue-600 hover:text-green-700">+ Tambah Pendidikan</button>
+                    <button type="button"
+                            @click="addItem()"
+                            class="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors">
+                        + Tambah Pendidikan
+                    </button>
                 </div>
             </x-admin.card>
 
             <x-admin.card title="Pengalaman">
-                <div class="space-y-4" x-data="{ items: {{ json_encode(old('experience', $boardMember->experience ?? [''])) }} }">
+                <div x-data="arrayItems({{ Js::from(old('experience', $boardMember->experience ?? [])) }})" class="space-y-4">
                     <template x-for="(item, index) in items" :key="index">
                         <div class="flex gap-2">
-                            <input type="text" :name="'experience['+index+']'" x-model="items[index]"
-                                   class="flex-1 rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Contoh: Direktur PT ABC (2015-2020)">
-                            <button type="button" @click="items.splice(index, 1)" class="p-2 text-red-500 hover:bg-red-50 rounded-lg" x-show="items.length > 1">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            <input type="text"
+                                   :name="'experience[' + index + ']'"
+                                   x-model="items[index]"
+                                   class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                                   placeholder="Contoh: Direktur PT ABC (2015-2020)">
+                            <button type="button"
+                                    @click="removeItem(index)"
+                                    x-show="items.length > 1"
+                                    class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
                             </button>
                         </div>
                     </template>
-                    <button type="button" @click="items.push('')" class="text-sm text-blue-600 hover:text-green-700">+ Tambah Pengalaman</button>
+                    <button type="button"
+                            @click="addItem()"
+                            class="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors">
+                        + Tambah Pengalaman
+                    </button>
                 </div>
             </x-admin.card>
         </div>

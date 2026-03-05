@@ -29,7 +29,17 @@ class AdminLoginController extends Controller
 
         $answer = $operator === '+' ? $num1 + $num2 : $num1 - $num2;
 
-        session(['admin_login_captcha_answer' => $answer]);
+        // Store captcha answer in session with multiple keys for compatibility
+        session([
+            'login_captcha_answer' => $answer,
+            'admin_login_captcha_answer' => $answer, // Fallback for compatibility
+        ]);
+        
+        \Log::info('CAPTCHA Generated', [
+            'question' => "$num1 $operator $num2 = ?",
+            'answer' => $answer,
+            'session_id' => session()->getId(),
+        ]);
 
         return view('auth.admin-login', [
             'captcha_question' => "$num1 $operator $num2 = ?",
@@ -48,7 +58,26 @@ class AdminLoginController extends Controller
         ]);
 
         // Validate CAPTCHA
-        if ($request->captcha_answer != session('admin_login_captcha_answer')) {
+        $sessionAnswer = session('login_captcha_answer') ?? session('admin_login_captcha_answer');
+        $userAnswer = $request->captcha_answer;
+        
+        \Log::info('CAPTCHA Validation', [
+            'session_answer' => $sessionAnswer,
+            'user_answer' => $userAnswer,
+            'session_answer_type' => gettype($sessionAnswer),
+            'user_answer_type' => gettype($userAnswer),
+            'comparison' => (int)$userAnswer === (int)$sessionAnswer,
+            'session_id' => session()->getId(),
+            'all_session' => session()->all(),
+        ]);
+        
+        if ($sessionAnswer === null) {
+            throw ValidationException::withMessages([
+                'captcha_answer' => ['Sesi CAPTCHA tidak ditemukan. Silakan refresh halaman dan coba lagi.'],
+            ]);
+        }
+        
+        if ((int)$userAnswer !== (int)$sessionAnswer) {
             throw ValidationException::withMessages([
                 'captcha_answer' => ['Jawaban keamanan salah. Silakan coba lagi.'],
             ]);
@@ -77,6 +106,9 @@ class AdminLoginController extends Controller
             }
 
             RateLimiter::clear($key);
+            
+            // Clear CAPTCHA from session after successful login
+            session()->forget('login_captcha_answer');
 
             return redirect()->intended(route('admin.dashboard'));
         }

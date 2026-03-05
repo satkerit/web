@@ -237,8 +237,7 @@
 
     <!-- Leaflet CSS & JS -->
     @push('head')
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    @vite('resources/js/map-utils.js')
     <style>
         .leaflet-popup-content-wrapper { border-radius: 12px; }
         .leaflet-popup-content { margin: 12px 16px; }
@@ -263,61 +262,27 @@
                 },
 
                 initMap() {
-                    const centerLat = {{ $centerLat }};
-                    const centerLng = {{ $centerLng }};
-
-                    this.map = L.map('officeMap').setView([centerLat, centerLng], 10);
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap'
-                    }).addTo(this.map);
-
-                    const typeColors = {
-                        'pusat': '#f59e0b',
-                        'cabang': '#3b82f6',
-                        'kas': '#374151',
-                        'kas_keliling': '#0d9488'
-                    };
-
-                    this.offices.forEach(office => {
-                        if (office.has_coords) {
-                            const color = typeColors[office.type] || '#10b981';
-                            const icon = L.divIcon({
-                                className: 'custom-marker',
-                                html: `<div style="background:${color};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:3px solid white;">
-                                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                </div>`,
-                                iconSize: [32, 32],
-                                iconAnchor: [16, 32]
-                            });
-
-                            const marker = L.marker([office.lat, office.lng], { icon })
-                                .addTo(this.map)
-                                .bindPopup(`
-                                    <div class="min-w-[200px]">
-                                        <span class="inline-block px-2 py-0.5 text-xs font-bold rounded-full text-white mb-2" style="background:${color}">${office.type_label}</span>
-                                        <h3 class="font-bold text-gray-900 text-sm">${office.name}</h3>
-                                        <p class="text-xs text-gray-600 mt-1 leading-normal mb-2">${office.address}</p>
-                                        ${office.phone ? `<p class="text-xs text-emerald-600 font-bold mb-2">${office.phone}</p>` : ''}
-                                        ${office.directions_url ? `<a href="${office.directions_url}" target="_blank" class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors w-full justify-center">
-                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-                                            Petunjuk Arah
-                                        </a>` : ''}
-                                    </div>
-                                `);
-
-                            this.markers[office.id] = marker;
-                        }
-                    });
+                    const points = this.offices.map(o => ({
+                        id: o.id,
+                        name: o.name,
+                        type: o.type_label,
+                        address: o.address,
+                        lat: o.lat,
+                        lng: o.lng,
+                        url: o.directions_url || null
+                    }));
+                    this.mapCtx = window.BPRSMaps?.initSimpleMap?.('officeMap', points, { scrollWheelZoom: false }) || null;
                 },
 
                 selectOffice(id, lat, lng) {
                     this.selectedOffice = id;
-                    if (lat && lng && this.map) {
-                        this.map.setView([lat, lng], 15);
-                        if (this.markers[id]) {
-                            this.markers[id].openPopup();
-                        }
+                    const la = parseFloat(String(lat ?? '').replace(',', '.'));
+                    const lo = parseFloat(String(lng ?? '').replace(',', '.'));
+                    const map = this.mapCtx?.map;
+                    const mk = this.mapCtx?.markersById?.[String(id)];
+                    if (isFinite(la) && isFinite(lo) && map) {
+                        map.setView([la, lo], 15);
+                        if (mk) mk.openPopup();
                     }
                 }
             }));

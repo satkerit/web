@@ -22,6 +22,23 @@
 
     <section class="py-16 -mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mb-8">
+                <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        Peta Jaringan Kantor
+                    </h2>
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full uppercase tracking-wide">OpenStreetMap</span>
+                </div>
+                <div class="relative">
+                    <div id="officesMap" class="w-full h-[420px]"></div>
+                </div>
+            </div>
             <!-- Filter -->
             <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-2 mb-8 border border-gray-100 max-w-4xl mx-auto">
                 <div class="flex flex-wrap justify-center gap-2">
@@ -130,4 +147,42 @@
             @endif
         </div>
     </section>
+
+    @push('head')
+    @vite('resources/js/map-utils.js')
+    <style>
+        #officesMap .leaflet-popup-content-wrapper{border-radius:14px}
+        #officesMap .leaflet-popup-content{margin:10px 14px}
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script>
+        (function () {
+            var tries = 0;
+            function initWhenReady() {
+                var el = document.getElementById('officesMap');
+                if (!el) return;
+                if (!window.BPRSMaps) {
+                    if (tries++ < 20) return setTimeout(initWhenReady, 150);
+                    return;
+                }
+                const data = @js($offices->map(fn($o) => [
+                    'n' => $o->name, 'a' => $o->address, 't' => $o->type_label,
+                    'la' => $o->latitude, 'lo' => $o->longitude, 'u' => route('about.offices.show', $o)
+                ])->values());
+
+                const result = window.BPRSMaps.initSimpleMap('officesMap', data, { scrollWheelZoom: false });
+                if (!result || !result.markers || result.markers.length === 0) {
+                    el.parentElement.parentElement.classList.add('hidden');
+                }
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initWhenReady);
+            } else {
+                initWhenReady();
+            }
+        })();
+    </script>
+    @endpush
 </x-frontend-layout>

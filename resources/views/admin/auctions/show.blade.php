@@ -603,103 +603,111 @@
 
     @push('scripts')
     <script>
-        // Image gallery data
-        const images = @json($auction->images ? array_map(function($image) { return \App\Helpers\StorageHelper::url($image); }, $auction->images) : []);
-        let currentImageIndex = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image gallery data
+            const images = @js($auction->images ? array_map(function($image) { return \App\Helpers\StorageHelper::url($image); }, $auction->images) : []);
+            let currentImageIndex = 0;
 
-        // Tab functionality
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const tabId = this.dataset.tab;
+            // Tab functionality
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
 
-                // Remove active class from all buttons
-                document.querySelectorAll('.tab-button').forEach(btn => {
-                    btn.classList.remove('active', 'border-orange-500', 'text-orange-600');
-                    btn.classList.add('border-transparent', 'text-gray-500');
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active', 'border-orange-500', 'text-orange-600');
+                        btn.classList.add('border-transparent', 'text-gray-500');
+                    });
+
+                    // Add active class to clicked button
+                    this.classList.add('active', 'border-orange-500', 'text-orange-600');
+                    this.classList.remove('border-transparent', 'text-gray-500');
+
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Show selected tab content
+                    document.getElementById(tabId).classList.remove('hidden');
                 });
-
-                // Add active class to clicked button
-                this.classList.add('active', 'border-orange-500', 'text-orange-600');
-                this.classList.remove('border-transparent', 'text-gray-500');
-
-                // Hide all tab contents
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.add('hidden');
-                });
-
-                // Show selected tab content
-                document.getElementById(tabId).classList.remove('hidden');
             });
-        });
 
-        // Set first tab as active
-        document.querySelector('.tab-button[data-tab="property"]').classList.add('border-orange-500', 'text-orange-600');
-        document.querySelector('.tab-button[data-tab="property"]').classList.remove('border-transparent', 'text-gray-500');
-
-        // Image modal functions
-        function openImageModal(index) {
-            if (images.length === 0) return;
-
-            currentImageIndex = index;
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-
-            modalImage.src = images[currentImageIndex];
-            modalImage.alt = `{{ $auction->title }} - Foto ${currentImageIndex + 1}`;
-            modal.classList.remove('hidden');
-
-            // Prevent body scroll
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeImageModal() {
-            const modal = document.getElementById('imageModal');
-            modal.classList.add('hidden');
-
-            // Restore body scroll
-            document.body.style.overflow = 'auto';
-        }
-
-        function nextImage() {
-            if (images.length === 0) return;
-
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-            const modalImage = document.getElementById('modalImage');
-            modalImage.src = images[currentImageIndex];
-            modalImage.alt = `{{ $auction->title }} - Foto ${currentImageIndex + 1}`;
-        }
-
-        function previousImage() {
-            if (images.length === 0) return;
-
-            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-            const modalImage = document.getElementById('modalImage');
-            modalImage.src = images[currentImageIndex];
-            modalImage.alt = `{{ $auction->title }} - Foto ${currentImageIndex + 1}`;
-        }
-
-        // Keyboard navigation for image modal
-        document.addEventListener('keydown', function(e) {
-            const modal = document.getElementById('imageModal');
-            if (!modal.classList.contains('hidden')) {
-                switch(e.key) {
-                    case 'Escape':
-                        closeImageModal();
-                        break;
-                    case 'ArrowLeft':
-                        previousImage();
-                        break;
-                    case 'ArrowRight':
-                        nextImage();
-                        break;
-                }
+            // Set first tab as active
+            const firstTab = document.querySelector('.tab-button[data-tab="property"]');
+            if (firstTab) {
+                firstTab.classList.add('border-orange-500', 'text-orange-600');
+                firstTab.classList.remove('border-transparent', 'text-gray-500');
             }
-        });
 
-        // Close modal when clicking outside the image
-        document.getElementById('imageModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeImageModal();
+            // Image modal functions
+            window.openImageModal = function(index) {
+                if (images.length === 0) return;
+
+                currentImageIndex = index;
+                const modal = document.getElementById('imageModal');
+                const modalImage = document.getElementById('modalImage');
+
+                modalImage.src = images[currentImageIndex];
+                modalImage.alt = `{{ $auction->title }} - Foto ${currentImageIndex + 1}`;
+                modal.classList.remove('hidden');
+
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+            }
+
+            window.closeImageModal = function() {
+                const modal = document.getElementById('imageModal');
+                modal.classList.add('hidden');
+
+                // Restore body scroll
+                document.body.style.overflow = 'auto';
+            }
+
+            window.nextImage = function() {
+                if (images.length === 0) return;
+
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                const modalImage = document.getElementById('modalImage');
+                modalImage.src = images[currentImageIndex];
+                modalImage.alt = `{{ $auction->title }} - Foto ${currentImageIndex + 1}`;
+            }
+
+            window.previousImage = function() {
+                if (images.length === 0) return;
+
+                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                const modalImage = document.getElementById('modalImage');
+                modalImage.src = images[currentImageIndex];
+                modalImage.alt = `{{ $auction->title }} - Foto ${currentImageIndex + 1}`;
+            }
+
+            // Keyboard navigation for image modal
+            document.addEventListener('keydown', function(e) {
+                const modal = document.getElementById('imageModal');
+                if (modal && !modal.classList.contains('hidden')) {
+                    switch(e.key) {
+                        case 'Escape':
+                            closeImageModal();
+                            break;
+                        case 'ArrowLeft':
+                            previousImage();
+                            break;
+                        case 'ArrowRight':
+                            nextImage();
+                            break;
+                    }
+                }
+            });
+
+            // Close modal when clicking outside the image
+            const modalEl = document.getElementById('imageModal');
+            if (modalEl) {
+                modalEl.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeImageModal();
+                    }
+                });
             }
         });
     </script>
