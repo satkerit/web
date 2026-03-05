@@ -2,23 +2,19 @@
     <x-slot:title>Berita & Artikel - {{ config('app.name') }}</x-slot:title>
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 py-20 md:py-24 overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
-
-        <!-- Animated Gradient Orbs -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute top-0 left-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-blob"></div>
-            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+    <section class="relative pt-32 pb-20 overflow-hidden">
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.03&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+            <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
         </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
-            <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-emerald-50 text-sm font-medium mb-6 ring-1 ring-white/20">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-teal-100 text-sm font-medium mb-6 animate-slide-up">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                 Informasi Terkini
             </span>
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">Berita & Artikel</h1>
-            <p class="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto leading-relaxed">Dapatkan wawasan terbaru seputar ekonomi syariah, kegiatan BPRS Bangka Belitung, dan tips keuangan bermanfaat.</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tight animate-slide-up delay-100">Berita & Artikel</h1>
+            <p class="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed animate-slide-up delay-200">Dapatkan wawasan terbaru seputar ekonomi syariah, kegiatan BPRS Bangka Belitung, dan tips keuangan bermanfaat.</p>
         </div>
     </section>
 
