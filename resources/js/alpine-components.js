@@ -426,7 +426,6 @@ window.permissionManager = function () {
         },
     };
 };
-
 window.reportForm = function (initialPostingMode = "auto") {
     return {
         postingMode: initialPostingMode || "auto",
