@@ -42,7 +42,7 @@
             </x-admin.card>
 
             <x-admin.card title="Pendidikan">
-                <div x-data='arrayItems(@js(old("education", $boardMember->education ?? [])))' class="space-y-4">
+                <div x-data="arrayItems(@js(old('education', $boardMember->education ?? [])))" class="space-y-4">
                     <template x-for="(item, index) in items" :key="index">
                         <div class="flex gap-2">
                             <input type="text"
@@ -69,7 +69,7 @@
             </x-admin.card>
 
             <x-admin.card title="Pengalaman">
-                <div x-data='arrayItems(@js(old("experience", $boardMember->experience ?? [])))' class="space-y-4">
+                <div x-data="arrayItems(@js(old('experience', $boardMember->experience ?? [])))" class="space-y-4">
                     <template x-for="(item, index) in items" :key="index">
                         <div class="flex gap-2">
                             <input type="text"

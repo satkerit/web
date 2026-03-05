@@ -3,12 +3,12 @@
 @section('title', 'Backup Database')
 
 @section('content')
-<div class="space-y-6" x-data='backupManager({ 
-    createUrl: @js(route("admin.database-backup.create")), 
-    cleanupUrl: @js(route("admin.database-backup.cleanup")), 
-    restoreUrlTemplate: @js(route("admin.database-backup.restore", ":filename")), 
-    deleteUrlTemplate: @js(route("admin.database-backup.delete", ":filename")) 
-})' x-init="init()">
+<div class="space-y-6" x-data="backupManager({
+    createUrl: @js(route('admin.database-backup.create')),
+    cleanupUrl: @js(route('admin.database-backup.cleanup')),
+    restoreUrlTemplate: @js(route('admin.database-backup.restore', ':filename')),
+    deleteUrlTemplate: @js(route('admin.database-backup.delete', ':filename'))
+})" x-init="init()">
     {{-- Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
