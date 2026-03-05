@@ -54,9 +54,7 @@
                     <a href="{{ route('about.offices', ['type' => 'kas']) }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request('type') === 'kas' ? 'bg-gray-700 text-white shadow-lg shadow-gray-700/30 ring-2 ring-gray-700 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-700' }}">
                         Kantor Kas
                     </a>
-                    <a href="{{ route('about.offices', ['type' => 'kas_keliling']) }}" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 {{ request('type') === 'kas_keliling' ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30 ring-2 ring-teal-600 ring-offset-2' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-teal-600' }}">
-                        Kas Keliling
-                    </a>
+
                 </div>
             </div>
 

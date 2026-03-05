@@ -169,6 +169,8 @@ class CacheService
             $query = Office::where('is_active', true);
             if ($type) {
                 $query->where('type', $type);
+            } else {
+                $query->where('type', '!=', 'kas_keliling');
             }
             return $query->orderBy('type')->orderBy('name')->get();
         });
@@ -217,11 +219,13 @@ class CacheService
             self::CACHE_MEDIUM,
             fn() =>
             KasKeliling::where('is_active', true)
-                ->with(['schedules' => function ($query) {
-                    $query->where('is_active', true)
-                        ->where('schedule_date', '>=', now()->toDateString())
-                        ->orderBy('schedule_date');
-                }])
+                ->with([
+                    'schedules' => function ($query) {
+                        $query->where('is_active', true)
+                            ->where('schedule_date', '>=', now()->toDateString())
+                            ->orderBy('schedule_date');
+                    }
+                ])
                 ->get()
         );
     }
