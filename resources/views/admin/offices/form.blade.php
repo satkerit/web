@@ -53,14 +53,14 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
                             <input type="number" name="latitude" id="latitude" x-model="latitude" @input="updateMap()"
-                                   value="{{ old('latitude', $office->latitude ?? '') }}" step="any" placeholder="-2.123456"
+                                   step="any" placeholder="-2.123456"
                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <p class="text-xs text-gray-500 mt-1">Contoh: -2.131629</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
                             <input type="number" name="longitude" id="longitude" x-model="longitude" @input="updateMap()"
-                                   value="{{ old('longitude', $office->longitude ?? '') }}" step="any" placeholder="106.123456"
+                                   step="any" placeholder="106.123456"
                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                             <p class="text-xs text-gray-500 mt-1">Contoh: 106.116504</p>
                         </div>
