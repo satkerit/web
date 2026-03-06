@@ -137,7 +137,7 @@
     @endpush
 
     <!-- Hero Section -->
-    <section class="relative pt-32 pb-24 overflow-hidden">
+    <section class="relative pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24 overflow-hidden">
         <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
             <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.03&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
             <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
@@ -148,33 +148,33 @@
         <div class="absolute inset-0 overflow-hidden pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-12">
-                <div class="inline-flex items-center px-6 py-3 glass-auction rounded-full text-sm font-semibold mb-6 scale-in-auction">
-                    <svg class="w-5 h-5 mr-3 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="text-center mb-8 sm:mb-12">
+                <div class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 glass-auction rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6 scale-in-auction">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-emerald-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
                     <span class="text-emerald-50">Lelang Agunan Terpercaya</span>
                 </div>
-                <h1 class="text-4xl md:text-6xl font-bold mb-6 slide-up-auction tracking-tight text-white">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 slide-up-auction tracking-tight text-white px-4">
                     Temukan Agunan <span class="text-emerald-300 auction-pulse">Impian Anda</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-emerald-100 mb-8 max-w-3xl mx-auto slide-up-auction" style="animation-delay: 0.2s;">
+                <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-emerald-100 mb-6 sm:mb-8 max-w-3xl mx-auto slide-up-auction px-4" style="animation-delay: 0.2s;">
                     Dapatkan agunan berkualitas dengan harga terbaik melalui lelang resmi dan terpercaya
                 </p>
 
                 <!-- Search Form -->
-                <div class="max-w-5xl mx-auto slide-up-auction" style="animation-delay: 0.4s;">
-                    <form method="GET" class="auction-search-form rounded-2xl p-6 md:p-8 shadow-2xl">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                            <div class="space-y-2 text-left">
-                                <label class="block text-sm font-bold tracking-tight text-gray-700">Cari Agunan</label>
+                <div class="max-w-5xl mx-auto slide-up-auction px-4" style="animation-delay: 0.4s;">
+                    <form method="GET" class="auction-search-form rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                            <div class="space-y-1.5 sm:space-y-2 text-left">
+                                <label class="block text-xs sm:text-sm font-bold tracking-tight text-gray-700">Cari Agunan</label>
                                 <input type="text" name="search" value="{{ request('search') }}"
                                        placeholder="Lokasi, jenis agunan..."
-                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all">
+                                       class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all touch-manipulation">
                             </div>
-                            <div class="space-y-2 text-left">
-                                <label class="block text-sm font-semibold text-gray-700">Jenis Aset</label>
-                                <select name="asset_type" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all">
+                            <div class="space-y-1.5 sm:space-y-2 text-left">
+                                <label class="block text-xs sm:text-sm font-semibold text-gray-700">Jenis Aset</label>
+                                <select name="asset_type" class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all touch-manipulation">
                                     <option value="">Semua Jenis</option>
                                     @foreach($assetTypes as $value => $label)
                                         <option value="{{ $value }}" {{ request('asset_type') === $value ? 'selected' : '' }}>
@@ -183,9 +183,9 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="space-y-2 text-left">
-                                <label class="block text-sm font-semibold text-gray-700">Kota</label>
-                                <select name="city" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all">
+                            <div class="space-y-1.5 sm:space-y-2 text-left">
+                                <label class="block text-xs sm:text-sm font-semibold text-gray-700">Kota</label>
+                                <select name="city" class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-200 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 transition-all touch-manipulation">
                                     <option value="">Semua Kota</option>
                                     @foreach($cities as $city)
                                         <option value="{{ $city }}" {{ request('city') === $city ? 'selected' : '' }}>
@@ -194,10 +194,10 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="space-y-2">
-                                <label class="block text-sm font-semibold text-gray-700">&nbsp;</label>
-                                <button type="submit" class="w-full btn-auction-primary py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-bold tracking-tight">
-                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="space-y-1.5 sm:space-y-2">
+                                <label class="block text-xs sm:text-sm font-semibold text-gray-700">&nbsp;</label>
+                                <button type="submit" class="w-full min-h-[44px] btn-auction-primary py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-bold tracking-tight touch-manipulation active:scale-95">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 inline mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                     </svg>
                                     Cari Lelang
