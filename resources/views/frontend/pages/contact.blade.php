@@ -27,19 +27,19 @@
     @endphp
 
     <!-- Hero Section -->
-    <section class="relative py-20 md:py-24 overflow-hidden">
+    <section class="relative pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24 overflow-hidden">
         <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
             <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
             <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
             <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
         </div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white text-sm font-semibold mb-8 border border-white/20 shadow-lg">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span class="inline-flex items-center px-3 sm:px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white text-xs sm:text-sm font-semibold mb-6 sm:mb-8 border border-white/20 shadow-lg">
+                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 Kontak Kami
             </span>
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight drop-shadow-sm">Hubungi Kami</h1>
-            <p class="text-xl text-emerald-50 max-w-2xl mx-auto leading-relaxed">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 tracking-tight drop-shadow-sm">Hubungi Kami</h1>
+            <p class="text-base sm:text-lg md:text-xl text-emerald-50 max-w-2xl mx-auto leading-relaxed px-4">
                 Kami siap membantu Anda dengan layanan perbankan syariah terbaik. Temukan kantor terdekat atau kirim pesan kepada kami.
             </p>
         </div>
@@ -49,48 +49,49 @@
     <section class="py-12 md:py-20 bg-gray-50 -mt-10 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Quick Contact Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <a href="tel:{{ $companyInfo->phone ?? '' }}" class="bg-white rounded-2xl p-6 shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-300 group border border-gray-100 hover:border-emerald-200 hover:-translate-y-1">
-                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+                <a href="tel:{{ $companyInfo->phone ?? '' }}" class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-300 group border border-gray-100 hover:border-emerald-200 hover:-translate-y-1 touch-manipulation active:scale-95 min-h-[120px] flex flex-col justify-center">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-100 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform flex-shrink-0">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                     </div>
-                    <div class="text-center md:text-left">
-                        <p class="text-sm font-medium text-gray-500 mb-1">Telepon</p>
-                        <p class="text-lg font-bold text-gray-900 truncate group-hover:text-emerald-700 transition-colors">{{ $companyInfo->phone ?? '-' }}</p>
-                    </div>
-                </a>
-
-                <a href="mailto:{{ $companyInfo->email ?? '' }}" class="bg-white rounded-2xl p-6 shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-300 group border border-gray-100 hover:border-emerald-200 hover:-translate-y-1">
-                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                    </div>
-                    <div class="text-center md:text-left">
-                        <p class="text-sm font-medium text-gray-500 mb-1">Email</p>
-                        <p class="text-lg font-bold text-gray-900 truncate group-hover:text-emerald-700 transition-colors">{{ $companyInfo->email ?? '-' }}</p>
+                    <div class="text-center sm:text-left">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500 mb-1">Telepon</p>
+                        <p class="text-base sm:text-lg font-bold text-gray-900 truncate group-hover:text-emerald-700 transition-colors">{{ $companyInfo->phone ?? '-' }}</p>
                     </div>
                 </a>
 
-                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-gray-200/50 border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4">
-                        <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <a href="mailto:{{ $companyInfo->email ?? '' }}" class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-300 group border border-gray-100 hover:border-emerald-200 hover:-translate-y-1 touch-manipulation active:scale-95 min-h-[120px] flex flex-col justify-center">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-100 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform flex-shrink-0">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     </div>
-                    <div class="text-center md:text-left">
-                        <p class="text-sm font-medium text-gray-500 mb-1">Jam Operasional</p>
-                        <p class="text-lg font-bold text-gray-900">Sen-Jum 08:00-16:00</p>
+                    <div class="text-center sm:text-left">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500 mb-1">Email</p>
+                        <p class="text-base sm:text-lg font-bold text-gray-900 truncate group-hover:text-emerald-700 transition-colors">{{ $companyInfo->email ?? '-' }}</p>
+                    </div>
+                </a>
+
+                <div class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl shadow-gray-200/50 border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 min-h-[120px] flex flex-col justify-center sm:col-span-2 lg:col-span-1">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-100 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 flex-shrink-0">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500 mb-1">Jam Operasional</p>
+                        <p class="text-base sm:text-lg font-bold text-gray-900">Sen-Jum 08:00-16:00</p>
                     </div>
                 </div>
             </div>
 
             <!-- Map & Offices Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12" id="mapContainer" x-data="officeMapData()" x-init="init()">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12" id="mapContainer" x-data="officeMapData()" x-init="init()">
                 <!-- Interactive Map -->
-                <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl shadow-gray-200/50 overflow-hidden border border-gray-100 h-[500px] flex flex-col hover:shadow-2xl transition-shadow duration-300">
-                    <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                        <h2 class="font-bold text-gray-900 flex items-center text-lg tracking-tight">
-                            <svg class="w-6 h-6 mr-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            Peta Lokasi Kantor
+                <div class="lg:col-span-2 bg-white rounded-xl sm:rounded-2xl shadow-xl shadow-gray-200/50 overflow-hidden border border-gray-100 h-[400px] sm:h-[500px] flex flex-col hover:shadow-2xl transition-shadow duration-300">
+                    <div class="p-4 sm:p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                        <h2 class="font-bold text-gray-900 flex items-center text-base sm:text-lg tracking-tight">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span class="hidden sm:inline">Peta Lokasi Kantor</span>
+                            <span class="sm:hidden">Peta Kantor</span>
                         </h2>
-                        <span class="inline-flex items-center px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200">
+                        <span class="inline-flex items-center px-2 sm:px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200">
                             {{ $officesWithCoords->count() }} Lokasi
                         </span>
                     </div>
@@ -98,27 +99,27 @@
                 </div>
 
                 <!-- Office List Sidebar -->
-                <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col h-[500px] overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-                    <div class="p-6 border-b border-gray-100 bg-gray-50/50">
-                        <h2 class="font-bold text-gray-900 mb-4 text-lg">Daftar Kantor</h2>
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col h-[400px] sm:h-[500px] overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                    <div class="p-4 sm:p-6 border-b border-gray-100 bg-gray-50/50">
+                        <h2 class="font-bold text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">Daftar Kantor</h2>
                         <!-- Filter Tabs -->
                         <div class="flex flex-wrap gap-2">
-                            <button @click="filterType = 'all'" :class="filterType === 'all' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200">
+                            <button @click="filterType = 'all'" :class="filterType === 'all' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-3 sm:px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 touch-manipulation active:scale-95 min-h-[44px] flex items-center">
                                 Semua
                             </button>
-                            <button @click="filterType = 'pusat'" :class="filterType === 'pusat' ? 'bg-amber-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200">
+                            <button @click="filterType = 'pusat'" :class="filterType === 'pusat' ? 'bg-amber-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-3 sm:px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 touch-manipulation active:scale-95 min-h-[44px] flex items-center">
                                 Pusat
                             </button>
-                            <button @click="filterType = 'cabang'" :class="filterType === 'cabang' ? 'bg-blue-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200">
+                            <button @click="filterType = 'cabang'" :class="filterType === 'cabang' ? 'bg-blue-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-3 sm:px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 touch-manipulation active:scale-95 min-h-[44px] flex items-center">
                                 Cabang
                             </button>
-                            <button @click="filterType = 'kas'" :class="filterType === 'kas' ? 'bg-gray-700 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200">
+                            <button @click="filterType = 'kas'" :class="filterType === 'kas' ? 'bg-gray-700 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'" class="px-3 sm:px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 touch-manipulation active:scale-95 min-h-[44px] flex items-center">
                                 Kas
                             </button>
                         </div>
                     </div>
                     <!-- Office List -->
-                    <div class="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+                    <div class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2 sm:space-y-3 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
                         @foreach($offices as $office)
                         <div x-show="filterType === 'all' || filterType === '{{ $office->type }}'"
                              x-transition:enter="transition ease-out duration-300"
@@ -126,8 +127,8 @@
                              x-transition:enter-end="opacity-100 translate-y-0"
                              @click="selectOffice({{ $office->id }}, {{ $office->latitude ?? 'null' }}, {{ $office->longitude ?? 'null' }})"
                              :class="selectedOffice === {{ $office->id }} ? 'ring-2 ring-emerald-500 bg-emerald-50 border-emerald-200' : 'hover:bg-gray-50 border-gray-100'"
-                             class="p-4 rounded-xl border cursor-pointer transition-all duration-200 group">
-                            <div class="flex items-start gap-4">
+                             class="p-3 sm:p-4 rounded-lg sm:rounded-xl border cursor-pointer transition-all duration-200 group touch-manipulation active:scale-98 min-h-[80px]">
+                            <div class="flex items-start gap-3 sm:gap-4">
                                 @php
                                     $typeColors = [
                                         'pusat' => 'bg-amber-500',
@@ -136,11 +137,11 @@
                                         'kas_keliling' => 'bg-teal-600'
                                     ];
                                 @endphp
-                                <div class="w-10 h-10 {{ $typeColors[$office->type] ?? 'bg-gray-500' }} rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm text-white font-bold group-hover:scale-110 transition-transform">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 {{ $typeColors[$office->type] ?? 'bg-gray-500' }} rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm text-white font-bold text-sm sm:text-base group-hover:scale-110 transition-transform">
                                     {{ substr($office->type_label, 0, 1) }}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h3 class="text-sm font-bold text-gray-900 truncate">{{ $office->name }}</h3>
+                                    <h3 class="text-xs sm:text-sm font-bold text-gray-900 truncate">{{ $office->name }}</h3>
                                     <p class="text-xs text-gray-500 line-clamp-2 mt-1 leading-relaxed">{{ $office->address }}</p>
                                     @if($office->phone)
                                     <p class="text-xs text-emerald-600 mt-2 font-medium flex items-center">
@@ -162,11 +163,11 @@
             </div>
 
             <!-- Contact Form Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                 <!-- Company Info -->
-                <div class="space-y-8">
-                    <div class="bg-white rounded-2xl p-8 shadow-xl shadow-gray-200/50 border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-                        <h3 class="font-bold text-gray-900 mb-6 flex items-center text-lg">
+                <div class="space-y-6 sm:space-y-8">
+                    <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+                        <h3 class="font-bold text-gray-900 mb-4 sm:mb-6 flex items-center text-base sm:text-lg">
                             <span class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mr-3">
                                 <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                             </span>
@@ -223,10 +224,10 @@
 
                 <!-- Contact Form -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white rounded-2xl p-6 md:p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
-                        <div class="mb-6">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Kirim Pesan</h2>
-                            <p class="text-gray-600">Isi form di bawah ini dan tim kami akan segera menghubungi Anda dalam waktu 24 jam kerja.</p>
+                    <div class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
+                        <div class="mb-4 sm:mb-6">
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Kirim Pesan</h2>
+                            <p class="text-sm sm:text-base text-gray-600">Isi form di bawah ini dan tim kami akan segera menghubungi Anda dalam waktu 24 jam kerja.</p>
                         </div>
                         <livewire:frontend.contact.form />
                     </div>

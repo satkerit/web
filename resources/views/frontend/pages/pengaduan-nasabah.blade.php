@@ -2,37 +2,37 @@
     <x-slot name="title">Pengaduan Nasabah - {{ $companyInfo->name ?? 'BPR Syariah' }}</x-slot>
 
     <!-- Hero -->
-    <section class="relative pt-32 pb-20 overflow-hidden">
+    <section class="relative pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 overflow-hidden">
         <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
             <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.03&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
             <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
             <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
         </div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-teal-100 text-sm font-medium mb-6 animate-slide-up">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <span class="inline-flex items-center px-3 sm:px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-teal-100 text-xs sm:text-sm font-medium mb-4 sm:mb-6 animate-slide-up">
+                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 Layanan Pengaduan
             </span>
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 animate-slide-up delay-100 tracking-tight">Pengaduan Nasabah</h1>
-            <p class="text-xl text-white/80 max-w-2xl mx-auto animate-slide-up delay-200">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 animate-slide-up delay-100 tracking-tight">Pengaduan Nasabah</h1>
+            <p class="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto animate-slide-up delay-200 px-4">
                 Kami berkomitmen untuk memberikan pelayanan terbaik. Sampaikan kritik, saran, atau pengaduan Anda untuk perbaikan layanan kami.
             </p>
         </div>
     </section>
 
     <!-- Ticket Search Section -->
-    <section class="py-12 -mt-10 relative z-10">
+    <section class="py-8 sm:py-12 -mt-10 relative z-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 border border-gray-100" x-intersect="$el.classList.add('animate-slide-up')">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-xl shadow-gray-200/50 border border-gray-100" x-intersect="$el.classList.add('animate-slide-up')">
+                <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30 flex-shrink-0">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-bold text-gray-900">Lacak Pengaduan</h2>
-                        <p class="text-gray-500 text-sm">Masukkan nomor tiket untuk melihat status pengaduan Anda</p>
+                        <h2 class="text-lg sm:text-xl font-bold text-gray-900">Lacak Pengaduan</h2>
+                        <p class="text-gray-500 text-xs sm:text-sm">Masukkan nomor tiket untuk melihat status pengaduan Anda</p>
                     </div>
                 </div>
                 <livewire:frontend.ticket-search type="customer" />
@@ -40,9 +40,9 @@
         </div>
     </section>
 
-    <section class="py-20 -mt-6">
+    <section class="py-12 sm:py-16 md:py-20 -mt-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-3 gap-8">
+            <div class="grid lg:grid-cols-3 gap-6 sm:gap-8">
                 <!-- Info Sidebar -->
                 <div class="lg:col-span-1 space-y-6">
                     <!-- About -->
@@ -128,9 +128,9 @@
 
                 <!-- Form -->
                 <div class="lg:col-span-2" x-intersect="$el.classList.add('animate-slide-in-right')">
-                    <div class="bg-white rounded-2xl p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Form Pengaduan</h2>
-                        <p class="text-gray-600 mb-8">Isi form di bawah ini untuk menyampaikan pengaduan Anda</p>
+                    <div class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Form Pengaduan</h2>
+                        <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Isi form di bawah ini untuk menyampaikan pengaduan Anda</p>
                         <livewire:frontend.customer-complaint.form />
                     </div>
                 </div>

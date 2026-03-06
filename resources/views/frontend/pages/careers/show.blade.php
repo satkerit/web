@@ -2,7 +2,7 @@
     <x-slot:title>{{ $career->title }} - Karir {{ config('app.name') }}</x-slot:title>
 
     <!-- Hero Section -->
-    <section class="relative pt-32 pb-16 overflow-hidden">
+    <section class="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16 overflow-hidden">
         <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
             <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.03&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
             <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
@@ -10,41 +10,41 @@
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div class="max-w-4xl">
-                <a href="{{ route('careers.index') }}" class="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('careers.index') }}" class="inline-flex items-center gap-1.5 sm:gap-2 text-white/80 hover:text-white mb-3 sm:mb-4 transition-colors text-sm sm:text-base min-h-[44px] sm:min-h-0 -my-2 sm:my-0 touch-manipulation active:scale-95">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
                     Kembali ke Daftar Karir
                 </a>
-                <div class="flex flex-wrap items-center gap-3 mb-4">
-                    <span class="px-4 py-1.5 text-sm font-semibold rounded-full bg-white/20 text-white">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                    <span class="px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full bg-white/20 text-white">
                         {{ $career->employment_type_label }}
                     </span>
                     @if($career->deadline)
                         @if($career->isExpired())
-                            <span class="px-4 py-1.5 text-sm font-semibold rounded-full bg-red-500/80 text-white">
+                            <span class="px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full bg-red-500/80 text-white">
                                 Lowongan Ditutup
                             </span>
                         @else
-                            <span class="px-4 py-1.5 text-sm font-semibold rounded-full bg-yellow-500/80 text-white">
+                            <span class="px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-full bg-yellow-500/80 text-white">
                                 Deadline: {{ $career->deadline->format('d M Y') }}
                             </span>
                         @endif
                     @endif
                 </div>
-                <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">{{ $career->title }}</h1>
-                <div class="flex flex-wrap items-center gap-6 text-white/90">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">{{ $career->title }}</h1>
+                <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-sm sm:text-base text-white/90">
                     @if($career->department)
-                        <span class="flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span class="flex items-center gap-1.5 sm:gap-2">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                             </svg>
                             {{ $career->department }}
                         </span>
                     @endif
                     @if($career->location)
-                        <span class="flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span class="flex items-center gap-1.5 sm:gap-2">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
@@ -52,8 +52,8 @@
                         </span>
                     @endif
                     @if($career->salary_range)
-                        <span class="flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span class="flex items-center gap-1.5 sm:gap-2">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             {{ $career->salary_range }}

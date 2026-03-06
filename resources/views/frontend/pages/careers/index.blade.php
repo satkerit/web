@@ -2,15 +2,15 @@
     <x-slot:title>Karir - {{ config('app.name') }}</x-slot:title>
 
     <!-- Hero Section -->
-    <section class="relative py-20 md:py-24 overflow-hidden">
+    <section class="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div class="absolute inset-0" style="background: linear-gradient(135deg, #0f766e 0%, #3bdacb 50%, #0d9488 100%);">
             <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
             <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl"></div>
             <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Karir</h1>
-            <p class="text-xl text-emerald-50 max-w-2xl mx-auto">Bergabunglah bersama kami dan kembangkan karir Anda di industri perbankan syariah yang terus bertumbuh.</p>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 tracking-tight">Karir</h1>
+            <p class="text-base sm:text-lg md:text-xl text-emerald-50 max-w-2xl mx-auto px-4">Bergabunglah bersama kami dan kembangkan karir Anda di industri perbankan syariah yang terus bertumbuh.</p>
         </div>
     </section>
 
@@ -18,53 +18,53 @@
     <section class="py-12 md:py-20 bg-slate-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Filters -->
-            <div class="mb-10 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 border border-gray-100 transform -mt-24 relative z-10">
-                <form method="GET" class="flex flex-col gap-6">
+            <div class="mb-8 sm:mb-10 bg-white rounded-xl sm:rounded-2xl shadow-xl shadow-gray-200/50 p-4 sm:p-6 md:p-8 border border-gray-100 transform -mt-20 sm:-mt-24 relative z-10">
+                <form method="GET" class="flex flex-col gap-4 sm:gap-6">
                     <div class="flex-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pencarian</label>
+                        <label class="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Pencarian</label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
+                                <svg class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                 </svg>
                             </div>
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari posisi, departemen, atau kata kunci..." class="block w-full pl-11 pr-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-sm">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari posisi..." class="block w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border-gray-200 rounded-lg sm:rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 touch-manipulation">
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tipe Pekerjaan</label>
+                            <label class="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Tipe Pekerjaan</label>
                             <div class="relative">
-                                <select name="type" class="block w-full pl-4 pr-10 py-3 bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-sm appearance-none">
+                                <select name="type" class="block w-full pl-3 sm:pl-4 pr-8 sm:pr-10 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border-gray-200 rounded-lg sm:rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 appearance-none touch-manipulation">
                                     <option value="">Semua Tipe</option>
                                     <option value="full_time" {{ request('type') == 'full_time' ? 'selected' : '' }}>Full Time</option>
                                     <option value="part_time" {{ request('type') == 'part_time' ? 'selected' : '' }}>Part Time</option>
                                     <option value="contract" {{ request('type') == 'contract' ? 'selected' : '' }}>Kontrak</option>
                                     <option value="internship" {{ request('type') == 'internship' ? 'selected' : '' }}>Magang</option>
                                 </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 sm:px-4 text-gray-500">
+                                    <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </div>
                             </div>
                         </div>
                         @if($departments->count() > 0)
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Departemen</label>
+                            <label class="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Departemen</label>
                             <div class="relative">
-                                <select name="department" class="block w-full pl-4 pr-10 py-3 bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-sm appearance-none">
+                                <select name="department" class="block w-full pl-3 sm:pl-4 pr-8 sm:pr-10 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border-gray-200 rounded-lg sm:rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 appearance-none touch-manipulation">
                                     <option value="">Semua Departemen</option>
                                     @foreach($departments as $dept)
                                         <option value="{{ $dept }}" {{ request('department') == $dept ? 'selected' : '' }}>{{ $dept }}</option>
                                     @endforeach
                                 </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 sm:px-4 text-gray-500">
+                                    <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </div>
                             </div>
                         </div>
                         @endif
-                        <div class="flex items-end">
-                            <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-600/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                        <div class="flex items-end sm:col-span-2 lg:col-span-1">
+                            <button type="submit" class="w-full min-h-[44px] px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-lg sm:rounded-xl hover:shadow-lg hover:shadow-emerald-600/30 transition-all duration-300 transform hover:-translate-y-0.5 touch-manipulation active:scale-95">
                                 Terapkan Filter
                             </button>
                         </div>
