@@ -117,6 +117,65 @@
         [x-data] {
             contain: layout style paint;
         }
+
+        /* Prayer Time Widget Styles */
+        .prayer-widget-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+
+        .prayer-widget-container::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .prayer-widget-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .prayer-widget-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .prayer-widget-container::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Pulse animation for FAB */
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .animate-ping {
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        /* Prevent body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* Responsive adjustments for prayer widget */
+        @media (max-width: 1279px) {
+            .prayer-widget-container {
+                max-width: 100vw;
+            }
+        }
+
+        /* Ensure main content doesn't go under widget on large screens */
+        @media (min-width: 1280px) {
+            main {
+                margin-right: 0;
+            }
+        }
+
+        /* Alpine.js cloak */
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 
     @stack('head')
@@ -131,6 +190,60 @@
     <main>
         {{ $slot }}
     </main>
+
+    <!-- Fixed Prayer Time Widget - Right Side -->
+    <div x-data="{ 
+        show: true, 
+        minimized: false,
+        topPosition: 96,
+        init() {
+            console.log('Prayer widget sidebar initialized');
+            if (window.innerWidth < 1024) {
+                this.minimized = true;
+            }
+            this.calculateTopPosition();
+            window.addEventListener('resize', () => {
+                this.calculateTopPosition();
+                this.minimized = window.innerWidth < 1024;
+            });
+        },
+        calculateTopPosition() {
+            const header = document.querySelector('header');
+            if (header) {
+                this.topPosition = header.offsetHeight + 16;
+            }
+        }
+    }" 
+    class="fixed right-0 z-40 transition-all duration-300"
+    :class="minimized ? 'translate-x-[calc(100%-3rem)]' : 'translate-x-0'"
+    :style="'top: ' + topPosition + 'px; max-height: calc(100vh - ' + topPosition + 'px - 2rem);'">
+        
+        <!-- Toggle Button -->
+        <button 
+            @click="minimized = !minimized"
+            class="absolute left-0 top-4 -translate-x-full bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-2 rounded-l-lg shadow-lg hover:shadow-xl transition-all z-10"
+            :class="minimized ? 'opacity-100' : 'opacity-0 hover:opacity-100'"
+            title="Toggle Prayer Times">
+            <svg class="w-5 h-5 transition-transform duration-300" :class="minimized ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+
+        <!-- Close Button (Mobile) -->
+        <button 
+            @click="show = false; $el.closest('[x-data]').style.display = 'none'"
+            class="lg:hidden absolute right-2 top-2 bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-lg transition-all z-10"
+            title="Close">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <!-- Widget Container -->
+        <div class="w-80 sm:w-96 overflow-y-auto prayer-widget-container shadow-2xl" style="max-height: inherit;">
+            <x-prayer-time-widget />
+        </div>
+    </div>
 
     <!-- Footer -->
     @include('frontend.partials.footer', ['company' => $company])

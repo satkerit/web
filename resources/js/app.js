@@ -18,6 +18,45 @@ document.addEventListener("alpine:init", () => {
     // Register plugins
     window.Alpine.plugin(collapse);
 
+    // Register Prayer Widget Sidebar Controller
+    window.Alpine.data("prayerWidgetSidebar", () => ({
+        show: true,
+        minimized: false,
+        topPosition: 96, // Default top position (24 * 4 = 96px)
+
+        init() {
+            // Auto minimize on mobile
+            if (window.innerWidth < 1024) {
+                this.minimized = true;
+            }
+
+            // Calculate top position based on header height
+            this.calculateTopPosition();
+
+            // Recalculate on resize
+            window.addEventListener("resize", () => {
+                this.calculateTopPosition();
+                if (window.innerWidth < 1024) {
+                    this.minimized = true;
+                } else {
+                    this.minimized = false;
+                }
+            });
+
+            // Recalculate on scroll (for sticky header)
+            window.addEventListener("scroll", () => {
+                this.calculateTopPosition();
+            });
+        },
+
+        calculateTopPosition() {
+            const header = document.querySelector("header");
+            if (header) {
+                this.topPosition = header.offsetHeight + 16; // Header height + 1rem padding
+            }
+        },
+    }));
+
     // Register Prayer Time Widget
     window.Alpine.data("prayerTimeWidget", () => ({
         loading: true,
