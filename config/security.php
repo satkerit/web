@@ -1,137 +1,115 @@
 <?php
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Rate Limiting Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Configure rate limits for different types of requests to prevent
-    | DDoS attacks and abuse.
-    |
-    */
-
-    'rate_limits' => [
-        // General web requests
-        'web' => [
-            'max_attempts' => env('RATE_LIMIT_WEB', 120),
-            'decay_minutes' => 1,
-        ],
-
-        // Admin panel requests
-        'admin' => [
-            'max_attempts' => env('RATE_LIMIT_ADMIN', 100),
-            'decay_minutes' => 1,
-        ],
-
-        // Login attempts
-        'login' => [
-            'max_attempts' => env('RATE_LIMIT_LOGIN', 5),
-            'decay_minutes' => 5,
-        ],
-
-        // Password reset requests
-        'password_reset' => [
-            'max_attempts' => env('RATE_LIMIT_PASSWORD_RESET', 3),
-            'decay_minutes' => 1,
-        ],
-
-        // File downloads
-        'download' => [
-            'max_attempts' => env('RATE_LIMIT_DOWNLOAD', 30),
-            'decay_minutes' => 1,
-        ],
-
-        // API requests (if any)
-        'api' => [
-            'max_attempts' => env('RATE_LIMIT_API', 60),
-            'decay_minutes' => 1,
-        ],
-    ],
 
     /*
     |--------------------------------------------------------------------------
-    | IP Blocking Configuration
+    | Password Policy Configuration
     |--------------------------------------------------------------------------
     |
-    | Configure automatic IP blocking for suspicious activity.
-    |
-    */
-
-    'ip_blocking' => [
-        // Number of suspicious requests before blocking
-        'threshold' => env('SECURITY_BLOCK_THRESHOLD', 10),
-
-        // How long to block IP (in hours)
-        'block_duration' => env('SECURITY_BLOCK_DURATION', 24),
-
-        // Whitelist IPs that should never be blocked
-        'whitelist' => array_filter(explode(',', env('SECURITY_IP_WHITELIST', ''))),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Idle Timeout Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Configure idle timeout for user sessions. Users will be automatically
-    | logged out after being inactive for the specified time.
-    |
-    */
-
-    'idle_timeout' => env('SESSION_IDLE_TIMEOUT', 30), // minutes
-
-    /*
-    |--------------------------------------------------------------------------
-    | Security Headers
-    |--------------------------------------------------------------------------
-    |
-    | Configure security headers for responses.
-    |
-    */
-
-    'headers' => [
-        'x_frame_options' => 'SAMEORIGIN',
-        'x_content_type_options' => 'nosniff',
-        'x_xss_protection' => '1; mode=block',
-        'referrer_policy' => 'strict-origin-when-cross-origin',
-        'permissions_policy' => 'geolocation=(), microphone=(), camera=()',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Session Security
-    |--------------------------------------------------------------------------
-    |
-    | Additional session security settings.
-    |
-    */
-
-    'session' => [
-        // Regenerate session ID on login
-        'regenerate_on_login' => true,
-
-        // Maximum session lifetime (minutes)
-        'max_lifetime' => env('SESSION_LIFETIME', 120),
-
-        // Idle timeout (minutes) - logout after inactivity
-        'idle_timeout' => env('SESSION_IDLE_TIMEOUT', 30),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Password Policy
-    |--------------------------------------------------------------------------
-    |
-    | Password requirements for user accounts.
+    | Configure password requirements for user accounts
     |
     */
 
     'password' => [
-        'min_length' => 8,
-        'require_uppercase' => true,
-        'require_lowercase' => true,
-        'require_numbers' => true,
-        'require_special' => false,
+        'min_length' => env('PASSWORD_MIN_LENGTH', 12),
+        'require_uppercase' => env('PASSWORD_REQUIRE_UPPERCASE', true),
+        'require_lowercase' => env('PASSWORD_REQUIRE_LOWERCASE', true),
+        'require_numbers' => env('PASSWORD_REQUIRE_NUMBERS', true),
+        'require_special_chars' => env('PASSWORD_REQUIRE_SPECIAL_CHARS', true),
+        'history_count' => env('PASSWORD_HISTORY_COUNT', 5),
+        'expiry_days' => env('PASSWORD_EXPIRY_DAYS', 90),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Session Security Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure session security settings
+    |
+    */
+
+    'session' => [
+        'strict_ip_check' => env('SESSION_STRICT_IP_CHECK', true),
+        'regenerate_interval' => env('SESSION_REGENERATE_INTERVAL', 30), // minutes
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Account Lockout Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure account lockout after failed login attempts
+    |
+    */
+
+    'lockout' => [
+        'max_attempts' => env('LOGIN_MAX_ATTEMPTS', 5),
+        'lockout_duration' => env('LOGIN_LOCKOUT_DURATION', 30), // minutes
+        'throttle_decay' => env('LOGIN_THROTTLE_DECAY', 1), // minutes
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Two-Factor Authentication
+    |--------------------------------------------------------------------------
+    |
+    | Configure 2FA settings
+    |
+    */
+
+    '2fa' => [
+        'enabled' => env('TWO_FACTOR_ENABLED', false),
+        'issuer' => env('TWO_FACTOR_ISSUER', config('app.name')),
+        'qr_code_size' => env('TWO_FACTOR_QR_CODE_SIZE', 200),
+        'enforce_for_admins' => env('TWO_FACTOR_ENFORCE_ADMINS', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | File Upload Security
+    |--------------------------------------------------------------------------
+    |
+    | Configure file upload security settings
+    |
+    */
+
+    'upload' => [
+        'max_size' => env('UPLOAD_MAX_SIZE', 10240), // KB
+        'allowed_extensions' => explode(',', env('UPLOAD_ALLOWED_EXTENSIONS', 'jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx')),
+        'scan_viruses' => env('UPLOAD_SCAN_VIRUSES', false),
+        'quarantine_suspicious' => env('UPLOAD_QUARANTINE_SUSPICIOUS', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Security Monitoring
+    |--------------------------------------------------------------------------
+    |
+    | Configure security monitoring and alerting
+    |
+    */
+
+    'monitoring' => [
+        'alert_email' => env('SECURITY_ALERT_EMAIL'),
+        'alert_slack' => env('SECURITY_ALERT_SLACK'),
+        'alert_threshold' => env('SECURITY_ALERT_THRESHOLD', 10), // threats per hour
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Backup Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure backup security settings
+    |
+    */
+
+    'backup' => [
+        'enabled' => env('BACKUP_ENABLED', true),
+        'encrypt' => env('BACKUP_ENCRYPT', true),
+        'retention_days' => env('BACKUP_RETENTION_DAYS', 30),
+    ],
+
 ];

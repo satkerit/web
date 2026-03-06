@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', new \App\Rules\StrongPassword()],
         ]);
 
         $editorRole = Role::where('name', User::ROLE_EDITOR)->first();
@@ -46,6 +46,9 @@ class RegisteredUserController extends Controller
             'role_id' => $editorRole?->id,
             'is_active' => true,
         ]);
+
+        // Save initial password to history
+        \App\Models\PasswordHistory::savePassword($user->id, $request->password);
 
         event(new Registered($user));
 

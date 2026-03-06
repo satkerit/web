@@ -20,3 +20,9 @@ Schedule::command('security:cleanup-blocked-ips')
     ->at('03:00')
     ->withoutOverlapping()
     ->runInBackground();
+
+// Schedule password history cleanup to run yearly
+Schedule::command('password-history:cleanup --days=365')
+    ->yearly()
+    ->withoutOverlapping()
+    ->runInBackground();

@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\CspReportController;
+
+// CSP Violation Report (must be before other routes)
+Route::post('/api/csp-report', [CspReportController::class, 'report'])->name('csp.report');
 
 // Home Route
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

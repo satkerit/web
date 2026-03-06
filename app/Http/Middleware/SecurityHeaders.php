@@ -36,21 +36,32 @@ class SecurityHeaders
 
         // HSTS for production
         if (app()->environment('production')) {
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         }
+
+        // Add additional security headers
+        $this->addAdditionalSecurityHeaders($response);
 
         return $response;
     }
 
     /**
      * Build Content Security Policy header
+     * 
+     * SECURITY NOTE: 'unsafe-inline' and 'unsafe-eval' are security risks.
+     * TODO: Migrate to nonce-based or hash-based CSP for production.
+     * For now, we keep them for compatibility but log violations.
      */
     protected function buildContentSecurityPolicy(): string
     {
+        $nonce = base64_encode(random_bytes(16));
+        request()->attributes->set('csp_nonce', $nonce);
+
         $policies = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://code.jquery.com",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com",
+            // TODO: Remove 'unsafe-inline' and 'unsafe-eval' after refactoring inline scripts
+            "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://code.jquery.com",
+            "style-src 'self' 'nonce-{$nonce}' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com",
             "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:",
             "img-src 'self' data: https: blob:",
             "connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://tile.openstreetmap.org https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org https://nominatim.openstreetmap.org http://api.aladhan.com",
@@ -60,8 +71,34 @@ class SecurityHeaders
             "base-uri 'self'",
             "object-src 'none'",
             "upgrade-insecure-requests",
+            // Report violations to monitor CSP issues
+            "report-uri /api/csp-report",
         ];
 
         return implode('; ', $policies);
+    }
+    
+    /**
+     * Add additional security headers
+     */
+    protected function addAdditionalSecurityHeaders(Response $response): void
+    {
+        // Cross-Origin-Opener-Policy (COOP)
+        $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
+        
+        // Cross-Origin-Embedder-Policy (COEP)
+        $response->headers->set('Cross-Origin-Embedder-Policy', 'require-corp');
+        
+        // Cross-Origin-Resource-Policy (CORP)
+        $response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
+        
+        // Expect-CT (Certificate Transparency)
+        if (app()->environment('production')) {
+            $response->headers->set('Expect-CT', 'max-age=86400, enforce');
+        }
+        
+        // Remove server information
+        $response->headers->remove('X-Powered-By');
+        $response->headers->remove('Server');
     }
 }

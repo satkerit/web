@@ -54,6 +54,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get password history
+     */
+    public function passwordHistories()
+    {
+        return $this->hasMany(PasswordHistory::class);
+    }
+
+    /**
+     * Check if password was recently used
+     */
+    public function hasUsedPassword(string $password, int $historyCount = 5): bool
+    {
+        return PasswordHistory::isPasswordReused($this->id, $password, $historyCount);
+    }
+
+    /**
      * Send the password reset notification.
      */
     public function sendPasswordResetNotification($token): void

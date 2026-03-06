@@ -33,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'menu.permission' => \App\Http\Middleware\CheckMenuPermission::class,
             'idle.timeout' => \App\Http\Middleware\IdleTimeoutMiddleware::class,
             'detect.suspicious' => \App\Http\Middleware\DetectSuspiciousActivity::class,
+            'secure.session' => \App\Http\Middleware\SecureSessionMiddleware::class,
         ]);
 
         // Security headers for all responses
@@ -44,6 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\DetectSuspiciousActivity::class,
             \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\BlockSuspiciousRequests::class,
+            \App\Http\Middleware\SecureSessionMiddleware::class,
             \App\Http\Middleware\LogVisitor::class,
             \App\Http\Middleware\OptimizeResponse::class,
         ]);
