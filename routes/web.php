@@ -212,6 +212,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::post('menu-permissions/update', [App\Http\Controllers\Admin\MenuPermissionController::class, 'update'])->name('menu-permissions.update');
 });
 
+// API Routes
+Route::prefix('api')->group(function () {
+    Route::get('prayer-times', [App\Http\Controllers\PrayerTimeController::class, 'getPrayerTimes']);
+});
+
 // Fallback route for 404
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);

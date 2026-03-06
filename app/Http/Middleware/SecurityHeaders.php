@@ -27,8 +27,8 @@ class SecurityHeaders
         // Referrer policy
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-        // Permissions policy
-        $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+        // Permissions policy - Allow geolocation for prayer times widget
+        $response->headers->set('Permissions-Policy', 'geolocation=(self), microphone=(), camera=()');
 
         // Content Security Policy
         $csp = $this->buildContentSecurityPolicy();
@@ -53,7 +53,7 @@ class SecurityHeaders
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com",
             "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:",
             "img-src 'self' data: https: blob:",
-            "connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://tile.openstreetmap.org https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org",
+            "connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://tile.openstreetmap.org https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org https://nominatim.openstreetmap.org http://api.aladhan.com",
             "frame-src 'self' https://www.google.com https://maps.google.com",
             "frame-ancestors 'self'",
             "form-action 'self'",

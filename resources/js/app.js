@@ -18,6 +18,246 @@ document.addEventListener("alpine:init", () => {
     // Register plugins
     window.Alpine.plugin(collapse);
 
+    // Register Prayer Time Widget
+    window.Alpine.data("prayerTimeWidget", () => ({
+        loading: true,
+        error: null,
+        location: "Jakarta, Indonesia",
+        latitude: -6.2088,
+        longitude: 106.8456,
+        currentTime: "",
+        currentDate: "",
+        prayerTimes: [],
+        nextPrayer: null,
+        countdown: {
+            hours: "00",
+            minutes: "00",
+            seconds: "00",
+        },
+        timeInterval: null,
+        countdownInterval: null,
+        lastDate: null,
+
+        init() {
+            this.getUserLocation();
+            this.updateCurrentTime();
+            this.timeInterval = setInterval(
+                () => this.updateCurrentTime(),
+                1000,
+            );
+        },
+
+        async getUserLocation() {
+            // Check if geolocation is available and allowed
+            if (!navigator.geolocation) {
+                console.log("Geolocation not supported");
+                this.fetchPrayerTimes();
+                return;
+            }
+
+            // Check permissions first
+            if (navigator.permissions) {
+                try {
+                    const permission = await navigator.permissions.query({
+                        name: "geolocation",
+                    });
+
+                    if (permission.state === "denied") {
+                        console.log(
+                            "Geolocation permission denied, using default location",
+                        );
+                        this.fetchPrayerTimes();
+                        return;
+                    }
+                } catch (error) {
+                    // Permission API not supported, continue anyway
+                    console.log(
+                        "Permission check not supported, continuing...",
+                    );
+                }
+            }
+
+            // Try to get location
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.latitude = position.coords.latitude;
+                    this.longitude = position.coords.longitude;
+                    this.reverseGeocode();
+                    this.fetchPrayerTimes();
+                },
+                (error) => {
+                    console.log("Geolocation error:", error.message);
+                    this.fetchPrayerTimes();
+                },
+                {
+                    timeout: 10000,
+                    maximumAge: 300000, // Cache for 5 minutes
+                    enableHighAccuracy: false,
+                },
+            );
+        },
+
+        async reverseGeocode() {
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?lat=${this.latitude}&lon=${this.longitude}&format=json`,
+                );
+                const data = await response.json();
+                if (data.address) {
+                    const city =
+                        data.address.city ||
+                        data.address.town ||
+                        data.address.village ||
+                        data.address.county;
+                    const state = data.address.state;
+                    this.location =
+                        city && state ? `${city}, ${state}` : "Indonesia";
+                }
+            } catch (error) {
+                console.log("Reverse geocode error:", error);
+            }
+        },
+
+        async fetchPrayerTimes() {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await fetch(
+                    `/api/prayer-times?latitude=${this.latitude}&longitude=${this.longitude}`,
+                );
+                const data = await response.json();
+
+                if (data.success && data.timings) {
+                    this.processPrayerTimes(data.timings);
+                    this.findNextPrayer();
+                    this.startCountdown();
+                } else {
+                    this.error = "Gagal memuat jadwal sholat";
+                }
+            } catch (error) {
+                this.error = "Terjadi kesalahan saat memuat data";
+                console.error("Error fetching prayer times:", error);
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        processPrayerTimes(timings) {
+            const prayers = [
+                { name: "Subuh", key: "Fajr", icon: "🌅" },
+                { name: "Dzuhur", key: "Dhuhr", icon: "☀️" },
+                { name: "Ashar", key: "Asr", icon: "🌤️" },
+                { name: "Maghrib", key: "Maghrib", icon: "🌆" },
+                { name: "Isya", key: "Isha", icon: "🌙" },
+            ];
+
+            this.prayerTimes = prayers.map((prayer) => ({
+                name: prayer.name,
+                time: timings[prayer.key],
+                icon: prayer.icon,
+                key: prayer.key,
+                isNext: false,
+            }));
+        },
+
+        findNextPrayer() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+            for (let prayer of this.prayerTimes) {
+                const [hours, minutes] = prayer.time.split(":").map(Number);
+                const prayerMinutes = hours * 60 + minutes;
+
+                if (prayerMinutes > currentMinutes) {
+                    prayer.isNext = true;
+                    this.nextPrayer = prayer;
+                    return;
+                }
+            }
+
+            if (this.prayerTimes.length > 0) {
+                this.prayerTimes[0].isNext = true;
+                this.nextPrayer = this.prayerTimes[0];
+            }
+        },
+
+        startCountdown() {
+            if (this.countdownInterval) {
+                clearInterval(this.countdownInterval);
+            }
+
+            this.updateCountdown();
+            this.countdownInterval = setInterval(
+                () => this.updateCountdown(),
+                1000,
+            );
+        },
+
+        updateCountdown() {
+            if (!this.nextPrayer) return;
+
+            const now = new Date();
+            const [hours, minutes] = this.nextPrayer.time
+                .split(":")
+                .map(Number);
+
+            let target = new Date();
+            target.setHours(hours, minutes, 0, 0);
+
+            if (target <= now) {
+                target.setDate(target.getDate() + 1);
+            }
+
+            const diff = target - now;
+
+            if (diff <= 0) {
+                this.findNextPrayer();
+                return;
+            }
+
+            const totalSeconds = Math.floor(diff / 1000);
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+
+            this.countdown = {
+                hours: String(h).padStart(2, "0"),
+                minutes: String(m).padStart(2, "0"),
+                seconds: String(s).padStart(2, "0"),
+            };
+        },
+
+        updateCurrentTime() {
+            const now = new Date();
+
+            this.currentTime = now.toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+            });
+
+            const options = {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            };
+            this.currentDate = now.toLocaleDateString("id-ID", options);
+
+            const currentDate = now.toDateString();
+            if (this.lastDate && this.lastDate !== currentDate) {
+                this.fetchPrayerTimes();
+            }
+            this.lastDate = currentDate;
+        },
+
+        destroy() {
+            if (this.timeInterval) clearInterval(this.timeInterval);
+            if (this.countdownInterval) clearInterval(this.countdownInterval);
+        },
+    }));
+
     // Register repeaterField component for dynamic form fields
     window.Alpine.data("repeaterField", (initialData = []) => ({
         items: [],

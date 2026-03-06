@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Permissions Policy for Geolocation -->
+    <meta http-equiv="Permissions-Policy" content="geolocation=(self)">
+    
     <title>{{ $title ?? config('app.name', 'BPRS Bangka Belitung') }}</title>
 
     @php $company = \App\Models\CompanyInfo::getInfo(); @endphp
@@ -22,7 +26,12 @@
 
         /* Custom Animations */
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes float-delayed { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes pulse-glow { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.4; } }
+        @keyframes bounce-in { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
+        @keyframes fade-in-section { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slide-in-left { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slide-in-right { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
@@ -30,12 +39,19 @@
         @keyframes gradient-x { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
         .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-float-delayed { animation: float-delayed 4s ease-in-out infinite; }
         .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        .animate-bounce-in { animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
         .animate-slide-up { animation: slide-up 0.6s ease-out forwards; }
         .animate-slide-in-left { animation: slide-in-left 0.6s ease-out forwards; }
         .animate-slide-in-right { animation: slide-in-right 0.6s ease-out forwards; }
         .animate-scale-in { animation: scale-in 0.5s ease-out forwards; }
         .animate-gradient { background-size: 200% 200%; animation: gradient-x 3s ease infinite; }
+        .fade-in-section { animation: fade-in-section 0.6s ease-out forwards; }
+        .slide-in-left { animation: slide-in-left 0.8s ease-out forwards; }
+        .slide-in-right { animation: slide-in-right 0.8s ease-out forwards; }
 
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
