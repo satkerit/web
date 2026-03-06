@@ -153,32 +153,80 @@
         </div>
     </div>
 
+    <!-- Prayer Widget in Footer - Always Visible -->
+    <div x-data="{ show: false }" class="relative">
+        <!-- Floating Action Button -->
+        <button 
+            @click="show = true"
+            class="fixed bottom-6 right-6 xl:bottom-8 xl:right-8 z-50 w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 touch-manipulation active:scale-95 group"
+            title="Jadwal Sholat"
+            aria-label="Buka Jadwal Sholat">
+            
+            <!-- Icon -->
+            <svg class="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            
+            <!-- Pulse Animation -->
+            <span class="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-20"></span>
+        </button>
+
+        <!-- Modal Overlay -->
+        <div x-show="show"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center"
+             @click.self="show = false"
+             style="display: none;">
+            
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+            
+            <!-- Modal Content -->
+            <div x-show="show"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="translate-y-full sm:scale-95 sm:translate-y-0"
+                 x-transition:enter-end="translate-y-0 sm:scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="translate-y-0 sm:scale-100"
+                 x-transition:leave-end="translate-y-full sm:scale-95 sm:translate-y-0"
+                 class="relative w-full sm:w-auto sm:max-w-md mx-auto"
+                 @click.stop>
+                
+                <!-- Close Button -->
+                <button 
+                    @click="show = false"
+                    class="absolute -top-12 right-4 sm:right-0 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors z-10 touch-manipulation active:scale-95"
+                    title="Tutup"
+                    aria-label="Tutup Jadwal Sholat">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+
+                <!-- Widget Container -->
+                <div class="max-h-[85vh] sm:max-h-[90vh] overflow-y-auto prayer-widget-container">
+                    <x-prayer-time-widget />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Back to Top Button -->
     <button
         id="backToTop"
         onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-        class="fixed bottom-6 right-6 xl:bottom-8 xl:right-8 z-40 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 opacity-0 invisible flex items-center justify-center group touch-manipulation active:scale-95"
-        style="bottom: 5.5rem;"
+        class="fixed bottom-24 right-6 xl:bottom-28 xl:right-8 z-40 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 opacity-0 invisible flex items-center justify-center group touch-manipulation active:scale-95"
         aria-label="Kembali ke atas"
     >
         <svg class="w-5 h-5 sm:w-6 sm:h-6 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
         </svg>
     </button>
-
-    <style>
-        /* Adjust back to top button position on mobile to avoid FAB conflict */
-        @media (max-width: 1279px) {
-            #backToTop {
-                bottom: 5.5rem !important; /* Above prayer widget FAB */
-            }
-        }
-        @media (min-width: 1280px) {
-            #backToTop {
-                bottom: 1.5rem !important; /* Normal position on desktop */
-            }
-        }
-    </style>
 
     <script>
         // Back to Top Button Visibility
