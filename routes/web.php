@@ -135,7 +135,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     // Why Choose Us Management
     Route::get('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'editSettings'])->name('why-choose-us.settings');
     Route::put('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'updateSettings'])->name('why-choose-us.settings.update');
-    Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class);
+    Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class)->parameters(['why-choose-us' => 'whyChooseUs']);
 
     // Offices Management
     Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class);
