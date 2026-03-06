@@ -48,9 +48,8 @@ class SecurityHeaders
     /**
      * Build Content Security Policy header
      * 
-     * SECURITY NOTE: 'unsafe-inline' and 'unsafe-eval' are security risks.
-     * TODO: Migrate to nonce-based or hash-based CSP for production.
-     * For now, we keep them for compatibility but log violations.
+     * SECURITY NOTE: Using 'unsafe-inline' for compatibility with existing inline styles.
+     * Nonce is generated but 'unsafe-inline' takes precedence for backward compatibility.
      */
     protected function buildContentSecurityPolicy(): string
     {
@@ -59,9 +58,10 @@ class SecurityHeaders
 
         $policies = [
             "default-src 'self'",
-            // TODO: Remove 'unsafe-inline' and 'unsafe-eval' after refactoring inline scripts
-            "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://code.jquery.com",
-            "style-src 'self' 'nonce-{$nonce}' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com",
+            // Scripts: Allow inline for compatibility
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://code.jquery.com",
+            // Styles: Allow inline for compatibility (nonce removed to allow unsafe-inline)
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com",
             "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:",
             "img-src 'self' data: https: blob:",
             "connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://tile.openstreetmap.org https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org https://nominatim.openstreetmap.org http://api.aladhan.com",
@@ -70,10 +70,17 @@ class SecurityHeaders
             "form-action 'self'",
             "base-uri 'self'",
             "object-src 'none'",
-            "upgrade-insecure-requests",
-            // Report violations to monitor CSP issues
-            "report-uri /api/csp-report",
         ];
+        
+        // Only add upgrade-insecure-requests in production with HTTPS
+        if (app()->environment('production') && request()->secure()) {
+            $policies[] = "upgrade-insecure-requests";
+        }
+        
+        // Add report-uri for monitoring (optional)
+        if (config('security.csp.report_violations', false)) {
+            $policies[] = "report-uri /api/csp-report";
+        }
 
         return implode('; ', $policies);
     }
@@ -87,10 +94,13 @@ class SecurityHeaders
         $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
         
         // Cross-Origin-Embedder-Policy (COEP)
-        $response->headers->set('Cross-Origin-Embedder-Policy', 'require-corp');
+        // Use 'unsafe-none' for compatibility with external resources
+        // Change to 'require-corp' in production after testing
+        $response->headers->set('Cross-Origin-Embedder-Policy', 'unsafe-none');
         
         // Cross-Origin-Resource-Policy (CORP)
-        $response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
+        // Use 'cross-origin' for compatibility with CDN resources
+        $response->headers->set('Cross-Origin-Resource-Policy', 'cross-origin');
         
         // Expect-CT (Certificate Transparency)
         if (app()->environment('production')) {

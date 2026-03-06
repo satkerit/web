@@ -99,6 +99,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Content Security Policy (CSP)
+    |--------------------------------------------------------------------------
+    |
+    | Configure CSP reporting and monitoring
+    |
+    */
+
+    'csp' => [
+        'report_violations' => env('CSP_REPORT_VIOLATIONS', false),
+        'report_only_mode' => env('CSP_REPORT_ONLY', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Backup Configuration
     |--------------------------------------------------------------------------
     |

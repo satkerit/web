@@ -50,7 +50,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\OptimizeResponse::class,
         ]);
 
-        $middleware->validateCsrfTokens(except: []);
+        $middleware->validateCsrfTokens(except: [
+            '/api/csp-report',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
