@@ -33,7 +33,7 @@ class FinancingCalculatorServiceTest extends TestCase
     #[DataProvider('calculationFormulaProvider')]
     public function test_calculation_formula_correctness(int $principal, float $marginRate, int $tenor): void
     {
-        $result = $this->service->calculate($principal, $marginRate, $tenor);
+        $result = $this->service->calculate($principal, $marginRate, $tenor, 'margin', 0);
 
         // Calculate expected values using the flat rate formula
         $expectedTotalMargin = $principal * $marginRate * ($tenor / 12);
@@ -105,7 +105,7 @@ class FinancingCalculatorServiceTest extends TestCase
     #[DataProvider('totalPaymentConsistencyProvider')]
     public function test_total_payment_consistency(int $principal, float $marginRate, int $tenor): void
     {
-        $result = $this->service->calculate($principal, $marginRate, $tenor);
+        $result = $this->service->calculate($principal, $marginRate, $tenor, 'margin', 0);
 
         // Total payment should equal monthly installment × tenor
         $expectedTotalPayment = $result['monthly_installment'] * $tenor;
@@ -162,7 +162,7 @@ class FinancingCalculatorServiceTest extends TestCase
     #[DataProvider('totalMarginConsistencyProvider')]
     public function test_total_margin_consistency(int $principal, float $marginRate, int $tenor): void
     {
-        $result = $this->service->calculate($principal, $marginRate, $tenor);
+        $result = $this->service->calculate($principal, $marginRate, $tenor, 'margin', 0);
 
         // Total margin should equal total payment - principal
         $expectedTotalMargin = $result['total_payment'] - $principal;
@@ -177,6 +177,64 @@ class FinancingCalculatorServiceTest extends TestCase
         $this->assertIsInt(
             $result['total_margin'],
             "Total margin should be an integer (no decimal for Rupiah)"
+        );
+    }
+
+    /**
+     * Test profit sharing calculation based on projected revenue
+     *
+     * For profit sharing financing, the calculation should be based on
+     * projected revenue instead of principal amount.
+     */
+    public function test_profit_sharing_calculation_with_projected_revenue(): void
+    {
+        $principal = 50000000; // 50 million
+        $projectedRevenue = 100000000; // 100 million per year
+        $marginRate = 0.12; // 12% per year
+        $tenor = 12; // 12 months
+
+        $result = $this->service->calculate($principal, $marginRate, $tenor, 'profit_sharing', $projectedRevenue);
+
+        // For profit sharing: Total margin = Projected Revenue × Annual Rate × (Tenor / 12)
+        $expectedTotalMargin = $projectedRevenue * $marginRate * ($tenor / 12);
+        $expectedTotalPayment = $principal + $expectedTotalMargin;
+        $expectedMonthlyInstallment = $expectedTotalPayment / $tenor;
+
+        $this->assertEquals(
+            (int) round($expectedMonthlyInstallment),
+            $result['monthly_installment'],
+            "Monthly installment for profit sharing should be based on projected revenue"
+        );
+
+        // Verify total margin is based on projected revenue, not principal
+        $this->assertGreaterThan(
+            $principal * $marginRate * ($tenor / 12),
+            $result['total_margin'],
+            "Total margin should be higher when based on projected revenue vs principal"
+        );
+    }
+
+    /**
+     * Test margin calculation (default behavior)
+     */
+    public function test_margin_calculation_based_on_principal(): void
+    {
+        $principal = 50000000; // 50 million
+        $marginRate = 0.12; // 12% per year
+        $tenor = 12; // 12 months
+
+        $result = $this->service->calculate($principal, $marginRate, $tenor, 'margin', 0);
+
+        // For margin: Total margin = Principal × Monthly Rate × Tenor
+        $monthlyRate = $marginRate / 12;
+        $expectedTotalMargin = $principal * $monthlyRate * $tenor;
+        $expectedTotalPayment = $principal + $expectedTotalMargin;
+        $expectedMonthlyInstallment = $expectedTotalPayment / $tenor;
+
+        $this->assertEquals(
+            (int) round($expectedMonthlyInstallment),
+            $result['monthly_installment'],
+            "Monthly installment for margin should be based on principal"
         );
     }
 

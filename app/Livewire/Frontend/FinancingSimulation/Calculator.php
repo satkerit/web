@@ -16,6 +16,7 @@ class Calculator extends Component
     public $principal = '';
     public $tenor = '';
     public $downPayment = '';
+    public $projectedRevenue = '';
     public $result = null;
     public $configs = [];
     public $availableTenors = [];
@@ -40,6 +41,7 @@ class Calculator extends Component
         $this->updateAvailableTenors();
         $this->tenor = '';
         $this->downPayment = '';
+        $this->projectedRevenue = '';
         $this->result = null;
     }
 
@@ -68,6 +70,9 @@ class Calculator extends Component
 
         // Clean down payment
         $cleanDownPayment = (int) preg_replace('/[^0-9]/', '', $this->downPayment);
+
+        // Clean projected revenue
+        $cleanProjectedRevenue = (int) preg_replace('/[^0-9]/', '', $this->projectedRevenue);
 
         // Validate financing type
         if (empty($this->financingType)) {
@@ -128,6 +133,19 @@ class Calculator extends Component
             }
         }
 
+        // Validate projected revenue for profit sharing
+        if ($config->isProfitSharing()) {
+            if (empty($this->projectedRevenue) || $cleanProjectedRevenue < 1) {
+                $this->addError('projectedRevenue', 'Proyeksi pendapatan wajib diisi untuk pembiayaan modal kerja.');
+                return;
+            }
+
+            if ($cleanProjectedRevenue < $cleanPrincipal) {
+                $this->addError('projectedRevenue', 'Proyeksi pendapatan harus lebih besar dari plafond pembiayaan.');
+                return;
+            }
+        }
+
         // Calculate principal after DP
         $principalAfterDp = $cleanPrincipal - $cleanDownPayment;
 
@@ -135,7 +153,9 @@ class Calculator extends Component
         $this->result = $service->calculate(
             $principalAfterDp,
             (float) $config->margin_rate,
-            $cleanTenor
+            $cleanTenor,
+            $config->calculation_type,
+            $cleanProjectedRevenue
         );
 
         // Add config info to result
@@ -147,6 +167,10 @@ class Calculator extends Component
         $this->result['original_principal'] = $cleanPrincipal;
         $this->result['down_payment'] = $cleanDownPayment;
         $this->result['dp_percentage'] = $cleanPrincipal > 0 ? round(($cleanDownPayment / $cleanPrincipal) * 100, 2) : 0;
+        
+        if ($config->isProfitSharing() && $cleanProjectedRevenue > 0) {
+            $this->result['projected_revenue'] = $cleanProjectedRevenue;
+        }
     }
 
     /**
@@ -157,6 +181,7 @@ class Calculator extends Component
         $this->principal = '';
         $this->tenor = '';
         $this->downPayment = '';
+        $this->projectedRevenue = '';
         $this->result = null;
         $this->resetValidation();
     }

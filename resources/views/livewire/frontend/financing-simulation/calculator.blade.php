@@ -179,6 +179,73 @@
             @enderror
         </div>
 
+        <!-- Projected Revenue (for profit sharing only) -->
+        @if($selectedConfig && $selectedConfig->isProfitSharing())
+        <div class="group">
+            <label class="block text-sm font-bold text-gray-800 mb-3 flex items-center">
+                <span class="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center mr-2">
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </span>
+                Proyeksi Pendapatan Usaha/Proyek
+                <span class="ml-2 px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs rounded-full font-normal">Per Tahun</span>
+            </label>
+            <div class="relative">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
+                    <span class="text-gray-600 font-bold text-lg">Rp</span>
+                </div>
+                <input
+                    type="text"
+                    wire:model="projectedRevenue"
+                    x-on:input="
+                        let input = $event.target;
+                        let cursorPosition = input.selectionStart;
+                        let oldValue = input.value;
+                        let oldLength = oldValue.length;
+                        
+                        // Get only numbers
+                        let numbers = input.value.replace(/\D/g, '');
+                        
+                        // Format with dots (real-time!)
+                        let formatted = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                        
+                        // Update display
+                        input.value = formatted;
+                        
+                        // Update Livewire with clean number
+                        $wire.set('projectedRevenue', numbers);
+                        
+                        // Adjust cursor position
+                        let newLength = formatted.length;
+                        let diff = newLength - oldLength;
+                        input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+                    "
+                    class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-indigo-300 @error('projectedRevenue') border-red-300 ring-4 ring-red-100 @enderror"
+                    placeholder="100.000.000"
+                >
+            </div>
+            <div class="mt-3 p-3 bg-indigo-50 border border-indigo-200 rounded-xl">
+                <p class="text-sm text-indigo-700 flex items-start">
+                    <svg class="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="leading-relaxed">
+                        <strong>Proyeksi pendapatan tahunan</strong> dari usaha/proyek yang akan dibiayai. Bagi hasil dihitung berdasarkan proyeksi ini, bukan dari plafond pembiayaan.
+                    </span>
+                </p>
+            </div>
+            @error('projectedRevenue')
+                <p class="mt-2 text-sm text-red-600 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+        @endif
+
         <!-- Down Payment (if enabled) -->
         @if($selectedConfig && $selectedConfig->dp_enabled)
         <div>
@@ -419,6 +486,20 @@
 
             <!-- Detail Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                @if(isset($result['projected_revenue']) && $result['projected_revenue'] > 0)
+                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 shadow-lg border-2 border-indigo-200 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-start justify-between mb-2">
+                        <p class="text-xs font-semibold text-indigo-700 uppercase tracking-wide">Proyeksi Pendapatan</p>
+                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-indigo-600 mb-1">Per Tahun</p>
+                    <p class="text-2xl font-black text-indigo-700">
+                        Rp {{ number_format($result['projected_revenue'], 0, ',', '.') }}
+                    </p>
+                </div>
+                @endif
                 @if(isset($result['down_payment']) && $result['down_payment'] > 0)
                 <div class="bg-white rounded-2xl p-5 shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
                     <div class="flex items-start justify-between mb-2">
