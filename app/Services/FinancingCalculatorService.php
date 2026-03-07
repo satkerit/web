@@ -7,25 +7,42 @@ use App\Models\FinancingConfig;
 class FinancingCalculatorService
 {
     /**
-     * Calculate financing installment using flat rate formula.
+     * Calculate financing installment using monthly margin rate formula.
      *
-     * Formula: Monthly = (Principal + (Principal × Margin × Tenor/12)) / Tenor
+     * Formula:
+     * - Monthly Margin Rate = Annual Margin Rate / 12
+     * - Total Margin = Principal × Monthly Margin Rate × Tenor
+     * - Total Payment = Principal + Total Margin
+     * - Monthly Installment = Total Payment / Tenor
+     *
+     * Example: Principal 50.000.000, Annual Rate 12%, Tenor 9 bulan
+     * - Monthly Rate = 12% / 12 = 1% per bulan
+     * - Total Margin = 50.000.000 × 1% × 9 = 4.500.000
+     * - Total Payment = 50.000.000 + 4.500.000 = 54.500.000
+     * - Monthly Installment = 54.500.000 / 9 = 6.055.556
      *
      * @param int $principal The principal amount
      * @param float $marginRate Annual margin rate (e.g., 0.12 for 12%)
      * @param int $tenor Tenor in months
-     * @return array{principal: int, margin_rate: float, tenor: int, monthly_installment: int, total_payment: int, total_margin: int}
+     * @return array{principal: int, margin_rate: float, monthly_margin_rate: float, tenor: int, monthly_installment: int, total_payment: int, total_margin: int}
      */
     public function calculate(int $principal, float $marginRate, int $tenor): array
     {
-        // Flat rate formula: (Principal + (Principal × Margin × Tenor/12)) / Tenor
-        $totalMarginRaw = $principal * $marginRate * ($tenor / 12);
+        // Calculate monthly margin rate from annual rate
+        $monthlyMarginRate = $marginRate / 12;
+        
+        // Calculate total margin: Principal × Monthly Rate × Tenor
+        $totalMarginRaw = $principal * $monthlyMarginRate * $tenor;
+        
+        // Calculate total payment
         $totalPaymentRaw = $principal + $totalMarginRaw;
+        
+        // Calculate monthly installment
         $monthlyInstallmentRaw = $totalPaymentRaw / $tenor;
 
         // Round monthly installment first, then derive other values to ensure consistency
-        // This ensures: total_payment = monthly_installment * tenor (Requirement 3.2)
-        // And: total_margin = total_payment - principal (Requirement 3.3)
+        // This ensures: total_payment = monthly_installment * tenor
+        // And: total_margin = total_payment - principal
         $monthlyInstallment = (int) round($monthlyInstallmentRaw);
         $totalPayment = $monthlyInstallment * $tenor;
         $totalMargin = $totalPayment - $principal;
@@ -33,6 +50,7 @@ class FinancingCalculatorService
         return [
             'principal' => $principal,
             'margin_rate' => $marginRate,
+            'monthly_margin_rate' => $monthlyMarginRate,
             'tenor' => $tenor,
             'monthly_installment' => $monthlyInstallment,
             'total_payment' => $totalPayment,

@@ -83,7 +83,7 @@ if (!function_exists('format_rupiah')) {
 
 if (!function_exists('format_rupiah_short')) {
     /**
-     * Format number to short Indonesian Rupiah (with K, M, B suffix)
+     * Format number to short Indonesian Rupiah (with K, Jt, M suffix)
      *
      * @param int|float|string|null $amount
      * @param bool $showPrefix Show "Rp" prefix (default: true)
@@ -102,14 +102,29 @@ if (!function_exists('format_rupiah_short')) {
 
         $prefix = $showPrefix ? 'Rp ' : '';
 
+        // Miliar (Billion)
         if ($amount >= 1000000000) {
-            return $prefix . number_format($amount / 1000000000, 1, ',', '.') . ' M'; // Miliar
-        } elseif ($amount >= 1000000) {
-            return $prefix . number_format($amount / 1000000, 1, ',', '.') . ' Jt'; // Juta
-        } elseif ($amount >= 1000) {
-            return $prefix . number_format($amount / 1000, 0, ',', '.') . ' Rb'; // Ribu
+            $value = $amount / 1000000000;
+            // Format dengan 1 desimal jika ada, tanpa desimal jika bulat
+            $formatted = $value == floor($value) ? number_format($value, 0, ',', '.') : number_format($value, 1, ',', '.');
+            return $prefix . $formatted . ' M';
+        } 
+        // Juta (Million)
+        elseif ($amount >= 1000000) {
+            $value = $amount / 1000000;
+            // Format dengan 1 desimal jika ada, tanpa desimal jika bulat
+            $formatted = $value == floor($value) ? number_format($value, 0, ',', '.') : number_format($value, 1, ',', '.');
+            return $prefix . $formatted . ' Jt';
+        } 
+        // Ribu (Thousand)
+        elseif ($amount >= 1000) {
+            $value = $amount / 1000;
+            // Format dengan 1 desimal jika ada, tanpa desimal jika bulat
+            $formatted = $value == floor($value) ? number_format($value, 0, ',', '.') : number_format($value, 1, ',', '.');
+            return $prefix . $formatted . ' Rb';
         }
 
+        // Kurang dari 1000, tampilkan full
         return $prefix . number_format($amount, 0, ',', '.');
     }
 }

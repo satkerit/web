@@ -18,7 +18,9 @@ class FinancingConfig extends Model
 
     protected $fillable = [
         'type',
+        'calculation_type',
         'name',
+        'description',
         'margin_rate',
         'min_principal',
         'max_principal',
@@ -82,5 +84,29 @@ class FinancingConfig extends Model
 
         static::saved($clearCache);
         static::deleted($clearCache);
+    }
+
+    /**
+     * Check if this financing uses profit sharing calculation
+     */
+    public function isProfitSharing(): bool
+    {
+        return $this->calculation_type === 'profit_sharing';
+    }
+
+    /**
+     * Check if this financing uses margin calculation
+     */
+    public function isMargin(): bool
+    {
+        return $this->calculation_type === 'margin';
+    }
+
+    /**
+     * Get the rate label based on calculation type
+     */
+    public function getRateLabel(): string
+    {
+        return $this->isProfitSharing() ? 'Proyeksi Bagi Hasil' : 'Margin';
     }
 }

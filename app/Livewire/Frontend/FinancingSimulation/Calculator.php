@@ -140,7 +140,10 @@ class Calculator extends Component
 
         // Add config info to result
         $this->result['config_name'] = $config->name;
+        $this->result['calculation_type'] = $config->calculation_type;
+        $this->result['rate_label'] = $config->getRateLabel();
         $this->result['margin_percentage'] = $config->margin_rate * 100;
+        $this->result['monthly_margin_percentage'] = ($config->margin_rate / 12) * 100;
         $this->result['original_principal'] = $cleanPrincipal;
         $this->result['down_payment'] = $cleanDownPayment;
         $this->result['dp_percentage'] = $cleanPrincipal > 0 ? round(($cleanDownPayment / $cleanPrincipal) * 100, 2) : 0;

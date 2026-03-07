@@ -104,6 +104,8 @@ class FinancingConfigController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'calculation_type' => 'required|in:margin,profit_sharing',
+            'description' => 'nullable|string|max:1000',
             'margin_rate' => 'required|numeric|min:0.01|max:100',
             'min_principal' => 'required|integer|min:1',
             'max_principal' => 'required|integer|gt:min_principal',
@@ -115,6 +117,8 @@ class FinancingConfigController extends Controller
             'is_active' => 'boolean',
         ], [
             'name.required' => 'Nama pembiayaan wajib diisi.',
+            'calculation_type.required' => 'Tipe perhitungan wajib dipilih.',
+            'calculation_type.in' => 'Tipe perhitungan tidak valid.',
             'margin_rate.required' => 'Margin rate wajib diisi.',
             'margin_rate.numeric' => 'Margin rate harus berupa angka.',
             'margin_rate.min' => 'Margin rate minimal 0.01%.',
