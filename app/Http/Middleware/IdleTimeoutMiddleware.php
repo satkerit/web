@@ -3,11 +3,11 @@
 namespace App\Http\Middleware;
 
 use App\Models\AuditTrail;
+use App\Models\SecuritySetting;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 class IdleTimeoutMiddleware
@@ -32,8 +32,16 @@ class IdleTimeoutMiddleware
             return $next($request);
         }
 
+        // Get security settings from database
+        $settings = SecuritySetting::getSettings();
+        
+        // Skip if session tracking is disabled
+        if (!$settings->enable_session_tracking) {
+            return $next($request);
+        }
+
         $user = Auth::user();
-        $idleTimeout = Config::get('security.idle_timeout', 30) * 60; // Convert to seconds
+        $idleTimeout = $settings->idle_timeout * 60; // Convert to seconds
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
 
@@ -54,19 +62,19 @@ class IdleTimeoutMiddleware
             if ($request->expectsJson()) {
                 return response()->json([
                     'message' => 'Sesi Anda telah berakhir karena tidak ada aktivitas.',
-                    'redirect' => route(Config::get('session.idle_logout_route', 'login')),
+                    'redirect' => route('admin.login'),
                     'idle_timeout' => true
                 ], 401);
             }
 
             // Redirect to login with message
-            return redirect()->route(Config::get('session.idle_logout_route', 'login'))
-                ->with('warning', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama ' . Config::get('security.idle_timeout', 30) . ' menit.');
+            return redirect()->route('admin.login')
+                ->with('warning', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama ' . $settings->idle_timeout . ' menit.');
         }
 
         // Update last activity time for non-AJAX requests or if auto-extend is enabled
-        if (Config::get('session.auto_extend', true) && (!$request->ajax() && !$request->expectsJson())) {
-            Cache::put($sessionKey, $currentTime, now()->addMinutes(Config::get('security.idle_timeout', 30) + 10));
+        if ($settings->auto_extend_session && (!$request->ajax() && !$request->expectsJson())) {
+            Cache::put($sessionKey, $currentTime, now()->addMinutes($settings->idle_timeout + 10));
         }
 
         $response = $next($request);
@@ -76,7 +84,7 @@ class IdleTimeoutMiddleware
             $response->headers->set('X-Idle-Timeout', $idleTimeout);
             $response->headers->set('X-Last-Activity', $lastActivity);
             $response->headers->set('X-Current-Time', $currentTime);
-            $response->headers->set('X-Idle-Warning', Config::get('session.idle_warning', 5) * 60);
+            $response->headers->set('X-Idle-Warning', $settings->idle_warning * 60);
         }
 
         return $response;

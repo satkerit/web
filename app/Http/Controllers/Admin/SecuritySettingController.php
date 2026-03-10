@@ -55,12 +55,21 @@ class SecuritySettingController extends Controller
             'enable_suspicious_blocking' => 'boolean',
             'enable_rate_limiting' => 'boolean',
             'log_security_events' => 'boolean',
+            
+            // Session Settings
+            'session_lifetime' => 'required|integer|min:30|max:1440',
+            'idle_timeout' => 'required|integer|min:5|max:480',
+            'idle_warning' => 'required|integer|min:1|max:60',
+            'auto_extend_session' => 'boolean',
+            'enable_session_tracking' => 'boolean',
         ]);
 
         // Convert checkboxes
         $validated['enable_suspicious_blocking'] = $request->has('enable_suspicious_blocking');
         $validated['enable_rate_limiting'] = $request->has('enable_rate_limiting');
         $validated['log_security_events'] = $request->has('log_security_events');
+        $validated['auto_extend_session'] = $request->has('auto_extend_session');
+        $validated['enable_session_tracking'] = $request->has('enable_session_tracking');
 
         // Validate IP addresses
         if ($request->filled('ip_whitelist')) {
@@ -79,6 +88,11 @@ class SecuritySettingController extends Controller
                     return back()->withErrors(['ip_blacklist' => "IP tidak valid: {$ip}"])->withInput();
                 }
             }
+        }
+
+        // Validate idle_warning is less than idle_timeout
+        if ($validated['idle_warning'] >= $validated['idle_timeout']) {
+            return back()->withErrors(['idle_warning' => 'Idle warning harus lebih kecil dari idle timeout'])->withInput();
         }
 
         $settings = SecuritySetting::getSettings();

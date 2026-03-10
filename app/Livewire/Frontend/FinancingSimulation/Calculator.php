@@ -187,11 +187,19 @@ class Calculator extends Component
     }
 
     /**
-     * Format number to Indonesian Rupiah
+     * Format number to Indonesian Rupiah with optimal scale
      */
     public function formatRupiah($number): string
     {
-        return 'Rp ' . number_format($number, 0, ',', '.');
+        return \App\Helpers\CurrencyFormatter::formatOptimal($number);
+    }
+
+    /**
+     * Format number to full Rupiah format
+     */
+    public function formatRupiahFull($number): string
+    {
+        return \App\Helpers\CurrencyFormatter::formatFull($number);
     }
 
     public function render()

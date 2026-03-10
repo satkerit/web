@@ -260,6 +260,83 @@
         </div>
     </x-admin.card>
 
+    <!-- Session Management Settings -->
+    <x-admin.card class="mt-6">
+        <div class="mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Manajemen Sesi Admin</h3>
+            <p class="text-sm text-gray-600">Atur pengaturan sesi dan idle timeout untuk admin</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Session Lifetime (menit)
+                </label>
+                <input type="number" name="session_lifetime" value="{{ old('session_lifetime', $settings->session_lifetime) }}" 
+                       min="30" max="1440" required
+                       class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                <p class="mt-1 text-xs text-gray-500">Durasi maksimal sesi (30-1440 menit / 0.5-24 jam)</p>
+                @error('session_lifetime')
+                <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Idle Timeout (menit)
+                </label>
+                <input type="number" name="idle_timeout" value="{{ old('idle_timeout', $settings->idle_timeout) }}" 
+                       min="5" max="480" required
+                       class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                <p class="mt-1 text-xs text-gray-500">Waktu idle sebelum auto logout (5-480 menit / 5 menit - 8 jam)</p>
+                @error('idle_timeout')
+                <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Idle Warning (menit)
+                </label>
+                <input type="number" name="idle_warning" value="{{ old('idle_warning', $settings->idle_warning) }}" 
+                       min="1" max="60" required
+                       class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                <p class="mt-1 text-xs text-gray-500">Waktu warning sebelum idle timeout (harus lebih kecil dari idle timeout)</p>
+                @error('idle_warning')
+                <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="flex items-center pt-6">
+                <div class="flex items-center h-5">
+                    <input type="checkbox" name="auto_extend_session" id="auto_extend_session" value="1"
+                           {{ old('auto_extend_session', $settings->auto_extend_session) ? 'checked' : '' }}
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                </div>
+                <div class="ml-3">
+                    <label for="auto_extend_session" class="font-medium text-gray-900">
+                        Auto Extend Session
+                    </label>
+                    <p class="text-sm text-gray-500">Perpanjang sesi otomatis saat ada aktivitas user</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 flex items-start">
+            <div class="flex items-center h-5">
+                <input type="checkbox" name="enable_session_tracking" id="enable_session_tracking" value="1"
+                       {{ old('enable_session_tracking', $settings->enable_session_tracking) ? 'checked' : '' }}
+                       class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            </div>
+            <div class="ml-3">
+                <label for="enable_session_tracking" class="font-medium text-gray-900">
+                    Enable Session Tracking
+                </label>
+                <p class="text-sm text-gray-500">Aktifkan pelacakan aktivitas sesi untuk keamanan</p>
+            </div>
+        </div>
+    </x-admin.card>
+
     <!-- Submit Button -->
     <div class="mt-6 flex gap-3">
         <x-admin.button type="submit">

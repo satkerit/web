@@ -404,18 +404,6 @@
                     <div class="absolute -top-6 -right-6 w-48 h-48 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-3xl -z-10 opacity-20"></div>
 
                     <!-- Floating Card -->
-                    <div class="absolute -bottom-8 -right-8 bg-white rounded-2xl shadow-xl p-6 z-20 animate-bounce-in delay-500">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
-                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-lg font-bold text-gray-900">{{ $whyChooseUsSettings->badge_text ?? '100% Syariah Compliant' }}</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

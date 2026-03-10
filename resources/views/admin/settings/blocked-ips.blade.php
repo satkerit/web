@@ -11,7 +11,7 @@
             </svg>
             Blokir IP Manual
         </button>
-        <form action="{{ route('admin.settings.security.clear-expired') }}" method="POST" class="inline">
+        <form action="{{ route('admin.settings.blocked-ips.clear-expired') }}" method="POST" class="inline">
             @csrf
             <button type="submit" class="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition-colors font-medium"
                     onclick="return confirm('Hapus semua blokir yang sudah kadaluarsa?')">
@@ -89,7 +89,7 @@
                         {{ $block->created_at->format('d M Y H:i') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <form action="{{ route('admin.settings.security.unblock', $block) }}" method="POST" class="inline">
+                        <form action="{{ route('admin.settings.blocked-ips.unblock', $block) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-blue-600 hover:text-blue-900"
@@ -130,7 +130,7 @@
         <div x-show="open" class="relative bg-white rounded-2xl max-w-2xl w-full p-8">
             <h3 class="text-2xl font-bold text-gray-900 mb-6">Blokir IP Manual</h3>
             
-            <form action="{{ route('admin.settings.security.block-ip') }}" method="POST" class="space-y-4">
+            <form action="{{ route('admin.settings.blocked-ips.block') }}" method="POST" class="space-y-4">
                 @csrf
                 
                 <div>

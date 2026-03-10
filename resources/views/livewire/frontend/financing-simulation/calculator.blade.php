@@ -87,28 +87,16 @@
                 <input
                     type="text"
                     wire:model="principal"
-                    x-on:input="
-                        let input = $event.target;
-                        let cursorPosition = input.selectionStart;
-                        let oldValue = input.value;
-                        let oldLength = oldValue.length;
-                        
-                        // Get only numbers
-                        let numbers = input.value.replace(/\D/g, '');
-                        
-                        // Format with dots (real-time!)
-                        let formatted = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        
-                        // Update display
+                    @input="
+                        const input = $event.target;
+                        const cursorPos = input.selectionStart;
+                        const oldLen = input.value.length;
+                        const nums = input.value.replace(/[^0-9]/g, '');
+                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                         input.value = formatted;
-                        
-                        // Update Livewire with clean number
-                        $wire.set('principal', numbers);
-                        
-                        // Adjust cursor position
-                        let newLength = formatted.length;
-                        let diff = newLength - oldLength;
-                        input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+                        $wire.set('principal', nums);
+                        const newLen = formatted.length;
+                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
                     "
                     class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-blue-300 @error('principal') border-red-300 ring-4 ring-red-100 @enderror"
                     placeholder="50.000.000"
@@ -198,28 +186,16 @@
                 <input
                     type="text"
                     wire:model="projectedRevenue"
-                    x-on:input="
-                        let input = $event.target;
-                        let cursorPosition = input.selectionStart;
-                        let oldValue = input.value;
-                        let oldLength = oldValue.length;
-                        
-                        // Get only numbers
-                        let numbers = input.value.replace(/\D/g, '');
-                        
-                        // Format with dots (real-time!)
-                        let formatted = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        
-                        // Update display
+                    @input="
+                        const input = $event.target;
+                        const cursorPos = input.selectionStart;
+                        const oldLen = input.value.length;
+                        const nums = input.value.replace(/[^0-9]/g, '');
+                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                         input.value = formatted;
-                        
-                        // Update Livewire with clean number
-                        $wire.set('projectedRevenue', numbers);
-                        
-                        // Adjust cursor position
-                        let newLength = formatted.length;
-                        let diff = newLength - oldLength;
-                        input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+                        $wire.set('projectedRevenue', nums);
+                        const newLen = formatted.length;
+                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
                     "
                     class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-indigo-300 @error('projectedRevenue') border-red-300 ring-4 ring-red-100 @enderror"
                     placeholder="100.000.000"
@@ -257,36 +233,16 @@
                 <input
                     type="text"
                     wire:model="downPayment"
-                    x-data="{
-                        formatCurrency(value) {
-                            // Remove all non-numeric characters
-                            let numbers = value.replace(/\D/g, '');
-                            // Format with dots as thousand separators
-                            return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        }
-                    }"
-                    x-on:input="
-                        let input = $event.target;
-                        let cursorPosition = input.selectionStart;
-                        let oldValue = input.value;
-                        let oldLength = oldValue.length;
-                        
-                        // Get only numbers
-                        let numbers = input.value.replace(/\D/g, '');
-                        
-                        // Format with dots
-                        let formatted = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        
-                        // Update display
+                    @input="
+                        const input = $event.target;
+                        const cursorPos = input.selectionStart;
+                        const oldLen = input.value.length;
+                        const nums = input.value.replace(/[^0-9]/g, '');
+                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                         input.value = formatted;
-                        
-                        // Update Livewire with clean number
-                        $wire.set('downPayment', numbers);
-                        
-                        // Adjust cursor position
-                        let newLength = formatted.length;
-                        let diff = newLength - oldLength;
-                        input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+                        $wire.set('downPayment', nums);
+                        const newLen = formatted.length;
+                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
                     "
                     class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 @error('downPayment') border-red-300 @enderror"
                     placeholder="Contoh: 10.000.000"
@@ -324,28 +280,16 @@
                 <input
                     type="text"
                     wire:model="downPayment"
-                    x-on:input="
-                        let input = $event.target;
-                        let cursorPosition = input.selectionStart;
-                        let oldValue = input.value;
-                        let oldLength = oldValue.length;
-                        
-                        // Get only numbers
-                        let numbers = input.value.replace(/\D/g, '');
-                        
-                        // Format with dots (real-time!)
-                        let formatted = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        
-                        // Update display
+                    @input="
+                        const input = $event.target;
+                        const cursorPos = input.selectionStart;
+                        const oldLen = input.value.length;
+                        const nums = input.value.replace(/[^0-9]/g, '');
+                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                         input.value = formatted;
-                        
-                        // Update Livewire with clean number
-                        $wire.set('downPayment', numbers);
-                        
-                        // Adjust cursor position
-                        let newLength = formatted.length;
-                        let diff = newLength - oldLength;
-                        input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+                        $wire.set('downPayment', nums);
+                        const newLen = formatted.length;
+                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
                     "
                     class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-amber-300 @error('downPayment') border-red-300 ring-4 ring-red-100 @enderror"
                     placeholder="10.000.000"
@@ -469,10 +413,9 @@
                 
                 <div class="relative text-center">
                     <p class="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">Angsuran Per Bulan</p>
-                    <div class="flex items-center justify-center mb-2">
-                        <span class="text-2xl font-bold text-gray-700 mr-2">Rp</span>
-                        <p class="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
-                            {{ number_format($result['monthly_installment'], 0, ',', '.') }}
+                    <div class="mb-2">
+                        <p class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+                            {{ $this->formatRupiah($result['monthly_installment']) }}
                         </p>
                     </div>
                     <div class="inline-flex items-center px-4 py-2 bg-emerald-100 rounded-full">
@@ -496,7 +439,7 @@
                     </div>
                     <p class="text-xs text-indigo-600 mb-1">Per Tahun</p>
                     <p class="text-2xl font-black text-indigo-700">
-                        Rp {{ number_format($result['projected_revenue'], 0, ',', '.') }}
+                        {{ $this->formatRupiah($result['projected_revenue']) }}
                     </p>
                 </div>
                 @endif
@@ -509,7 +452,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-black text-gray-900">
-                        Rp {{ number_format($result['original_principal'], 0, ',', '.') }}
+                        {{ $this->formatRupiah($result['original_principal']) }}
                     </p>
                 </div>
                 <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 shadow-lg border-2 border-blue-200 hover:shadow-xl transition-shadow duration-300">
@@ -520,7 +463,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-black text-blue-700">
-                        Rp {{ number_format($result['down_payment'], 0, ',', '.') }}
+                        {{ $this->formatRupiah($result['down_payment']) }}
                     </p>
                 </div>
                 @endif
@@ -532,7 +475,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-black text-gray-900">
-                        Rp {{ number_format($result['principal'], 0, ',', '.') }}
+                        {{ $this->formatRupiah($result['principal']) }}
                     </p>
                 </div>
                 <div class="bg-white rounded-2xl p-5 shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
@@ -543,7 +486,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-black text-gray-900">
-                        Rp {{ number_format($result['total_margin'], 0, ',', '.') }}
+                        {{ $this->formatRupiah($result['total_margin']) }}
                     </p>
                 </div>
             </div>
@@ -560,7 +503,7 @@
                     </div>
                     <p class="text-xs text-emerald-100 mb-1">Pokok + {{ $result['rate_label'] ?? 'Margin' }}</p>
                     <p class="text-4xl font-black text-white">
-                        Rp {{ number_format($result['total_payment'], 0, ',', '.') }}
+                        {{ $this->formatRupiah($result['total_payment']) }}
                     </p>
                 </div>
             </div>

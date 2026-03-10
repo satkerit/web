@@ -33,12 +33,19 @@ class SecuritySetting extends Model
         'enable_suspicious_blocking',
         'enable_rate_limiting',
         'log_security_events',
+        'session_lifetime',
+        'idle_timeout',
+        'idle_warning',
+        'auto_extend_session',
+        'enable_session_tracking',
     ];
 
     protected $casts = [
         'enable_suspicious_blocking' => 'boolean',
         'enable_rate_limiting' => 'boolean',
         'log_security_events' => 'boolean',
+        'auto_extend_session' => 'boolean',
+        'enable_session_tracking' => 'boolean',
     ];
 
     public static function getSettings(): self
