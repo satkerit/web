@@ -139,11 +139,6 @@ class Calculator extends Component
                 $this->addError('projectedRevenue', 'Proyeksi pendapatan wajib diisi untuk pembiayaan modal kerja.');
                 return;
             }
-
-            if ($cleanProjectedRevenue < $cleanPrincipal) {
-                $this->addError('projectedRevenue', 'Proyeksi pendapatan harus lebih besar dari plafond pembiayaan.');
-                return;
-            }
         }
 
         // Calculate principal after DP

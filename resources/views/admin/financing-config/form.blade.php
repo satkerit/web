@@ -73,6 +73,33 @@
                 <x-admin.card title="Parameter Perhitungan">
                     <div class="space-y-4">
                         <div>
+                            <label for="calculation_type" class="block text-sm font-semibold text-slate-700 mb-1.5">
+                                Tipe Perhitungan <span class="text-red-500">*</span>
+                            </label>
+                            <select
+                                name="calculation_type"
+                                id="calculation_type"
+                                required
+                                class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm {{ $errors->has('calculation_type') ? 'ring-red-300 focus:ring-red-500 bg-red-50/50' : 'hover:ring-slate-300' }}"
+                            >
+                                <option value="">-- Pilih Tipe Perhitungan --</option>
+                                <option value="margin" {{ old('calculation_type', $config?->calculation_type) === 'margin' ? 'selected' : '' }}>
+                                    Margin (Flat Rate)
+                                </option>
+                                <option value="profit_sharing" {{ old('calculation_type', $config?->calculation_type) === 'profit_sharing' ? 'selected' : '' }}>
+                                    Bagi Hasil (Profit Sharing)
+                                </option>
+                            </select>
+                            <p class="mt-1.5 text-xs text-slate-500">
+                                <strong>Margin:</strong> Perhitungan berdasarkan plafond pembiayaan<br>
+                                <strong>Bagi Hasil:</strong> Perhitungan berdasarkan proyeksi keuntungan proyek
+                            </p>
+                            @error('calculation_type')
+                                <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
                             <label for="margin_rate" class="block text-sm font-semibold text-slate-700 mb-1.5">
                                 Margin Rate (%) <span class="text-red-500">*</span>
                             </label>

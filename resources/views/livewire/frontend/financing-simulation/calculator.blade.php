@@ -207,7 +207,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <span class="leading-relaxed">
-                        <strong>Proyeksi pendapatan tahunan</strong> dari usaha/proyek yang akan dibiayai. Bagi hasil dihitung berdasarkan proyeksi ini, bukan dari plafond pembiayaan.
+                        <strong>Proyeksi keuntungan tahunan</strong> dari usaha/proyek yang akan dibiayai. Bagi hasil dihitung berdasarkan proyeksi keuntungan ini, bukan dari plafond pembiayaan.
                     </span>
                 </p>
             </div>
@@ -540,7 +540,7 @@
                                     Khusus Pembiayaan Modal Kerja:
                                 </p>
                                 <p class="text-xs text-amber-800 leading-relaxed">
-                                    Perhitungan menggunakan <strong>proyeksi bagi hasil</strong> yang dihitung dari <strong>proyeksi pendapatan proyek</strong>, bukan dari plafond pembiayaan. Bagi hasil aktual akan ditentukan berdasarkan realisasi pendapatan usaha/proyek yang dibiayai.
+                                    Perhitungan menggunakan <strong>proyeksi bagi hasil</strong> yang dihitung dari <strong>proyeksi keuntungan proyek</strong>, bukan dari plafond pembiayaan. Bagi hasil aktual akan ditentukan berdasarkan realisasi keuntungan usaha/proyek yang dibiayai.
                                 </p>
                             </div>
                             @endif
