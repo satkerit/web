@@ -20,7 +20,7 @@
     </x-slot:actions>
 </x-admin.page-header>
 
-<form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" x-data="{ type: '{{ old('type', $product->type) }}' }">
+<form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" x-data="{ type: '{{ old('type', $product->type) }}' }" autocomplete="off" data-autofill-ignore="true">
     @csrf
     @method('PUT')
 
@@ -94,7 +94,7 @@
                         <label for="description" class="block text-sm font-semibold text-slate-700 mb-1.5 ml-0.5">
                             Deskripsi Lengkap <span class="text-red-500">*</span>
                         </label>
-                        <textarea name="description" id="description" rows="6" required
+                        <textarea name="description" id="description" rows="6" required autocomplete="off"
                                   placeholder="Jelaskan detail produk secara lengkap..."
                                   class="block w-full rounded-xl border-0 py-2.5 px-4 text-slate-900 bg-slate-50 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 hover:ring-slate-300 transition-all @error('description') ring-red-300 focus:ring-red-500 bg-red-50/50 @enderror">{{ old('description', $product->description) }}</textarea>
                         @error('description')
