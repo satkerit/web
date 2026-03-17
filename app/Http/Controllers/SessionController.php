@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use App\Models\AuditTrail;
 
 class SessionController extends Controller
@@ -25,7 +24,7 @@ class SessionController extends Controller
         $user = Auth::user();
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
-        $idleTimeout = Config::get('security.idle_timeout', 30);
+        $idleTimeout = config('session.idle_timeout', 15);
 
         // Update last activity time
         Cache::put($sessionKey, $currentTime, now()->addMinutes($idleTimeout + 10));
@@ -61,7 +60,7 @@ class SessionController extends Controller
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
         $lastActivity = Cache::get($sessionKey, $currentTime);
-        $idleTimeout = Config::get('security.idle_timeout', 30) * 60; // Convert to seconds
+        $idleTimeout = config('session.idle_timeout', 15) * 60; // Convert to seconds
 
         $timeIdle = $currentTime - $lastActivity;
         $timeRemaining = max(0, $idleTimeout - $timeIdle);

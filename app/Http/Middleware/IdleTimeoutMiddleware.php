@@ -41,7 +41,8 @@ class IdleTimeoutMiddleware
         }
 
         $user = Auth::user();
-        $idleTimeout = $settings->idle_timeout * 60; // Convert to seconds
+        $idleTimeout = $settings->idle_timeout ?: (int) config('session.idle_timeout', 15);
+        $idleTimeoutSeconds = $idleTimeout * 60; // Convert to seconds
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
 
@@ -49,7 +50,7 @@ class IdleTimeoutMiddleware
         $lastActivity = Cache::get($sessionKey, $currentTime);
 
         // Check if user has been idle too long
-        if (($currentTime - $lastActivity) > $idleTimeout) {
+        if (($currentTime - $lastActivity) > $idleTimeoutSeconds) {
             // Log idle logout
             AuditTrail::log('idle_logout', 'User logged out due to inactivity: ' . $user->name);
 
@@ -69,12 +70,12 @@ class IdleTimeoutMiddleware
 
             // Redirect to login with message
             return redirect()->route('admin.login')
-                ->with('warning', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama ' . $settings->idle_timeout . ' menit.');
+                ->with('warning', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama ' . $idleTimeout . ' menit.');
         }
 
         // Update last activity time for non-AJAX requests or if auto-extend is enabled
         if ($settings->auto_extend_session && (!$request->ajax() && !$request->expectsJson())) {
-            Cache::put($sessionKey, $currentTime, now()->addMinutes($settings->idle_timeout + 10));
+            Cache::put($sessionKey, $currentTime, now()->addMinutes($idleTimeout + 10));
         }
 
         $response = $next($request);
