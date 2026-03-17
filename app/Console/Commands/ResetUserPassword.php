@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class ResetUserPassword extends Command
 {
@@ -13,14 +14,17 @@ class ResetUserPassword extends Command
      *
      * @var string
      */
-    protected $signature = 'user:reset-password {email} {--password=} {--generate}';
+    protected $signature = 'user:reset-password 
+                            {email : Email user yang akan direset passwordnya}
+                            {--password= : Password baru (opsional, akan digenerate otomatis jika tidak diisi)}
+                            {--show : Tampilkan password baru di console}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Reset password untuk user berdasarkan email';
+    protected $description = 'Reset password untuk user tertentu';
 
     /**
      * Execute the console command.
@@ -28,58 +32,55 @@ class ResetUserPassword extends Command
     public function handle()
     {
         $email = $this->argument('email');
+        $customPassword = $this->option('password');
+        $showPassword = $this->option('show');
+
+        // Cari user berdasarkan email
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            $this->error("User dengan email {$email} tidak ditemukan!");
+            $this->error("User dengan email '{$email}' tidak ditemukan.");
             return 1;
         }
 
-        // Jika ada opsi generate, buat password random
-        if ($this->option('generate')) {
-            $password = $this->generateRandomPassword();
-            $this->info("Password baru yang dihasilkan: {$password}");
+        // Generate password jika tidak disediakan
+        if ($customPassword) {
+            $newPassword = $customPassword;
         } else {
-            // Jika ada opsi password, gunakan itu
-            $password = $this->option('password');
-            
-            if (!$password) {
-                // Tanya user untuk input password
-                $password = $this->secret('Masukkan password baru:');
-                $confirmPassword = $this->secret('Konfirmasi password baru:');
-                
-                if ($password !== $confirmPassword) {
-                    $this->error('Password tidak cocok!');
-                    return 1;
-                }
-            }
+            $newPassword = Str::random(12); // Password 12 karakter acak
         }
 
-        // Update password
-        $user->password = Hash::make($password);
+        // Update password user
+        $user->password = Hash::make($newPassword);
         $user->save();
 
-        $this->info("✅ Password untuk user {$user->name} ({$email}) berhasil direset!");
-        
-        if ($this->option('generate')) {
-            $this->warn('⚠️  Simpan password ini dengan aman! Password tidak dapat dilihat lagi.');
+        // Tampilkan informasi
+        $this->info("✅ Password berhasil direset untuk user:");
+        $this->line("   Nama: {$user->name}");
+        $this->line("   Email: {$user->email}");
+        $this->line("   Role: {$user->getRoleDisplayName()}");
+
+        if ($showPassword) {
+            $this->info("   Password Baru: {$newPassword}");
+        } else {
+            $this->warn("   Password Baru: {$newPassword}");
+            $this->line("   (Gunakan opsi --show untuk menampilkan password di console)");
         }
+
+        $this->newLine();
+        $this->info("📝 Informasi Login:");
+        $this->line("   URL Login: " . url('/admin/login'));
+        $this->line("   Email: {$user->email}");
+        $this->line("   Password: {$newPassword}");
+
+        // Simpan ke log untuk keamanan
+        \Log::info("Password reset untuk user: {$user->email}", [
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'reset_by' => 'console_command',
+            'timestamp' => now()->toDateTimeString(),
+        ]);
 
         return 0;
-    }
-
-    /**
-     * Generate random password
-     */
-    private function generateRandomPassword($length = 12)
-    {
-        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-        $password = '';
-        
-        for ($i = 0; $i < $length; $i++) {
-            $password .= $characters[random_int(0, strlen($characters) - 1)];
-        }
-        
-        return $password;
     }
 }
