@@ -221,6 +221,9 @@ Route::prefix('api')->group(function () {
     Route::get('prayer-times', [App\Http\Controllers\PrayerTimeController::class, 'getPrayerTimes']);
 });
 
+// Include authentication routes
+require __DIR__.'/auth.php';
+
 // Fallback route for 404
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);

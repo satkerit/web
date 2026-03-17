@@ -49,8 +49,19 @@ class IdleTimeoutMiddleware
         // Get last activity time
         $lastActivity = Cache::get($sessionKey, $currentTime);
 
-        // Check if user has been idle too long
-        if (($currentTime - $lastActivity) > $idleTimeoutSeconds) {
+        // Update last activity time on every request to keep session alive
+        // This ensures proper synchronization between frontend and backend
+        if ($settings->auto_extend_session) {
+            $cacheDuration = now()->addMinutes($idleTimeout + 10);
+            Cache::put($sessionKey, $currentTime, $cacheDuration);
+            
+            // Update last activity for response headers
+            $lastActivity = $currentTime;
+        }
+
+        // Check if user has been idle too long (with 10 second tolerance for processing delay)
+        $timeIdle = $currentTime - $lastActivity;
+        if ($timeIdle > $idleTimeoutSeconds + 10) {
             // Log idle logout
             AuditTrail::log('idle_logout', 'User logged out due to inactivity: ' . $user->name);
 
@@ -71,11 +82,6 @@ class IdleTimeoutMiddleware
             // Redirect to login with message
             return redirect()->route('admin.login')
                 ->with('warning', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama ' . $idleTimeout . ' menit.');
-        }
-
-        // Update last activity time for non-AJAX requests or if auto-extend is enabled
-        if ($settings->auto_extend_session && (!$request->ajax() && !$request->expectsJson())) {
-            Cache::put($sessionKey, $currentTime, now()->addMinutes($idleTimeout + 10));
         }
 
         $response = $next($request);

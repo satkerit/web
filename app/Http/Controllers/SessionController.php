@@ -24,7 +24,10 @@ class SessionController extends Controller
         $user = Auth::user();
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
-        $idleTimeout = config('session.idle_timeout', 15);
+        
+        // Get settings from database to ensure consistency
+        $settings = \App\Models\SecuritySetting::getSettings();
+        $idleTimeout = $settings->idle_timeout ?: config('session.idle_timeout', 15);
 
         // Update last activity time
         Cache::put($sessionKey, $currentTime, now()->addMinutes($idleTimeout + 10));
@@ -60,10 +63,14 @@ class SessionController extends Controller
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
         $lastActivity = Cache::get($sessionKey, $currentTime);
-        $idleTimeout = config('session.idle_timeout', 15) * 60; // Convert to seconds
+        
+        // Get settings from database to ensure consistency
+        $settings = \App\Models\SecuritySetting::getSettings();
+        $idleTimeout = $settings->idle_timeout ?: config('session.idle_timeout', 15);
+        $idleTimeoutSeconds = $idleTimeout * 60; // Convert to seconds
 
         $timeIdle = $currentTime - $lastActivity;
-        $timeRemaining = max(0, $idleTimeout - $timeIdle);
+        $timeRemaining = max(0, $idleTimeoutSeconds - $timeIdle);
 
         return response()->json([
             'authenticated' => true,
@@ -77,9 +84,9 @@ class SessionController extends Controller
                 'current_time' => $currentTime,
                 'time_idle' => $timeIdle,
                 'time_remaining' => $timeRemaining,
-                'idle_timeout' => $idleTimeout,
-                'will_expire_at' => date('Y-m-d H:i:s', $lastActivity + $idleTimeout),
-                'is_warning_time' => $timeRemaining <= (Config::get('session.idle_warning', 5) * 60)
+                'idle_timeout' => $idleTimeoutSeconds,
+                'will_expire_at' => date('Y-m-d H:i:s', $lastActivity + $idleTimeoutSeconds),
+                'is_warning_time' => $timeRemaining <= ($settings->idle_warning ?: 5) * 60
             ]
         ]);
     }

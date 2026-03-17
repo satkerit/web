@@ -69,6 +69,9 @@ Route::middleware('auth')->group(function () {
     // Session management routes
     Route::post('session/update-activity', [App\Http\Controllers\Auth\SessionController::class, 'updateActivity'])
         ->name('session.update-activity');
+    
+    Route::post('extend-session', [App\Http\Controllers\Auth\SessionController::class, 'updateActivity'])
+        ->name('session.extend');
 
     Route::get('session/status', [App\Http\Controllers\Auth\SessionController::class, 'getStatus'])
         ->name('auth.session.status');

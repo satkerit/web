@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 
 class SessionController extends Controller
 {
@@ -23,7 +22,10 @@ class SessionController extends Controller
         $user = Auth::user();
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
-        $idleTimeout = Config::get('security.idle_timeout', 30);
+        
+        // Get settings from database to ensure consistency
+        $settings = \App\Models\SecuritySetting::getSettings();
+        $idleTimeout = $settings->idle_timeout ?: config('session.idle_timeout', 15);
 
         // Update last activity time
         Cache::put($sessionKey, $currentTime, now()->addMinutes($idleTimeout + 10));
@@ -48,18 +50,23 @@ class SessionController extends Controller
         $user = Auth::user();
         $sessionKey = 'user_last_activity_' . $user->id;
         $currentTime = now()->timestamp;
-        $idleTimeout = Config::get('security.idle_timeout', 30) * 60; // in seconds
+        
+        // Get settings from database to ensure consistency
+        $settings = \App\Models\SecuritySetting::getSettings();
+        $idleTimeout = $settings->idle_timeout ?: config('session.idle_timeout', 15);
+        $idleTimeoutSeconds = $idleTimeout * 60; // in seconds
+        
         $lastActivity = Cache::get($sessionKey, $currentTime);
 
-        $timeRemaining = $idleTimeout - ($currentTime - $lastActivity);
+        $timeRemaining = $idleTimeoutSeconds - ($currentTime - $lastActivity);
 
         return response()->json([
             'authenticated' => true,
             'last_activity' => $lastActivity,
             'current_time' => $currentTime,
-            'idle_timeout' => $idleTimeout,
+            'idle_timeout' => $idleTimeoutSeconds,
             'time_remaining' => max(0, $timeRemaining),
-            'expires_at' => $lastActivity + $idleTimeout,
+            'expires_at' => $lastActivity + $idleTimeoutSeconds,
             'will_expire_soon' => $timeRemaining <= 300 // 5 minutes warning
         ]);
     }

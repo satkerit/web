@@ -50,7 +50,30 @@ class IdleTimeoutHandler {
         if (window.axios) {
             window.axios.interceptors.response.use(
                 (response) => {
-                    this.updateActivity();
+                    // Check for updated activity time from backend
+                    const lastActivity = response.headers["x-last-activity"];
+                    const currentTime = response.headers["x-current-time"];
+
+                    if (lastActivity && currentTime) {
+                        // Sync with backend activity time (convert to milliseconds)
+                        this.lastActivity = parseInt(lastActivity) * 1000;
+
+                        // If warning is shown but session was extended, hide it
+                        if (this.warningShown) {
+                            const now = Date.now();
+                            const idleTime = now - this.lastActivity;
+                            const timeUntilLogout = this.idleTimeout - idleTime;
+
+                            // If we have more than warning time left, hide the warning
+                            if (timeUntilLogout > this.warningTime) {
+                                this.hideWarning();
+                            }
+                        }
+                    } else {
+                        // Fallback to current time
+                        this.updateActivity();
+                    }
+
                     return response;
                 },
                 (error) => {
@@ -79,6 +102,11 @@ class IdleTimeoutHandler {
         this.checkInterval = setInterval(() => {
             this.checkIdleTime();
         }, 1000); // Check setiap detik
+
+        // Sync with backend every 30 seconds to ensure accuracy
+        this.syncInterval = setInterval(() => {
+            this.syncWithBackend();
+        }, 30000);
     }
 
     checkIdleTime() {
@@ -86,7 +114,8 @@ class IdleTimeoutHandler {
         const idleTime = now - this.lastActivity;
         const timeUntilLogout = this.idleTimeout - idleTime;
 
-        if (timeUntilLogout <= 0) {
+        // Logout only if idle time exceeds timeout (with 10 second tolerance to match backend)
+        if (idleTime >= this.idleTimeout + 10000) {
             this.performLogout();
         } else if (timeUntilLogout <= this.warningTime && !this.warningShown) {
             this.showWarning(Math.ceil(timeUntilLogout / 1000));
@@ -151,16 +180,29 @@ class IdleTimeoutHandler {
         modal.classList.remove("hidden");
 
         this.countdownInterval = setInterval(() => {
-            secondsLeft--;
-            timer.textContent = secondsLeft;
+            // Recalculate time remaining based on current activity
+            const now = Date.now();
+            const idleTime = now - this.lastActivity;
+            const timeUntilLogout = this.idleTimeout - idleTime;
+            const actualSecondsLeft = Math.ceil(timeUntilLogout / 1000);
 
-            if (secondsLeft <= 0) {
+            // If session was extended, hide warning
+            if (actualSecondsLeft > this.warningTime / 1000) {
+                this.hideWarning();
+                return;
+            }
+
+            // Update timer with actual remaining time
+            timer.textContent = Math.max(0, actualSecondsLeft);
+
+            // Only logout if actually timed out
+            if (actualSecondsLeft <= 0) {
                 clearInterval(this.countdownInterval);
                 this.performLogout();
             }
         }, 1000);
 
-        timer.textContent = secondsLeft;
+        timer.textContent = Math.max(0, secondsLeft);
     }
 
     hideWarning() {
@@ -171,6 +213,29 @@ class IdleTimeoutHandler {
         if (this.countdownInterval) {
             clearInterval(this.countdownInterval);
             this.countdownInterval = null;
+        }
+    }
+
+    async syncWithBackend() {
+        try {
+            if (window.axios) {
+                const response = await window.axios.get("/session/status");
+                if (response.data.authenticated) {
+                    // Update last activity based on backend data
+                    this.lastActivity = response.data.last_activity * 1000; // Convert to milliseconds
+
+                    // If warning is shown but backend says we have more time, hide it
+                    if (
+                        this.warningShown &&
+                        response.data.time_remaining > this.warningTime / 1000
+                    ) {
+                        this.hideWarning();
+                    }
+                }
+            }
+        } catch (error) {
+            // Silently handle sync errors to avoid disrupting user experience
+            console.debug("Session sync failed:", error);
         }
     }
 
@@ -311,6 +376,10 @@ class IdleTimeoutHandler {
 
         if (this.countdownInterval) {
             clearInterval(this.countdownInterval);
+        }
+
+        if (this.syncInterval) {
+            clearInterval(this.syncInterval);
         }
 
         const modal = document.getElementById("idle-warning-modal");

@@ -9,10 +9,16 @@
 
     {{-- Idle Timeout Configuration --}}
     @auth
-    <meta name="idle-timeout" content="{{ config('security.idle_timeout', 30) }}">
-    <meta name="idle-warning" content="{{ config('session.idle_warning', 5) }}">
+    @php
+        $securitySettings = \App\Models\SecuritySetting::getSettings();
+        $idleTimeout = $securitySettings->idle_timeout ?: config('session.idle_timeout', 15);
+        $idleWarning = $securitySettings->idle_warning ?: config('session.idle_warning', 5);
+        $autoExtend = $securitySettings->auto_extend_session ?? true;
+    @endphp
+    <meta name="idle-timeout" content="{{ $idleTimeout }}">
+    <meta name="idle-warning" content="{{ $idleWarning }}">
     <meta name="logout-url" content="{{ route('admin.logout') }}">
-    <meta name="auto-extend" content="{{ config('session.auto_extend', 'true') }}">
+    <meta name="auto-extend" content="{{ $autoExtend ? 'true' : 'false' }}">
     @endauth
 
     <title>@yield('title', 'Admin') - {{ config('app.name') }}</title>
