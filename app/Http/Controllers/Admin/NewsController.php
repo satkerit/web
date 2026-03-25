@@ -39,6 +39,9 @@ class NewsController extends Controller
             'is_published' => 'nullable|boolean',
         ]);
 
+        // Increase execution time for multiple image processing
+        set_time_limit(600); // 10 minutes
+
         DB::beginTransaction();
         try {
             $data = $request->except(['featured_image', 'slide_images', '_token']);
@@ -61,18 +64,64 @@ class NewsController extends Controller
 
             $news = News::create($data);
 
-            // Handle Gallery Images
+            // Handle Gallery Images with batch processing
             if ($request->hasFile('slide_images')) {
-                foreach ($request->file('slide_images') as $image) {
-                    $path = $this->storeOptimizedImage($image, 'news/gallery');
-                    $news->images()->create(['image_path' => $path]);
+                $slideImages = $request->file('slide_images');
+                $maxImages = 10; // Limit number of images
+                
+                if (count($slideImages) > $maxImages) {
+                    throw new \Exception("Maksimal {$maxImages} gambar galeri yang diizinkan");
+                }
+
+                $processedImages = [];
+                $failedImages = [];
+
+                foreach ($slideImages as $index => $image) {
+                    try {
+                        // Add small delay to prevent overwhelming the server
+                        if ($index > 0) {
+                            usleep(100000); // 0.1 second delay
+                        }
+
+                        $path = $this->storeOptimizedImage($image, 'news/gallery');
+                        $processedImages[] = ['image_path' => $path];
+                        
+                        Log::info("Gallery image processed", ['index' => $index + 1, 'path' => $path]);
+                    } catch (\Exception $e) {
+                        $failedImages[] = $index + 1;
+                        Log::error("Failed to process gallery image", [
+                            'index' => $index + 1,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
+                }
+
+                // Bulk insert successful images
+                if (!empty($processedImages)) {
+                    foreach ($processedImages as $imageData) {
+                        $news->images()->create($imageData);
+                    }
+                }
+
+                // Report failed images
+                if (!empty($failedImages)) {
+                    $failedList = implode(', ', $failedImages);
+                    Log::warning("Some gallery images failed to process: {$failedList}");
                 }
             }
 
             DB::commit();
-            return redirect()->route('admin.news.index')->with('success', 'Berita berhasil ditambahkan.');
+            
+            $message = 'Berita berhasil ditambahkan.';
+            if (!empty($failedImages)) {
+                $failedList = implode(', ', $failedImages);
+                $message .= " Namun, gambar galeri nomor {$failedList} gagal diproses.";
+            }
+            
+            return redirect()->route('admin.news.index')->with('success', $message);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('News creation failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return back()->with('error', 'Gagal menambahkan berita: ' . $e->getMessage())->withInput();
         }
     }
@@ -96,6 +145,9 @@ class NewsController extends Controller
             'is_published' => 'nullable|boolean',
         ]);
 
+        // Increase execution time for multiple image processing
+        set_time_limit(600); // 10 minutes
+
         DB::beginTransaction();
         try {
             $data = $request->except(['featured_image', 'slide_images', 'delete_images', '_token', '_method']);
@@ -116,9 +168,47 @@ class NewsController extends Controller
 
             // Handle Gallery Images (Add New)
             if ($request->hasFile('slide_images')) {
-                foreach ($request->file('slide_images') as $image) {
-                    $path = $this->storeOptimizedImage($image, 'news/gallery');
-                    $news->images()->create(['image_path' => $path]);
+                $slideImages = $request->file('slide_images');
+                $maxImages = 10; // Limit number of images
+                
+                if (count($slideImages) > $maxImages) {
+                    throw new \Exception("Maksimal {$maxImages} gambar galeri yang diizinkan");
+                }
+
+                $processedImages = [];
+                $failedImages = [];
+
+                foreach ($slideImages as $index => $image) {
+                    try {
+                        // Add small delay to prevent overwhelming the server
+                        if ($index > 0) {
+                            usleep(100000); // 0.1 second delay
+                        }
+
+                        $path = $this->storeOptimizedImage($image, 'news/gallery');
+                        $processedImages[] = ['image_path' => $path];
+                        
+                        Log::info("Gallery image processed", ['index' => $index + 1, 'path' => $path]);
+                    } catch (\Exception $e) {
+                        $failedImages[] = $index + 1;
+                        Log::error("Failed to process gallery image", [
+                            'index' => $index + 1,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
+                }
+
+                // Bulk insert successful images
+                if (!empty($processedImages)) {
+                    foreach ($processedImages as $imageData) {
+                        $news->images()->create($imageData);
+                    }
+                }
+
+                // Report failed images
+                if (!empty($failedImages)) {
+                    $failedList = implode(', ', $failedImages);
+                    Log::warning("Some gallery images failed to process: {$failedList}");
                 }
             }
 
@@ -132,9 +222,17 @@ class NewsController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diperbarui.');
+            
+            $message = 'Berita berhasil diperbarui.';
+            if (!empty($failedImages)) {
+                $failedList = implode(', ', $failedImages);
+                $message .= " Namun, gambar galeri nomor {$failedList} gagal diproses.";
+            }
+            
+            return redirect()->route('admin.news.index')->with('success', $message);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('News update failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return back()->with('error', 'Gagal memperbarui berita: ' . $e->getMessage())->withInput();
         }
     }

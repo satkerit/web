@@ -110,7 +110,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::put('/profile/password', [App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // News Management
-    Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
+    Route::resource('news', App\Http\Controllers\Admin\NewsController::class)
+        ->middleware(['optimize.upload']);  // Add upload optimization for news
 
     // Products Management
     Route::resource('products', App\Http\Controllers\Admin\ProductController::class);

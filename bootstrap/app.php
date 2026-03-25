@@ -34,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'idle.timeout' => \App\Http\Middleware\IdleTimeoutMiddleware::class,
             'detect.suspicious' => \App\Http\Middleware\DetectSuspiciousActivity::class,
             'secure.session' => \App\Http\Middleware\SecureSessionMiddleware::class,
+            'optimize.upload' => \App\Http\Middleware\OptimizeFileUpload::class,
         ]);
 
         // Security headers for all responses

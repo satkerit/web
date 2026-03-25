@@ -53,16 +53,27 @@ class AdminDdosProtection
         // Load custom limits from settings if available
         $this->loadSettingsLimits();
 
+        // Special handling for file upload requests
+        $isFileUpload = $this->isFileUploadRequest($request);
+        
+        if ($isFileUpload) {
+            // More lenient limits for file uploads
+            $this->limits['requests_per_second'] = 2; // Slower but more tolerant
+            $this->limits['requests_per_minute'] = 20; // Reduced for uploads
+        }
+
         // Check burst protection (requests per second)
         if (!$this->checkBurstLimit($ip)) {
             $this->recordViolation($ip, 'burst');
-            return $this->rateLimitResponse($request, 'Terlalu cepat! Mohon tunggu sebentar.');
+            $message = $isFileUpload ? 'Upload terlalu cepat! Mohon tunggu sebentar sebelum upload lagi.' : 'Terlalu cepat! Mohon tunggu sebentar.';
+            return $this->rateLimitResponse($request, $message);
         }
 
         // Check per-minute rate limit
         if (!$this->checkMinuteLimit($ip, $userId)) {
             $this->recordViolation($ip, 'minute');
-            return $this->rateLimitResponse($request, 'Rate limit tercapai. Coba lagi dalam 1 menit.');
+            $message = $isFileUpload ? 'Batas upload per menit tercapai. Coba lagi dalam 1 menit.' : 'Rate limit tercapai. Coba lagi dalam 1 menit.';
+            return $this->rateLimitResponse($request, $message);
         }
 
         // Check per-hour rate limit
@@ -75,17 +86,20 @@ class AdminDdosProtection
         try {
             $response = $next($request);
 
-            // Track failed responses (4xx, 5xx)
+            // Track failed responses (4xx, 5xx) but be more lenient for uploads
             if ($response->getStatusCode() >= 400) {
-                $this->trackFailedRequest($ip);
+                // Don't count 503 errors from uploads as violations
+                if (!($isFileUpload && $response->getStatusCode() === 503)) {
+                    $this->trackFailedRequest($ip);
+                }
             }
 
             // Add rate limit headers
             return $this->addRateLimitHeaders($response, $ip, $userId);
 
         } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
-            // Track HTTP exceptions (404, 403, etc)
-            if ($e->getStatusCode() >= 400) {
+            // Track HTTP exceptions (404, 403, etc) but be lenient for upload timeouts
+            if ($e->getStatusCode() >= 400 && !($isFileUpload && in_array($e->getStatusCode(), [503, 504, 408]))) {
                 $this->trackFailedRequest($ip);
             }
             throw $e;
@@ -94,10 +108,43 @@ class AdminDdosProtection
             $this->trackFailedRequest($ip);
             throw $e;
         } catch (\Throwable $e) {
-            // Track other server errors (500)
-            $this->trackFailedRequest($ip);
+            // Don't track server errors for file uploads (likely timeout/memory issues)
+            if (!$isFileUpload) {
+                $this->trackFailedRequest($ip);
+            }
             throw $e;
         }
+    }
+
+    /**
+     * Check if the request is a file upload
+     */
+    protected function isFileUploadRequest(Request $request): bool
+    {
+        // Check if request has files
+        if ($request->hasFile('featured_image') || $request->hasFile('slide_images')) {
+            return true;
+        }
+
+        // Check content type
+        $contentType = $request->header('Content-Type', '');
+        if (str_contains($contentType, 'multipart/form-data')) {
+            return true;
+        }
+
+        // Check route patterns for upload endpoints
+        $route = $request->route();
+        if ($route) {
+            $routeName = $route->getName();
+            $routeUri = $route->uri();
+            
+            if (str_contains($routeName, 'store') || str_contains($routeName, 'update') || 
+                str_contains($routeUri, 'upload') || str_contains($routeUri, 'image')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function isIpBlocked(string $ip): bool
