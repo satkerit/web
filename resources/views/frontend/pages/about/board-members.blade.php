@@ -23,9 +23,9 @@
     <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if($members->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+            <div class="flex flex-wrap justify-center gap-6 sm:gap-8">
                 @foreach($members as $member)
-                <div class="group relative flex flex-col bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1.5 transition-all duration-500 ease-out touch-manipulation active:scale-[0.99]"
+                <div class="group relative flex flex-col bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1.5 transition-all duration-500 ease-out touch-manipulation active:scale-[0.99] w-full sm:w-72 lg:w-64 xl:w-60"
                      x-data="{ loaded: false }">
                     
                     <!-- Image Aspect Ratio 4:5 -->
