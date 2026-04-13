@@ -75,9 +75,23 @@
                         <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
                     </div>
                     <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Misi</h3>
-                    <div class="prose prose-sm sm:prose-base prose-primary text-gray-600">
-                        {!! nl2br(e($companyInfo->mission ?? 'Memberikan layanan perbankan syariah yang profesional, amanah, dan memberikan nilai tambah bagi nasabah.')) !!}
-                    </div>
+                    @php
+                        $missionText = $companyInfo->mission ?? 'Memberikan layanan perbankan syariah yang profesional, amanah, dan memberikan nilai tambah bagi nasabah.';
+                        // Split by newline or numbered pattern like "1. " "2. " etc.
+                        $missionLines = preg_split('/\n|(?=\d+\.\s)/', $missionText, -1, PREG_SPLIT_NO_EMPTY);
+                        $missionLines = array_values(array_filter(array_map('trim', $missionLines)));
+                    @endphp
+                    <ul class="space-y-3">
+                        @foreach($missionLines as $line)
+                        @php $line = preg_replace('/^\d+\.\s*/', '', $line); @endphp
+                        @if($line)
+                        <li class="flex items-start gap-3 text-gray-600 text-sm sm:text-base">
+                            <span class="mt-1.5 w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></span>
+                            <span>{{ $line }}</span>
+                        </li>
+                        @endif
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
