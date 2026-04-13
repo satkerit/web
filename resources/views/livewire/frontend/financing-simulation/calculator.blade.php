@@ -86,18 +86,24 @@
                 </div>
                 <input
                     type="text"
-                    wire:model="principal"
+                    x-data="{
+                        dv: '',
+                        fmt(v) { return v ? Number(String(v).replace(/[^0-9]/g,'')).toLocaleString('id-ID') : ''; },
+                        init() {
+                            this.dv = this.fmt(this.$wire.principal);
+                            this.$watch('$wire.principal', v => {
+                                if (document.activeElement !== this.$el) this.dv = this.fmt(v);
+                            });
+                        }
+                    }"
+                    x-model="dv"
                     @input="
-                        const input = $event.target;
-                        const cursorPos = input.selectionStart;
-                        const oldLen = input.value.length;
-                        const nums = input.value.replace(/[^0-9]/g, '');
-                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        input.value = formatted;
-                        $wire.set('principal', nums);
-                        const newLen = formatted.length;
-                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
+                        const raw = $event.target.value.replace(/[^0-9]/g, '');
+                        dv = raw ? Number(raw).toLocaleString('id-ID') : '';
+                        $nextTick(() => { $el.value = dv; });
+                        $wire.set('principal', raw);
                     "
+                    @blur="dv = fmt($wire.principal);"
                     class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-blue-300 @error('principal') border-red-300 ring-4 ring-red-100 @enderror"
                     placeholder="50.000.000"
                 >
@@ -185,18 +191,24 @@
                 </div>
                 <input
                     type="text"
-                    wire:model="projectedRevenue"
+                    x-data="{
+                        dv: '',
+                        fmt(v) { return v ? Number(String(v).replace(/[^0-9]/g,'')).toLocaleString('id-ID') : ''; },
+                        init() {
+                            this.dv = this.fmt(this.$wire.projectedRevenue);
+                            this.$watch('$wire.projectedRevenue', v => {
+                                if (document.activeElement !== this.$el) this.dv = this.fmt(v);
+                            });
+                        }
+                    }"
+                    x-model="dv"
                     @input="
-                        const input = $event.target;
-                        const cursorPos = input.selectionStart;
-                        const oldLen = input.value.length;
-                        const nums = input.value.replace(/[^0-9]/g, '');
-                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        input.value = formatted;
-                        $wire.set('projectedRevenue', nums);
-                        const newLen = formatted.length;
-                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
+                        const raw = $event.target.value.replace(/[^0-9]/g, '');
+                        dv = raw ? Number(raw).toLocaleString('id-ID') : '';
+                        $nextTick(() => { $el.value = dv; });
+                        $wire.set('projectedRevenue', raw);
                     "
+                    @blur="dv = fmt($wire.projectedRevenue);"
                     class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-indigo-300 @error('projectedRevenue') border-red-300 ring-4 ring-red-100 @enderror"
                     placeholder="100.000.000"
                 >
@@ -232,19 +244,25 @@
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                 <input
                     type="text"
-                    wire:model="downPayment"
+                    x-data="{
+                        dv: '',
+                        fmt(v) { return v ? Number(String(v).replace(/[^0-9]/g,'')).toLocaleString('id-ID') : ''; },
+                        init() {
+                            this.dv = this.fmt(this.$wire.downPayment);
+                            this.$watch('$wire.downPayment', v => {
+                                if (document.activeElement !== this.$el) this.dv = this.fmt(v);
+                            });
+                        }
+                    }"
+                    x-model="dv"
                     @input="
-                        const input = $event.target;
-                        const cursorPos = input.selectionStart;
-                        const oldLen = input.value.length;
-                        const nums = input.value.replace(/[^0-9]/g, '');
-                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        input.value = formatted;
-                        $wire.set('downPayment', nums);
-                        const newLen = formatted.length;
-                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
+                        const raw = $event.target.value.replace(/[^0-9]/g, '');
+                        dv = raw ? Number(raw).toLocaleString('id-ID') : '';
+                        $nextTick(() => { $el.value = dv; });
+                        $wire.set('downPayment', raw);
                     "
-                    class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 @error('downPayment') border-red-300 @enderror"
+                    @blur="dv = fmt($wire.downPayment);"
+                    class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-emerald-300 @error('downPayment') border-red-300 ring-4 ring-red-100 @enderror"
                     placeholder="Contoh: 10.000.000"
                 >
             </div>
@@ -279,18 +297,24 @@
                 </div>
                 <input
                     type="text"
-                    wire:model="downPayment"
+                    x-data="{
+                        dv: '',
+                        fmt(v) { return v ? Number(String(v).replace(/[^0-9]/g,'')).toLocaleString('id-ID') : ''; },
+                        init() {
+                            this.dv = this.fmt(this.$wire.downPayment);
+                            this.$watch('$wire.downPayment', v => {
+                                if (document.activeElement !== this.$el) this.dv = this.fmt(v);
+                            });
+                        }
+                    }"
+                    x-model="dv"
                     @input="
-                        const input = $event.target;
-                        const cursorPos = input.selectionStart;
-                        const oldLen = input.value.length;
-                        const nums = input.value.replace(/[^0-9]/g, '');
-                        const formatted = nums.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                        input.value = formatted;
-                        $wire.set('downPayment', nums);
-                        const newLen = formatted.length;
-                        input.setSelectionRange(cursorPos + (newLen - oldLen), cursorPos + (newLen - oldLen));
+                        const raw = $event.target.value.replace(/[^0-9]/g, '');
+                        dv = raw ? Number(raw).toLocaleString('id-ID') : '';
+                        $nextTick(() => { $el.value = dv; });
+                        $wire.set('downPayment', raw);
                     "
+                    @blur="dv = fmt($wire.downPayment);"
                     class="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all duration-300 text-gray-900 font-semibold text-lg placeholder:text-gray-400 placeholder:font-normal hover:border-amber-300 @error('downPayment') border-red-300 ring-4 ring-red-100 @enderror"
                     placeholder="10.000.000"
                 >
