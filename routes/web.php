@@ -174,10 +174,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::put('settings/email', [App\Http\Controllers\Admin\EmailSettingController::class, 'update'])->name('settings.email.update');
     Route::post('settings/email/test', [App\Http\Controllers\Admin\EmailSettingController::class, 'sendTest'])->name('settings.email.test');
 
+    // Complaint Settings
+    Route::get('settings/complaint', [App\Http\Controllers\Admin\ComplaintSettingController::class, 'index'])->name('settings.complaint');
+    Route::put('settings/complaint', [App\Http\Controllers\Admin\ComplaintSettingController::class, 'update'])->name('settings.complaint.update');
+
     // Financing Config Management
     Route::resource('financing-config', App\Http\Controllers\Admin\FinancingConfigController::class);
 
     // Customer Complaints Management
+    Route::get('customer-complaints/print', [App\Http\Controllers\Admin\CustomerComplaintController::class, 'print'])->name('customer-complaints.print');
+    Route::get('customer-complaints/{customerComplaint}/print', [App\Http\Controllers\Admin\CustomerComplaintController::class, 'printSingle'])->name('customer-complaints.print-single');
     Route::resource('customer-complaints', App\Http\Controllers\Admin\CustomerComplaintController::class);
 
     // Whistleblowing Management

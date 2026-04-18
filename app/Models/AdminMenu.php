@@ -129,6 +129,7 @@ class AdminMenu extends Model
             'careers' => 'careers.view',
             'customer-complaints' => 'complaints.view',
             'complaints' => 'complaints.view',
+            'complaint-settings' => 'settings.complaints',
             'storage' => 'storage.view',
             'database-backup' => 'storage.manage',
             'settings' => 'settings.maintenance',

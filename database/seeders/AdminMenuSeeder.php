@@ -35,6 +35,7 @@ class AdminMenuSeeder extends Seeder
             // Layanan
             ['key' => 'customer-complaints', 'name' => 'Pengaduan Nasabah', 'route' => 'admin.customer-complaints.index', 'section' => 'Layanan', 'order' => 30],
             ['key' => 'complaints', 'name' => 'Whistleblowing', 'route' => 'admin.complaints.index', 'section' => 'Layanan', 'order' => 31],
+            ['key' => 'complaint-settings', 'name' => 'Pengaturan Pengaduan', 'route' => 'admin.settings.complaint', 'section' => 'Layanan', 'order' => 32],
 
             // Sistem
             ['key' => 'storage', 'name' => 'File Manager', 'route' => 'admin.storage.index', 'section' => 'Sistem', 'order' => 40],
@@ -53,8 +54,8 @@ class AdminMenuSeeder extends Seeder
 
         // Default permissions per role
         $defaultPermissions = [
-            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
-            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
+            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'complaint-settings', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
+            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'complaint-settings', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
             'editor' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers'],
         ];
 

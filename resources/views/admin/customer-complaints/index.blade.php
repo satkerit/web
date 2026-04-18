@@ -3,7 +3,18 @@
 @section('title', 'Pengaduan Nasabah')
 
 @section('content')
-<x-admin.page-header title="Pengaduan Nasabah" subtitle="Kelola pengaduan dan keluhan nasabah"/>
+<x-admin.page-header title="Pengaduan Nasabah" subtitle="Kelola pengaduan dan keluhan nasabah">
+    <x-slot:actions>
+        <a href="{{ route('admin.customer-complaints.print', request()->query()) }}"
+           target="_blank"
+           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            </svg>
+            Cetak Laporan
+        </a>
+    </x-slot:actions>
+</x-admin.page-header>
 
 <!-- Stats Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -50,18 +61,19 @@
 
 <x-admin.card :noPadding="true">
     <div class="p-4 border-b border-gray-100">
-        <form method="GET" class="flex flex-col sm:flex-row gap-3">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari tiket/nama/subjek..."
-                   class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
-            <div class="flex flex-wrap gap-3">
-                <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">Semua Status</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
-                    <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Diproses</option>
-                    <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Selesai</option>
-                    <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Ditutup</option>
-                </select>
-                <select name="category" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+        <form method="GET" class="flex flex-col gap-3">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari tiket/nama/subjek..."
+                       class="w-full sm:flex-1 sm:min-w-[200px] rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                <div class="flex flex-wrap gap-3">
+                    <select name="status" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                        <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Diproses</option>
+                        <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Selesai</option>
+                        <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Ditutup</option>
+                    </select>
+                    <select name="category" class="flex-1 sm:flex-none rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Semua Kategori</option>
                     <option value="service" {{ request('category') == 'service' ? 'selected' : '' }}>Pelayanan</option>
                     <option value="product" {{ request('category') == 'product' ? 'selected' : '' }}>Produk</option>
@@ -81,6 +93,20 @@
                     <a href="{{ route('admin.customer-complaints.index') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-600 bg-white rounded-lg ring-1 ring-inset ring-slate-200 hover:bg-slate-50 transition-colors">
                         Reset
                     </a>
+                @endif
+            </div>
+            {{-- Filter Tanggal --}}
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+                <span class="text-xs text-gray-500 font-medium">Periode:</span>
+                <input type="date" name="date_from" value="{{ request('date_from') }}"
+                       class="rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500"
+                       placeholder="Dari tanggal">
+                <span class="text-xs text-gray-400">s/d</span>
+                <input type="date" name="date_to" value="{{ request('date_to') }}"
+                       class="rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500"
+                       placeholder="Sampai tanggal">
+                @if(request('date_from') || request('date_to'))
+                    <span class="text-xs text-emerald-600 font-medium">● Filter tanggal aktif</span>
                 @endif
             </div>
         </form>

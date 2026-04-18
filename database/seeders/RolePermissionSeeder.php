@@ -78,6 +78,7 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'settings.financing', 'display_name' => 'Konfigurasi Pembiayaan', 'group' => 'settings'],
             ['name' => 'settings.financing', 'display_name' => 'Konfigurasi Pembiayaan', 'group' => 'settings'],
             ['name' => 'settings.menu', 'display_name' => 'Kelola Menu Permission', 'group' => 'settings'],
+            ['name' => 'settings.complaints', 'display_name' => 'Pengaturan Pengaduan Nasabah', 'group' => 'settings'],
 
             // Security Monitoring permissions
             ['name' => 'security.view', 'display_name' => 'Lihat Security Logs', 'group' => 'security'],
