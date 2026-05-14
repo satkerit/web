@@ -211,7 +211,7 @@
 </x-admin.card>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const checkboxes = document.querySelectorAll('.schedule-checkbox');
     const bulkActionsBar = document.getElementById('bulkActionsBar');

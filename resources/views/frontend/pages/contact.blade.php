@@ -247,7 +247,7 @@
     @endpush
 
     @push('scripts')
-    <script>
+    <script nonce="{{ $nonce }}">
         document.addEventListener('alpine:init', () => {
             Alpine.data('officeMapData', () => ({
                 filterType: 'all',

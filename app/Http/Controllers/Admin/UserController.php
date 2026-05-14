@@ -57,6 +57,16 @@ class UserController extends Controller
             'is_active' => 'boolean',
         ]);
 
+        // Prevent non-super-admin from creating super admins
+        /** @var \App\Models\User $currentUser */
+        $currentUser = auth()->user();
+        if (!$currentUser->isSuperAdmin()) {
+            $newRole = Role::find($validated['role_id']);
+            if ($newRole && $newRole->name === User::ROLE_SUPER_ADMIN) {
+                return back()->with('error', 'Hanya Super Admin yang dapat membuat akun Super Admin baru.');
+            }
+        }
+
         $validated['password'] = Hash::make($validated['password']);
         $validated['is_active'] = $request->boolean('is_active');
 
@@ -84,6 +94,20 @@ class UserController extends Controller
             'role_id' => 'required|exists:roles,id',
             'is_active' => 'boolean',
         ]);
+
+        // Prevent non-super-admin from elevating roles or changing super admin data
+        /** @var \App\Models\User $currentUser */
+        $currentUser = auth()->user();
+        if (!$currentUser->isSuperAdmin()) {
+            $newRole = Role::find($validated['role_id']);
+            if ($newRole && $newRole->name === User::ROLE_SUPER_ADMIN) {
+                return back()->with('error', 'Hanya Super Admin yang dapat memberikan hak akses Super Admin.');
+            }
+
+            if ($user->isSuperAdmin()) {
+                return back()->with('error', 'Anda tidak memiliki wewenang untuk mengubah data Super Admin.');
+            }
+        }
 
         if ($request->filled('password')) {
             $validated['password'] = Hash::make($validated['password']);

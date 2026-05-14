@@ -14,7 +14,6 @@ export default defineConfig({
                 "resources/js/alpine-components.js",
                 "resources/js/alpine-init.js",
                 "resources/js/pagination-fix.js",
-                "resources/js/quill-editor.js",
                 "resources/js/idle-timeout.js",
                 "resources/js/admin-layout-patch.js",
                 "resources/js/map-utils.js",
@@ -64,7 +63,6 @@ export default defineConfig({
     // Optimize dependencies
     optimizeDeps: {
         include: ["alpinejs", "@alpinejs/collapse"],
-        exclude: ["quill"], // Lazy load quill
     },
     server: {
         host: "0.0.0.0",

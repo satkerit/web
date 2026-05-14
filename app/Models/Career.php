@@ -81,6 +81,26 @@ class Career extends Model
         return $this->deadline && $this->deadline->isPast();
     }
 
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setRequirementsAttribute($value)
+    {
+        $this->attributes['requirements'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setResponsibilitiesAttribute($value)
+    {
+        $this->attributes['responsibilities'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setBenefitsAttribute($value)
+    {
+        $this->attributes['benefits'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     protected static function booted(): void
     {
         static::saved(fn() => Cache::forget('careers_active'));

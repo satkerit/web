@@ -778,7 +778,7 @@
     </section>
 
     @push('scripts')
-    <script>
+    <script nonce="{{ $nonce }}">
         function shareAuction() {
             if (navigator.share) {
                 navigator.share({

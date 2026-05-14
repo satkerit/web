@@ -223,7 +223,7 @@
 />
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
     function confirmDelete() {
         const modal = document.getElementById('deleteModal');
         const form = modal.querySelector('form');

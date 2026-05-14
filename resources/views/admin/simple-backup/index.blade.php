@@ -76,7 +76,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $nonce }}">
 async function createBackup() {
     try {
         const response = await fetch('{{ route("admin.simple-backup.create") }}', {

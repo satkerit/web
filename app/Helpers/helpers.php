@@ -76,8 +76,20 @@ if (!function_exists('format_rupiah')) {
         }
 
         $formatted = number_format($amount, 0, ',', '.');
-        
+
         return $showPrefix ? 'Rp ' . $formatted : $formatted;
+    }
+}
+
+if (!function_exists('csp_nonce')) {
+    /**
+     * Get the CSP nonce for the current request
+     *
+     * @return string
+     */
+    function csp_nonce(): string
+    {
+        return request()->attributes->get('csp_nonce', '');
     }
 }
 
@@ -108,14 +120,14 @@ if (!function_exists('format_rupiah_short')) {
             // Format dengan 1 desimal jika ada, tanpa desimal jika bulat
             $formatted = $value == floor($value) ? number_format($value, 0, ',', '.') : number_format($value, 1, ',', '.');
             return $prefix . $formatted . ' M';
-        } 
+        }
         // Juta (Million)
         elseif ($amount >= 1000000) {
             $value = $amount / 1000000;
             // Format dengan 1 desimal jika ada, tanpa desimal jika bulat
             $formatted = $value == floor($value) ? number_format($value, 0, ',', '.') : number_format($value, 1, ',', '.');
             return $prefix . $formatted . ' Jt';
-        } 
+        }
         // Ribu (Thousand)
         elseif ($amount >= 1000) {
             $value = $amount / 1000;
@@ -128,4 +140,3 @@ if (!function_exists('format_rupiah_short')) {
         return $prefix . number_format($amount, 0, ',', '.');
     }
 }
-

@@ -596,7 +596,7 @@
 
 
     @push('scripts')
-    <script>
+    <script nonce="{{ $nonce }}">
         function toggleFilters() {
             const filters = document.getElementById('advanced-filters');
             const toggleText = document.getElementById('filter-toggle-text');

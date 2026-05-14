@@ -767,7 +767,7 @@
 </form>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
 let selectedImages = [];
 
 function previewImages(event) {

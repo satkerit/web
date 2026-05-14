@@ -136,7 +136,7 @@
 </x-admin.card>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const maintenanceModeCheckbox = document.getElementById('maintenance_mode');
     const maintenanceFields = document.getElementById('maintenance_fields');

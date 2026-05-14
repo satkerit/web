@@ -74,14 +74,21 @@ trait HandlesImageUpload
         // Increase memory limit and execution time for image processing
         $originalMemoryLimit = ini_get('memory_limit');
         $originalTimeLimit = ini_get('max_execution_time');
-        
+
         ini_set('memory_limit', '512M');
         ini_set('max_execution_time', 300); // 5 minutes
-        
+
         try {
-            $extension = strtolower($file->getClientOriginalExtension());
+            $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension());
             $filename = Str::uuid() . '.' . $extension;
             $fullPath = $storagePath . '/' . $filename;
+
+            // Define allowed extensions
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+
+            if (!in_array($extension, $allowedExtensions)) {
+                throw new \Exception('Ekstensi file tidak diizinkan: ' . $extension);
+            }
 
             // For images that can be optimized
             if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
@@ -105,7 +112,7 @@ trait HandlesImageUpload
                     // Skip processing if image is already small enough
                     $maxWidth = 1920;
                     $maxHeight = 1080;
-                    
+
                     if ($originalWidth <= $maxWidth && $originalHeight <= $maxHeight && $fileSize <= 1024 * 1024) {
                         // Image is already optimized, just store it
                         return $file->store($storagePath, 'public');
@@ -126,14 +133,14 @@ trait HandlesImageUpload
 
                     // Save to storage
                     Storage::disk('public')->put($fullPath, (string) $encoded);
-                    
+
                     // Log successful optimization
                     Log::info('Image optimized successfully', [
                         'original_size' => $fileSize,
                         'original_dimensions' => "{$originalWidth}x{$originalHeight}",
                         'final_path' => $fullPath
                     ]);
-                    
+
                     return $fullPath;
                 } catch (\Exception $e) {
                     // Log error and fall back to normal upload
@@ -141,7 +148,7 @@ trait HandlesImageUpload
                         'file_size' => $file->getSize(),
                         'file_name' => $file->getClientOriginalName()
                     ]);
-                    
+
                     // Fall back to direct storage without optimization
                     return $file->store($storagePath, 'public');
                 }
@@ -149,7 +156,6 @@ trait HandlesImageUpload
 
             // Default: store without optimization
             return $file->store($storagePath, 'public');
-            
         } finally {
             // Restore original limits
             ini_set('memory_limit', $originalMemoryLimit);

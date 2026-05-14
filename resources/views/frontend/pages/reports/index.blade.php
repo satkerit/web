@@ -126,7 +126,7 @@
     </div>
 
     @push('scripts')
-    <script>
+    <script nonce="{{ $nonce }}">
     var currentReportId = null;
 
     function openPreview(url, title, id) {

@@ -17,18 +17,16 @@ class BlockSuspiciousRequests
      */
     protected array $excludedRoutes = [
         'storage/*',
-        'login',
+        // 'login',
         'logout',
-        'register',
-        'password/*',
-        'forgot-password',
-        'reset-password/*',
-        'livewire/*',
+        // 'register',
+        // 'password/*',
+        // 'forgot-password',
+        // 'reset-password/*',
+        // 'livewire/*',
         'sanctum/*',
         '_ignition/*',
         'admin/storage/*',
-        'admin/company-info',
-        'admin/company-info/*', // Added wildcard for all company-info routes
         'admin/*/upload*',
     ];
 
@@ -84,10 +82,7 @@ class BlockSuspiciousRequests
                 return $next($request);
             }
 
-            // Allow Super Admin to bypass checks
-            if (auth()->check() && (auth()->user()->isSuperAdmin() || auth()->user()->id === 1)) {
-                return $next($request);
-            }
+            // Super Admin bypass removed for better security monitoring
 
             // Get security settings with fallback
             $settings = $this->getSettings();

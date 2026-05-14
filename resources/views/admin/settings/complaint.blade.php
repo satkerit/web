@@ -308,7 +308,7 @@
 </div>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
     // Toggle attachment settings visibility
     const toggle = document.getElementById('allow_attachments_toggle');
     const attachmentSettings = document.getElementById('attachment_settings');

@@ -155,7 +155,7 @@
     @endpush
 
     @push('scripts')
-    <script>
+    <script nonce="{{ $nonce }}">
         (function () {
             var tries = 0;
             function initWhenReady() {

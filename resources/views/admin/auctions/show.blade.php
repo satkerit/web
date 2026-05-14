@@ -602,7 +602,7 @@
     </div>
 
     @push('scripts')
-    <script>
+    <script nonce="{{ $nonce }}">
         document.addEventListener('DOMContentLoaded', function() {
             // Image gallery data
             const images = @js($auction->images ? array_map(function($image) { return \App\Helpers\StorageHelper::url($image); }, $auction->images) : []);

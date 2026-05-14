@@ -178,16 +178,15 @@ class DetectSuspiciousActivity
      * Routes to exclude from checking
      */
     protected array $excludedRoutes = [
-        'livewire/*',
+        // 'livewire/*', // Livewire should be checked
         '_ignition/*',
         'sanctum/*',
         'telescope/*',
         '__clockwork/*',
-        'login',
+        // 'login', // Login should be checked for SQLi
         'logout',
-        'register',
-        'password/*',
-        'admin/company-info*',
+        // 'register',
+        // 'password/*',
     ];
 
     /**
@@ -203,10 +202,9 @@ class DetectSuspiciousActivity
             return $next($request);
         }
 
-        // Allow Super Admin to bypass checks
-        if (auth()->check() && (auth()->user()->isSuperAdmin() || auth()->user()->id === 1)) {
-            return $next($request);
-        }
+        // We no longer bypass security checks for Super Admin automatically.
+        // Even admins can be a source of malicious activity if account is compromised.
+        // However, we can make it less aggressive for them if needed.
 
         $ip = $request->ip();
 

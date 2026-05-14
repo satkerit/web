@@ -212,7 +212,7 @@
 @endsection
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
 (function() {
     'use strict';
     

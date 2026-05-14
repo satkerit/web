@@ -80,7 +80,7 @@
 </x-admin.card>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
     function fileUpload() {
         return {
             isDropping: false,

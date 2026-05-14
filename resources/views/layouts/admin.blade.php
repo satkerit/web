@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csp-nonce" content="{{ request()->attributes->get('csp_nonce') }}">
     <meta name="theme-color" content="#0f172a">
 
     {{-- Idle Timeout Configuration --}}
@@ -45,7 +46,8 @@
 
     @vite(['resources/css/admin.css', 'resources/js/alpine-bundle.js', 'resources/js/alpine-components.js', 'resources/js/alpine-init.js', 'resources/js/admin.js', 'resources/js/idle-timeout.js', 'resources/js/admin-layout-patch.js'])
     @stack('styles')
-    <style>
+
+    <style nonce="{{ $nonce }}">
         [x-cloak] {
             display: none !important;
         }
@@ -382,7 +384,7 @@
         </div>
     </div>
 
-    <style>
+    <style nonce="{{ $nonce }}">
          @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -398,7 +400,7 @@
         }
     </style>
 
-    <script>
+    <script nonce="{{ $nonce }}">
         window.adminLogoutUrl = "{{ route('admin.logout') }}";
     </script>
     @stack('scripts')

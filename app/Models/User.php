@@ -87,11 +87,23 @@ class User extends Authenticatable
             return true;
         }
 
-        // Admin has most permissions except super admin specific ones
+        // Admin has many permissions but restricted on user/role/system settings
         if ($this->isAdmin()) {
-            $superAdminOnlyPermissions = ['users.view', 'roles.view', 'settings.menu'];
-            if (!in_array($permission, $superAdminOnlyPermissions)) {
-                return true;
+            $superAdminOnlyPermissions = [
+                'users.view',
+                'users.create',
+                'users.edit',
+                'users.delete',
+                'roles.view',
+                'roles.create',
+                'roles.edit',
+                'roles.delete',
+                'settings.menu',
+                'settings.security'
+            ];
+
+            if (in_array($permission, $superAdminOnlyPermissions)) {
+                return false;
             }
         }
 

@@ -25,6 +25,16 @@ class WhyChooseUs extends Model
         'sort_order' => 'integer',
     ];
 
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     /**
      * Get the background class based on color theme.
      */

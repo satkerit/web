@@ -267,7 +267,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="{{ $nonce }}">
 function openDeleteModal(path, type, name) {
     document.getElementById('deleteItemPath').value = path;
     document.getElementById('deleteItemType').value = type;

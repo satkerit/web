@@ -541,6 +541,21 @@ class Auction extends Model
         ]);
     }
 
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setLegalBasisAttribute($value)
+    {
+        $this->attributes['legal_basis'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setTermsConditionsAttribute($value)
+    {
+        $this->attributes['terms_conditions'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     public function postpone(Carbon $newDate, string $reason = null): void
     {
         $this->update([

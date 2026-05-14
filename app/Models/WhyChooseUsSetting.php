@@ -22,6 +22,16 @@ class WhyChooseUsSetting extends Model
         'is_active' => 'boolean',
     ];
 
+    public function setSectionTitleAttribute($value)
+    {
+        $this->attributes['section_title'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setSectionSubtitleAttribute($value)
+    {
+        $this->attributes['section_subtitle'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     /**
      * Get the singleton instance (only one settings record)
      */

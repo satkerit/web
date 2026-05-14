@@ -351,7 +351,7 @@
     @vite(['resources/js/pagination-fix.js'])
     
     <!-- Auction-specific JavaScript -->
-    <script>
+    <script nonce="{{ $nonce }}">
         // Intersection Observer for animations
         document.addEventListener('DOMContentLoaded', function() {
             const observerOptions = {

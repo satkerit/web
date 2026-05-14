@@ -176,7 +176,7 @@
 </div>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const startTimeInput = document.getElementById('start_time');
     const endTimeInput = document.getElementById('end_time');

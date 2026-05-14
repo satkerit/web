@@ -274,8 +274,8 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" referrerpolicy="no-referrer" nonce="{{ $nonce }}"></script>
+<script nonce="{{ $nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('visitorChart');
     if (!canvas) return;

@@ -56,6 +56,11 @@ class BoardMember extends Model
         return $query->where('type', 'pengawas_syariah');
     }
 
+    public function setBiographyAttribute($value)
+    {
+        $this->attributes['biography'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     protected static function booted(): void
     {
         $clearCache = function ($model) {

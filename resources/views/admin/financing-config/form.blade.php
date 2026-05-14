@@ -401,7 +401,7 @@
 </div>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
     // No conversion needed - controller handles percentage to decimal conversion
 </script>
 @endpush

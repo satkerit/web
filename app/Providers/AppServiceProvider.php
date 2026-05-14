@@ -44,6 +44,11 @@ class AppServiceProvider extends ServiceProvider
 
         $this->loadSmtpSettings();
         $this->registerBladeDirectives();
+
+        // Share CSP nonce with all views
+        view()->composer('*', function ($view) {
+            $view->with('nonce', request()->attributes->get('csp_nonce'));
+        });
     }
 
     /**

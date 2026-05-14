@@ -411,7 +411,7 @@
     @livewireScripts
 
     <!-- Admin Auction JavaScript -->
-    <script>
+    <script nonce="{{ $nonce }}">
         // Update current time
         function updateTime() {
             const now = new Date();

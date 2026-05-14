@@ -169,7 +169,7 @@
 </div>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
 async function blockThisIp() {
     const reason = prompt('Alasan pemblokiran (opsional):');
 

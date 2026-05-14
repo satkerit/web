@@ -51,7 +51,7 @@
 
 @once
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
     function closeDeleteModal(id) {
         const modal = document.getElementById(id);
         if (modal) {

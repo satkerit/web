@@ -161,19 +161,19 @@
             <div class="hidden sm:flex items-center bg-gradient-to-r from-emerald-600 to-teal-700 text-white px-4 py-2 rounded-full shadow-lg">
                 <span class="text-sm font-semibold whitespace-nowrap">Jadwal Sholat</span>
             </div>
-            
+
             <!-- Icon Button -->
-            <button 
+            <button
                 @click="show = true"
                 class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 touch-manipulation active:scale-95 group relative"
                 title="Jadwal Sholat"
                 aria-label="Buka Jadwal Sholat">
-                
+
                 <!-- Icon -->
                 <svg class="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                
+
                 <!-- Pulse Animation -->
                 <span class="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-20"></span>
             </button>
@@ -190,10 +190,10 @@
              class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center"
              @click.self="show = false"
              style="display: none;">
-            
+
             <!-- Backdrop -->
             <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-            
+
             <!-- Modal Content -->
             <div x-show="show"
                  x-transition:enter="transition ease-out duration-300"
@@ -204,9 +204,9 @@
                  x-transition:leave-end="translate-y-full sm:scale-95 sm:translate-y-0"
                  class="relative w-full sm:w-auto sm:max-w-lg mx-auto"
                  @click.stop>
-                
+
                 <!-- Close Button -->
-                <button 
+                <button
                     @click="show = false"
                     class="absolute -top-12 right-4 sm:right-0 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors z-10 touch-manipulation active:scale-95"
                     title="Tutup"
@@ -236,7 +236,7 @@
         </svg>
     </button>
 
-    <script>
+    <script nonce="{{ $nonce }}">
         // Back to Top Button Visibility
         (function() {
             const backToTopBtn = document.getElementById('backToTop');

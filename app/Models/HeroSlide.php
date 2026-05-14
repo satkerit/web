@@ -61,6 +61,16 @@ class HeroSlide extends Model
         return $query->where('is_active', true)->orderBy('order_position');
     }
 
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setSubtitleAttribute($value)
+    {
+        $this->attributes['subtitle'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     protected static function booted(): void
     {
         $clearCache = function () {

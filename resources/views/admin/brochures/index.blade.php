@@ -76,8 +76,8 @@
 />
 
 @push('scripts')
-<script>
-    function confirmDelete(id, name) {
+<script nonce="{{ $nonce }}">
+function confirmDelete(id, name) {
         const modal = document.getElementById('deleteModal');
         const form = modal.querySelector('form');
         const messageEl = modal.querySelector('[data-message]');

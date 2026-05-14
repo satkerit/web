@@ -79,6 +79,16 @@ class Office extends Model
             : null;
     }
 
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setAddressAttribute($value)
+    {
+        $this->attributes['address'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     protected static function booted(): void
     {
         $clearCache = function () {

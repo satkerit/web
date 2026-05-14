@@ -99,6 +99,16 @@ class Product extends Model
         return $query->where('type', 'deposito');
     }
 
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setShortDescriptionAttribute($value)
+    {
+        $this->attributes['short_description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     protected static function booted(): void
     {
         $clearCache = function () {

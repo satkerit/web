@@ -97,6 +97,31 @@ class CompanyInfo extends Model
         'operational_hours' => 'array',
     ];
 
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setVisionAttribute($value)
+    {
+        $this->attributes['vision'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setMissionAttribute($value)
+    {
+        $this->attributes['mission'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setHistoryAttribute($value)
+    {
+        $this->attributes['history'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
+    public function setFooterDescriptionAttribute($value)
+    {
+        $this->attributes['footer_description'] = \App\Helpers\HtmlSanitizer::clean($value);
+    }
+
     /**
      * Get cached company info
      */

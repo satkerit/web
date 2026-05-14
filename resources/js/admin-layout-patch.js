@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const form = document.createElement("form");
                 form.method = "POST";
                 form.action = window.adminLogoutUrl || "/admin/logout";
-                form.style.display = "none";
+                form.setAttribute("hidden", "hidden");
+                form.style.display = "none"; // This might still be blocked, but hidden is a better fallback
 
                 const csrf = document.createElement("input");
                 csrf.type = "hidden";

@@ -143,7 +143,7 @@
 </div>
 
 @push('scripts')
-<script>
+<script nonce="{{ $nonce }}">
 class HeroSlider {
     constructor(container) {
         this.container = container;

@@ -120,14 +120,6 @@ $(document).ready(function () {
         $(".datatable").DataTable();
     }
 
-    // Select2 initialization
-    if ($.fn.select2) {
-        $(".select2").select2({
-            theme: "bootstrap-5",
-            width: "100%",
-        });
-    }
-
     // Tooltip initialization
     if ($('[data-bs-toggle="tooltip"]').length > 0) {
         $('[data-bs-toggle="tooltip"]').tooltip();
@@ -473,9 +465,11 @@ async function loadSwal() {
     }
 
     swalPromise = new Promise((resolve, reject) => {
+        const nonce = document.querySelector('meta[name="csp-nonce"]')?.getAttribute('content');
         const script = document.createElement("script");
         script.src =
             "https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js";
+        if (nonce) script.setAttribute("nonce", nonce);
         script.onload = () => {
             swalLoaded = true;
             resolve(window.Swal);

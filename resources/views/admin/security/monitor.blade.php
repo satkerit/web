@@ -394,7 +394,7 @@
     </div>
 
     @push('scripts')
-        <script>
+        <script nonce="{{ $nonce }}">
             function openBlockIpModal() {
                 document.getElementById('blockIpModal').classList.remove('hidden');
             }

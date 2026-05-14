@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Vite;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityHeaders
@@ -13,6 +14,15 @@ class SecurityHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Generate CSP nonce early so it's available in Blade views
+        $nonce = base64_encode(random_bytes(16));
+        $request->attributes->set('csp_nonce', $nonce);
+
+        // Tell Vite to use this nonce
+        if (class_exists(\Illuminate\Support\Facades\Vite::class)) {
+            \Illuminate\Support\Facades\Vite::useCspNonce($nonce);
+        }
+
         $response = $next($request);
 
         // Prevent clickjacking
@@ -47,21 +57,17 @@ class SecurityHeaders
 
     /**
      * Build Content Security Policy header
-     * 
-     * SECURITY NOTE: Using 'unsafe-inline' for compatibility with existing inline styles.
-     * Nonce is generated but 'unsafe-inline' takes precedence for backward compatibility.
      */
     protected function buildContentSecurityPolicy(): string
     {
-        $nonce = base64_encode(random_bytes(16));
-        request()->attributes->set('csp_nonce', $nonce);
+        $nonce = request()->attributes->get('csp_nonce');
 
         $policies = [
             "default-src 'self'",
-            // Scripts: Allow inline for compatibility
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://code.jquery.com",
-            // Styles: Allow inline for compatibility (nonce removed to allow unsafe-inline)
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com",
+            // Scripts: Allow self, nonce-protected inline, and trusted CDNs
+            "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://code.jquery.com",
+            // Styles: Allow self, nonce-protected inline, and trusted CDNs
+            "style-src 'self' 'nonce-{$nonce}' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com",
             "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:",
             "img-src 'self' data: https: blob:",
             "connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://tile.openstreetmap.org https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org https://nominatim.openstreetmap.org http://api.aladhan.com",
@@ -71,12 +77,12 @@ class SecurityHeaders
             "base-uri 'self'",
             "object-src 'none'",
         ];
-        
+
         // Only add upgrade-insecure-requests in production with HTTPS
         if (app()->environment('production') && request()->secure()) {
             $policies[] = "upgrade-insecure-requests";
         }
-        
+
         // Add report-uri for monitoring (optional)
         if (config('security.csp.report_violations', false)) {
             $policies[] = "report-uri /api/csp-report";
@@ -84,7 +90,7 @@ class SecurityHeaders
 
         return implode('; ', $policies);
     }
-    
+
     /**
      * Add additional security headers
      */
@@ -92,21 +98,19 @@ class SecurityHeaders
     {
         // Cross-Origin-Opener-Policy (COOP)
         $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
-        
+
         // Cross-Origin-Embedder-Policy (COEP)
-        // Use 'unsafe-none' for compatibility with external resources
-        // Change to 'require-corp' in production after testing
         $response->headers->set('Cross-Origin-Embedder-Policy', 'unsafe-none');
-        
+
         // Cross-Origin-Resource-Policy (CORP)
-        // Use 'cross-origin' for compatibility with CDN resources
-        $response->headers->set('Cross-Origin-Resource-Policy', 'cross-origin');
-        
+        $response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
+
+        // X-Permitted-Cross-Domain-Policies
+        $response->headers->set('X-Permitted-Cross-Domain-Policies', 'none');
+
         // Expect-CT (Certificate Transparency)
-        if (app()->environment('production')) {
-            $response->headers->set('Expect-CT', 'max-age=86400, enforce');
-        }
-        
+        $response->headers->set('Expect-CT', 'max-age=86400, enforce');
+
         // Remove server information
         $response->headers->remove('X-Powered-By');
         $response->headers->remove('Server');

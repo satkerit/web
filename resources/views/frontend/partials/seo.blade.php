@@ -39,7 +39,7 @@
 <!-- JSON-LD Schema -->
 @if(!empty($seo->schema))
     @foreach($seo->schema as $schemaData)
-<script type="application/ld+json">
+<script type="application/ld+json" nonce="{{ $nonce }}">
     {!! json_encode($schemaData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
 </script>
     @endforeach
