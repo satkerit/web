@@ -23,7 +23,10 @@ class IdleTimeoutMiddleware
         }
 
         // Skip for login, logout, and authentication routes
-        if ($request->is('login') || $request->is('logout') || $request->is('register') || $request->is('password/*')) {
+        if (
+            $request->is('login') || $request->is('logout') || $request->is('register') || $request->is('password/*') ||
+            $request->is('admin/login') || $request->is('admin/logout')
+        ) {
             return $next($request);
         }
 
@@ -34,7 +37,7 @@ class IdleTimeoutMiddleware
 
         // Get security settings from database
         $settings = SecuritySetting::getSettings();
-        
+
         // Skip if session tracking is disabled
         if (!$settings->enable_session_tracking) {
             return $next($request);
@@ -51,16 +54,15 @@ class IdleTimeoutMiddleware
 
         // Update last activity time on every request to keep session alive
         // This ensures proper synchronization between frontend and backend
-        if ($settings->auto_extend_session) {
-            $cacheDuration = now()->addMinutes($idleTimeout + 10);
-            Cache::put($sessionKey, $currentTime, $cacheDuration);
-            
-            // Update last activity for response headers
-            $lastActivity = $currentTime;
-        }
+        $cacheDuration = now()->addMinutes($idleTimeout + 10);
+        Cache::put($sessionKey, $currentTime, $cacheDuration);
 
         // Check if user has been idle too long (with 10 second tolerance for processing delay)
         $timeIdle = $currentTime - $lastActivity;
+
+        // If auto_extend_session is false, we only update the activity but still check against the OLD last activity
+        // Wait, if we just updated it, $timeIdle will be based on the value BEFORE update.
+
         if ($timeIdle > $idleTimeoutSeconds + 10) {
             // Log idle logout
             AuditTrail::log('idle_logout', 'User logged out due to inactivity: ' . $user->name);
@@ -70,17 +72,20 @@ class IdleTimeoutMiddleware
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            // Return JSON response for AJAX requests
-            if ($request->expectsJson()) {
+            // Always redirect to admin login since this middleware is now admin-only
+            $loginRoute = route('admin.login');
+
+            // Return JSON response for AJAX requests (including Livewire)
+            if ($request->expectsJson() || $request->hasHeader('X-Livewire')) {
                 return response()->json([
                     'message' => 'Sesi Anda telah berakhir karena tidak ada aktivitas.',
-                    'redirect' => route('admin.login'),
+                    'redirect' => $loginRoute,
                     'idle_timeout' => true
                 ], 401);
             }
 
-            // Redirect to login with message
-            return redirect()->route('admin.login')
+            // Redirect to admin login with message
+            return redirect()->to($loginRoute)
                 ->with('warning', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama ' . $idleTimeout . ' menit.');
         }
 

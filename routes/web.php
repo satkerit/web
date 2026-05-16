@@ -94,7 +94,7 @@ Route::middleware(['web', 'throttle:120,1'])->group(function () {
 });
 
 // Storage API Routes (lighter middleware for API access)
-Route::prefix('admin/storage')->name('admin.storage.')->middleware(['auth'])->group(function () {
+Route::prefix('admin/storage')->name('admin.storage.')->middleware(['auth', 'idle.timeout'])->group(function () {
     Route::get('/api/browse', [App\Http\Controllers\Admin\StorageController::class, 'apiBrowse'])->name('api.browse');
     Route::post('/upload-editor-image', [App\Http\Controllers\Admin\StorageController::class, 'uploadEditorImage'])->name('upload-editor-image');
 });

@@ -112,6 +112,11 @@ class AppServiceProvider extends ServiceProvider
             }
 
             if (Schema::hasTable('security_settings')) {
+                // Only apply custom session lifetime for admin area
+                if (!request()->is('admin') && !request()->is('admin/*')) {
+                    return;
+                }
+
                 $settings = \App\Models\SecuritySetting::getSettings();
                 if ($settings) {
                     // Apply session lifetime (convert to minutes for Laravel config)
