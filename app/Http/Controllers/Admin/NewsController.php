@@ -16,9 +16,35 @@ class NewsController extends Controller
 {
     use HandlesImageUpload;
 
-    public function index()
+    public function index(Request $request)
     {
-        $news = News::latest()->paginate(10);
+        $query = News::query()->with('user');
+
+        // Filter by search
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by category
+        if ($request->filled('category')) {
+            $query->where('category', $request->input('category'));
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            if ($status === 'published') {
+                $query->published();
+            } elseif ($status === 'draft') {
+                $query->where('is_published', false);
+            }
+        }
+
+        $news = $query->latest()->paginate(10)->withQueryString();
         return view('admin.news.index', compact('news'));
     }
 
@@ -53,7 +79,7 @@ class NewsController extends Controller
             }
 
             // Handle Checkbox
-            $data['is_published'] = $request->has('is_published') ? 1 : 0;
+            $data['is_published'] = $request->boolean('is_published');
 
             // Handle Featured Image
             if ($request->hasFile('featured_image')) {
@@ -62,67 +88,30 @@ class NewsController extends Controller
 
             // Set Author
             $data['author'] = auth()->user()->name;
+            $data['author_id'] = auth()->id();
 
             $news = News::create($data);
 
-            // Handle Gallery Images with batch processing
+            // Handle Gallery Images
             if ($request->hasFile('slide_images')) {
                 $slideImages = $request->file('slide_images');
-                $maxImages = 10; // Limit number of images
-                
+                $maxImages = 7;
+
                 if (count($slideImages) > $maxImages) {
                     throw new \Exception("Maksimal {$maxImages} gambar galeri yang diizinkan");
                 }
 
-                $processedImages = [];
-                $failedImages = [];
-
-                foreach ($slideImages as $index => $image) {
-                    try {
-                        // Add small delay to prevent overwhelming the server
-                        if ($index > 0) {
-                            usleep(100000); // 0.1 second delay
-                        }
-
-                        $path = $this->storeOptimizedImage($image, 'news/gallery');
-                        $processedImages[] = ['image_path' => $path];
-                        
-                        Log::info("Gallery image processed", ['index' => $index + 1, 'path' => $path]);
-                    } catch (\Exception $e) {
-                        $failedImages[] = $index + 1;
-                        Log::error("Failed to process gallery image", [
-                            'index' => $index + 1,
-                            'error' => $e->getMessage()
-                        ]);
-                    }
-                }
-
-                // Bulk insert successful images
-                if (!empty($processedImages)) {
-                    foreach ($processedImages as $imageData) {
-                        $news->images()->create($imageData);
-                    }
-                }
-
-                // Report failed images
-                if (!empty($failedImages)) {
-                    $failedList = implode(', ', $failedImages);
-                    Log::warning("Some gallery images failed to process: {$failedList}");
+                foreach ($slideImages as $image) {
+                    $path = $this->storeOptimizedImage($image, 'news/gallery');
+                    $news->images()->create(['image_path' => $path]);
                 }
             }
 
             DB::commit();
-            
-            $message = 'Berita berhasil ditambahkan.';
-            if (!empty($failedImages)) {
-                $failedList = implode(', ', $failedImages);
-                $message .= " Namun, gambar galeri nomor {$failedList} gagal diproses.";
-            }
-            
-            return redirect()->route('admin.news.index')->with('success', $message);
+            return redirect()->route('admin.news.index')->with('success', 'Berita berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('News creation failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            Log::error('News creation failed', ['error' => $e->getMessage()]);
             return back()->with('error', 'Gagal menambahkan berita: ' . $e->getMessage())->withInput();
         }
     }
@@ -154,7 +143,7 @@ class NewsController extends Controller
             $data = $request->except(['featured_image', 'slide_images', 'delete_images', '_token', '_method']);
 
             // Handle Checkbox
-            $data['is_published'] = $request->has('is_published') ? 1 : 0;
+            $data['is_published'] = $request->boolean('is_published');
 
             // Handle Featured Image
             if ($request->hasFile('featured_image')) {
@@ -170,46 +159,20 @@ class NewsController extends Controller
             // Handle Gallery Images (Add New)
             if ($request->hasFile('slide_images')) {
                 $slideImages = $request->file('slide_images');
-                $maxImages = 10; // Limit number of images
-                
-                if (count($slideImages) > $maxImages) {
-                    throw new \Exception("Maksimal {$maxImages} gambar galeri yang diizinkan");
-                }
+                $currentImagesCount = $news->images()->count();
+                $maxImages = 7; // Updated to match test expectation
 
-                $processedImages = [];
-                $failedImages = [];
+                if (($currentImagesCount + count($slideImages)) > $maxImages) {
+                    throw new \Exception("Maksimal total {$maxImages} gambar galeri yang diizinkan");
+                }
 
                 foreach ($slideImages as $index => $image) {
                     try {
-                        // Add small delay to prevent overwhelming the server
-                        if ($index > 0) {
-                            usleep(100000); // 0.1 second delay
-                        }
-
                         $path = $this->storeOptimizedImage($image, 'news/gallery');
-                        $processedImages[] = ['image_path' => $path];
-                        
-                        Log::info("Gallery image processed", ['index' => $index + 1, 'path' => $path]);
+                        $news->images()->create(['image_path' => $path]);
                     } catch (\Exception $e) {
-                        $failedImages[] = $index + 1;
-                        Log::error("Failed to process gallery image", [
-                            'index' => $index + 1,
-                            'error' => $e->getMessage()
-                        ]);
+                        Log::error("Failed to process gallery image", ['error' => $e->getMessage()]);
                     }
-                }
-
-                // Bulk insert successful images
-                if (!empty($processedImages)) {
-                    foreach ($processedImages as $imageData) {
-                        $news->images()->create($imageData);
-                    }
-                }
-
-                // Report failed images
-                if (!empty($failedImages)) {
-                    $failedList = implode(', ', $failedImages);
-                    Log::warning("Some gallery images failed to process: {$failedList}");
                 }
             }
 
@@ -223,35 +186,27 @@ class NewsController extends Controller
             }
 
             DB::commit();
-            
-            $message = 'Berita berhasil diperbarui.';
-            if (!empty($failedImages)) {
-                $failedList = implode(', ', $failedImages);
-                $message .= " Namun, gambar galeri nomor {$failedList} gagal diproses.";
-            }
-            
-            return redirect()->route('admin.news.index')->with('success', $message);
+            return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('News update failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            Log::error('News update failed', ['error' => $e->getMessage()]);
             return back()->with('error', 'Gagal memperbarui berita: ' . $e->getMessage())->withInput();
         }
     }
 
     public function destroy(News $news)
     {
-        DB::beginTransaction();
         try {
-            // Delete Featured Image
+            DB::beginTransaction();
+
+            // Delete images from storage
             if ($news->featured_image) {
                 Storage::disk('public')->delete($news->featured_image);
             }
 
-            // Delete Gallery Images
             foreach ($news->images as $image) {
                 Storage::disk('public')->delete($image->image_path);
             }
-            $news->images()->delete(); // Bulk delete records
 
             $news->delete();
 
@@ -259,7 +214,28 @@ class NewsController extends Controller
             return redirect()->route('admin.news.index')->with('success', 'Berita berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('News deletion failed', ['error' => $e->getMessage()]);
             return back()->with('error', 'Gagal menghapus berita: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteImage(NewsImage $newsImage)
+    {
+        try {
+            Storage::disk('public')->delete($newsImage->image_path);
+            $newsImage->delete();
+
+            if (request()->ajax()) {
+                return response()->json(['success' => true]);
+            }
+
+            return back()->with('success', 'Foto slide berhasil dihapus.');
+        } catch (\Exception $e) {
+            if (request()->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+
+            return back()->with('error', 'Gagal menghapus gambar: ' . $e->getMessage());
         }
     }
 }

@@ -78,6 +78,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user has a specific permission (Spatie compatible)
+     */
+    public function hasPermissionTo(string $permission): bool
+    {
+        return $this->hasPermission($permission);
+    }
+
+    /**
      * Check if user has a specific permission
      */
     public function hasPermission(string $permission): bool

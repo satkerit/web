@@ -33,7 +33,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],
@@ -43,11 +43,11 @@ return [
             // Root path: where files are physically stored
             // Always use storage/app/public (symlink will handle the rest)
             'root' => storage_path('app/public'),
-            
+
             // URL: how to access files via web
             // Automatically configured based on STORAGE_URL env variable
-            'url' => env('STORAGE_URL', env('APP_URL').'/storage'),
-            
+            'url' => env('STORAGE_URL', env('APP_URL') . '/storage'),
+
             'visibility' => 'public',
             'serve' => true,
             'throw' => false,
@@ -84,20 +84,20 @@ return [
     |
     */
 
-    'links' => (function() {
+    'links' => (function () {
         $storageMode = env('STORAGE_MODE', 'development');
-        
+
         if ($storageMode === 'production') {
             // Production: link from public_html to app/storage/app/public
             $publicPath = env('PRODUCTION_PUBLIC_PATH');
-            
+
             if ($publicPath && is_dir($publicPath)) {
                 return [
                     $publicPath . '/storage' => storage_path('app/public'),
                 ];
             }
         }
-        
+
         // Development: standard Laravel structure
         return [
             public_path('storage') => storage_path('app/public'),

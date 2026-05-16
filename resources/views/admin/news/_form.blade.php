@@ -1,6 +1,9 @@
 @csrf
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8" 
+     data-edit-mode="{{ isset($news) ? 'true' : 'false' }}" 
+     data-news-id="{{ $news->id ?? 'new' }}"
+     data-upload-url="{{ route('admin.storage.upload-editor-image') }}">
     <!-- Main Content -->
     <div class="lg:col-span-2 space-y-6">
         <!-- Title & Slug -->

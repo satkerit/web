@@ -58,7 +58,7 @@ class NewsCRUDTest extends TestCase
             ->get(route('admin.news.create'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.news.form-redesign');
+        $response->assertViewIs('admin.news.create');
     }
 
     #[Test]
@@ -105,6 +105,7 @@ class NewsCRUDTest extends TestCase
             'title' => 'Berita Dengan Slide',
             'content' => 'Konten berita dengan slide images.',
             'category' => 'Artikel',
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true,
             'published_at' => now()->format('Y-m-d\TH:i'),
             'slide_images' => [
@@ -144,7 +145,7 @@ class NewsCRUDTest extends TestCase
             ->get(route('admin.news.edit', $news));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.news.form-redesign');
+        $response->assertViewIs('admin.news.edit');
         $response->assertViewHas('news');
     }
 
@@ -178,6 +179,10 @@ class NewsCRUDTest extends TestCase
 
         $response->assertRedirect(route('admin.news.index'));
         $response->assertSessionHas('success', 'Berita berhasil diperbarui.');
+
+        $news->refresh();
+        $this->assertEquals('Judul Baru Diperbarui', $news->title);
+        $this->assertEquals('Artikel', $news->category);
 
         $this->assertDatabaseHas('news', [
             'id' => $news->id,
@@ -462,6 +467,7 @@ class NewsCRUDTest extends TestCase
             'title' => 'Berita Author Test',
             'content' => 'Konten untuk test author.',
             'category' => 'Berita',
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true,
             'published_at' => now()->format('Y-m-d\TH:i'),
         ];
@@ -490,6 +496,7 @@ class NewsCRUDTest extends TestCase
             'title' => 'Judul Berita Untuk Slug Test',
             'content' => 'Konten berita.',
             'category' => 'Berita',
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true,
             'published_at' => now()->format('Y-m-d\TH:i'),
         ];

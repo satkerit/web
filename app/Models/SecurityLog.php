@@ -108,6 +108,12 @@ class SecurityLog extends Model
         $sensitiveKeys = ['password', 'password_confirmation', 'token', 'api_key', 'secret', '_token'];
 
         foreach ($data as $key => $value) {
+            // Filter out files/UploadedFile objects as they cannot be JSON encoded
+            if ($value instanceof \Illuminate\Http\UploadedFile || (is_array($value) && isset($value[0]) && $value[0] instanceof \Illuminate\Http\UploadedFile)) {
+                $data[$key] = '[FILE_UPLOAD]';
+                continue;
+            }
+
             if (in_array(strtolower($key), $sensitiveKeys)) {
                 $data[$key] = '[REDACTED]';
             } elseif (is_array($value)) {

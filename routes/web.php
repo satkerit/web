@@ -110,6 +110,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::put('/profile/password', [App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // News Management
+    Route::delete('news/image/{newsImage}', [App\Http\Controllers\Admin\NewsController::class, 'deleteImage'])->name('news.delete-image');
     Route::resource('news', App\Http\Controllers\Admin\NewsController::class)
         ->middleware(['optimize.upload']);  // Add upload optimization for news
 
@@ -212,6 +213,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::get('visitor-stats', [App\Http\Controllers\Admin\VisitorStatController::class, 'index'])->name('visitor-stats.index');
     Route::get('visitor-stats/export', [App\Http\Controllers\Admin\VisitorStatController::class, 'export'])->name('visitor-stats.export');
 
+    // Security Monitoring
+    Route::get('security-monitor', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'index'])->name('security-monitor');
+    Route::post('security-monitor/block', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'blockIp'])->name('security-monitor.block');
+    Route::post('security-monitor/unblock/{blockedIp}', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'unblockIp'])->name('security-monitor.unblock');
+    Route::post('security-monitor/cleanup', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'cleanup'])->name('security-monitor.cleanup');
+    Route::post('security-monitor/clear-expired', [App\Http\Controllers\Admin\SecurityMonitorController::class, 'clearExpiredBlocks'])->name('security-monitor.clear-expired');
+
     // Role Management
     Route::resource('roles', App\Http\Controllers\Admin\RoleController::class);
 
@@ -229,7 +237,7 @@ Route::prefix('api')->group(function () {
 });
 
 // Include authentication routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // Fallback route for 404
 Route::fallback(function () {

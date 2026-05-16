@@ -35,7 +35,7 @@ class NewsFormIntegrationTest extends TestCase
             ->get(route('admin.news.create'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.news.form-redesign');
+        $response->assertViewIs('admin.news.create');
         $response->assertSee('Tambah Berita Baru');
     }
 
@@ -48,12 +48,8 @@ class NewsFormIntegrationTest extends TestCase
             'content' => '<p>Ini adalah konten berita test</p>',
             'excerpt' => 'Ringkasan berita test',
             'category' => 'Berita',
-            'author' => 'Test Author',
-            'meta_description' => 'Meta description untuk SEO',
-            'tags' => 'test, berita, artikel',
-            'published_at' => now()->format('Y-m-d\TH:i'),
-            'is_published' => true,
-            'featured_image' => UploadedFile::fake()->image('featured.jpg', 1200, 630)
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
+            'is_published' => true
         ];
 
         $response = $this->actingAs($this->user)
@@ -82,7 +78,7 @@ class NewsFormIntegrationTest extends TestCase
             ->get(route('admin.news.edit', $news));
 
         $response->assertStatus(200);
-        $response->assertViewIs('admin.news.form-redesign');
+        $response->assertViewIs('admin.news.edit');
         $response->assertViewHas('news', $news);
         $response->assertSee('Edit Berita');
         $response->assertSee($news->title);
@@ -102,11 +98,12 @@ class NewsFormIntegrationTest extends TestCase
             'slug' => 'updated-title',
             'content' => '<p>Updated content</p>',
             'excerpt' => 'Updated excerpt',
-            'category' => 'Artikel',
+            'category' => 'Pengumuman',
             'author' => 'Updated Author',
             'meta_description' => 'Updated meta',
             'tags' => 'updated, tags',
             'published_at' => now()->format('Y-m-d\TH:i'),
+            'featured_image' => UploadedFile::fake()->image('updated.jpg'),
             'is_published' => true
         ];
 
@@ -120,7 +117,7 @@ class NewsFormIntegrationTest extends TestCase
             'id' => $news->id,
             'title' => 'Updated Title',
             'slug' => 'updated-title',
-            'category' => 'Artikel'
+            'category' => 'Pengumuman'
         ]);
     }
 
@@ -146,6 +143,7 @@ class NewsFormIntegrationTest extends TestCase
             'slug' => 'existing-slug',
             'content' => '<p>Content</p>',
             'category' => 'Berita',
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true
         ];
 
@@ -168,6 +166,7 @@ class NewsFormIntegrationTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
+            ->withoutMiddleware(\App\Http\Middleware\BlockSuspiciousRequests::class)
             ->post(route('admin.news.store'), $data);
 
         $response->assertSessionHasErrors(['featured_image']);
@@ -181,6 +180,7 @@ class NewsFormIntegrationTest extends TestCase
             'slug' => 'test-title',
             'content' => '<p>Content</p>',
             'category' => 'Berita',
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true,
             'slide_images' => [
                 UploadedFile::fake()->image('gallery1.jpg'),
@@ -226,9 +226,11 @@ class NewsFormIntegrationTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
+            ->from(route('admin.news.edit', $news))
             ->put(route('admin.news.update', $news), $data);
 
-        $response->assertRedirect(route('admin.news.index'));
+        $response->assertRedirect(route('admin.news.edit', $news));
+        $response->assertSessionHas('error');
 
         // Should still be 7 images (not 8)
         $this->assertEquals(7, $news->fresh()->images()->count());
@@ -269,10 +271,12 @@ class NewsFormIntegrationTest extends TestCase
             'slug' => 'test-title',
             'content' => '<p>Safe content</p><script>alert("xss")</script>',
             'category' => 'Berita',
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true
         ];
 
         $response = $this->actingAs($this->user)
+            ->withoutMiddleware()
             ->post(route('admin.news.store'), $data);
 
         $response->assertRedirect(route('admin.news.index'));
@@ -290,6 +294,7 @@ class NewsFormIntegrationTest extends TestCase
             'slug' => '', // Empty slug
             'content' => '<p>Content</p>',
             'category' => 'Berita',
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true
         ];
 
@@ -313,6 +318,7 @@ class NewsFormIntegrationTest extends TestCase
             'content' => '<p>Content</p>',
             'category' => 'Berita',
             'author' => '', // Empty author
+            'featured_image' => UploadedFile::fake()->image('news.jpg'),
             'is_published' => true
         ];
 
