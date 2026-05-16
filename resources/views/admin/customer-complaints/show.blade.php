@@ -125,7 +125,12 @@
             <div class="space-y-3">
                 <div>
                     <p class="text-sm text-gray-500">Kategori</p>
-                    <x-admin.badge>{{ $customerComplaint->category_label }}</x-admin.badge>
+                    <div class="flex items-center gap-2">
+                        <x-admin.badge>{{ $customerComplaint->category_label }}</x-admin.badge>
+                        @if($customerComplaint->subcategory)
+                            <x-admin.badge variant="info">{{ $customerComplaint->subcategory_label }}</x-admin.badge>
+                        @endif
+                    </div>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Prioritas</p>

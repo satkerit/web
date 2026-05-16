@@ -461,7 +461,14 @@
                         <div class="nasabah-name">{{ $c->name }}</div>
                         <div class="nasabah-contact">{{ $c->phone }}</div>
                     </td>
-                    <td><span class="badge badge-category">{{ $c->category_label }}</span></td>
+                    <td>
+                        <div class="flex flex-col gap-1">
+                            <span class="badge badge-category">{{ $c->category_label }}</span>
+                            @if($c->subcategory)
+                                <div style="font-size:8.5px;color:#2563eb;font-weight:600;margin-top:2px;">• {{ $c->subcategory_label }}</div>
+                            @endif
+                        </div>
+                    </td>
                     <td>
                         @if($c->priority === 'high')
                             <span class="badge badge-high">Tinggi</span>

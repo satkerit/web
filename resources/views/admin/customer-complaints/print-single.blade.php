@@ -291,6 +291,9 @@
     </div>
     <div class="ticket-badges">
         <span class="badge badge-category">{{ $customerComplaint->category_label }}</span>
+        @if($customerComplaint->subcategory)
+            <span class="badge badge-progress">{{ $customerComplaint->subcategory_label }}</span>
+        @endif
         @if($customerComplaint->priority === 'high')
             <span class="badge badge-high">⚠ Prioritas Tinggi</span>
         @elseif($customerComplaint->priority === 'medium')

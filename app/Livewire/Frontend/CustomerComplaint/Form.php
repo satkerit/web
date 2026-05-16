@@ -22,6 +22,7 @@ class Form extends Component
     public $phone = '';
     public $account_number = '';
     public $category = '';
+    public $subcategory = '';
     public $subject = '';
     public $description = '';
     public $branch_office = '';
@@ -38,6 +39,7 @@ class Form extends Component
         'email' => 'required|email|max:255',
         'phone' => 'required|string|max:20',
         'category' => 'required|in:service,product,transaction,facility,staff,other',
+        'subcategory' => 'required_if:category,product|nullable|in:tabungan,pembiayaan',
         'subject' => 'required|string|max:255',
         'description' => 'required|string|min:20|max:3000',
         'attachments.*' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,jpeg,png',
@@ -50,6 +52,7 @@ class Form extends Component
         'email.email' => 'Format email tidak valid',
         'phone.required' => 'Nomor telepon wajib diisi',
         'category.required' => 'Pilih kategori pengaduan',
+        'subcategory.required_if' => 'Pilih sub kategori produk',
         'subject.required' => 'Subjek pengaduan wajib diisi',
         'description.required' => 'Deskripsi pengaduan wajib diisi',
         'description.min' => 'Deskripsi minimal 20 karakter',
@@ -80,6 +83,7 @@ class Form extends Component
             'phone' => $this->phone,
             'account_number' => $this->account_number ?: null,
             'category' => $this->category,
+            'subcategory' => $this->category === 'product' ? $this->subcategory : null,
             'subject' => $this->subject,
             'description' => $this->description,
             'branch_office' => $this->branch_office ?: null,

@@ -76,6 +76,19 @@
                         </select>
                         @error('category') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                     </div>
+
+                    @if($category === 'product')
+                    <div x-data x-init="$el.classList.add('animate-fade-in')">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Sub Kategori Produk <span class="text-red-500">*</span></label>
+                        <select wire:model.live="subcategory" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('subcategory') border-red-300 @enderror">
+                            <option value="">Pilih Sub Kategori</option>
+                            <option value="tabungan">Tabungan</option>
+                            <option value="pembiayaan">Pembiayaan</option>
+                        </select>
+                        @error('subcategory') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    @endif
+
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Kantor Terkait</label>
                         <select wire:model.live="branch_office" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">

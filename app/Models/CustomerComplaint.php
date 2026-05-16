@@ -27,6 +27,7 @@ class CustomerComplaint extends Model
         'phone',
         'account_number',
         'category',
+        'subcategory',
         'subject',
         'description',
         'branch_office',
@@ -95,6 +96,19 @@ class CustomerComplaint extends Model
             'staff' => 'Petugas/Karyawan',
             'other' => 'Lainnya',
             default => $this->category
+        };
+    }
+
+    public function getSubcategoryLabelAttribute(): ?string
+    {
+        if (!$this->subcategory) {
+            return null;
+        }
+
+        return match ($this->subcategory) {
+            'tabungan' => 'Tabungan',
+            'pembiayaan' => 'Pembiayaan',
+            default => ucfirst($this->subcategory)
         };
     }
 

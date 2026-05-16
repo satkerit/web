@@ -144,6 +144,9 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2 mb-3">
                     <x-admin.badge>{{ $complaint->category_label }}</x-admin.badge>
+                    @if($complaint->subcategory)
+                        <x-admin.badge variant="info">{{ $complaint->subcategory_label }}</x-admin.badge>
+                    @endif
                     @if($complaint->priority === 'high')
                         <x-admin.badge variant="danger">Prioritas Tinggi</x-admin.badge>
                     @endif
@@ -184,7 +187,12 @@
                         </div>
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">
-                        <x-admin.badge>{{ $complaint->category_label }}</x-admin.badge>
+                        <div class="flex flex-col gap-1">
+                            <x-admin.badge>{{ $complaint->category_label }}</x-admin.badge>
+                            @if($complaint->subcategory)
+                                <x-admin.badge variant="info" class="text-[10px]">{{ $complaint->subcategory_label }}</x-admin.badge>
+                            @endif
+                        </div>
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         @switch($complaint->priority)
