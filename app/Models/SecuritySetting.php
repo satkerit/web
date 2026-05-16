@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 class SecuritySetting extends Model
 {
@@ -51,7 +52,14 @@ class SecuritySetting extends Model
     public static function getSettings(): self
     {
         return Cache::remember('security_settings', 3600, function () {
-            return self::first() ?? self::create([]);
+            try {
+                if (!Schema::hasTable('security_settings')) {
+                    return new self();
+                }
+                return self::first() ?? self::create([]);
+            } catch (\Exception $e) {
+                return new self();
+            }
         });
     }
 

@@ -36,13 +36,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::shouldBeStrict(! $this->app->isProduction());
-        
+
         // Prevent lazy loading in development
         if (! $this->app->isProduction()) {
             Model::preventLazyLoading();
         }
 
         $this->loadSmtpSettings();
+        $this->applySecuritySettings();
         $this->registerBladeDirectives();
 
         // Share CSP nonce with all views
@@ -83,10 +84,48 @@ class AppServiceProvider extends ServiceProvider
     protected function loadSmtpSettings(): void
     {
         try {
+            // Check if we are running in console
+            if ($this->app->runningInConsole()) {
+                return;
+            }
+
             if (Schema::hasTable('smtp_settings')) {
-                $settings = SmtpSetting::getActive();
+                $settings = \App\Models\SmtpSetting::getActive();
                 if ($settings) {
                     $settings->applyToConfig();
+                }
+            }
+        } catch (\Exception $e) {
+            // Silently fail if database is not available
+        }
+    }
+
+    /**
+     * Apply security settings from database to application config
+     */
+    protected function applySecuritySettings(): void
+    {
+        try {
+            // Check if we are running in console (like migrations or seeders)
+            if ($this->app->runningInConsole()) {
+                return;
+            }
+
+            if (Schema::hasTable('security_settings')) {
+                $settings = \App\Models\SecuritySetting::getSettings();
+                if ($settings) {
+                    // Apply session lifetime (convert to minutes for Laravel config)
+                    if ($settings->session_lifetime) {
+                        config(['session.lifetime' => (int) $settings->session_lifetime]);
+                    }
+
+                    // Apply other security configs if needed
+                    config(['session.expire_on_close' => false]);
+
+                    // Force HTTPS cookie in production
+                    if ($this->app->isProduction()) {
+                        config(['session.secure' => true]);
+                    }
                 }
             }
         } catch (\Exception $e) {
