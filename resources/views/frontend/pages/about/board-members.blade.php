@@ -36,7 +36,8 @@
                         @if($member->photo)
                         <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" 
                              alt="{{ $member->name }}" 
-                             loading="lazy"
+                             loading="{{ $loop->index < 4 ? 'eager' : 'lazy' }}"
+                             fetchpriority="{{ $loop->index < 4 ? 'high' : 'auto' }}"
                              x-init="if($el.complete) loaded = true"
                              @load="loaded = true"
                              class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"

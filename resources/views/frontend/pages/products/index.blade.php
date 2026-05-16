@@ -46,7 +46,8 @@
                         <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
                              alt="{{ $product->name }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                             loading="lazy">
+                             loading="{{ $index < 3 ? 'eager' : 'lazy' }}"
+                             fetchpriority="{{ $index < 3 ? 'high' : 'auto' }}">
                         @else
                         <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center">
                             <span class="text-white text-3xl sm:text-4xl opacity-20 transform -rotate-12 select-none font-bold">BPRS</span>

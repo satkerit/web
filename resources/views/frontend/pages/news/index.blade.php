@@ -78,14 +78,17 @@
                 @endif
             </div>
 
-            <!-- News Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-                @forelse($news as $item)
+                @forelse($news as $index => $item)
                 <article class="group bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl shadow-gray-200/50 hover:shadow-2xl hover:shadow-emerald-900/10 transition-all duration-300 border border-gray-100 hover:border-emerald-200 flex flex-col h-full touch-manipulation active:scale-[0.99]">
                     <!-- Image -->
                     <div class="relative h-48 sm:h-56 md:h-64 overflow-hidden bg-gray-100">
                         @if($item->featured_image)
-                        <img src="{{ \App\Helpers\StorageHelper::url($item->featured_image) }}" alt="{{ $item->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
+                        <img src="{{ \App\Helpers\StorageHelper::url($item->featured_image) }}"
+                             alt="{{ $item->title }}"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                             loading="{{ $index < 3 ? 'eager' : 'lazy' }}"
+                             fetchpriority="{{ $index < 3 ? 'high' : 'auto' }}">
                         @else
                         <div class="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
                             <svg class="w-16 h-16 sm:w-20 sm:h-20 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
