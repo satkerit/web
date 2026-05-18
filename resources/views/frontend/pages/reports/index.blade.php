@@ -106,7 +106,7 @@
     @push('scripts')
     <script nonce="{{ $nonce }}">
     document.addEventListener('DOMContentLoaded', function() {
-        // Event delegation for report links
+        /* Event delegation for report links */
         document.addEventListener('click', function(e) {
             const link = e.target.closest('.report-link');
             if (!link) return;

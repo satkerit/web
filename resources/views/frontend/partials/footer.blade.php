@@ -236,7 +236,7 @@
     </button>
 
     <script nonce="{{ $nonce }}">
-        // Back to Top Button Visibility and Action
+        /* Back to Top Button Visibility and Action */
         (function() {
             const backToTopBtn = document.getElementById('backToTop');
 
@@ -252,11 +252,13 @@
 
             window.addEventListener('scroll', toggleBackToTop);
 
-            backToTopBtn.addEventListener('click', function() {
-                window.scrollTo({top: 0, behavior: 'smooth'});
-            });
+            if (backToTopBtn) {
+                backToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                });
+            }
 
-            toggleBackToTop(); // Initial check
+            toggleBackToTop(); /* Initial check */
         })();
     </script>
 </footer>
