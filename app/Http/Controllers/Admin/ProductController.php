@@ -88,8 +88,13 @@ class ProductController extends Controller
         }
 
         try {
-            $validated['image'] = $this->handleImageUpload($request, 'image', 'products');
+            // Handle image upload using Trait
+            $imagePath = $this->handleImageUpload($request, 'image', 'products');
+            if ($imagePath) {
+                $validated['image'] = $imagePath;
+            }
 
+            // Handle manual brochure upload
             if ($request->hasFile('brochure')) {
                 $validated['brochure'] = $request->file('brochure')->store('products/brochures', 'public');
             }
@@ -99,7 +104,7 @@ class ProductController extends Controller
             return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
         } catch (\Exception $e) {
             Log::error('Error creating product: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Gagal menambahkan produk. Silakan coba lagi.');
+            return back()->withInput()->with('error', 'Gagal menambahkan produk: ' . $e->getMessage());
         }
     }
 
@@ -151,8 +156,16 @@ class ProductController extends Controller
         }
 
         try {
-            $validated['image'] = $this->handleImageUpload($request, 'image', 'products', $product->image);
+            // Handle image upload using Trait
+            $imagePath = $this->handleImageUpload($request, 'image', 'products', $product->image);
+            if ($imagePath !== $product->image) {
+                $validated['image'] = $imagePath;
+            } else {
+                // Keep the old image if not changed
+                unset($validated['image']);
+            }
 
+            // Handle manual brochure upload
             if ($request->hasFile('brochure')) {
                 if ($product->brochure) {
                     Storage::disk('public')->delete($product->brochure);
@@ -165,7 +178,7 @@ class ProductController extends Controller
             return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
         } catch (\Exception $e) {
             Log::error('Error updating product: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Gagal memperbarui produk. Silakan coba lagi.');
+            return back()->withInput()->with('error', 'Gagal memperbarui produk: ' . $e->getMessage());
         }
     }
 
