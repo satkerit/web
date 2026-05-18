@@ -227,7 +227,6 @@
     <!-- Back to Top Button -->
     <button
         id="backToTop"
-        onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
         class="fixed bottom-24 right-6 xl:bottom-28 xl:right-8 z-40 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 opacity-0 invisible flex items-center justify-center group touch-manipulation active:scale-95"
         aria-label="Kembali ke atas"
     >
@@ -237,7 +236,7 @@
     </button>
 
     <script nonce="{{ $nonce }}">
-        // Back to Top Button Visibility
+        // Back to Top Button Visibility and Action
         (function() {
             const backToTopBtn = document.getElementById('backToTop');
 
@@ -252,6 +251,11 @@
             }
 
             window.addEventListener('scroll', toggleBackToTop);
+
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+
             toggleBackToTop(); // Initial check
         })();
     </script>

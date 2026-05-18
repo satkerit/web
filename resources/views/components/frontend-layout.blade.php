@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <!-- Permissions Policy for Geolocation -->
     <meta http-equiv="Permissions-Policy" content="geolocation=(self)">
-    
+
     <title>{{ $title ?? config('app.name', 'BPRS Bangka Belitung') }}</title>
 
     @php $company = \App\Models\CompanyInfo::getInfo(); @endphp
@@ -192,8 +192,8 @@
     </main>
 
     <!-- Fixed Prayer Time Widget - Right Side -->
-    <div x-data="{ 
-        show: true, 
+    <div x-data="{
+        show: true,
         minimized: false,
         topPosition: 96,
         init() {
@@ -213,13 +213,13 @@
                 this.topPosition = header.offsetHeight + 16;
             }
         }
-    }" 
+    }"
     class="fixed right-0 z-40 transition-all duration-300"
     :class="minimized ? 'translate-x-[calc(100%-3rem)]' : 'translate-x-0'"
     :style="'top: ' + topPosition + 'px; max-height: calc(100vh - ' + topPosition + 'px - 2rem);'">
-        
+
         <!-- Toggle Button -->
-        <button 
+        <button
             @click="minimized = !minimized"
             class="absolute left-0 top-4 -translate-x-full bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-2 rounded-l-lg shadow-lg hover:shadow-xl transition-all z-10"
             :class="minimized ? 'opacity-100' : 'opacity-0 hover:opacity-100'"
@@ -230,7 +230,7 @@
         </button>
 
         <!-- Close Button (Mobile) -->
-        <button 
+        <button
             @click="show = false; $el.closest('[x-data]').style.display = 'none'"
             class="lg:hidden absolute right-2 top-2 bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-lg transition-all z-10"
             title="Close">
@@ -248,13 +248,8 @@
     <!-- Footer -->
     @include('frontend.partials.footer', ['company' => $company])
 
-    <!-- Back to Top Button -->
-    <button x-data="{ show: false }" @scroll.window="show = window.scrollY > 500" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" @click="window.scrollTo({ top: 0, behavior: 'smooth' })" class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-40" aria-label="Back to top">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
-    </button>
-
-    @livewireScripts
-    @vite(['resources/js/pagination-fix.js'])
+    @livewireScripts(['nonce' => $nonce])
+    @vite(['resources/js/pagination-fix.js'], ['nonce' => $nonce])
     @stack('scripts')
 </body>
 </html>

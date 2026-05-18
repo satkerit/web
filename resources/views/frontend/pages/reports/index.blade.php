@@ -73,14 +73,21 @@
                             </span>
                         </div>
                         <div class="flex items-center gap-2 mt-4 sm:mt-6">
-                            <a href="{{ route('reports.preview', $report->id) }}" target="_blank" onclick="incrementPreview({{ $report->id }})" class="flex-1 min-h-[44px] px-3 sm:px-4 py-2 bg-white border border-gray-300 text-gray-700 text-xs sm:text-sm rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200 flex items-center justify-center shadow-sm touch-manipulation active:scale-95">
+                            <a href="{{ route('reports.preview', $report->id) }}"
+                               target="_blank"
+                               data-action="preview"
+                               data-report-id="{{ $report->id }}"
+                               class="report-link flex-1 min-h-[44px] px-3 sm:px-4 py-2 bg-white border border-gray-300 text-gray-700 text-xs sm:text-sm rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors duration-200 flex items-center justify-center shadow-sm touch-manipulation active:scale-95">
                                 <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                                 Preview
                             </a>
-                            <a href="{{ route('reports.download', $report->id) }}" onclick="incrementDownload({{ $report->id }})" class="flex-1 min-h-[44px] px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs sm:text-sm rounded-lg hover:shadow-lg hover:shadow-emerald-600/30 transition-all duration-200 flex items-center justify-center shadow-md touch-manipulation active:scale-95">
+                            <a href="{{ route('reports.download', $report->id) }}"
+                               data-action="download"
+                               data-report-id="{{ $report->id }}"
+                               class="report-link flex-1 min-h-[44px] px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs sm:text-sm rounded-lg hover:shadow-lg hover:shadow-emerald-600/30 transition-all duration-200 flex items-center justify-center shadow-md touch-manipulation active:scale-95">
                                 <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 Download
                             </a>
@@ -98,15 +105,38 @@
 
     @push('scripts')
     <script nonce="{{ $nonce }}">
-    function incrementPreview(id) {
-        var el = document.getElementById('preview-' + id);
-        if (el) el.textContent = (parseInt(el.textContent.replace(/,/g,'')) + 1).toLocaleString();
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Event delegation for report links
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('.report-link');
+            if (!link) return;
 
-    function incrementDownload(id) {
-        var el = document.getElementById('download-' + id);
-        if (el) el.textContent = (parseInt(el.textContent.replace(/,/g,'')) + 1).toLocaleString();
-    }
+            const id = link.dataset.reportId;
+            const action = link.dataset.action;
+
+            if (action === 'preview') {
+                incrementPreview(id);
+            } else if (action === 'download') {
+                incrementDownload(id);
+            }
+        });
+
+        function incrementPreview(id) {
+            const el = document.getElementById('preview-' + id);
+            if (el) {
+                const currentCount = parseInt(el.textContent.replace(/,/g, '')) || 0;
+                el.textContent = (currentCount + 1).toLocaleString();
+            }
+        }
+
+        function incrementDownload(id) {
+            const el = document.getElementById('download-' + id);
+            if (el) {
+                const currentCount = parseInt(el.textContent.replace(/,/g, '')) || 0;
+                el.textContent = (currentCount + 1).toLocaleString();
+            }
+        }
+    });
     </script>
     @endpush
 </x-frontend-layout>
