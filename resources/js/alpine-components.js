@@ -153,23 +153,26 @@ window.imagePicker = function (config = {}) {
         inputId: config.inputId || "",
         hasExistingImage: config.hasExistingImage || false,
         shouldDelete: false,
+        deleteFieldName: config.deleteFieldName || "",
 
         init() {
             console.log("[Alpine] imagePicker initialized:", {
                 previewUrl: this.previewUrl,
+                inputId: this.inputId,
             });
         },
 
-        openModal() {
+        openStorageModal() {
             this.showModal = true;
-            this.loadDirectory("");
+            this.navigateTo("");
         },
 
-        closeModal() {
+        closeStorageModal() {
             this.showModal = false;
+            this.selectedItem = null;
         },
 
-        async loadDirectory(path) {
+        async navigateTo(path) {
             this.loading = true;
             try {
                 const response = await fetch(
@@ -186,31 +189,67 @@ window.imagePicker = function (config = {}) {
             }
         },
 
-        selectItem(item) {
-            if (item.type === "file") {
-                this.previewUrl = item.url;
+        selectImage(item) {
+            this.selectedItem = item;
+        },
+
+        confirmSelection() {
+            if (this.selectedItem) {
+                this.previewUrl = this.selectedItem.url;
                 this.fromStorage = true;
-                this.storagePath = item.path;
+                this.storagePath = this.selectedItem.path;
+                this.shouldDelete = false;
                 this.showModal = false;
-                this.updateInput();
-            } else if (item.type === "dir") {
-                this.loadDirectory(item.path);
+                this.selectedItem = null;
+
+                // Reset file input if any
+                const input = document.getElementById(this.inputId);
+                if (input) input.value = "";
             }
         },
 
-        updateInput() {
-            const input = document.getElementById(this.inputId);
-            if (input) {
-                input.value = this.storagePath;
+        handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.previewUrl = e.target.result;
+                    this.fromStorage = false;
+                    this.storagePath = "";
+                    this.shouldDelete = false;
+                };
+                reader.readAsDataURL(file);
             }
         },
 
-        removeImage() {
+        clearSelection() {
             this.previewUrl = "";
             this.fromStorage = false;
             this.storagePath = "";
             this.shouldDelete = true;
-            this.updateInput();
+
+            // Reset file input
+            const input = document.getElementById(this.inputId);
+            if (input) input.value = "";
+        },
+
+        // Aliases for backward compatibility or different naming conventions
+        openModal() {
+            this.openStorageModal();
+        },
+        closeModal() {
+            this.closeStorageModal();
+        },
+        loadDirectory(path) {
+            this.navigateTo(path);
+        },
+        selectItem(item) {
+            this.selectImage(item);
+        },
+        removeImage() {
+            this.clearSelection();
         },
     };
 };
