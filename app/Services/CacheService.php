@@ -15,6 +15,7 @@ use App\Models\WhyChooseUs;
 use App\Models\WhyChooseUsSetting;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Cache;
+use Spatie\ResponseCache\Facades\ResponseCache;
 
 class CacheService
 {
@@ -47,13 +48,18 @@ class CacheService
      */
     public static function getHeroSlidesDynamic()
     {
-        // Get limit from site settings, default to 5 if not set
-        $limit = SiteSetting::getSettings()->hero_slide_limit ?? 5;
+        try {
+            if (!class_exists('\App\Models\SiteSetting')) return self::getHeroSlides(5);
+            // Get limit from site settings, default to 5 if not set
+            $limit = SiteSetting::getSettings()->hero_slide_limit ?? 5;
 
-        // Ensure limit is within valid range (1-20)
-        $limit = max(1, min(20, $limit));
+            // Ensure limit is within valid range (1-20)
+            $limit = max(1, min(20, $limit));
 
-        return self::getHeroSlides($limit);
+            return self::getHeroSlides($limit);
+        } catch (\Exception $e) {
+            return self::getHeroSlides(5);
+        }
     }
 
     /**
@@ -342,6 +348,14 @@ class CacheService
     {
         Cache::forget('news_home_3');
         Cache::forget('news_categories');
+
+        // Clear response cache from Spatie
+        try {
+            if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
+                ResponseCache::clear();
+            }
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -351,6 +365,14 @@ class CacheService
     {
         Cache::forget('kas_keliling');
         Cache::forget('kas_keliling_schedules');
+
+        // Clear response cache from Spatie
+        try {
+            if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
+                ResponseCache::clear();
+            }
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -364,6 +386,14 @@ class CacheService
             foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $t) {
                 Cache::forget("report_years_{$t}");
             }
+        }
+
+        // Clear response cache from Spatie
+        try {
+            if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
+                ResponseCache::clear();
+            }
+        } catch (\Exception $e) {
         }
     }
 
@@ -409,6 +439,14 @@ class CacheService
         foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $type) {
             Cache::forget("report_years_{$type}");
         }
+
+        // Clear response cache from Spatie
+        try {
+            if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
+                ResponseCache::clear();
+            }
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -421,6 +459,14 @@ class CacheService
         Cache::forget('auctions_upcoming');
         Cache::forget('auctions_asset_types');
         Cache::forget('auctions_cities');
+
+        // Clear response cache from Spatie
+        try {
+            if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
+                ResponseCache::clear();
+            }
+        } catch (\Exception $e) {
+        }
     }
 
     /**

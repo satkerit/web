@@ -39,7 +39,20 @@ return Application::configure(basePath: dirname(__DIR__))
 
 
         // Web middleware group - Security monitoring runs early
-        $middleware->web(append: []);
+        $middleware->web(append: [
+            \App\Http\Middleware\CacheStaticAssets::class,
+            \App\Http\Middleware\DdosProtection::class,
+            \App\Http\Middleware\DetectSuspiciousActivity::class,
+            \App\Http\Middleware\CheckMaintenanceMode::class,
+            \App\Http\Middleware\BlockSuspiciousRequests::class,
+            \App\Http\Middleware\SecureSessionMiddleware::class,
+            \App\Http\Middleware\LogVisitor::class,
+            \App\Http\Middleware\OptimizeResponse::class,
+            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
+        ]);
+
+        // Security headers for all responses
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
         $middleware->validateCsrfTokens(except: [
             '/api/csp-report',
