@@ -14,3 +14,4 @@ Thumbs.db
 /storage
 *.md
 *.sql
+*.sh

@@ -48,7 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SecureSessionMiddleware::class,
             \App\Http\Middleware\LogVisitor::class,
             \App\Http\Middleware\OptimizeResponse::class,
-            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
+            // \Spatie\ResponseCache\Middlewares\CacheResponse::class, // Temporarily disabled - run: composer install && php artisan config:clear on production
         ]);
 
         // Security headers for all responses
