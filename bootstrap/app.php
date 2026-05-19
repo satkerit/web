@@ -37,21 +37,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'optimize.upload' => \App\Http\Middleware\OptimizeFileUpload::class,
         ]);
 
-        // Security headers for all responses
-        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
         // Web middleware group - Security monitoring runs early
-        $middleware->web(append: [
-            \App\Http\Middleware\CacheStaticAssets::class,
-            \App\Http\Middleware\DdosProtection::class,
-            \App\Http\Middleware\DetectSuspiciousActivity::class,
-            \App\Http\Middleware\CheckMaintenanceMode::class,
-            \App\Http\Middleware\BlockSuspiciousRequests::class,
-            \App\Http\Middleware\SecureSessionMiddleware::class,
-            \App\Http\Middleware\LogVisitor::class,
-            \App\Http\Middleware\OptimizeResponse::class,
-            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
-        ]);
+        $middleware->web(append: []);
 
         $middleware->validateCsrfTokens(except: [
             '/api/csp-report',

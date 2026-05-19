@@ -15,7 +15,6 @@ use App\Models\WhyChooseUs;
 use App\Models\WhyChooseUsSetting;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Cache;
-use Spatie\ResponseCache\Facades\ResponseCache;
 
 class CacheService
 {
@@ -29,13 +28,17 @@ class CacheService
      */
     public static function getCompanyInfo(): ?CompanyInfo
     {
-        // Clear cache if it might be stale (doesn't have profile_image)
-        $cached = Cache::get('company_info');
-        if ($cached && !array_key_exists('profile_image', $cached->getAttributes())) {
-            Cache::forget('company_info');
-        }
+        try {
+            // Clear cache if it might be stale (doesn't have profile_image)
+            $cached = Cache::get('company_info');
+            if ($cached && $cached instanceof CompanyInfo && !array_key_exists('profile_image', $cached->getAttributes())) {
+                Cache::forget('company_info');
+            }
 
-        return Cache::remember('company_info', self::CACHE_LONG, fn() => CompanyInfo::first());
+            return Cache::remember('company_info', self::CACHE_LONG, fn() => CompanyInfo::first());
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -57,27 +60,31 @@ class CacheService
      */
     public static function getHeroSlides(int $limit = 5)
     {
-        return Cache::remember(
-            "hero_slides_{$limit}",
-            self::CACHE_MEDIUM,
-            fn() =>
-            HeroSlide::where('is_active', true)
-                ->orderBy('order_position')
-                ->limit($limit)
-                ->get([
-                    'id',
-                    'title',
-                    'subtitle',
-                    'image',
-                    'link_url',
-                    'link_text',
-                    'transition_type',
-                    'transition_duration',
-                    'show_title',
-                    'show_subtitle',
-                    'show_button'
-                ])
-        );
+        try {
+            return Cache::remember(
+                "hero_slides_{$limit}",
+                self::CACHE_MEDIUM,
+                fn() =>
+                HeroSlide::where('is_active', true)
+                    ->orderBy('order_position')
+                    ->limit($limit)
+                    ->get([
+                        'id',
+                        'title',
+                        'subtitle',
+                        'image',
+                        'link_url',
+                        'link_text',
+                        'transition_type',
+                        'transition_duration',
+                        'show_title',
+                        'show_subtitle',
+                        'show_button'
+                    ])
+            );
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 
     /**
@@ -85,15 +92,19 @@ class CacheService
      */
     public static function getHomeProducts(int $limit = 6)
     {
-        return Cache::remember(
-            "products_home_{$limit}",
-            self::CACHE_MEDIUM,
-            fn() =>
-            Product::where('is_active', true)
-                ->orderBy('order_position')
-                ->limit($limit)
-                ->get(['id', 'name', 'slug', 'short_description', 'image', 'type'])
-        );
+        try {
+            return Cache::remember(
+                "products_home_{$limit}",
+                self::CACHE_LONG,
+                fn() =>
+                Product::where('is_active', true)
+                    ->orderBy('order_position')
+                    ->limit($limit)
+                    ->get(['id', 'name', 'slug', 'short_description', 'image', 'type'])
+            );
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 
     /**
@@ -117,16 +128,20 @@ class CacheService
      */
     public static function getHomeNews(int $limit = 3)
     {
-        return Cache::remember(
-            "news_home_{$limit}",
-            self::CACHE_SHORT,
-            fn() =>
-            News::where('is_published', true)
-                ->where('published_at', '<=', now())
-                ->orderBy('published_at', 'desc')
-                ->limit($limit)
-                ->get(['id', 'title', 'slug', 'excerpt', 'featured_image', 'published_at', 'category'])
-        );
+        try {
+            return Cache::remember(
+                "news_home_{$limit}",
+                self::CACHE_MEDIUM,
+                fn() =>
+                News::where('is_published', true)
+                    ->where('published_at', '<=', now())
+                    ->orderBy('published_at', 'desc')
+                    ->limit($limit)
+                    ->get(['id', 'title', 'slug', 'excerpt', 'featured_image', 'published_at', 'category'])
+            );
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 
     /**
@@ -134,29 +149,33 @@ class CacheService
      */
     public static function getHomeAuctions(int $limit = 3)
     {
-        return Cache::remember(
-            "auctions_home_{$limit}",
-            self::CACHE_SHORT,
-            function () use ($limit) {
-                try {
-                    return Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled', 'sold'])
-                        ->where(function ($query) {
-                            $query->whereNull('auction_date')
-                                ->orWhere('auction_date', '>', now())
-                                ->orWhere('status', 'sold');
-                        })
-                        ->orderByRaw("CASE WHEN status = 'sold' THEN 1 ELSE 0 END")
-                        ->orderBy('auction_date', 'asc')
-                        ->orderBy('created_at', 'desc')
-                        ->limit($limit)
-                        ->get(['id', 'title', 'slug', 'city', 'limit_price', 'auction_date', 'images', 'asset_type', 'status']);
-                } catch (\Exception $e) {
-                    // Fallback jika ada masalah dengan kolom
-                    \Log::error('Error getting home auctions: ' . $e->getMessage());
-                    return collect(); // Return empty collection
+        try {
+            return Cache::remember(
+                "auctions_home_{$limit}",
+                self::CACHE_MEDIUM,
+                function () use ($limit) {
+                    try {
+                        return Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled', 'sold'])
+                            ->where(function ($query) {
+                                $query->whereNull('auction_date')
+                                    ->orWhere('auction_date', '>', now())
+                                    ->orWhere('status', 'sold');
+                            })
+                            ->orderByRaw("CASE WHEN status = 'sold' THEN 1 ELSE 0 END")
+                            ->orderBy('auction_date', 'asc')
+                            ->orderBy('created_at', 'desc')
+                            ->limit($limit)
+                            ->get(['id', 'title', 'slug', 'city', 'limit_price', 'auction_date', 'images', 'asset_type', 'status']);
+                    } catch (\Exception $e) {
+                        // Fallback jika ada masalah dengan kolom
+                        \Log::error('Error getting home auctions: ' . $e->getMessage());
+                        return collect(); // Return empty collection
+                    }
                 }
-            }
-        );
+            );
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 
     /**
@@ -249,13 +268,15 @@ class CacheService
      */
     public static function getWhyChooseUs()
     {
-        return Cache::remember(
-            'why_choose_us_items',
-            self::CACHE_MEDIUM,
-            fn() => WhyChooseUs::where('is_active', true)
-                ->orderBy('sort_order')
-                ->get()
-        );
+        try {
+            return Cache::remember('why_choose_us_items', self::CACHE_LONG, function () {
+                return WhyChooseUs::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->get();
+            });
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 
     /**
@@ -263,11 +284,20 @@ class CacheService
      */
     public static function getWhyChooseUsSettings()
     {
-        return Cache::remember(
-            'why_choose_us_settings',
-            self::CACHE_LONG,
-            fn() => WhyChooseUsSetting::getSettings()
-        );
+        try {
+            return Cache::remember('why_choose_us_settings', self::CACHE_LONG, function () {
+                return WhyChooseUsSetting::first() ?? WhyChooseUsSetting::create([
+                    'section_title' => 'Mengapa Memilih Kami?',
+                    'section_subtitle' => 'Keunggulan layanan perbankan syariah kami untuk Anda.',
+                ]);
+            });
+        } catch (\Exception $e) {
+            return (object)[
+                'section_title' => 'Mengapa Memilih Kami?',
+                'section_subtitle' => 'Keunggulan layanan perbankan syariah kami untuk Anda.',
+                'section_image' => null
+            ];
+        }
     }
 
     /**
@@ -300,9 +330,6 @@ class CacheService
     {
         Cache::forget('news_home_3');
         Cache::forget('news_categories');
-
-        // Clear response cache to ensure news pages are updated
-        ResponseCache::clear();
     }
 
     /**
@@ -312,9 +339,6 @@ class CacheService
     {
         Cache::forget('kas_keliling');
         Cache::forget('kas_keliling_schedules');
-
-        // Clear response cache
-        ResponseCache::clear();
     }
 
     /**
@@ -329,13 +353,10 @@ class CacheService
                 Cache::forget("report_years_{$t}");
             }
         }
-
-        // Clear response cache
-        ResponseCache::clear();
     }
 
     /**
-     * Clear all frontend caches including response cache
+     * Clear all frontend caches
      */
     public static function clearAll(): void
     {
@@ -376,9 +397,6 @@ class CacheService
         foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $type) {
             Cache::forget("report_years_{$type}");
         }
-
-        // Clear response cache from Spatie
-        ResponseCache::clear();
     }
 
     /**
@@ -391,9 +409,6 @@ class CacheService
         Cache::forget('auctions_upcoming');
         Cache::forget('auctions_asset_types');
         Cache::forget('auctions_cities');
-
-        // Clear response cache to ensure auction pages are updated
-        ResponseCache::clear();
     }
 
     /**

@@ -92,15 +92,23 @@ class SiteSetting extends Model
 
     public static function getSettings(): self
     {
-        return Cache::remember('site_settings', 3600, function () {
-            return self::first() ?? self::create([
-                'hero_slider_delay' => 5000,
-                'hero_slide_limit' => 5,
-                'maintenance_mode' => false,
-                'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
-                'maintenance_pages' => [],
-            ]);
-        });
+        try {
+            return Cache::remember('site_settings', 3600, function () {
+                return self::first() ?? self::create([
+                    'hero_slider_delay' => 5000,
+                    'hero_slide_limit' => 5,
+                    'maintenance_mode' => false,
+                    'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
+                ]);
+            });
+        } catch (\Exception $e) {
+            // Return a dummy model instance if table doesn't exist
+            $settings = new self();
+            $settings->hero_slider_delay = 5000;
+            $settings->hero_slide_limit = 5;
+            $settings->maintenance_mode = false;
+            return $settings;
+        }
     }
 
     /**

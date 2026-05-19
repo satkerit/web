@@ -12,7 +12,6 @@
 
     @php
         $company = \App\Models\CompanyInfo::getInfo();
-        $nonce = request()->attributes->get('csp_nonce');
     @endphp
     @if($company?->favicon)
     <link rel="icon" href="{{ \App\Helpers\StorageHelper::url($company->favicon) }}" type="image/x-icon">
@@ -27,10 +26,10 @@
     @endif
 
     <link href="https://fonts.bunny.net/css?family=montserrat:400,500,600,700,800|inter:400,500,600,700&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/css/frontend-fixes.css', 'resources/js/app.js'], ['nonce' => $nonce])
-    @livewireStyles(['nonce' => $nonce])
+    @vite(['resources/css/app.css', 'resources/css/frontend-fixes.css', 'resources/js/app.js'])
+    @livewireStyles
 
-    <style nonce="{{ $nonce }}">
+    <style>
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; }
 
@@ -258,39 +257,8 @@
     <!-- Footer -->
     @include('frontend.partials.footer', ['company' => $company])
 
-    <script nonce="{{ $nonce }}">
-        // Global handler for optimized images to avoid CSP inline handler issues
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initial handle for already loaded images
-            document.querySelectorAll('img.optimized-image').forEach(img => {
-                if (img.complete) {
-                    img.style.backgroundImage = 'none';
-                    img.classList.add('loaded');
-                }
-            });
-
-            // Event delegation for load and error events
-            document.addEventListener('load', function(e) {
-                if (e.target.tagName === 'IMG' && e.target.classList.contains('optimized-image')) {
-                    e.target.style.backgroundImage = 'none';
-                    e.target.classList.add('loaded');
-                }
-            }, true);
-
-            document.addEventListener('error', function(e) {
-                if (e.target.tagName === 'IMG' && e.target.classList.contains('optimized-image')) {
-                    const placeholder = e.target.getAttribute('data-placeholder');
-                    if (placeholder) {
-                        e.target.style.backgroundImage = `url('${placeholder}')`;
-                    }
-                    e.target.classList.add('img-error');
-                }
-            }, true);
-        });
-    </script>
-
-    @livewireScripts(['nonce' => $nonce])
-    @vite(['resources/js/pagination-fix.js'], ['nonce' => $nonce])
+    @livewireScripts
+    @vite(['resources/js/pagination-fix.js'])
     @stack('scripts')
 </body>
 </html>
