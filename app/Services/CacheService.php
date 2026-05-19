@@ -15,6 +15,7 @@ use App\Models\WhyChooseUs;
 use App\Models\WhyChooseUsSetting;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Cache;
+use Spatie\ResponseCache\Facades\ResponseCache;
 
 class CacheService
 {
@@ -299,6 +300,9 @@ class CacheService
     {
         Cache::forget('news_home_3');
         Cache::forget('news_categories');
+
+        // Clear response cache to ensure news pages are updated
+        ResponseCache::clear();
     }
 
     /**
@@ -308,6 +312,9 @@ class CacheService
     {
         Cache::forget('kas_keliling');
         Cache::forget('kas_keliling_schedules');
+
+        // Clear response cache
+        ResponseCache::clear();
     }
 
     /**
@@ -322,10 +329,13 @@ class CacheService
                 Cache::forget("report_years_{$t}");
             }
         }
+
+        // Clear response cache
+        ResponseCache::clear();
     }
 
     /**
-     * Clear all frontend caches
+     * Clear all frontend caches including response cache
      */
     public static function clearAll(): void
     {
@@ -366,6 +376,9 @@ class CacheService
         foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $type) {
             Cache::forget("report_years_{$type}");
         }
+
+        // Clear response cache from Spatie
+        ResponseCache::clear();
     }
 
     /**
@@ -378,6 +391,9 @@ class CacheService
         Cache::forget('auctions_upcoming');
         Cache::forget('auctions_asset_types');
         Cache::forget('auctions_cities');
+
+        // Clear response cache to ensure auction pages are updated
+        ResponseCache::clear();
     }
 
     /**

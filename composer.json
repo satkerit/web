@@ -16,6 +16,7 @@
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^4.3",
         "spatie/laravel-permission": "^7.0",
+        "spatie/laravel-responsecache": "^8.4",
         "spatie/laravel-sluggable": "^4.0"
     },
     "require-dev": {
@@ -95,7 +96,7 @@
             "php-http/discovery": true
         },
         "platform": {
-            "php": "8.3.0"
+            "php": "8.4.0"
         }
     },
     "minimum-stability": "stable",

@@ -50,6 +50,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SecureSessionMiddleware::class,
             \App\Http\Middleware\LogVisitor::class,
             \App\Http\Middleware\OptimizeResponse::class,
+            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
