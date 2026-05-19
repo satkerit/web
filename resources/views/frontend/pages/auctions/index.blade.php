@@ -211,11 +211,14 @@
     </section>
 
     <!-- Main Content -->
-    <section class="py-12 md:py-16 bg-gray-50">
+    <section class="py-12 md:py-16 bg-gray-50" x-data="{ showFilters: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row gap-8">
+            @php
+                $hasSidebar = $featuredAuctions->count() > 0 || $upcomingAuctions->count() > 0;
+            @endphp
+            <div class="flex flex-col {{ $hasSidebar ? 'lg:flex-row' : '' }} gap-8">
                 <!-- Main Content -->
-                <div class="lg:w-3/4">
+                <div class="{{ $hasSidebar ? 'lg:w-3/4' : 'w-full' }}">
                     <!-- Advanced Filters -->
                     <div class="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 md:p-8 mb-8 border border-gray-100">
                         <div class="flex items-center justify-between mb-6">
@@ -227,15 +230,15 @@
                                 </span>
                                 Filter Lanjutan
                             </h3>
-                            <button onclick="toggleFilters()" class="text-emerald-600 hover:text-emerald-700 font-medium text-sm">
-                                <span id="filter-toggle-text">Tampilkan</span>
-                                <svg id="filter-toggle-icon" class="w-4 h-4 inline ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button @click="showFilters = !showFilters" class="text-emerald-600 hover:text-emerald-700 font-medium text-sm">
+                                <span x-text="showFilters ? 'Sembunyikan' : 'Tampilkan'">Tampilkan</span>
+                                <svg class="w-4 h-4 inline ml-1 transform transition-transform" :class="showFilters ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
                         </div>
 
-                        <div id="advanced-filters" class="hidden">
+                        <div x-show="showFilters" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" id="advanced-filters">
                             <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                                 <input type="hidden" name="search" value="{{ request('search') }}">
                                 <input type="hidden" name="asset_type" value="{{ request('asset_type') }}">
@@ -310,8 +313,13 @@
                                 <!-- Image -->
                                 <div class="relative aspect-[4/3] overflow-hidden">
                                     @if($auction->main_image)
-                                        <img src="{{ $auction->main_image }}" alt="{{ $auction->title }}"
-                                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                        <x-optimized-image
+                                            src="{{ $auction->main_image }}"
+                                            alt="{{ $auction->title }}"
+                                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            :lazy="true"
+                                            aspect-ratio="4/3"
+                                        />
                                     @else
                                         <div class="w-full h-full bg-gradient-to-br from-emerald-100 via-emerald-200 to-teal-200 flex items-center justify-center">
                                             <div class="text-center">
@@ -482,6 +490,7 @@
                     @endif
                 </div>
 
+                @if($hasSidebar)
                 <!-- Sidebar -->
                 <div class="lg:w-1/4 space-y-8">
                     <!-- Featured Auctions -->
@@ -500,8 +509,14 @@
                                     <div class="group border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
                                         <div class="flex gap-3">
                                             @if($featured->main_image)
-                                                <img src="{{ $featured->main_image }}" alt="{{ $featured->title }}"
-                                                     class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+                                                <x-optimized-image
+                                                    src="{{ $featured->main_image }}"
+                                                    alt="{{ $featured->title }}"
+                                                    class="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                                                    :lazy="true"
+                                                    width="64"
+                                                    height="64"
+                                                />
                                             @else
                                                 <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                                     <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -553,8 +568,14 @@
                                     <div class="group border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
                                         <div class="flex gap-3">
                                             @if($upcoming->main_image)
-                                                <img src="{{ $upcoming->main_image }}" alt="{{ $upcoming->title }}"
-                                                     class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+                                                <x-optimized-image
+                                                    src="{{ $upcoming->main_image }}"
+                                                    alt="{{ $upcoming->title }}"
+                                                    class="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                                                    :lazy="true"
+                                                    width="64"
+                                                    height="64"
+                                                />
                                             @else
                                                 <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                                     <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -590,6 +611,7 @@
                         </div>
                     @endif
                 </div>
+                @endif
             </div>
         </div>
     </section>
@@ -597,21 +619,7 @@
 
     @push('scripts')
     <script nonce="{{ $nonce }}">
-        function toggleFilters() {
-            const filters = document.getElementById('advanced-filters');
-            const toggleText = document.getElementById('filter-toggle-text');
-            const toggleIcon = document.getElementById('filter-toggle-icon');
-
-            if (filters.classList.contains('hidden')) {
-                filters.classList.remove('hidden');
-                toggleText.textContent = 'Sembunyikan';
-                toggleIcon.style.transform = 'rotate(180deg)';
-            } else {
-                filters.classList.add('hidden');
-                toggleText.textContent = 'Tampilkan';
-                toggleIcon.style.transform = 'rotate(0deg)';
-            }
-        }
+        // Filter logic moved to Alpine.js
     </script>
     @endpush
 </x-frontend-layout>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use App\Rules\MinimumImages;
 use App\Services\CacheService;
+use App\Services\ImageCompressionService;
 use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -186,6 +187,14 @@ class AuctionController extends Controller
             foreach ($request->file('images') as $image) {
                 $filename = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
                 $path = $image->storeAs('auctions', $filename, 'public');
+
+                // Optimize image after upload
+                try {
+                    ImageCompressionService::compressForWeb($path, 80, 1200);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to optimize auction image: ' . $e->getMessage());
+                }
+
                 $images[] = $path;
             }
             $validated['images'] = $images;
@@ -198,7 +207,7 @@ class AuctionController extends Controller
 
         $auction = Auction::create($validated);
 
-        CacheService::clear('auctions_home_3');
+        CacheService::clearAuctionCache();
 
         return redirect()->route('admin.auctions.index')
             ->with('success', 'Lelang berhasil dibuat.');
@@ -331,7 +340,7 @@ class AuctionController extends Controller
         // 1. Handle Deletions
         if ($request->has('delete_images')) {
             $imagesToDelete = $request->delete_images;
-            $currentImages = array_values(array_filter($currentImages, function($img) use ($imagesToDelete) {
+            $currentImages = array_values(array_filter($currentImages, function ($img) use ($imagesToDelete) {
                 if (in_array($img, $imagesToDelete)) {
                     Storage::disk('public')->delete($img);
                     return false;
@@ -346,6 +355,14 @@ class AuctionController extends Controller
             foreach ($request->file('images') as $image) {
                 $filename = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
                 $path = $image->storeAs('auctions', $filename, 'public');
+
+                // Optimize image after upload
+                try {
+                    ImageCompressionService::compressForWeb($path, 80, 1200);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to optimize auction image: ' . $e->getMessage());
+                }
+
                 $currentImages[] = $path;
             }
             $hasImageUpdates = true;
@@ -363,7 +380,7 @@ class AuctionController extends Controller
 
         $auction->update($validated);
 
-        CacheService::clear('auctions_home_3');
+        CacheService::clearAuctionCache();
 
         return redirect()->route('admin.auctions.index')
             ->with('success', 'Lelang berhasil diperbarui.');
@@ -382,7 +399,7 @@ class AuctionController extends Controller
 
         $auction->delete();
 
-        CacheService::clear('auctions_home_3');
+        CacheService::clearAuctionCache();
 
         return redirect()->route('admin.auctions.index')
             ->with('success', 'Lelang berhasil dihapus.');
@@ -415,7 +432,7 @@ class AuctionController extends Controller
                 }
 
                 $auctions->delete();
-                CacheService::clear('auctions_home_3');
+                CacheService::clearAuctionCache();
                 return back()->with('success', "{$count} lelang berhasil dihapus.");
 
             case 'publish':
@@ -423,12 +440,12 @@ class AuctionController extends Controller
                     'status' => 'published',
                     'published_at' => now()
                 ]);
-                CacheService::clear('auctions_home_3');
+                CacheService::clearAuctionCache();
                 return back()->with('success', 'Lelang terpilih berhasil dipublikasi.');
 
             case 'unpublish':
                 $auctions->update(['status' => 'draft']);
-                CacheService::clear('auctions_home_3');
+                CacheService::clearAuctionCache();
                 return back()->with('success', 'Lelang terpilih berhasil di-unpublish.');
 
             case 'feature':

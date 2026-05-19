@@ -1,19 +1,11 @@
 <x-frontend-layout>
-    
+
     @if($firstHeroImage)
     @push('head')
     @php
-        try {
-            $compressedFirstImage = \App\Services\ImageCompressionService::compressForWeb($firstHeroImage, 70, 1920);
-            $responsiveFirst = \App\Services\ImageCompressionService::generateResponsiveSizes($firstHeroImage);
-            $webpFirst = \App\Services\WebPConverterService::generateResponsiveWebP($firstHeroImage);
-            $mainWebPFirst = \App\Services\WebPConverterService::convertToWebP($firstHeroImage, 75);
-        } catch (Exception $e) {
-            $compressedFirstImage = $firstHeroImage;
-            $responsiveFirst = [];
-            $webpFirst = [];
-            $mainWebPFirst = null;
-        }
+        $compressedFirstImage = \App\Services\ImageCompressionService::getExistingCompressed($firstHeroImage);
+        $webpFirst = \App\Services\WebPConverterService::getExistingResponsiveWebP($firstHeroImage);
+        $mainWebPFirst = \App\Services\WebPConverterService::getExistingWebP($firstHeroImage);
     @endphp
     {{-- Preload WebP for modern browsers --}}
     @if($mainWebPFirst)
@@ -117,20 +109,11 @@
                              :style="getTransitionStyle({{ $index }})">
                             @if($slide->image)
                             @php
-                                try {
-                                    $compressedImage = \App\Services\ImageCompressionService::compressForWeb($slide->image, 70, 1920);
-                                    $responsiveImages = \App\Services\ImageCompressionService::generateResponsiveSizes($slide->image);
-                                    $webpImages = \App\Services\WebPConverterService::generateResponsiveWebP($slide->image);
-                                    $mainWebP = \App\Services\WebPConverterService::convertToWebP($slide->image, 75);
-                                } catch (Exception $e) {
-                                    $compressedImage = $slide->image;
-                                    $responsiveImages = [];
-                                    $webpImages = [];
-                                    $mainWebP = null;
-                                }
+                                $compressedImage = \App\Services\ImageCompressionService::getExistingCompressed($slide->image);
+                                $webpImages = \App\Services\WebPConverterService::getExistingResponsiveWebP($slide->image);
                             @endphp
                             <picture>
-                                {{-- WebP sources for better compression --}}
+                                {{-- WebP sources --}}
                                 @if(isset($webpImages['mobile']))
                                 <source media="(max-width: 640px)"
                                         srcset="{{ \App\Helpers\StorageHelper::url($webpImages['mobile']) }}"
@@ -147,24 +130,7 @@
                                         type="image/webp">
                                 @endif
 
-                                {{-- JPEG fallback sources --}}
-                                @if(isset($responsiveImages['mobile']))
-                                <source media="(max-width: 640px)"
-                                        srcset="{{ \App\Helpers\StorageHelper::url($responsiveImages['mobile']) }}"
-                                        type="image/jpeg">
-                                @endif
-                                @if(isset($responsiveImages['tablet']))
-                                <source media="(max-width: 1024px)"
-                                        srcset="{{ \App\Helpers\StorageHelper::url($responsiveImages['tablet']) }}"
-                                        type="image/jpeg">
-                                @endif
-                                @if(isset($responsiveImages['desktop']))
-                                <source media="(min-width: 1025px)"
-                                        srcset="{{ \App\Helpers\StorageHelper::url($responsiveImages['desktop']) }}"
-                                        type="image/jpeg">
-                                @endif
-
-                                {{-- Final fallback image --}}
+                                {{-- Fallback --}}
                                 <img src="{{ \App\Helpers\StorageHelper::url($compressedImage) }}"
                                      alt="{{ $slide->title }}"
                                      class="w-full h-full object-cover object-center hero-slide-img"
@@ -328,7 +294,13 @@
                         <div class="flex items-start group fade-in-section" style="animation-delay: {{ $index * 100 }}ms">
                             <div class="w-12 h-12 {{ $item->bg_class }} rounded-2xl flex items-center justify-center mr-5 flex-shrink-0 {{ $item->hover_bg_class }} group-hover:scale-110 transition-all duration-300 shadow-sm">
                                 @if($item->icon)
-                                <img src="{{ \App\Helpers\StorageHelper::url($item->icon) }}" class="w-6 h-6 object-contain transition-all duration-300 filter group-hover:brightness-0 group-hover:invert" alt="{{ $item->title }}">
+                                <x-optimized-image
+                                    src="{{ \App\Helpers\StorageHelper::url($item->icon) }}"
+                                    class="w-6 h-6 object-contain transition-all duration-300 filter group-hover:brightness-0 group-hover:invert"
+                                    alt="{{ $item->title }}"
+                                    width="24"
+                                    height="24"
+                                />
                                 @else
                                 <svg class="w-6 h-6 {{ $item->text_class }} group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -383,9 +355,12 @@
                 <div class="relative slide-in-right">
                     <div class="relative z-10">
                         @if($whyChooseUsSettings->section_image)
-                        <img src="{{ \App\Helpers\StorageHelper::url($whyChooseUsSettings->section_image) }}"
+                        <x-optimized-image
+                             src="{{ \App\Helpers\StorageHelper::url($whyChooseUsSettings->section_image) }}"
                              alt="Why Choose Us"
-                             class="rounded-3xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none">
+                             class="rounded-3xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none"
+                             aspect-ratio="4/5"
+                        />
                         @else
                         <div class="rounded-3xl shadow-2xl w-full h-[600px] bg-gradient-to-br from-emerald-400 via-teal-500 to-emerald-600 flex items-center justify-center relative overflow-hidden">
                             <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-20"></div>
@@ -438,9 +413,12 @@
                     <!-- Product Image -->
                     <div class="relative aspect-[4/3] overflow-hidden">
                         @if($product->image)
-                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
+                        <x-optimized-image
+                             src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
                              alt="{{ $product->name }}"
-                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                             aspect-ratio="4/3"
+                        />
                         @else
                         <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center">
                             <svg class="w-20 h-20 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -595,9 +573,12 @@
                     <!-- Auction Image -->
                     <div class="relative h-48 overflow-hidden">
                         @if($auction->main_image)
-                        <img src="{{ $auction->main_image }}"
+                        <x-optimized-image
+                             src="{{ $auction->main_image }}"
                              alt="{{ $auction->title }}"
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             aspect-ratio="16/9"
+                        />
                         @else
                         <div class="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
                             <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">

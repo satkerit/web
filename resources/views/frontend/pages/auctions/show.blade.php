@@ -741,8 +741,27 @@
                             @endif
 
                             <!-- Action Buttons -->
-                            <div class="space-y-3 print:hidden">
-                                <button onclick="shareAuction()"
+                            <div class="space-y-3 print:hidden" x-data="{
+                                share() {
+                                    if (navigator.share) {
+                                        navigator.share({
+                                            title: '{{ addslashes($auction->title) }}',
+                                            text: 'Cek lelang ini: {{ addslashes($auction->title) }}',
+                                            url: '{{ url()->current() }}',
+                                        })
+                                        .catch((error) => console.log('Error sharing', error));
+                                    } else {
+                                        const el = document.createElement('textarea');
+                                        el.value = window.location.href;
+                                        document.body.appendChild(el);
+                                        el.select();
+                                        document.execCommand('copy');
+                                        document.body.removeChild(el);
+                                        alert('Link lelang berhasil disalin!');
+                                    }
+                                }
+                            }">
+                                <button @click="share()"
                                         class="w-full py-4 bg-white text-gray-700 font-bold text-center rounded-xl border border-gray-200 hover:bg-gray-50 hover:border-emerald-200 hover:text-emerald-600 transition-all flex items-center justify-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
@@ -750,7 +769,7 @@
                                     Bagikan
                                 </button>
 
-                                <button onclick="window.print()" class="w-full py-4 bg-gray-50 text-gray-600 font-bold text-center rounded-xl border border-gray-200 hover:bg-gray-100 transition-all flex items-center justify-center gap-2">
+                                <button @click="window.print()" class="w-full py-4 bg-gray-50 text-gray-600 font-bold text-center rounded-xl border border-gray-200 hover:bg-gray-100 transition-all flex items-center justify-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                     </svg>
@@ -779,26 +798,6 @@
 
     @push('scripts')
     <script nonce="{{ $nonce }}">
-        function shareAuction() {
-            if (navigator.share) {
-                navigator.share({
-                    title: '{{ $auction->title }}',
-                    text: 'Cek lelang ini: {{ $auction->title }}',
-                    url: '{{ url()->current() }}',
-                })
-                .catch((error) => console.log('Error sharing', error));
-            } else {
-                var dummy = document.createElement('input'),
-                text = window.location.href;
-                document.body.appendChild(dummy);
-                dummy.value = text;
-                dummy.select();
-                document.execCommand('copy');
-                document.body.removeChild(dummy);
-                alert('Link lelang berhasil disalin!');
-            }
-        }
-
         document.addEventListener('alpine:init', () => {
             Alpine.data('countdown', (endTime) => ({
                 days: '00',

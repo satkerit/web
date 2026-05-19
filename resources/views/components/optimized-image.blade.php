@@ -49,7 +49,6 @@
     @if($height) height="{{ $height }}" @endif
     @if($sizes) sizes="{{ $sizes }}" @endif
     style="{{ $styleString }}"
-    {{ $attributes->merge(['class' => $class . ' transition-opacity duration-300']) }}
-    onload="this.style.backgroundImage='none'; this.classList.add('loaded');"
-    onerror="this.onerror=null; this.classList.add('img-error');"
+    {{ $attributes->merge(['class' => $class . ' optimized-image transition-opacity duration-300']) }}
+    data-placeholder="{{ $placeholder }}"
 >

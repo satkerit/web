@@ -35,14 +35,7 @@ class NewsController extends Controller
         $news = $query->orderBy('published_at', 'desc')->paginate(12)->withQueryString();
 
         // Get categories for filter
-        $categories = Cache::remember(
-            'news_categories',
-            3600,
-            fn() => News::where('is_published', true)
-                ->whereNotNull('category')
-                ->distinct()
-                ->pluck('category')
-        );
+        $categories = \App\Services\CacheService::getNewsCategories();
 
         return view('frontend.pages.news.index', compact('news', 'categories'));
     }

@@ -43,11 +43,14 @@
                     <div class="h-1 sm:h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
                     <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
                         @if($product->image)
-                        <img src="{{ \App\Helpers\StorageHelper::url($product->image) }}"
-                             alt="{{ $product->name }}"
-                             class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                             loading="{{ $index < 3 ? 'eager' : 'lazy' }}"
-                             fetchpriority="{{ $index < 3 ? 'high' : 'auto' }}">
+                        <x-optimized-image 
+                             src="{{ \App\Helpers\StorageHelper::url($product->image) }}" 
+                             alt="{{ $product->name }}" 
+                             class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                             :lazy="$index >= 3"
+                             :priority="$index < 3"
+                             aspect-ratio="4/3"
+                        />
                         @else
                         <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center">
                             <span class="text-white text-3xl sm:text-4xl opacity-20 transform -rotate-12 select-none font-bold">BPRS</span>

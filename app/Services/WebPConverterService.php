@@ -10,7 +10,7 @@ class WebPConverterService
 {
     /**
      * Convert image to WebP format for better compression
-     * 
+     *
      * @param string $imagePath
      * @param int $quality
      * @return string|null WebP image path or null if conversion failed
@@ -18,13 +18,13 @@ class WebPConverterService
     public static function convertToWebP(string $imagePath, int $quality = 80): ?string
     {
         $webpPath = self::getWebPPath($imagePath);
-        
+
         if (Storage::exists($webpPath)) {
             return $webpPath;
         }
 
         $fullPath = Storage::path($imagePath);
-        
+
         if (!file_exists($fullPath)) {
             return null;
         }
@@ -32,19 +32,18 @@ class WebPConverterService
         try {
             $manager = new ImageManager(new Driver());
             $image = $manager->read($fullPath);
-            
+
             $webpFullPath = Storage::path($webpPath);
             $directory = dirname($webpFullPath);
-            
+
             if (!is_dir($directory)) {
                 mkdir($directory, 0755, true);
             }
-            
+
             // Convert to WebP
             $image->toWebp($quality)->save($webpFullPath);
-            
+
             return $webpPath;
-            
         } catch (\Exception $e) {
             \Log::error('WebP conversion failed: ' . $e->getMessage());
             return null;
@@ -52,14 +51,41 @@ class WebPConverterService
     }
 
     /**
+     * Get existing WebP path without generating it
+     */
+    public static function getExistingWebP(string $imagePath): ?string
+    {
+        $webpPath = self::getWebPPath($imagePath);
+        return Storage::disk('public')->exists($webpPath) ? $webpPath : null;
+    }
+
+    /**
+     * Get existing responsive WebP paths
+     */
+    public static function getExistingResponsiveWebP(string $imagePath): array
+    {
+        $sizes = ['mobile', 'tablet', 'desktop'];
+        $paths = [];
+
+        foreach ($sizes as $size) {
+            $path = self::getResponsiveWebPPath($imagePath, $size);
+            if (Storage::disk('public')->exists($path)) {
+                $paths[$size] = $path;
+            }
+        }
+
+        return $paths;
+    }
+
+    /**
      * Get WebP image path
      */
-    private static function getWebPPath(string $originalPath): string
+    public static function getWebPPath(string $originalPath): string
     {
         $pathInfo = pathinfo($originalPath);
         $directory = $pathInfo['dirname'];
         $filename = $pathInfo['filename'];
-        
+
         return $directory . '/' . $filename . '.webp';
     }
 
@@ -83,29 +109,28 @@ class WebPConverterService
 
         try {
             $manager = new ImageManager(new Driver());
-            
+
             foreach ($sizes as $size => $config) {
                 $webpPath = self::getResponsiveWebPPath($imagePath, $size);
-                
+
                 if (!Storage::exists($webpPath)) {
                     $image = $manager->read($fullPath);
                     $image->scale(width: $config['width']);
-                    
+
                     $webpFullPath = Storage::path($webpPath);
                     $directory = dirname($webpFullPath);
-                    
+
                     if (!is_dir($directory)) {
                         mkdir($directory, 0755, true);
                     }
-                    
+
                     $image->toWebp($config['quality'])->save($webpFullPath);
                 }
-                
+
                 $responsiveWebP[$size] = $webpPath;
             }
-            
+
             return $responsiveWebP;
-            
         } catch (\Exception $e) {
             \Log::error('Responsive WebP generation failed: ' . $e->getMessage());
             return [];
@@ -120,7 +145,7 @@ class WebPConverterService
         $pathInfo = pathinfo($originalPath);
         $directory = $pathInfo['dirname'];
         $filename = $pathInfo['filename'];
-        
+
         return $directory . '/' . $size . '_' . $filename . '.webp';
     }
 }

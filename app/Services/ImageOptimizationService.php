@@ -70,7 +70,7 @@ class ImageOptimizationService
         $escapedAlt = htmlspecialchars($alt, ENT_QUOTES, 'UTF-8');
         $escapedClass = htmlspecialchars($class, ENT_QUOTES, 'UTF-8');
 
-        return "<img src=\"{$src}\" alt=\"{$escapedAlt}\" class=\"{$escapedClass} transition-opacity duration-300\" loading=\"{$loading}\" decoding=\"async\" fetchpriority=\"{$fetchPriority}\" {$widthAttr} {$heightAttr} style=\"background-image: url('{$placeholder}'); background-size: cover;\" onload=\"this.style.backgroundImage='none';\" onerror=\"this.onerror=null; this.style.backgroundImage='url({$placeholder})';\">";
+        return "<img src=\"{$src}\" alt=\"{$escapedAlt}\" class=\"{$escapedClass} optimized-image transition-opacity duration-300\" loading=\"{$loading}\" decoding=\"async\" fetchpriority=\"{$fetchPriority}\" {$widthAttr} {$heightAttr} style=\"background-image: url('{$placeholder}'); background-size: cover;\" data-placeholder=\"{$placeholder}\">";
     }
 
     /**

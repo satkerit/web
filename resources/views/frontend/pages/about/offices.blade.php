@@ -65,7 +65,13 @@
                     <div class="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
                     <div class="relative h-56 overflow-hidden">
                         @if($office->photo)
-                        <img src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" alt="{{ $office->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <x-optimized-image 
+                             src="{{ \App\Helpers\StorageHelper::url($office->photo) }}" 
+                             alt="{{ $office->name }}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                             :lazy="true"
+                             aspect-ratio="16/9"
+                        />
                         @else
                         <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                             <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

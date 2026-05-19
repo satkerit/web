@@ -71,34 +71,42 @@ class AuctionController extends Controller
         }
 
         // Get featured auctions for sidebar
-        $featuredAuctions = Auction::published()
-                                  ->featured()
-                                  ->limit(5)
-                                  ->get();
+        $featuredAuctions = \Illuminate\Support\Facades\Cache::remember('auctions_featured', 3600, function() {
+            return Auction::published()
+                          ->featured()
+                          ->limit(5)
+                          ->get();
+        });
 
         // Get upcoming auctions
-        $upcomingAuctions = Auction::published()
-                                  ->upcoming()
-                                  ->limit(5)
-                                  ->get();
+        $upcomingAuctions = \Illuminate\Support\Facades\Cache::remember('auctions_upcoming', 3600, function() {
+            return Auction::published()
+                          ->upcoming()
+                          ->limit(5)
+                          ->get();
+        });
 
         $auctions = $query->paginate(12)->withQueryString();
 
         // Get filter options
-        $assetTypes = Auction::published()
-                            ->select('asset_type')
-                            ->distinct()
-                            ->pluck('asset_type')
-                            ->mapWithKeys(function($type) {
-                                return [$type => Auction::$assetTypes[$type] ?? $type];
-                            });
+        $assetTypes = \Illuminate\Support\Facades\Cache::remember('auctions_asset_types', 86400, function() {
+            return Auction::published()
+                        ->select('asset_type')
+                        ->distinct()
+                        ->pluck('asset_type')
+                        ->mapWithKeys(function($type) {
+                            return [$type => Auction::$assetTypes[$type] ?? $type];
+                        });
+        });
 
-        $cities = Auction::published()
+        $cities = \Illuminate\Support\Facades\Cache::remember('auctions_cities', 86400, function() {
+            return Auction::published()
                         ->whereNotNull('city')
                         ->select('city')
                         ->distinct()
                         ->orderBy('city')
                         ->pluck('city');
+        });
 
         return view('frontend.pages.auctions.index', compact(
             'auctions',

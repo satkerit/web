@@ -52,24 +52,8 @@ class ProductController extends Controller
         SeoMeta::setTitle('Jadwal Kas Keliling')
             ->setDescription('Cek jadwal dan lokasi layanan Kas Keliling BPRS Bangka Belitung terdekat.');
 
-        // Ambil jadwal 5 hari terdekat
-        $today = now()->startOfDay();
-        $endDate = now()->addDays(4)->endOfDay();
-        
-        $schedules = \App\Models\KasKelilingSchedule::active()
-            ->whereBetween('schedule_date', [
-                $today->toDateString(), 
-                $endDate->toDateString()
-            ])
-            ->orderBy('schedule_date', 'asc')
-            ->orderBy('start_time', 'asc')
-            ->get()
-            ->groupBy(function($schedule) {
-                return $schedule->schedule_date->format('Y-m-d');
-            });
-
         return view('frontend.pages.products.kas-keliling', [
-            'schedulesByDate' => $schedules,
+            'schedulesByDate' => CacheService::getKasKelilingSchedules(),
             'companyInfo' => CacheService::getCompanyInfo(),
         ]);
     }

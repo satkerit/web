@@ -11,14 +11,20 @@ class ReportController extends Controller
 {
     private function getReports(Request $request, string $type, string $title, string $subtitle)
     {
-        $query = Report::where('type', $type)->published();
+        $year = $request->query('year');
+        $page = $request->query('page', 1);
+        $cacheKey = "reports_{$type}_{$year}_{$page}";
 
-        if ($year = $request->query('year')) {
-            $query->where('year', $year);
-        }
+        $reports = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function() use ($type, $year) {
+            $query = Report::where('type', $type)->published();
+            if ($year) {
+                $query->where('year', $year);
+            }
+            return $query->orderBy('year', 'desc')->orderBy('quarter', 'desc')->paginate(15);
+        });
 
         return view('frontend.pages.reports.index', [
-            'reports' => $query->orderBy('year', 'desc')->orderBy('quarter', 'desc')->paginate(15),
+            'reports' => $reports->withQueryString(),
             'years' => CacheService::getReportYears($type),
             'title' => $title,
             'subtitle' => $subtitle,

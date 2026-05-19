@@ -42,6 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Web middleware group - Security monitoring runs early
         $middleware->web(append: [
+            \App\Http\Middleware\CacheStaticAssets::class,
             \App\Http\Middleware\DdosProtection::class,
             \App\Http\Middleware\DetectSuspiciousActivity::class,
             \App\Http\Middleware\CheckMaintenanceMode::class,

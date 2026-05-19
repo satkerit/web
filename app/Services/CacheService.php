@@ -192,20 +192,33 @@ class CacheService
     }
 
     /**
-     * Get reports by type with years
+     * Get news categories
+     */
+    public static function getNewsCategories()
+    {
+        return Cache::remember(
+            'news_categories',
+            self::CACHE_MEDIUM,
+            fn() => News::where('is_published', true)
+                ->whereNotNull('category')
+                ->distinct()
+                ->pluck('category')
+        );
+    }
+
+    /**
+     * Get report years by type
      */
     public static function getReportYears(string $type)
     {
         return Cache::remember(
             "report_years_{$type}",
-            self::CACHE_MEDIUM,
-            fn() =>
-            Report::where('type', $type)
-                ->where('is_published', true)
+            self::CACHE_LONG,
+            fn() => Report::where('type', $type)
+                ->published()
                 ->distinct()
+                ->orderBy('year', 'desc')
                 ->pluck('year')
-                ->sortDesc()
-                ->values()
         );
     }
 
@@ -257,6 +270,61 @@ class CacheService
     }
 
     /**
+     * Get active kas keliling schedules
+     */
+    public static function getKasKelilingSchedules()
+    {
+        return Cache::remember('kas_keliling_schedules', self::CACHE_MEDIUM, function () {
+            $today = now()->startOfDay();
+            $endDate = now()->addDays(4)->endOfDay();
+
+            return \App\Models\KasKelilingSchedule::active()
+                ->whereBetween('schedule_date', [
+                    $today->toDateString(),
+                    $endDate->toDateString()
+                ])
+                ->orderBy('schedule_date', 'asc')
+                ->orderBy('start_time', 'asc')
+                ->get()
+                ->groupBy(function ($schedule) {
+                    return $schedule->schedule_date->format('Y-m-d');
+                });
+        });
+    }
+
+    /**
+     * Clear news related caches
+     */
+    public static function clearNewsCache(): void
+    {
+        Cache::forget('news_home_3');
+        Cache::forget('news_categories');
+    }
+
+    /**
+     * Clear kas keliling related caches
+     */
+    public static function clearKasKelilingCache(): void
+    {
+        Cache::forget('kas_keliling');
+        Cache::forget('kas_keliling_schedules');
+    }
+
+    /**
+     * Clear report related caches
+     */
+    public static function clearReportCache(?string $type = null): void
+    {
+        if ($type) {
+            Cache::forget("report_years_{$type}");
+        } else {
+            foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $t) {
+                Cache::forget("report_years_{$t}");
+            }
+        }
+    }
+
+    /**
      * Clear all frontend caches
      */
     public static function clearAll(): void
@@ -279,6 +347,10 @@ class CacheService
             'kas_keliling',
             'why_choose_us_items',
             'why_choose_us_settings',
+            'auctions_featured',
+            'auctions_upcoming',
+            'auctions_asset_types',
+            'auctions_cities',
         ];
 
         foreach ($keys as $key) {
@@ -297,7 +369,19 @@ class CacheService
     }
 
     /**
-     * Clear specific cache
+     * Clear auction related caches
+     */
+    public static function clearAuctionCache(): void
+    {
+        Cache::forget('auctions_home_3');
+        Cache::forget('auctions_featured');
+        Cache::forget('auctions_upcoming');
+        Cache::forget('auctions_asset_types');
+        Cache::forget('auctions_cities');
+    }
+
+    /**
+     * Clear specific cache key
      */
     public static function clear(string $key): void
     {

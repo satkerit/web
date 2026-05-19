@@ -6,7 +6,13 @@
     @if($image)
     <div class="relative h-48 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity"></div>
-        <img src="{{ $image }}" alt="{{ $title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" loading="lazy">
+        <x-optimized-image 
+            src="{{ $image }}" 
+            alt="{{ $title }}" 
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+            :lazy="true"
+            aspect-ratio="16/9"
+        />
         <div class="absolute bottom-4 left-4 z-20">
             <span class="px-3 py-1 bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-semibold rounded-lg shadow-lg">
                 {{ $subtitle }}

@@ -25,23 +25,19 @@
             @if($members->count() > 0)
             <div class="flex flex-wrap justify-center gap-6 sm:gap-8">
                 @foreach($members as $member)
-                <div class="group relative flex flex-col bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1.5 transition-all duration-500 ease-out touch-manipulation active:scale-[0.99] w-full sm:w-72 lg:w-64 xl:w-60"
-                     x-data="{ loaded: false }">
-                    
+                <div class="group relative flex flex-col bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-xl hover:shadow-teal-900/5 hover:-translate-y-1.5 transition-all duration-500 ease-out touch-manipulation active:scale-[0.99] w-full sm:w-72 lg:w-64 xl:w-60">
+
                     <!-- Image Aspect Ratio 4:5 -->
                     <div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
-                        <!-- Skeleton Loader -->
-                        <div x-show="!loaded" class="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200"></div>
-                        
                         @if($member->photo)
-                        <img src="{{ \App\Helpers\StorageHelper::url($member->photo) }}" 
-                             alt="{{ $member->name }}" 
-                             loading="{{ $loop->index < 4 ? 'eager' : 'lazy' }}"
-                             fetchpriority="{{ $loop->index < 4 ? 'high' : 'auto' }}"
-                             x-init="if($el.complete) loaded = true"
-                             @load="loaded = true"
+                        <x-optimized-image
+                             src="{{ \App\Helpers\StorageHelper::url($member->photo) }}"
+                             alt="{{ $member->name }}"
                              class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
-                             :class="loaded ? 'opacity-100' : 'opacity-0'">
+                             :lazy="$loop->index >= 4"
+                             :priority="$loop->index < 4"
+                             aspect-ratio="4/5"
+                        />
                         @else
                         <div class="w-full h-full bg-gradient-to-br from-teal-50 to-emerald-50 flex items-center justify-center" x-init="loaded = true">
                             <div class="text-center p-4 sm:p-6">
@@ -57,7 +53,7 @@
 
                         <!-- Gradient Overlay -->
                         <div class="absolute inset-0 bg-gradient-to-t from-teal-950/90 via-teal-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        
+
                         <!-- Hover Quick Info -->
                         <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
                             <div class="flex items-center gap-2 text-white/90 text-[10px] sm:text-xs font-medium uppercase tracking-widest mb-1.5 sm:mb-2">

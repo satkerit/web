@@ -480,7 +480,17 @@ class Auction extends Model
     public function getMainImageAttribute(): ?string
     {
         if ($this->images && count($this->images) > 0) {
-            return \App\Helpers\StorageHelper::url($this->images[0]);
+            $path = $this->images[0];
+            
+            // Check if compressed version exists
+            $pathInfo = pathinfo($path);
+            $compressedPath = $pathInfo['dirname'] . '/compressed_' . $pathInfo['filename'] . '.' . $pathInfo['extension'];
+            
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($compressedPath)) {
+                return \App\Helpers\StorageHelper::url($compressedPath);
+            }
+            
+            return \App\Helpers\StorageHelper::url($path);
         }
         return null;
     }
