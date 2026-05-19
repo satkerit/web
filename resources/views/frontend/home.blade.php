@@ -1,11 +1,11 @@
 <x-frontend-layout>
 
-    @if($firstHeroImage)
+    @if(isset($firstHeroImage))
     @push('head')
     @php
-        $compressedFirstImage = \App\Services\ImageCompressionService::getExistingCompressed($firstHeroImage);
-        $webpFirst = \App\Services\WebPConverterService::getExistingResponsiveWebP($firstHeroImage);
-        $mainWebPFirst = \App\Services\WebPConverterService::getExistingWebP($firstHeroImage);
+        $compressedFirstImage = class_exists('\App\Services\ImageCompressionService') ? \App\Services\ImageCompressionService::getExistingCompressed($firstHeroImage) : $firstHeroImage;
+        $webpFirst = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingResponsiveWebP($firstHeroImage) : [];
+        $mainWebPFirst = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingWebP($firstHeroImage) : null;
     @endphp
     {{-- Preload WebP for modern browsers --}}
     @if($mainWebPFirst)
@@ -109,8 +109,8 @@
                              :style="getTransitionStyle({{ $index }})">
                             @if($slide->image)
                             @php
-                                $compressedImage = \App\Services\ImageCompressionService::getExistingCompressed($slide->image);
-                                $webpImages = \App\Services\WebPConverterService::getExistingResponsiveWebP($slide->image);
+                                $compressedImage = class_exists('\App\Services\ImageCompressionService') ? \App\Services\ImageCompressionService::getExistingCompressed($slide->image) : $slide->image;
+                                $webpImages = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingResponsiveWebP($slide->image) : [];
                             @endphp
                             <picture>
                                 {{-- WebP sources --}}

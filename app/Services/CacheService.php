@@ -29,6 +29,7 @@ class CacheService
     public static function getCompanyInfo(): ?CompanyInfo
     {
         try {
+            if (!class_exists('\App\Models\CompanyInfo')) return null;
             // Clear cache if it might be stale (doesn't have profile_image)
             $cached = Cache::get('company_info');
             if ($cached && $cached instanceof CompanyInfo && !array_key_exists('profile_image', $cached->getAttributes())) {
@@ -64,23 +65,25 @@ class CacheService
             return Cache::remember(
                 "hero_slides_{$limit}",
                 self::CACHE_MEDIUM,
-                fn() =>
-                HeroSlide::where('is_active', true)
-                    ->orderBy('order_position')
-                    ->limit($limit)
-                    ->get([
-                        'id',
-                        'title',
-                        'subtitle',
-                        'image',
-                        'link_url',
-                        'link_text',
-                        'transition_type',
-                        'transition_duration',
-                        'show_title',
-                        'show_subtitle',
-                        'show_button'
-                    ])
+                function () use ($limit) {
+                    if (!class_exists('\App\Models\HeroSlide')) return collect();
+                    return HeroSlide::where('is_active', true)
+                        ->orderBy('order_position')
+                        ->limit($limit)
+                        ->get([
+                            'id',
+                            'title',
+                            'subtitle',
+                            'image',
+                            'link_url',
+                            'link_text',
+                            'transition_type',
+                            'transition_duration',
+                            'show_title',
+                            'show_subtitle',
+                            'show_button'
+                        ]);
+                }
             );
         } catch (\Exception $e) {
             return collect();
@@ -96,11 +99,13 @@ class CacheService
             return Cache::remember(
                 "products_home_{$limit}",
                 self::CACHE_LONG,
-                fn() =>
-                Product::where('is_active', true)
-                    ->orderBy('order_position')
-                    ->limit($limit)
-                    ->get(['id', 'name', 'slug', 'short_description', 'image', 'type'])
+                function () use ($limit) {
+                    if (!class_exists('\App\Models\Product')) return collect();
+                    return Product::where('is_active', true)
+                        ->orderBy('order_position')
+                        ->limit($limit)
+                        ->get(['id', 'name', 'slug', 'short_description', 'image', 'type']);
+                }
             );
         } catch (\Exception $e) {
             return collect();
@@ -129,16 +134,14 @@ class CacheService
     public static function getHomeNews(int $limit = 3)
     {
         try {
-            return Cache::remember(
-                "news_home_{$limit}",
-                self::CACHE_MEDIUM,
-                fn() =>
-                News::where('is_published', true)
+            return Cache::remember("news_home_{$limit}", self::CACHE_MEDIUM, function () use ($limit) {
+                if (!class_exists('\App\Models\News')) return collect();
+                return News::where('is_published', true)
                     ->where('published_at', '<=', now())
                     ->orderBy('published_at', 'desc')
                     ->limit($limit)
-                    ->get(['id', 'title', 'slug', 'excerpt', 'featured_image', 'published_at', 'category'])
-            );
+                    ->get(['id', 'title', 'slug', 'excerpt', 'featured_image', 'published_at', 'category']);
+            });
         } catch (\Exception $e) {
             return collect();
         }
@@ -154,6 +157,7 @@ class CacheService
                 "auctions_home_{$limit}",
                 self::CACHE_MEDIUM,
                 function () use ($limit) {
+                    if (!class_exists('\App\Models\Auction')) return collect();
                     try {
                         return Auction::whereIn('status', ['published', 'registration_open', 'auction_scheduled', 'sold'])
                             ->where(function ($query) {
@@ -270,6 +274,7 @@ class CacheService
     {
         try {
             return Cache::remember('why_choose_us_items', self::CACHE_LONG, function () {
+                if (!class_exists('\App\Models\WhyChooseUs')) return collect();
                 return WhyChooseUs::where('is_active', true)
                     ->orderBy('sort_order')
                     ->get();
@@ -286,6 +291,13 @@ class CacheService
     {
         try {
             return Cache::remember('why_choose_us_settings', self::CACHE_LONG, function () {
+                if (!class_exists('\App\Models\WhyChooseUsSetting')) {
+                    return (object)[
+                        'section_title' => 'Mengapa Memilih Kami?',
+                        'section_subtitle' => 'Keunggulan layanan perbankan syariah kami untuk Anda.',
+                        'section_image' => null
+                    ];
+                }
                 return WhyChooseUsSetting::first() ?? WhyChooseUsSetting::create([
                     'section_title' => 'Mengapa Memilih Kami?',
                     'section_subtitle' => 'Keunggulan layanan perbankan syariah kami untuk Anda.',
