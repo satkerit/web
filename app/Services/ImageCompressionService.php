@@ -3,178 +3,255 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Illuminate\Support\Str;
 
+/**
+ * Service untuk kompresi dan optimasi gambar otomatis
+ * Menghasilkan multiple variants untuk responsive images
+ */
 class ImageCompressionService
 {
+    // Breakpoints untuk responsive images
+    const BREAKPOINTS = [
+        'mobile' => 640,   // sm
+        'tablet' => 1024,  // lg
+        'desktop' => 1920, // xl
+    ];
+
+    // Quality settings
+    const QUALITY_HIGH = 90;
+    const QUALITY_MEDIUM = 85;
+    const QUALITY_LOW = 75;
+
     /**
-     * Compress and optimize image for web display
-     *
-     * @param string $imagePath Original image path in storage
-     * @param int $quality Quality for compression (1-100)
-     * @param int|null $maxWidth Maximum width
-     * @return string Compressed image path
+     * Proses gambar saat upload - generate multiple variants
+     * 
+     * @param string $originalPath Path gambar original di storage
+     * @param array $options Opsi tambahan (quality, formats, breakpoints)
+     * @return array Array berisi path semua variant yang dihasilkan
      */
-    public static function compressForWeb(string $imagePath, int $quality = 75, ?int $maxWidth = 1920): string
+    public static function processUploadedImage(string $originalPath, array $options = []): array
     {
-        // Check if compressed version already exists
-        $compressedPath = self::getCompressedPath($imagePath);
-
-        if (Storage::exists($compressedPath)) {
-            return $compressedPath;
-        }
-
-        // Get full path
-        $fullPath = Storage::path($imagePath);
-
-        if (!file_exists($fullPath)) {
-            return $imagePath; // Return original if not found
-        }
+        $originalMemoryLimit = ini_get('memory_limit');
+        $originalTimeLimit = ini_get('max_execution_time');
+        
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', 300);
 
         try {
-            // Create image manager with GD driver
+            $disk = Storage::disk('public');
+            
+            if (!$disk->exists($originalPath)) {
+                throw new \Exception("Original image not found: {$originalPath}");
+            }
+
             $manager = new ImageManager(new Driver());
+            $image = $manager->read($disk->path($originalPath));
+            
+            $pathInfo = pathinfo($originalPath);
+            $directory = $pathInfo['dirname'];
+            $filename = $pathInfo['filename'];
+            
+            $results = [
+                'original' => $originalPath,
+                'compressed' => [],
+                'webp' => [],
+                'responsive' => []
+            ];
 
-            // Load and compress image
-            $image = $manager->read($fullPath);
-
-            // Resize if too large
-            if ($maxWidth && $image->width() > $maxWidth) {
-                $image->scale(width: $maxWidth);
+            // 1. Generate compressed JPEG/PNG version (original size)
+            $compressedPath = self::generateCompressed($image, $directory, $filename, $options);
+            if ($compressedPath) {
+                $results['compressed'] = $compressedPath;
             }
 
-            // Optimize and save
-            $compressedFullPath = Storage::path($compressedPath);
+            // 2. Generate WebP versions untuk semua breakpoints
+            $webpVersions = self::generateWebPVersions($image, $directory, $filename, $options);
+            $results['webp'] = $webpVersions;
 
-            // Create directory if not exists
-            $directory = dirname($compressedFullPath);
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
+            // 3. Generate responsive JPEG versions
+            $responsiveVersions = self::generateResponsiveVersions($image, $directory, $filename, $options);
+            $results['responsive'] = $responsiveVersions;
 
-            // Save with compression
-            $image->toJpeg($quality)->save($compressedFullPath);
+            Log::info('Image processing completed', [
+                'original' => $originalPath,
+                'variants_created' => count($results['webp']) + count($results['responsive']) + 1
+            ]);
 
-            return $compressedPath;
+            return $results;
+
         } catch (\Exception $e) {
-            \Log::error('Image compression failed: ' . $e->getMessage());
-            return $imagePath; // Return original on error
+            Log::error('Image processing failed: ' . $e->getMessage(), [
+                'path' => $originalPath,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return [
+                'original' => $originalPath,
+                'compressed' => $originalPath,
+                'webp' => [],
+                'responsive' => []
+            ];
+        } finally {
+            ini_set('memory_limit', $originalMemoryLimit);
+            ini_set('max_execution_time', $originalTimeLimit);
         }
     }
 
     /**
-     * Get already compressed image path if exists, otherwise return original
+     * Generate compressed version (same size, better compression)
      */
-    public static function getExistingCompressed(string $imagePath): string
+    protected static function generateCompressed($image, string $directory, string $filename, array $options): string
     {
-        $compressedPath = self::getCompressedPath($imagePath);
+        $quality = $options['quality'] ?? self::QUALITY_MEDIUM;
+        $compressedFilename = "{$filename}_compressed.jpg";
+        $compressedPath = "{$directory}/{$compressedFilename}";
 
+        $encoded = $image->toJpeg(quality: $quality, progressive: true);
+        Storage::disk('public')->put($compressedPath, (string) $encoded);
+
+        return $compressedPath;
+    }
+
+    /**
+     * Generate WebP versions untuk semua breakpoints
+     */
+    protected static function generateWebPVersions($image, string $directory, string $filename, array $options): array
+    {
+        $quality = $options['webp_quality'] ?? self::QUALITY_MEDIUM;
+        $breakpoints = $options['breakpoints'] ?? self::BREAKPOINTS;
+        $webpVersions = [];
+
+        foreach ($breakpoints as $name => $width) {
+            $webpFilename = "{$filename}_{$name}.webp";
+            $webpPath = "{$directory}/{$webpFilename}";
+
+            $resized = clone $image;
+            $resized->scaleDown(width: $width);
+            $encoded = $resized->toWebp(quality: $quality);
+            
+            Storage::disk('public')->put($webpPath, (string) $encoded);
+            $webpVersions[$name] = $webpPath;
+        }
+
+        return $webpVersions;
+    }
+
+    /**
+     * Generate responsive JPEG versions (fallback untuk browser lama)
+     */
+    protected static function generateResponsiveVersions($image, string $directory, string $filename, array $options): array
+    {
+        $quality = $options['quality'] ?? self::QUALITY_MEDIUM;
+        $breakpoints = $options['breakpoints'] ?? self::BREAKPOINTS;
+        $responsiveVersions = [];
+
+        foreach ($breakpoints as $name => $width) {
+            $responsiveFilename = "{$filename}_{$name}.jpg";
+            $responsivePath = "{$directory}/{$responsiveFilename}";
+
+            $resized = clone $image;
+            $resized->scaleDown(width: $width);
+            $encoded = $resized->toJpeg(quality: $quality, progressive: true);
+            
+            Storage::disk('public')->put($responsivePath, (string) $encoded);
+            $responsiveVersions[$name] = $responsivePath;
+        }
+
+        return $responsiveVersions;
+    }
+
+    /**
+     * Get existing compressed version atau fallback ke original
+     */
+    public static function getExistingCompressed(string $originalPath): string
+    {
+        $pathInfo = pathinfo($originalPath);
+        $directory = $pathInfo['dirname'];
+        $filename = $pathInfo['filename'];
+        
+        $compressedPath = "{$directory}/{$filename}_compressed.jpg";
+        
         if (Storage::disk('public')->exists($compressedPath)) {
             return $compressedPath;
         }
-
-        return $imagePath;
+        
+        return $originalPath;
     }
 
     /**
-     * Get compressed image path
+     * Get existing responsive WebP versions
      */
-    public static function getCompressedPath(string $originalPath): string
+    public static function getExistingResponsiveWebP(string $originalPath): array
     {
         $pathInfo = pathinfo($originalPath);
         $directory = $pathInfo['dirname'];
         $filename = $pathInfo['filename'];
-        $extension = $pathInfo['extension'];
-
-        return $directory . '/compressed_' . $filename . '.' . $extension;
-    }
-
-    /**
-     * Generate responsive image sizes
-     *
-     * @param string $imagePath
-     * @return array
-     */
-    public static function generateResponsiveSizes(string $imagePath): array
-    {
-        $sizes = [
-            'mobile' => ['width' => 640, 'quality' => 70],
-            'tablet' => ['width' => 1024, 'quality' => 75],
-            'desktop' => ['width' => 1920, 'quality' => 75],
-        ];
-
-        $responsiveImages = [];
-        $fullPath = Storage::path($imagePath);
-
-        if (!file_exists($fullPath)) {
-            return [];
-        }
-
-        try {
-            $manager = new ImageManager(new Driver());
-
-            foreach ($sizes as $size => $config) {
-                $responsivePath = self::getResponsivePath($imagePath, $size);
-
-                if (!Storage::exists($responsivePath)) {
-                    $image = $manager->read($fullPath);
-
-                    // Scale to width
-                    $image->scale(width: $config['width']);
-
-                    $responsiveFullPath = Storage::path($responsivePath);
-                    $directory = dirname($responsiveFullPath);
-
-                    if (!is_dir($directory)) {
-                        mkdir($directory, 0755, true);
-                    }
-
-                    $image->toJpeg($config['quality'])->save($responsiveFullPath);
-                }
-
-                $responsiveImages[$size] = $responsivePath;
+        
+        $webpVersions = [];
+        
+        foreach (self::BREAKPOINTS as $name => $width) {
+            $webpPath = "{$directory}/{$filename}_{$name}.webp";
+            if (Storage::disk('public')->exists($webpPath)) {
+                $webpVersions[$name] = $webpPath;
             }
-
-            return $responsiveImages;
-        } catch (\Exception $e) {
-            \Log::error('Responsive image generation failed: ' . $e->getMessage());
-            return [];
         }
+        
+        return $webpVersions;
     }
 
     /**
-     * Get responsive image path
+     * Get single WebP version (main/desktop)
      */
-    private static function getResponsivePath(string $originalPath, string $size): string
+    public static function getExistingWebP(string $originalPath): ?string
     {
         $pathInfo = pathinfo($originalPath);
         $directory = $pathInfo['dirname'];
         $filename = $pathInfo['filename'];
-        $extension = $pathInfo['extension'];
-
-        return $directory . '/' . $size . '_' . $filename . '.' . $extension;
+        
+        $webpPath = "{$directory}/{$filename}_desktop.webp";
+        
+        if (Storage::disk('public')->exists($webpPath)) {
+            return $webpPath;
+        }
+        
+        return null;
     }
 
     /**
-     * Clean up old compressed images
+     * Delete all variants of an image
      */
-    public static function cleanupCompressed(string $originalPath): void
+    public static function deleteImageVariants(string $originalPath): void
     {
-        $compressedPath = self::getCompressedPath($originalPath);
+        $disk = Storage::disk('public');
+        $pathInfo = pathinfo($originalPath);
+        $directory = $pathInfo['dirname'];
+        $filename = $pathInfo['filename'];
 
-        if (Storage::exists($compressedPath)) {
-            Storage::delete($compressedPath);
+        // Delete compressed version
+        $compressedPath = "{$directory}/{$filename}_compressed.jpg";
+        if ($disk->exists($compressedPath)) {
+            $disk->delete($compressedPath);
         }
 
-        // Clean responsive sizes
-        $sizes = ['mobile', 'tablet', 'desktop'];
-        foreach ($sizes as $size) {
-            $responsivePath = self::getResponsivePath($originalPath, $size);
-            if (Storage::exists($responsivePath)) {
-                Storage::delete($responsivePath);
+        // Delete all responsive versions
+        foreach (self::BREAKPOINTS as $name => $width) {
+            $webpPath = "{$directory}/{$filename}_{$name}.webp";
+            $jpegPath = "{$directory}/{$filename}_{$name}.jpg";
+            
+            if ($disk->exists($webpPath)) {
+                $disk->delete($webpPath);
             }
+            if ($disk->exists($jpegPath)) {
+                $disk->delete($jpegPath);
+            }
+        }
+
+        // Delete original
+        if ($disk->exists($originalPath)) {
+            $disk->delete($originalPath);
         }
     }
 }

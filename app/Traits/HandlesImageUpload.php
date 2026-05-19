@@ -68,6 +68,7 @@ trait HandlesImageUpload
 
     /**
      * Store image with optimization using Intervention Image
+     * Auto-generate WebP and responsive versions
      */
     protected function storeOptimizedImage(UploadedFile $file, string $storagePath): string
     {
@@ -109,16 +110,10 @@ trait HandlesImageUpload
                     $originalWidth = $image->width();
                     $originalHeight = $image->height();
 
-                    // Skip processing if image is already small enough
+                    // Resize if needed (max 1920x1080)
                     $maxWidth = 1920;
                     $maxHeight = 1080;
 
-                    if ($originalWidth <= $maxWidth && $originalHeight <= $maxHeight && $fileSize <= 1024 * 1024) {
-                        // Image is already optimized, just store it
-                        return $file->store($storagePath, 'public');
-                    }
-
-                    // Resize if needed (max 1920x1080)
                     if ($originalWidth > $maxWidth || $originalHeight > $maxHeight) {
                         $image->scaleDown(width: $maxWidth, height: $maxHeight);
                     }
@@ -140,6 +135,22 @@ trait HandlesImageUpload
                         'original_dimensions' => "{$originalWidth}x{$originalHeight}",
                         'final_path' => $fullPath
                     ]);
+
+                    // AUTO-GENERATE WEBP & RESPONSIVE VERSIONS
+                    // This runs in background and doesn't block the upload
+                    try {
+                        \App\Services\ImageCompressionService::processUploadedImage($fullPath, [
+                            'quality' => 85,
+                            'webp_quality' => 85
+                        ]);
+                        
+                        Log::info('Responsive variants generated', ['path' => $fullPath]);
+                    } catch (\Exception $e) {
+                        // Don't fail the upload if variant generation fails
+                        Log::warning('Variant generation failed: ' . $e->getMessage(), [
+                            'path' => $fullPath
+                        ]);
+                    }
 
                     return $fullPath;
                 } catch (\Exception $e) {

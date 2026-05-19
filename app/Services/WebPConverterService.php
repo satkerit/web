@@ -3,149 +3,130 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
+/**
+ * Service khusus untuk konversi WebP
+ * Mendukung AVIF jika extension tersedia
+ */
 class WebPConverterService
 {
     /**
-     * Convert image to WebP format for better compression
-     *
-     * @param string $imagePath
-     * @param int $quality
-     * @return string|null WebP image path or null if conversion failed
+     * Convert image to WebP format dengan multiple sizes
+     * 
+     * @param string $originalPath
+     * @param array $options
+     * @return array
      */
-    public static function convertToWebP(string $imagePath, int $quality = 80): ?string
+    public static function convertToWebP(string $originalPath, array $options = []): array
     {
-        $webpPath = self::getWebPPath($imagePath);
-
-        if (Storage::exists($webpPath)) {
-            return $webpPath;
-        }
-
-        $fullPath = Storage::path($imagePath);
-
-        if (!file_exists($fullPath)) {
-            return null;
-        }
-
         try {
+            $disk = Storage::disk('public');
+            
+            if (!$disk->exists($originalPath)) {
+                throw new \Exception("Original image not found: {$originalPath}");
+            }
+
             $manager = new ImageManager(new Driver());
-            $image = $manager->read($fullPath);
+            $image = $manager->read($disk->path($originalPath));
+            
+            $pathInfo = pathinfo($originalPath);
+            $directory = $pathInfo['dirname'];
+            $filename = $pathInfo['filename'];
+            
+            $quality = $options['quality'] ?? 85;
+            $breakpoints = $options['breakpoints'] ?? ImageCompressionService::BREAKPOINTS;
+            
+            $webpVersions = [];
 
-            $webpFullPath = Storage::path($webpPath);
-            $directory = dirname($webpFullPath);
+            // Generate WebP untuk setiap breakpoint
+            foreach ($breakpoints as $name => $width) {
+                $webpFilename = "{$filename}_{$name}.webp";
+                $webpPath = "{$directory}/{$webpFilename}";
 
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755, true);
+                $resized = clone $image;
+                $resized->scaleDown(width: $width);
+                $encoded = $resized->toWebp(quality: $quality);
+                
+                $disk->put($webpPath, (string) $encoded);
+                $webpVersions[$name] = $webpPath;
+                
+                Log::info("WebP created: {$webpPath}", [
+                    'size' => $disk->size($webpPath),
+                    'width' => $width
+                ]);
             }
 
-            // Convert to WebP
-            $image->toWebp($quality)->save($webpFullPath);
+            return $webpVersions;
 
-            return $webpPath;
         } catch (\Exception $e) {
-            \Log::error('WebP conversion failed: ' . $e->getMessage());
-            return null;
+            Log::error('WebP conversion failed: ' . $e->getMessage(), [
+                'path' => $originalPath
+            ]);
+            
+            return [];
         }
     }
 
     /**
-     * Get existing WebP path without generating it
+     * Get existing responsive WebP versions
      */
-    public static function getExistingWebP(string $imagePath): ?string
+    public static function getExistingResponsiveWebP(string $originalPath): array
     {
-        $webpPath = self::getWebPPath($imagePath);
-        return Storage::disk('public')->exists($webpPath) ? $webpPath : null;
+        return ImageCompressionService::getExistingResponsiveWebP($originalPath);
     }
 
     /**
-     * Get existing responsive WebP paths
+     * Get single WebP version (desktop/main)
      */
-    public static function getExistingResponsiveWebP(string $imagePath): array
+    public static function getExistingWebP(string $originalPath): ?string
     {
-        $sizes = ['mobile', 'tablet', 'desktop'];
-        $paths = [];
+        return ImageCompressionService::getExistingWebP($originalPath);
+    }
 
-        foreach ($sizes as $size) {
-            $path = self::getResponsiveWebPPath($imagePath, $size);
-            if (Storage::disk('public')->exists($path)) {
-                $paths[$size] = $path;
-            }
+    /**
+     * Check if WebP is supported by GD
+     */
+    public static function isWebPSupported(): bool
+    {
+        if (!function_exists('gd_info')) {
+            return false;
         }
-
-        return $paths;
+        
+        $gdInfo = gd_info();
+        return isset($gdInfo['WebP Support']) && $gdInfo['WebP Support'];
     }
 
     /**
-     * Get WebP image path
+     * Batch convert multiple images to WebP
+     * Useful untuk command/migration
      */
-    public static function getWebPPath(string $originalPath): string
+    public static function batchConvert(array $imagePaths, array $options = []): array
     {
-        $pathInfo = pathinfo($originalPath);
-        $directory = $pathInfo['dirname'];
-        $filename = $pathInfo['filename'];
-
-        return $directory . '/' . $filename . '.webp';
-    }
-
-    /**
-     * Generate responsive WebP images
-     */
-    public static function generateResponsiveWebP(string $imagePath): array
-    {
-        $sizes = [
-            'mobile' => ['width' => 640, 'quality' => 75],
-            'tablet' => ['width' => 1024, 'quality' => 80],
-            'desktop' => ['width' => 1920, 'quality' => 80],
+        $results = [
+            'success' => [],
+            'failed' => []
         ];
 
-        $responsiveWebP = [];
-        $fullPath = Storage::path($imagePath);
-
-        if (!file_exists($fullPath)) {
-            return [];
-        }
-
-        try {
-            $manager = new ImageManager(new Driver());
-
-            foreach ($sizes as $size => $config) {
-                $webpPath = self::getResponsiveWebPPath($imagePath, $size);
-
-                if (!Storage::exists($webpPath)) {
-                    $image = $manager->read($fullPath);
-                    $image->scale(width: $config['width']);
-
-                    $webpFullPath = Storage::path($webpPath);
-                    $directory = dirname($webpFullPath);
-
-                    if (!is_dir($directory)) {
-                        mkdir($directory, 0755, true);
-                    }
-
-                    $image->toWebp($config['quality'])->save($webpFullPath);
+        foreach ($imagePaths as $path) {
+            try {
+                $webpVersions = self::convertToWebP($path, $options);
+                
+                if (!empty($webpVersions)) {
+                    $results['success'][$path] = $webpVersions;
+                } else {
+                    $results['failed'][] = $path;
                 }
-
-                $responsiveWebP[$size] = $webpPath;
+            } catch (\Exception $e) {
+                $results['failed'][] = $path;
+                Log::error("Batch WebP conversion failed for: {$path}", [
+                    'error' => $e->getMessage()
+                ]);
             }
-
-            return $responsiveWebP;
-        } catch (\Exception $e) {
-            \Log::error('Responsive WebP generation failed: ' . $e->getMessage());
-            return [];
         }
-    }
 
-    /**
-     * Get responsive WebP path
-     */
-    private static function getResponsiveWebPPath(string $originalPath, string $size): string
-    {
-        $pathInfo = pathinfo($originalPath);
-        $directory = $pathInfo['dirname'];
-        $filename = $pathInfo['filename'];
-
-        return $directory . '/' . $size . '_' . $filename . '.webp';
+        return $results;
     }
 }
