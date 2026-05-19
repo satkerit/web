@@ -890,4 +890,65 @@
     {{-- ── END LAYANAN PENGADUAN SECTION ── --}}
 
 
+    <!-- Floating Action Buttons for Complaints -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3" x-data="{ showLabels: false }">
+        <!-- Customer Complaint Button -->
+        <a href="{{ route('pengaduan-nasabah') }}"
+           @mouseenter="showLabels = true"
+           @mouseleave="showLabels = false"
+           class="group relative flex items-center justify-end">
+            <!-- Label -->
+            <span class="absolute right-16 px-4 py-2 bg-white text-gray-800 text-sm font-medium rounded-lg shadow-lg whitespace-nowrap transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0">
+                Pengaduan Nasabah
+            </span>
+            <!-- Button -->
+            <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- Whistleblowing Button -->
+        <a href="{{ route('whistleblowing') }}"
+           @mouseenter="showLabels = true"
+           @mouseleave="showLabels = false"
+           class="group relative flex items-center justify-end">
+            <!-- Label -->
+            <span class="absolute right-16 px-4 py-2 bg-white text-gray-800 text-sm font-medium rounded-lg shadow-lg whitespace-nowrap transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0">
+                Whistleblowing System
+            </span>
+            <!-- Button -->
+            <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- Pulse animation for attention -->
+        <style>
+            @keyframes pulse-ring {
+                0% {
+                    transform: scale(0.95);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.05);
+                    opacity: 0.7;
+                }
+                100% {
+                    transform: scale(0.95);
+                    opacity: 1;
+                }
+            }
+            .fixed > div > a > div {
+                animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            .fixed > div > a:hover > div {
+                animation: none;
+            }
+        </style>
+    </div>
+
     </x-frontend-layout>
