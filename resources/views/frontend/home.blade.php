@@ -891,19 +891,19 @@
 
 
     <!-- Floating Action Buttons for Complaints -->
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3" x-data="{ showLabels: false }">
+    <div class="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 md:bottom-28 md:right-8 lg:bottom-32 lg:right-10 z-40 flex flex-col gap-4" x-data="{ showLabels: false }">
         <!-- Customer Complaint Button -->
         <a href="{{ route('pengaduan-nasabah') }}"
            @mouseenter="showLabels = true"
            @mouseleave="showLabels = false"
            class="group relative flex items-center justify-end">
             <!-- Label -->
-            <span class="absolute right-16 px-4 py-2 bg-white text-gray-800 text-sm font-medium rounded-lg shadow-lg whitespace-nowrap transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0">
+            <span class="absolute right-20 px-4 py-2.5 bg-white text-gray-800 text-sm font-semibold rounded-xl shadow-xl whitespace-nowrap transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-3 group-hover:translate-x-0 border border-emerald-100">
                 Pengaduan Nasabah
             </span>
             <!-- Button -->
-            <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
-                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 sm:w-[70px] sm:h-[70px] bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-full shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer ring-4 ring-white">
+                <svg class="w-8 h-8 sm:w-9 sm:h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                 </svg>
             </div>
@@ -915,12 +915,12 @@
            @mouseleave="showLabels = false"
            class="group relative flex items-center justify-end">
             <!-- Label -->
-            <span class="absolute right-16 px-4 py-2 bg-white text-gray-800 text-sm font-medium rounded-lg shadow-lg whitespace-nowrap transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0">
+            <span class="absolute right-20 px-4 py-2.5 bg-white text-gray-800 text-sm font-semibold rounded-xl shadow-xl whitespace-nowrap transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-3 group-hover:translate-x-0 border border-amber-100">
                 Whistleblowing System
             </span>
             <!-- Button -->
-            <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
-                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 sm:w-[70px] sm:h-[70px] bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 rounded-full shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer ring-4 ring-white">
+                <svg class="w-8 h-8 sm:w-9 sm:h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                 </svg>
             </div>
@@ -942,11 +942,23 @@
                     opacity: 1;
                 }
             }
+            
+            /* Apply pulse animation to buttons */
             .fixed > div > a > div {
-                animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             }
+            
+            /* Stop animation on hover */
             .fixed > div > a:hover > div {
                 animation: none;
+            }
+            
+            /* Responsive adjustments for mobile */
+            @media (max-width: 640px) {
+                .fixed > div > a > span {
+                    font-size: 0.75rem;
+                    padding: 0.5rem 0.75rem;
+                }
             }
         </style>
     </div>
