@@ -14,7 +14,10 @@ class BlockSuspiciousRequests
 {
     protected array $excludedRoutes = [
         'storage/*', 'logout', 'sanctum/*', '_ignition/*',
-        'admin/storage/*', 'admin/*/upload*',
+        'admin/storage/*', 'admin/*/upload*', 'admin/company-info*',
+        'admin/news*', 'admin/products*', 'admin/hero-slides*',
+        'admin/why-choose-us*', 'admin/board-members*', 'admin/offices*',
+        'admin/careers*', 'admin/brochures*', 'admin/auctions*', 'admin/reports*'
     ];
 
     protected array $suspiciousPatterns;

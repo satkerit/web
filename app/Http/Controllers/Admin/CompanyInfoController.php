@@ -17,7 +17,11 @@ class CompanyInfoController extends Controller
 
     public function edit()
     {
-        $this->authorizeView('settings.company');
+        // Allow super admin and admin roles
+        $user = auth()->user();
+        if (!$user->isSuperAdmin() && !$user->isAdmin()) {
+            $this->authorizeView('settings.company');
+        }
 
         $company = CompanyInfo::first() ?? new CompanyInfo();
 
@@ -26,10 +30,9 @@ class CompanyInfoController extends Controller
 
     public function update(Request $request)
     {
-        // Bypass authorization check for Super Admin to prevent 403 errors
-        if (auth()->user() && auth()->user()->isSuperAdmin()) {
-            // Super admin is always authorized
-        } else {
+        // Allow super admin and admin roles - maximum accessibility
+        $user = auth()->user();
+        if (!$user->isSuperAdmin() && !$user->isAdmin()) {
             try {
                 $this->authorizeEdit('settings.company');
             } catch (\Exception $e) {
@@ -141,7 +144,6 @@ class CompanyInfoController extends Controller
 
             return redirect()->route('admin.company-info.edit')
                 ->with('success', 'Informasi perusahaan berhasil diperbarui.');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Company Info Validation Failed', [
                 'user_id' => auth()->id(),
@@ -257,7 +259,6 @@ class CompanyInfoController extends Controller
                 'path' => $path,
                 'items' => $items,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Storage browse error: ' . $e->getMessage());
 
@@ -276,7 +277,7 @@ class CompanyInfoController extends Controller
     {
         $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 
-        return match($type) {
+        return match ($type) {
             'image' => in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']),
             'icon' => in_array($extension, ['ico', 'png', 'jpg', 'jpeg']),
             'document' => in_array($extension, ['pdf', 'doc', 'docx']),
@@ -319,7 +320,6 @@ class CompanyInfoController extends Controller
                 'url' => Storage::url($storedPath),
                 'filename' => $filename,
             ]);
-
         } catch (\Exception $e) {
             Log::error('File upload error: ' . $e->getMessage());
 
@@ -357,7 +357,6 @@ class CompanyInfoController extends Controller
                 'success' => false,
                 'message' => 'File not found',
             ], 404);
-
         } catch (\Exception $e) {
             Log::error('File delete error: ' . $e->getMessage());
 

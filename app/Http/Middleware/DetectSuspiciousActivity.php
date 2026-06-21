@@ -21,6 +21,9 @@ class DetectSuspiciousActivity
     protected array $scannerAgents;
     protected array $excludedRoutes = [
         '_ignition/*', 'sanctum/*', 'telescope/*', '__clockwork/*', 'logout',
+        'admin/company-info*', 'admin/news*', 'admin/products*', 'admin/hero-slides*',
+        'admin/why-choose-us*', 'admin/board-members*', 'admin/offices*', 'admin/careers*',
+        'admin/brochures*', 'admin/auctions*', 'admin/reports*', 'admin/storage*'
     ];
 
     public function __construct()
