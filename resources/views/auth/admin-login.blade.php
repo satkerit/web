@@ -198,7 +198,7 @@
                         showPassword: false,
                         remember: {{ old('remember') ? 'true' : 'false' }},
                         isLoading: false
-                    }">
+                    }" x-init="console.log('Alpine initialized')">
 
                         <!-- Mobile Logo -->
                         <div class="lg:hidden flex items-center justify-center mb-10">
@@ -280,7 +280,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
                                     <input
-                                        :type="showPassword ? 'text' : 'password'"
+                                        type="password"
+                                        x-bind:type="showPassword ? 'text' : 'password'"
                                         id="password"
                                         name="password"
                                         required
@@ -326,11 +327,10 @@
 
                             <!-- Remember -->
                             <div class="flex items-center">
-                                <label class="flex items-center cursor-pointer group">
+                                <label class="flex items-center cursor-pointer group" @click.prevent="remember = !remember">
                                     <div
                                         class="custom-checkbox flex items-center justify-center mr-3"
                                         :class="{ 'checked': remember }"
-                                        @click="remember = !remember"
                                     >
                                         <svg x-show="remember" class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-cloak>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
@@ -341,6 +341,7 @@
                                         name="remember"
                                         class="sr-only"
                                         :checked="remember"
+                                        @change="remember = $event.target.checked"
                                     >
                                     <span class="text-sm font-semibold text-slate-400 group-hover:text-slate-200 transition-colors">Tetap masuk</span>
                                 </label>
