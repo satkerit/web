@@ -2,6 +2,23 @@
 // Note: Alpine components are now registered in alpine-components.js
 // This file handles jQuery plugins, SweetAlert, and other admin functionality
 
+// Global error handler for browser extension errors
+window.addEventListener("unhandledrejection", function (event) {
+    // Suppress errors from browser extensions
+    if (
+        (event.reason &&
+            event.reason.message &&
+            event.reason.message.includes("message channel closed")) ||
+        (event.reason.message &&
+            event.reason.message.includes(
+                "Listener indicated an asynchronous response",
+            ))
+    ) {
+        event.preventDefault();
+        return;
+    }
+});
+
 import "./bootstrap";
 
 // Import Alpine.js bundle first to ensure it's available
@@ -469,7 +486,9 @@ async function loadSwal() {
     }
 
     swalPromise = new Promise((resolve, reject) => {
-        const nonce = document.querySelector('meta[name="csp-nonce"]')?.getAttribute('content');
+        const nonce = document
+            .querySelector('meta[name="csp-nonce"]')
+            ?.getAttribute("content");
         const script = document.createElement("script");
         script.src =
             "https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js";
