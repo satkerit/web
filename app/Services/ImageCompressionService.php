@@ -221,6 +221,43 @@ class ImageCompressionService
     }
 
     /**
+     * Compress an existing image for web (resize + re-encode)
+     */
+    public static function compressForWeb(string $relativePath, int $quality = 80, int $maxWidth = 1200): ?string
+    {
+        try {
+            $disk = Storage::disk('public');
+
+            if (!$disk->exists($relativePath)) {
+                return null;
+            }
+
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($disk->path($relativePath));
+
+            if ($image->width() > $maxWidth) {
+                $image->scaleDown(width: $maxWidth);
+            }
+
+            $extension = strtolower(pathinfo($relativePath, PATHINFO_EXTENSION));
+
+            $encoded = match ($extension) {
+                'webp' => $image->toWebp(quality: $quality),
+                'png' => $image->toPng(),
+                default => $image->toJpeg(quality: $quality, progressive: true),
+            };
+
+            $compressedPath = $relativePath;
+            $disk->put($compressedPath, (string) $encoded);
+
+            return $compressedPath;
+        } catch (\Exception $e) {
+            Log::error('compressForWeb failed: ' . $e->getMessage(), ['path' => $relativePath]);
+            return null;
+        }
+    }
+
+    /**
      * Delete all variants of an image
      */
     public static function deleteImageVariants(string $originalPath): void

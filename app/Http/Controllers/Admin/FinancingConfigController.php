@@ -48,11 +48,15 @@ class FinancingConfigController extends Controller
         // Generate type from name
         $validated['type'] = Str::slug($validated['name'], '_');
 
-        FinancingConfig::create($validated);
+        try {
+            FinancingConfig::create($validated);
 
-        return redirect()
-            ->route('admin.financing-config.index')
-            ->with('success', 'Konfigurasi pembiayaan berhasil ditambahkan.');
+            return redirect()
+                ->route('admin.financing-config.index')
+                ->with('success', 'Konfigurasi pembiayaan berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan konfigurasi: ' . $e->getMessage())->withInput();
+        }
     }
 
     /**
@@ -76,11 +80,15 @@ class FinancingConfigController extends Controller
 
         $validated = $this->validateConfig($request);
 
-        $financingConfig->update($validated);
+        try {
+            $financingConfig->update($validated);
 
-        return redirect()
-            ->route('admin.financing-config.index')
-            ->with('success', 'Konfigurasi pembiayaan berhasil diperbarui.');
+            return redirect()
+                ->route('admin.financing-config.index')
+                ->with('success', 'Konfigurasi pembiayaan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui konfigurasi: ' . $e->getMessage())->withInput();
+        }
     }
 
     /**
@@ -90,11 +98,17 @@ class FinancingConfigController extends Controller
     {
         $this->authorizeAny(['settings.financing']);
 
-        $financingConfig->delete();
+        try {
+            $financingConfig->delete();
 
-        return redirect()
-            ->route('admin.financing-config.index')
-            ->with('success', 'Konfigurasi pembiayaan berhasil dihapus.');
+            return redirect()
+                ->route('admin.financing-config.index')
+                ->with('success', 'Konfigurasi pembiayaan berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.financing-config.index')
+                ->with('error', 'Gagal menghapus konfigurasi: ' . $e->getMessage());
+        }
     }
 
     /**

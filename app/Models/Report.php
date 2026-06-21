@@ -53,6 +53,10 @@ class Report extends Model
             ->where(function ($q) {
                 $q->whereNull('posted_at')
                     ->orWhere('posted_at', '<=', Carbon::now());
+            })
+            ->where(function ($q) {
+                $q->whereNull('scheduled_at')
+                    ->orWhere('scheduled_at', '<=', Carbon::now());
             });
     }
 
@@ -72,6 +76,10 @@ class Report extends Model
     public function isVisibleNow(): bool
     {
         if (!$this->is_published) {
+            return false;
+        }
+
+        if ($this->scheduled_at !== null && $this->scheduled_at > Carbon::now()) {
             return false;
         }
 

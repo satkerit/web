@@ -59,9 +59,8 @@ class ReportController extends Controller
             'published_date' => 'required|date',
         ];
 
-        // Hanya validasi scheduled_at harus after:now jika posting_mode adalah manual
-        if ($request->posting_mode === 'manual' && $request->filled('scheduled_at')) {
-            $rules['scheduled_at'] = 'required|date|after:now';
+        if ($request->posting_mode === 'manual') {
+            $rules['scheduled_at'] = 'required|date';
         }
 
         $validated = $request->validate($rules);
@@ -114,7 +113,7 @@ class ReportController extends Controller
     public function update(Request $request, Report $report)
     {
         $this->authorizeEdit('reports.edit');
-        $validated = $request->validate([
+        $rules = [
             'title' => 'required|string|max:255',
             'type' => 'required|in:keuangan_publikasi,tata_kelola,tahunan,tahunan_berkelanjutan',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
@@ -125,7 +124,13 @@ class ReportController extends Controller
             'posting_mode' => 'required|in:auto,manual',
             'scheduled_at' => 'nullable|date',
             'published_date' => 'required|date',
-        ]);
+        ];
+
+        if ($request->posting_mode === 'manual') {
+            $rules['scheduled_at'] = 'required|date';
+        }
+
+        $validated = $request->validate($rules);
 
         try {
             $validated['is_published'] = $request->boolean('is_published');
@@ -165,12 +170,16 @@ class ReportController extends Controller
     {
         $this->authorizeDelete('reports.delete');
 
-        if ($report->file_path) {
-            Storage::disk('public')->delete($report->file_path);
+        try {
+            if ($report->file_path) {
+                Storage::disk('public')->delete($report->file_path);
+            }
+
+            $report->delete();
+
+            return redirect()->route('admin.reports.index')->with('success', 'Laporan berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.reports.index')->with('error', 'Gagal menghapus laporan: ' . $e->getMessage());
         }
-
-        $report->delete();
-
-        return redirect()->route('admin.reports.index')->with('success', 'Laporan berhasil dihapus.');
     }
 }

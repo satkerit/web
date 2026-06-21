@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\NewsImage;
+use App\Traits\AuthorizesAdminActions;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,10 +15,11 @@ use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
-    use HandlesImageUpload;
+    use HandlesImageUpload, AuthorizesAdminActions;
 
     public function index(Request $request)
     {
+        $this->authorizeView('news.view');
         $query = News::query()->with('user');
 
         // Filter by search
@@ -50,15 +52,21 @@ class NewsController extends Controller
 
     public function create()
     {
+        $this->authorizeCreate('news.create');
         return view('admin.news.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $this->authorizeCreate('news.create');
+
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news',
             'content' => 'required',
+            'excerpt' => 'nullable|string',
+            'meta_description' => 'nullable|string',
+            'tags' => 'nullable|string|max:255',
             'category' => 'required|string',
             'featured_image' => 'required|image|max:2048',
             'slide_images.*' => 'image|max:2048',
@@ -71,7 +79,7 @@ class NewsController extends Controller
 
         DB::beginTransaction();
         try {
-            $data = $request->except(['featured_image', 'slide_images', '_token']);
+            $data = $validated;
 
             // Handle Slug
             if (empty($data['slug'])) {
@@ -118,16 +126,22 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
+        $this->authorizeEdit('news.edit');
         $news->load('images');
         return view('admin.news.edit', compact('news'));
     }
 
     public function update(Request $request, News $news)
     {
-        $request->validate([
+        $this->authorizeEdit('news.edit');
+
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news,slug,' . $news->id,
             'content' => 'required',
+            'excerpt' => 'nullable|string',
+            'meta_description' => 'nullable|string',
+            'tags' => 'nullable|string|max:255',
             'category' => 'required|string',
             'featured_image' => 'nullable|image|max:2048',
             'slide_images.*' => 'image|max:2048',
@@ -140,7 +154,7 @@ class NewsController extends Controller
 
         DB::beginTransaction();
         try {
-            $data = $request->except(['featured_image', 'slide_images', 'delete_images', '_token', '_method']);
+            $data = $validated;
 
             // Handle Checkbox
             $data['is_published'] = $request->boolean('is_published');
@@ -196,6 +210,7 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
+        $this->authorizeDelete('news.delete');
         try {
             DB::beginTransaction();
 
@@ -221,6 +236,7 @@ class NewsController extends Controller
 
     public function deleteImage(NewsImage $newsImage)
     {
+        $this->authorizeEdit('news.edit');
         try {
             Storage::disk('public')->delete($newsImage->image_path);
             $newsImage->delete();

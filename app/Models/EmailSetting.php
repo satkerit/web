@@ -30,6 +30,18 @@ class EmailSetting extends Model
     ];
 
     /**
+     * Encrypt password before storing
+     */
+    public function setPasswordAttribute($value): void
+    {
+        if (empty($value)) {
+            return;
+        }
+
+        $this->attributes['password'] = Crypt::encryptString($value);
+    }
+
+    /**
      * Get cached settings
      */
     public static function getSettings(): ?self

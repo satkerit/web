@@ -6,16 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\WhyChooseUs;
 use App\Models\WhyChooseUsSetting;
 use App\Services\CacheService;
+use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class WhyChooseUsController extends Controller
 {
+    use AuthorizesAdminActions;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorizeView('why_choose_us.view');
         $items = WhyChooseUs::orderBy('sort_order')->get();
         return view('admin.why-choose-us.index', compact('items'));
     }
@@ -25,6 +29,7 @@ class WhyChooseUsController extends Controller
      */
     public function create()
     {
+        $this->authorizeCreate('why_choose_us.manage');
         return view('admin.why-choose-us.create');
     }
 
@@ -33,6 +38,7 @@ class WhyChooseUsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorizeCreate('why_choose_us.manage');
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -52,12 +58,17 @@ class WhyChooseUsController extends Controller
             $validated['is_active'] = false;
         }
 
-        WhyChooseUs::create($validated);
+        try {
+            WhyChooseUs::create($validated);
 
-        CacheService::clear('why_choose_us_items');
+            CacheService::clear('why_choose_us_items');
 
-        return redirect()->route('admin.why-choose-us.index')
-            ->with('success', 'Item berhasil ditambahkan.');
+            return redirect()->route('admin.why-choose-us.index')
+                ->with('success', 'Item berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.why-choose-us.index')
+                ->with('error', 'Gagal menambahkan item: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -65,6 +76,7 @@ class WhyChooseUsController extends Controller
      */
     public function edit(WhyChooseUs $whyChooseUs)
     {
+        $this->authorizeEdit('why_choose_us.manage');
         return view('admin.why-choose-us.edit', compact('whyChooseUs'));
     }
 
@@ -73,6 +85,7 @@ class WhyChooseUsController extends Controller
      */
     public function update(Request $request, WhyChooseUs $whyChooseUs)
     {
+        $this->authorizeEdit('why_choose_us.manage');
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -83,7 +96,6 @@ class WhyChooseUsController extends Controller
         ]);
 
         if ($request->hasFile('icon')) {
-            // Delete old icon
             if ($whyChooseUs->icon) {
                 Storage::disk('public')->delete($whyChooseUs->icon);
             }
@@ -95,12 +107,17 @@ class WhyChooseUsController extends Controller
             $validated['is_active'] = false;
         }
 
-        $whyChooseUs->update($validated);
+        try {
+            $whyChooseUs->update($validated);
 
-        CacheService::clear('why_choose_us_items');
+            CacheService::clear('why_choose_us_items');
 
-        return redirect()->route('admin.why-choose-us.index')
-            ->with('success', 'Item berhasil diperbarui.');
+            return redirect()->route('admin.why-choose-us.index')
+                ->with('success', 'Item berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.why-choose-us.index')
+                ->with('error', 'Gagal memperbarui item: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -108,15 +125,22 @@ class WhyChooseUsController extends Controller
      */
     public function destroy(WhyChooseUs $whyChooseUs)
     {
+        $this->authorizeDelete('why_choose_us.manage');
         if ($whyChooseUs->icon) {
             Storage::disk('public')->delete($whyChooseUs->icon);
         }
-        $whyChooseUs->delete();
 
-        CacheService::clear('why_choose_us_items');
+        try {
+            $whyChooseUs->delete();
 
-        return redirect()->route('admin.why-choose-us.index')
-            ->with('success', 'Item berhasil dihapus.');
+            CacheService::clear('why_choose_us_items');
+
+            return redirect()->route('admin.why-choose-us.index')
+                ->with('success', 'Item berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.why-choose-us.index')
+                ->with('error', 'Gagal menghapus item: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -124,6 +148,7 @@ class WhyChooseUsController extends Controller
      */
     public function editSettings()
     {
+        $this->authorizeAny(['why_choose_us.settings']);
         $settings = WhyChooseUsSetting::getSettings();
         return view('admin.why-choose-us.settings', compact('settings'));
     }
@@ -133,6 +158,7 @@ class WhyChooseUsController extends Controller
      */
     public function updateSettings(Request $request)
     {
+        $this->authorizeAny(['why_choose_us.settings']);
         $validated = $request->validate([
             'section_title' => 'required|string|max:255',
             'section_subtitle' => 'required|string',
@@ -155,11 +181,16 @@ class WhyChooseUsController extends Controller
             $validated['is_active'] = false;
         }
 
-        $settings->update($validated);
+        try {
+            $settings->update($validated);
 
-        CacheService::clear('why_choose_us_settings');
+            CacheService::clear('why_choose_us_settings');
 
-        return redirect()->route('admin.why-choose-us.settings')
-            ->with('success', 'Pengaturan berhasil disimpan.');
+            return redirect()->route('admin.why-choose-us.settings')
+                ->with('success', 'Pengaturan berhasil disimpan.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.why-choose-us.settings')
+                ->with('error', 'Gagal menyimpan pengaturan: ' . $e->getMessage());
+        }
     }
 }

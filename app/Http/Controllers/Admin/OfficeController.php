@@ -60,9 +60,12 @@ class OfficeController extends Controller
 
         $validated['photo'] = $this->handleImageUpload($request, 'photo', 'offices');
 
-        Office::create($validated);
-
-        return redirect()->route('admin.offices.index')->with('success', 'Kantor berhasil ditambahkan.');
+        try {
+            Office::create($validated);
+            return redirect()->route('admin.offices.index')->with('success', 'Kantor berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan kantor: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function edit(Office $office)
@@ -94,9 +97,12 @@ class OfficeController extends Controller
 
         $validated['photo'] = $this->handleImageUpload($request, 'photo', 'offices', $office->photo);
 
-        $office->update($validated);
-
-        return redirect()->route('admin.offices.index')->with('success', 'Kantor berhasil diperbarui.');
+        try {
+            $office->update($validated);
+            return redirect()->route('admin.offices.index')->with('success', 'Kantor berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui kantor: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy(Office $office)
@@ -107,8 +113,11 @@ class OfficeController extends Controller
             Storage::disk('public')->delete($office->photo);
         }
 
-        $office->delete();
-
-        return redirect()->route('admin.offices.index')->with('success', 'Kantor berhasil dihapus.');
+        try {
+            $office->delete();
+            return redirect()->route('admin.offices.index')->with('success', 'Kantor berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.offices.index')->with('error', 'Gagal menghapus kantor: ' . $e->getMessage());
+        }
     }
 }

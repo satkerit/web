@@ -84,12 +84,16 @@ class AuditTrailController extends Controller
 
         $days = $request->input('days', 90);
 
-        $deleted = AuditTrail::where('created_at', '<', now()->subDays($days))->delete();
+        try {
+            $deleted = AuditTrail::where('created_at', '<', now()->subDays($days))->delete();
 
-        // Log this action
-        AuditTrail::log('clear_logs', "Menghapus {$deleted} log audit yang lebih dari {$days} hari");
+            AuditTrail::log('clear_logs', "Menghapus {$deleted} log audit yang lebih dari {$days} hari");
 
-        return redirect()->route('admin.audit-trails.index')
-            ->with('success', "Berhasil menghapus {$deleted} log audit yang lebih dari {$days} hari.");
+            return redirect()->route('admin.audit-trails.index')
+                ->with('success', "Berhasil menghapus {$deleted} log audit yang lebih dari {$days} hari.");
+        } catch (\Exception $e) {
+            return redirect()->route('admin.audit-trails.index')
+                ->with('error', 'Gagal menghapus log audit: ' . $e->getMessage());
+        }
     }
 }

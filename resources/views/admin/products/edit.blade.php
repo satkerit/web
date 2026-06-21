@@ -322,7 +322,7 @@
                             <p class="mt-1 text-xs text-slate-500">Pilih brosur yang sudah diupload di library brosur</p>
                         </div>
 
-                        @if($product->brochure_id && $product->brochure)
+                        @if($product->brochure_id && $product->libraryBrochure)
                             <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
                                 <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 text-red-600">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -331,12 +331,12 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-slate-900 truncate">
-                                        Brosur Library: {{ $product->brochure->original_name }}
+                                        Brosur Library: {{ $product->libraryBrochure->original_name }}
                                     </p>
-                                    <a href="{{ route('admin.brochures.show', $product->brochure_id) }}" target="_blank" class="text-xs text-blue-600 hover:text-green-700 hover:underline">Lihat Detail</a>
+                                    <a href="{{ $product->libraryBrochure->download_url }}" target="_blank" class="text-xs text-blue-600 hover:text-green-700 hover:underline">Unduh Brosur</a>
                                 </div>
                             </div>
-                        @elseif($product->brochure)
+                        @elseif($product->getAttribute('brochure'))
                             <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
                                 <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 text-red-600">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -347,7 +347,7 @@
                                     <p class="text-sm font-medium text-slate-900 truncate">
                                         Brosur Upload Manual
                                     </p>
-                                    <a href="{{ Storage::url($product->brochure) }}" target="_blank" class="text-xs text-blue-600 hover:text-green-700 hover:underline">Lihat File</a>
+                                    <a href="{{ Storage::url($product->getAttribute('brochure')) }}" target="_blank" class="text-xs text-blue-600 hover:text-green-700 hover:underline">Lihat File</a>
                                 </div>
                             </div>
                         @endif

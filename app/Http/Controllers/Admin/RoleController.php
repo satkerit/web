@@ -65,19 +65,23 @@ class RoleController extends Controller
             'name.regex' => 'Nama role hanya boleh menggunakan huruf kecil dan underscore.',
         ]);
 
-        $role = Role::create([
-            'name' => $validated['name'],
-            'display_name' => $validated['display_name'],
-            'description' => $validated['description'] ?? null,
-            'is_active' => $request->boolean('is_active'),
-            'is_system' => false,
-        ]);
+        try {
+            $role = Role::create([
+                'name' => $validated['name'],
+                'display_name' => $validated['display_name'],
+                'description' => $validated['description'] ?? null,
+                'is_active' => $request->boolean('is_active'),
+                'is_system' => false,
+            ]);
 
-        if (!empty($validated['permissions'])) {
-            $role->syncPermissions($validated['permissions']);
+            if (!empty($validated['permissions'])) {
+                $role->syncPermissions($validated['permissions']);
+            }
+
+            return redirect()->route('admin.roles.index')->with('success', 'Role berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan role: ' . $e->getMessage())->withInput();
         }
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role berhasil ditambahkan.');
     }
 
     public function edit(Role $role)
@@ -124,11 +128,14 @@ class RoleController extends Controller
             $updateData['name'] = $validated['name'];
         }
 
-        $role->update($updateData);
+        try {
+            $role->update($updateData);
+            $role->syncPermissions($validated['permissions'] ?? []);
 
-        $role->syncPermissions($validated['permissions'] ?? []);
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role berhasil diperbarui.');
+            return redirect()->route('admin.roles.index')->with('success', 'Role berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui role: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy(Role $role)
@@ -145,9 +152,13 @@ class RoleController extends Controller
                 ->with('error', 'Role ini masih digunakan oleh user dan tidak dapat dihapus.');
         }
 
-        $role->delete();
-
-        return redirect()->route('admin.roles.index')
-            ->with('success', 'Role berhasil dihapus.');
+        try {
+            $role->delete();
+            return redirect()->route('admin.roles.index')
+                ->with('success', 'Role berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.roles.index')
+                ->with('error', 'Gagal menghapus role: ' . $e->getMessage());
+        }
     }
 }

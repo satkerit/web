@@ -45,9 +45,51 @@ class Product extends Model
         'brochure_id' => 'integer'
     ];
 
-    public function brochure()
+    public function libraryBrochure()
     {
-        return $this->belongsTo(Brochure::class);
+        return $this->belongsTo(Brochure::class, 'brochure_id');
+    }
+
+    public function hasManualBrochure(): bool
+    {
+        return !empty($this->getAttribute('brochure'));
+    }
+
+    public function hasLibraryBrochure(): bool
+    {
+        return !empty($this->brochure_id) && $this->libraryBrochure !== null;
+    }
+
+    public function hasAnyBrochure(): bool
+    {
+        return $this->hasManualBrochure() || $this->hasLibraryBrochure();
+    }
+
+    public function getEffectiveBrochurePath(): ?string
+    {
+        if ($this->hasManualBrochure()) {
+            return $this->getAttribute('brochure');
+        }
+
+        return $this->libraryBrochure?->file_path;
+    }
+
+    public function getEffectiveBrochureName(): ?string
+    {
+        if ($this->hasManualBrochure()) {
+            return str_replace(' ', '_', $this->name) . '_Brosur.pdf';
+        }
+
+        return $this->libraryBrochure?->original_name;
+    }
+
+    public function getEffectiveBrochureDownloadUrl(): ?string
+    {
+        if (!$this->hasAnyBrochure()) {
+            return null;
+        }
+
+        return route('brochures.download-product', $this);
     }
 
     public function getSlugOptions(): SlugOptions

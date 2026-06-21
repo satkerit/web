@@ -5,27 +5,31 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\SecuritySetting;
 use App\Models\BlockedIp;
+use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class SecuritySettingController extends Controller
 {
+    use AuthorizesAdminActions;
+
     public function index()
     {
+        $this->authorizeAny(['settings.security']);
         $settings = SecuritySetting::getSettings();
-        
+
         // Get blocked IPs statistics
         $blockedIpsCount = BlockedIp::count();
         $permanentBlocksCount = BlockedIp::where('is_permanent', true)->count();
         $temporaryBlocksCount = BlockedIp::where('is_permanent', false)
             ->where('blocked_until', '>', now())
             ->count();
-        
+
         // Get recent blocked IPs
         $recentBlocks = BlockedIp::orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
-        
+
         return view('admin.settings.security', compact(
             'settings',
             'blockedIpsCount',
@@ -37,6 +41,8 @@ class SecuritySettingController extends Controller
 
     public function update(Request $request)
     {
+        $this->authorizeAny(['settings.security']);
+
         $validated = $request->validate([
             // Rate Limiting
             'rate_limit_web' => 'required|integer|min:10|max:1000',
@@ -44,18 +50,18 @@ class SecuritySettingController extends Controller
             'rate_limit_login' => 'required|integer|min:1|max:20',
             'rate_limit_password_reset' => 'required|integer|min:1|max:10',
             'rate_limit_download' => 'required|integer|min:5|max:100',
-            
+
             // IP Blocking
             'block_threshold' => 'required|integer|min:3|max:50',
             'block_duration_hours' => 'required|integer|min:1|max:168',
             'ip_whitelist' => 'nullable|string',
             'ip_blacklist' => 'nullable|string',
-            
+
             // Security Features
             'enable_suspicious_blocking' => 'boolean',
             'enable_rate_limiting' => 'boolean',
             'log_security_events' => 'boolean',
-            
+
             // Session Settings
             'session_lifetime' => 'required|integer|min:30|max:1440',
             'idle_timeout' => 'required|integer|min:5|max:480',
@@ -95,34 +101,49 @@ class SecuritySettingController extends Controller
             return back()->withErrors(['idle_warning' => 'Idle warning harus lebih kecil dari idle timeout'])->withInput();
         }
 
-        $settings = SecuritySetting::getSettings();
-        $settings->update($validated);
+        try {
+            $settings = SecuritySetting::getSettings();
+            $settings->update($validated);
 
-        // Clear cache
-        SecuritySetting::clearCache();
-        Cache::flush();
+            // Clear cache
+            SecuritySetting::clearCache();
+            Cache::flush();
 
-        return redirect()->route('admin.settings.security')
-            ->with('success', 'Pengaturan keamanan berhasil diperbarui');
+            return redirect()->route('admin.settings.security')
+                ->with('success', 'Pengaturan keamanan berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.settings.security')
+                ->with('error', 'Gagal memperbarui pengaturan keamanan: ' . $e->getMessage());
+        }
     }
 
     public function blockedIps()
     {
+        $this->authorizeAny(['settings.security']);
         $blockedIps = BlockedIp::orderBy('created_at', 'desc')->paginate(20);
-        
+
         return view('admin.settings.blocked-ips', compact('blockedIps'));
     }
 
     public function unblockIp(BlockedIp $blockedIp)
     {
-        $blockedIp->delete();
-        
+        $this->authorizeAny(['settings.security']);
+
+        try {
+            $blockedIp->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('admin.settings.blocked-ips')
+                ->with('error', 'Gagal meng-unblock IP: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.settings.blocked-ips')
             ->with('success', 'IP berhasil di-unblock');
     }
 
     public function blockIp(Request $request)
     {
+        $this->authorizeAny(['settings.security']);
+
         $validated = $request->validate([
             'ip_address' => 'required|ip',
             'reason' => 'nullable|string|max:255',
@@ -131,34 +152,48 @@ class SecuritySettingController extends Controller
         ]);
 
         $validated['is_permanent'] = $request->has('is_permanent');
-        
+
         if (!$validated['is_permanent']) {
             $validated['blocked_until'] = now()->addHours($validated['duration_hours']);
         }
 
-        BlockedIp::updateOrCreate(
-            ['ip_address' => $validated['ip_address']],
-            $validated
-        );
+        try {
+            BlockedIp::updateOrCreate(
+                ['ip_address' => $validated['ip_address']],
+                $validated
+            );
 
-        return redirect()->route('admin.settings.blocked-ips')
-            ->with('success', 'IP berhasil diblokir');
+            return redirect()->route('admin.settings.blocked-ips')
+                ->with('success', 'IP berhasil diblokir');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.settings.blocked-ips')
+                ->with('error', 'Gagal memblokir IP: ' . $e->getMessage());
+        }
     }
 
     public function clearExpiredBlocks()
     {
-        $deleted = BlockedIp::where('is_permanent', false)
-            ->where('blocked_until', '<', now())
-            ->delete();
+        $this->authorizeAny(['settings.security']);
 
-        return redirect()->route('admin.settings.blocked-ips')
-            ->with('success', "Berhasil menghapus {$deleted} blokir yang sudah kadaluarsa");
+        try {
+            $deleted = BlockedIp::where('is_permanent', false)
+                ->where('blocked_until', '<', now())
+                ->delete();
+
+            return redirect()->route('admin.settings.blocked-ips')
+                ->with('success', "Berhasil menghapus {$deleted} blokir yang sudah kadaluarsa");
+        } catch (\Exception $e) {
+            return redirect()->route('admin.settings.blocked-ips')
+                ->with('error', 'Gagal menghapus blokir expired: ' . $e->getMessage());
+        }
     }
 
     public function testSecurity()
     {
+        $this->authorizeAny(['settings.security']);
+
         $settings = SecuritySetting::getSettings();
-        
+
         $tests = [
             'Rate Limiting' => [
                 'Web' => $settings->rate_limit_web . ' requests/minute',

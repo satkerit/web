@@ -304,7 +304,7 @@ class CacheService
                         'section_image' => null
                     ];
                 }
-                return WhyChooseUsSetting::first() ?? WhyChooseUsSetting::create([
+                return WhyChooseUsSetting::first() ?? new WhyChooseUsSetting([
                     'section_title' => 'Mengapa Memilih Kami?',
                     'section_subtitle' => 'Keunggulan layanan perbankan syariah kami untuk Anda.',
                 ]);

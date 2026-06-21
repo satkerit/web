@@ -140,3 +140,18 @@ if (!function_exists('format_rupiah_short')) {
         return $prefix . number_format($amount, 0, ',', '.');
     }
 }
+
+if (!function_exists('format_file_size')) {
+    function format_file_size($bytes): string
+    {
+        if ($bytes >= 1073741824) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } else {
+            return $bytes . ' B';
+        }
+    }
+}

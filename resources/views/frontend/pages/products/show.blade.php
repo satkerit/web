@@ -131,8 +131,8 @@
                         <hr class="my-4 sm:my-6">
 
                         <div class="space-y-2 sm:space-y-3">
-                            @if($product->type === 'pembiayaan_syariah' && $product->brochure)
-                                <a href="{{ \Illuminate\Support\Facades\Storage::url($product->brochure) }}" target="_blank" class="block w-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-center py-3 sm:py-3.5 rounded-lg sm:rounded-xl font-semibold hover:bg-emerald-100 transition shadow-sm hover:shadow-md text-sm sm:text-base touch-manipulation active:scale-95">
+                            @if($product->type === 'pembiayaan_syariah' && $product->hasAnyBrochure())
+                                <a href="{{ $product->getEffectiveBrochureDownloadUrl() }}" target="_blank" class="block w-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-center py-3 sm:py-3.5 rounded-lg sm:rounded-xl font-semibold hover:bg-emerald-100 transition shadow-sm hover:shadow-md text-sm sm:text-base touch-manipulation active:scale-95">
                                     <span class="flex items-center justify-center gap-2">
                                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>

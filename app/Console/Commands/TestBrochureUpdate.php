@@ -31,9 +31,13 @@ class TestBrochureUpdate extends Command
             
             // Test produk pembiayaan dengan brosur
             $this->line("Mencari produk pembiayaan dengan brosur...");
-            $pembiayaanProducts = Product::where('type', 'pembiayaan_syariah')
+            $pembiayaanProducts = Product::with('libraryBrochure')
+                ->where('type', 'pembiayaan_syariah')
                 ->where('is_active', true)
-                ->whereNotNull('brochure')
+                ->where(function ($query) {
+                    $query->whereNotNull('brochure')
+                        ->orWhereNotNull('brochure_id');
+                })
                 ->orderBy('order_position')
                 ->orderBy('name')
                 ->get();
@@ -43,7 +47,8 @@ class TestBrochureUpdate extends Command
             if ($pembiayaanProducts->count() > 0) {
                 $this->line("Daftar produk:");
                 foreach ($pembiayaanProducts as $product) {
-                    $this->line("  - {$product->name} (brochure: " . ($product->brochure ? 'ada' : 'tidak ada') . ")");
+                    $source = $product->hasManualBrochure() ? 'manual' : ($product->hasLibraryBrochure() ? 'library' : 'tidak ada');
+                    $this->line("  - {$product->name} (brochure: {$source})");
                 }
             } else {
                 $this->warn("⚠️  Tidak ada produk pembiayaan dengan brosur");
@@ -55,6 +60,7 @@ class TestBrochureUpdate extends Command
             $productsWithoutBrochure = Product::where('type', 'pembiayaan_syariah')
                 ->where('is_active', true)
                 ->whereNull('brochure')
+                ->whereNull('brochure_id')
                 ->count();
             
             $this->info("✅ Ditemukan {$productsWithoutBrochure} produk pembiayaan tanpa brosur");

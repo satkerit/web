@@ -40,16 +40,19 @@ class SettingController extends Controller
         // Clear cache SEBELUM update agar data fresh
         SiteSetting::clearCache();
 
-        $settings = SiteSetting::first();
-        if ($settings) {
-            $settings->update($validated);
-        } else {
-            SiteSetting::create($validated);
+        try {
+            $settings = SiteSetting::first();
+            if ($settings) {
+                $settings->update($validated);
+            } else {
+                SiteSetting::create($validated);
+            }
+
+            SiteSetting::clearCache();
+
+            return redirect()->route('admin.settings.maintenance')->with('success', 'Pengaturan maintenance berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui pengaturan: ' . $e->getMessage())->withInput();
         }
-
-        // Clear cache SETELAH update juga untuk memastikan
-        SiteSetting::clearCache();
-
-        return redirect()->route('admin.settings.maintenance')->with('success', 'Pengaturan maintenance berhasil diperbarui.');
     }
 }

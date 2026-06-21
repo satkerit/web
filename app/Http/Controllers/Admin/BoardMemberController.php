@@ -63,9 +63,12 @@ class BoardMemberController extends Controller
 
         $validated['photo'] = $this->handleImageUpload($request, 'photo', 'board-members');
 
-        BoardMember::create($validated);
-
-        return redirect()->route('admin.board-members.index')->with('success', 'Anggota dewan berhasil ditambahkan.');
+        try {
+            BoardMember::create($validated);
+            return redirect()->route('admin.board-members.index')->with('success', 'Anggota dewan berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan anggota: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function edit(BoardMember $boardMember)
@@ -99,9 +102,12 @@ class BoardMemberController extends Controller
 
         $validated['photo'] = $this->handleImageUpload($request, 'photo', 'board-members', $boardMember->photo);
 
-        $boardMember->update($validated);
-
-        return redirect()->route('admin.board-members.index')->with('success', 'Anggota dewan berhasil diperbarui.');
+        try {
+            $boardMember->update($validated);
+            return redirect()->route('admin.board-members.index')->with('success', 'Anggota dewan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui anggota: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy(BoardMember $boardMember)
@@ -112,8 +118,12 @@ class BoardMemberController extends Controller
             Storage::disk('public')->delete($boardMember->photo);
         }
 
-        $boardMember->delete();
-
-        return redirect()->route('admin.board-members.index')->with('success', 'Anggota dewan berhasil dihapus.');
+        try {
+            $boardMember->delete();
+            return redirect()->route('admin.board-members.index')->with('success', 'Anggota dewan berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.board-members.index')
+                ->with('error', 'Gagal menghapus anggota: ' . $e->getMessage());
+        }
     }
 }

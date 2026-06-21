@@ -52,6 +52,7 @@ class UploadTestBrochure extends Command
 
         // Update produk dengan path brosur
         $product->brochure = $path;
+        $product->brochure_id = null;
         $product->save();
 
         $this->info("✅ Brosur test berhasil diupload untuk produk: {$product->name}");

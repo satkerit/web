@@ -13,9 +13,13 @@ class BrochureController extends Controller
     public function index()
     {
         // Ambil produk pembiayaan yang memiliki brosur dan aktif
-        $pembiayaanProducts = Product::where('type', 'pembiayaan_syariah')
+        $pembiayaanProducts = Product::with('libraryBrochure')
+            ->where('type', 'pembiayaan_syariah')
             ->where('is_active', true)
-            ->whereNotNull('brochure')
+            ->where(function ($query) {
+                $query->whereNotNull('brochure')
+                    ->orWhereNotNull('brochure_id');
+            })
             ->orderBy('order_position')
             ->orderBy('name')
             ->get();
@@ -65,7 +69,11 @@ class BrochureController extends Controller
 
     public function downloadProduct(Product $product)
     {
-        if (!$product->brochure || !Storage::disk('public')->exists($product->brochure)) {
+        $product->loadMissing('libraryBrochure');
+
+        $brochurePath = $product->getEffectiveBrochurePath();
+
+        if (!$brochurePath || !Storage::disk('public')->exists($brochurePath)) {
             abort(404, 'File brosur produk tidak ditemukan.');
         }
 
@@ -76,14 +84,18 @@ class BrochureController extends Controller
             $product
         );
 
-        $filename = str_replace(' ', '_', $product->name) . '_Brosur.pdf';
-        
-        return Storage::disk('public')->download($product->brochure, $filename);
+        $filename = $product->getEffectiveBrochureName() ?? (str_replace(' ', '_', $product->name) . '_Brosur.pdf');
+
+        return Storage::disk('public')->download($brochurePath, $filename);
     }
 
     public function previewProduct(Product $product)
     {
-        if (!$product->brochure || !Storage::disk('public')->exists($product->brochure)) {
+        $product->loadMissing('libraryBrochure');
+
+        $brochurePath = $product->getEffectiveBrochurePath();
+
+        if (!$brochurePath || !Storage::disk('public')->exists($brochurePath)) {
             abort(404, 'File brosur produk tidak ditemukan.');
         }
 
@@ -94,9 +106,9 @@ class BrochureController extends Controller
             $product
         );
 
-        $filename = str_replace(' ', '_', $product->name) . '_Brosur.pdf';
-        
-        return Storage::disk('public')->response($product->brochure, $filename, [
+        $filename = $product->getEffectiveBrochureName() ?? (str_replace(' ', '_', $product->name) . '_Brosur.pdf');
+
+        return Storage::disk('public')->response($brochurePath, $filename, [
             'Content-Disposition' => 'inline; filename="' . $filename . '"',
             'Content-Type' => 'application/pdf',
         ]);

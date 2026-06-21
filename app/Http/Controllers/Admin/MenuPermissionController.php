@@ -40,14 +40,31 @@ class MenuPermissionController extends Controller
         $menus = AdminMenu::all();
         $roles = Role::all()->keyBy('name');
 
+        // Build bulk upsert data
+        $upsertData = [];
+
         foreach ($menus as $menu) {
             foreach ($roles as $roleName => $roleModel) {
                 $canAccess = isset($permissions[$menu->id][$roleName]);
+                $upsertData[] = [
+                    'admin_menu_id' => $menu->id,
+                    'role_id' => $roleModel->id,
+                    'can_access' => $canAccess,
+                ];
+            }
+        }
 
-                AdminMenuPermission::updateOrCreate(
-                    ['admin_menu_id' => $menu->id, 'role_id' => $roleModel->id],
-                    ['can_access' => $canAccess]
+        // Use bulk upsert to eliminate N+1 queries
+        if (!empty($upsertData)) {
+            try {
+                AdminMenuPermission::upsert(
+                    $upsertData,
+                    ['admin_menu_id', 'role_id'],
+                    ['can_access']
                 );
+            } catch (\Exception $e) {
+                return redirect()->route('admin.menu-permissions.index')
+                    ->with('error', 'Gagal memperbarui hak akses menu: ' . $e->getMessage());
             }
         }
 

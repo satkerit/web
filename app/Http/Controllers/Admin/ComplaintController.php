@@ -57,42 +57,48 @@ class ComplaintController extends Controller
             'admin_notes' => 'nullable|string',
         ]);
 
-        $oldStatus = $complaint->status;
+        try {
+            $oldStatus = $complaint->status;
 
-        if ($validated['status'] === 'resolved' && $complaint->status !== 'resolved') {
-            $validated['resolved_at'] = now();
-        }
-
-        $complaint->update($validated);
-
-        // Send email notification if status changed and email is valid
-        if (
-            $oldStatus !== $validated['status'] &&
-            $complaint->email &&
-            $complaint->email !== 'anonymous@whistleblowing.local'
-        ) {
-            try {
-                $companyInfo = CompanyInfo::first();
-                Mail::to($complaint->email)->send(new ComplaintStatusUpdateMail(
-                    $complaint,
-                    $oldStatus,
-                    $validated['admin_notes'] ?? null,
-                    $companyInfo
-                ));
-            } catch (\Exception $e) {
-                Log::error('Failed to send complaint status update email: ' . $e->getMessage());
+            if ($validated['status'] === 'resolved' && $complaint->status !== 'resolved') {
+                $validated['resolved_at'] = now();
             }
-        }
 
-        return redirect()->route('admin.complaints.show', $complaint)->with('success', 'Status pengaduan berhasil diperbarui.');
+            $complaint->update($validated);
+
+            if (
+                $oldStatus !== $validated['status'] &&
+                $complaint->email &&
+                $complaint->email !== 'anonymous@whistleblowing.local'
+            ) {
+                try {
+                    $companyInfo = CompanyInfo::first();
+                    Mail::to($complaint->email)->send(new ComplaintStatusUpdateMail(
+                        $complaint,
+                        $oldStatus,
+                        $validated['admin_notes'] ?? null,
+                        $companyInfo
+                    ));
+                } catch (\Exception $e) {
+                    Log::error('Failed to send complaint status update email: ' . $e->getMessage());
+                }
+            }
+
+            return redirect()->route('admin.complaints.show', $complaint)->with('success', 'Status pengaduan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui pengaduan: ' . $e->getMessage());
+        }
     }
 
     public function destroy(Complaint $complaint)
     {
         $this->authorizeDelete('complaints.manage');
 
-        $complaint->delete();
-
-        return redirect()->route('admin.complaints.index')->with('success', 'Pengaduan berhasil dihapus.');
+        try {
+            $complaint->delete();
+            return redirect()->route('admin.complaints.index')->with('success', 'Pengaduan berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.complaints.index')->with('error', 'Gagal menghapus pengaduan: ' . $e->getMessage());
+        }
     }
 }

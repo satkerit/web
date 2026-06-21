@@ -75,9 +75,9 @@
                         Edit
                     </a>
                     @if($user->id !== auth()->id())
-                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')" class="flex-1">
+                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="flex-1">
                             @csrf @method('DELETE')
-                            <button type="submit" class="w-full py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                            <button type="submit" class="btn-delete w-full py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors" data-title="Hapus Pengguna" data-text="Apakah Anda yakin ingin menghapus pengguna ini? Data yang dihapus tidak dapat dikembalikan.">
                                 Hapus
                             </button>
                         </form>
@@ -143,9 +143,9 @@
                                 </svg>
                             </a>
                             @if($user->id !== auth()->id())
-                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg">
+                                    <button type="submit" class="btn-delete p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg" data-title="Hapus Pengguna" data-text="Apakah Anda yakin ingin menghapus pengguna ini? Data yang dihapus tidak dapat dikembalikan.">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>

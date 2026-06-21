@@ -4,19 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class SiteSettingController extends Controller
 {
+    use AuthorizesAdminActions;
+
     public function index()
     {
+        $this->authorizeAny(['settings.site']);
         $settings = SiteSetting::getSettings();
         return view('admin.site-settings.index', compact('settings'));
     }
 
     public function update(Request $request)
     {
+        $this->authorizeAny(['settings.site']);
+
         try {
             $validated = $request->validate([
                 'hero_slider_delay' => 'nullable|integer|min:1000|max:10000',
@@ -56,6 +62,8 @@ class SiteSettingController extends Controller
 
     public function updateHeroSlideLimit(Request $request)
     {
+        $this->authorizeAny(['settings.site']);
+
         try {
             $validated = $request->validate([
                 'hero_slide_limit' => 'required|integer|min:1|max:20',

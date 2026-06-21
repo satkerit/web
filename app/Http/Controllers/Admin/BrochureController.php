@@ -4,26 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brochure;
+use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class BrochureController extends Controller
 {
+    use AuthorizesAdminActions;
+
     public function index()
     {
+        $this->authorizeView('brochures.view');
         $brochures = Brochure::with('uploader')->latest()->paginate(10);
         return view('admin.brochures.index', compact('brochures'));
     }
 
     public function create()
     {
+        $this->authorizeCreate('brochures.create');
         return view('admin.brochures.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $this->authorizeCreate('brochures.create');
+
+        $validated = $request->validate([
             'file' => 'required|file|mimes:pdf|max:10240', // 10MB
         ]);
 
@@ -32,13 +39,18 @@ class BrochureController extends Controller
         $filename = Str::random(40) . '.pdf';
         $path = $file->storeAs('uploads/brosur-syariah', $filename, 'public');
 
-        Brochure::create([
-            'filename' => $filename,
-            'original_name' => $originalName,
-            'file_path' => $path,
-            'file_size' => $file->getSize(),
-            'uploaded_by' => auth()->id(),
-        ]);
+        try {
+            Brochure::create([
+                'filename' => $filename,
+                'original_name' => $originalName,
+                'file_path' => $path,
+                'file_size' => $file->getSize(),
+                'uploaded_by' => auth()->id(),
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.brochures.index')
+                ->with('error', 'Gagal mengunggah brosur: ' . $e->getMessage());
+        }
 
         if ($request->wantsJson()) {
             return response()->json(['message' => 'Brochure uploaded successfully']);
@@ -49,6 +61,7 @@ class BrochureController extends Controller
 
     public function destroy(Brochure $brochure)
     {
+        $this->authorizeDelete('brochures.delete');
         try {
             // Delete file from storage
             if (Storage::disk('public')->exists($brochure->file_path)) {
@@ -68,6 +81,7 @@ class BrochureController extends Controller
 
     public function download(Brochure $brochure)
     {
+        $this->authorizeView('brochures.view');
         if (!Storage::disk('public')->exists($brochure->file_path)) {
             abort(404, 'File tidak ditemukan');
         }

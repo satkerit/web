@@ -112,13 +112,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     // News Management
     Route::delete('news/image/{newsImage}', [App\Http\Controllers\Admin\NewsController::class, 'deleteImage'])->name('news.delete-image');
     Route::resource('news', App\Http\Controllers\Admin\NewsController::class)
+        ->except(['show'])
         ->middleware(['optimize.upload']);  // Add upload optimization for news
 
     // Products Management
     Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
 
     // Brochures Management
-    Route::resource('brochures', App\Http\Controllers\Admin\BrochureController::class);
+    Route::resource('brochures', App\Http\Controllers\Admin\BrochureController::class)
+        ->only(['index', 'create', 'store', 'destroy']);
 
     // Auctions Management
     Route::post('auctions/bulk-action', [App\Http\Controllers\Admin\AuctionController::class, 'bulkAction'])->name('auctions.bulk-action');
@@ -131,7 +133,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::get('hero-slides/settings', [App\Http\Controllers\Admin\HeroSlideController::class, 'settings'])->name('hero-slides.settings');
     Route::put('hero-slides/settings', [App\Http\Controllers\Admin\HeroSlideController::class, 'updateSettings'])->name('hero-slides.settings.update');
     Route::post('hero-slides/reorder', [App\Http\Controllers\Admin\HeroSlideController::class, 'reorder'])->name('hero-slides.reorder');
-    Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class);
+    Route::resource('hero-slides', App\Http\Controllers\Admin\HeroSlideController::class)
+        ->except(['show']);
 
     // Site Settings Management
     Route::get('site-settings', [App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('site-settings.index');
@@ -141,16 +144,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     // Why Choose Us Management
     Route::get('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'editSettings'])->name('why-choose-us.settings');
     Route::put('why-choose-us/settings', [App\Http\Controllers\Admin\WhyChooseUsController::class, 'updateSettings'])->name('why-choose-us.settings.update');
-    Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class)->parameters(['why-choose-us' => 'whyChooseUs']);
+    Route::resource('why-choose-us', App\Http\Controllers\Admin\WhyChooseUsController::class)
+        ->except(['show'])
+        ->parameters(['why-choose-us' => 'whyChooseUs']);
 
     // Offices Management
-    Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class);
+    Route::resource('offices', App\Http\Controllers\Admin\OfficeController::class)
+        ->except(['show']);
 
     // Kas Keliling Management
     Route::get('kas-keliling/export', [App\Http\Controllers\Admin\KasKelilingController::class, 'export'])->name('kas-keliling.export');
     Route::post('kas-keliling/bulk-delete', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkDelete'])->name('kas-keliling.bulk-delete');
     Route::post('kas-keliling/bulk-status', [App\Http\Controllers\Admin\KasKelilingController::class, 'bulkUpdateStatus'])->name('kas-keliling.bulk-status');
-    Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class);
+    Route::resource('kas-keliling', App\Http\Controllers\Admin\KasKelilingController::class)
+        ->except(['show']);
 
     // Careers Management
     Route::resource('careers', App\Http\Controllers\Admin\CareerController::class);
@@ -160,7 +167,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::put('company-info', [App\Http\Controllers\Admin\CompanyInfoController::class, 'update'])->name('company-info.update');
 
     // Board Members Management
-    Route::resource('board-members', App\Http\Controllers\Admin\BoardMemberController::class);
+    Route::resource('board-members', App\Http\Controllers\Admin\BoardMemberController::class)
+        ->except(['show']);
 
     // Settings Management
     Route::get('settings/maintenance', [App\Http\Controllers\Admin\SettingController::class, 'maintenance'])->name('settings.maintenance');
@@ -180,15 +188,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::put('settings/complaint', [App\Http\Controllers\Admin\ComplaintSettingController::class, 'update'])->name('settings.complaint.update');
 
     // Financing Config Management
-    Route::resource('financing-config', App\Http\Controllers\Admin\FinancingConfigController::class);
+    Route::resource('financing-config', App\Http\Controllers\Admin\FinancingConfigController::class)
+        ->except(['show']);
 
     // Customer Complaints Management
     Route::get('customer-complaints/print', [App\Http\Controllers\Admin\CustomerComplaintController::class, 'print'])->name('customer-complaints.print');
     Route::get('customer-complaints/{customerComplaint}/print', [App\Http\Controllers\Admin\CustomerComplaintController::class, 'printSingle'])->name('customer-complaints.print-single');
-    Route::resource('customer-complaints', App\Http\Controllers\Admin\CustomerComplaintController::class);
+    Route::resource('customer-complaints', App\Http\Controllers\Admin\CustomerComplaintController::class)
+        ->only(['index', 'show', 'update', 'destroy']);
 
     // Whistleblowing Management
-    Route::resource('complaints', App\Http\Controllers\Admin\ComplaintController::class);
+    Route::resource('complaints', App\Http\Controllers\Admin\ComplaintController::class)
+        ->only(['index', 'show', 'update', 'destroy']);
 
     // Database Backup Management
     Route::get('database-backup', [App\Http\Controllers\Admin\DatabaseBackupController::class, 'index'])->name('database-backup.index');
@@ -224,7 +235,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::resource('roles', App\Http\Controllers\Admin\RoleController::class);
 
     // User Management
-    Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class)
+        ->except(['show']);
 
     // Menu Permissions Management
     Route::get('menu-permissions', [App\Http\Controllers\Admin\MenuPermissionController::class, 'index'])->name('menu-permissions.index');

@@ -14,6 +14,10 @@ window.jQuery = window.$ = $;
 import "summernote/dist/summernote-lite.css";
 import "summernote/dist/summernote-lite.js";
 
+// SweetAlert 2
+import Swal from "sweetalert2";
+window.Swal = Swal;
+
 // Initialize Summernote and other jQuery scripts
 $(document).ready(function () {
     // Summernote Initialization

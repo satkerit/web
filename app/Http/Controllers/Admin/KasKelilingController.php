@@ -4,14 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KasKelilingSchedule;
+use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class KasKelilingController extends Controller
 {
+    use AuthorizesAdminActions;
+
     public function index(Request $request)
     {
+        $this->authorizeView('kas_keliling.view');
         $query = KasKelilingSchedule::query();
 
         // Search
@@ -46,11 +50,13 @@ class KasKelilingController extends Controller
 
     public function create()
     {
+        $this->authorizeCreate('kas_keliling.manage');
         return view('admin.kas-keliling.create');
     }
 
     public function store(Request $request)
     {
+        $this->authorizeCreate('kas_keliling.manage');
         try {
             $validated = $request->validate([
                 'schedule_date' => 'required|date|after_or_equal:today',
@@ -68,20 +74,7 @@ class KasKelilingController extends Controller
                 'end_time.after' => 'Jam selesai harus lebih besar dari jam mulai.'
             ]);
 
-            // Check for duplicate schedule at same location and time
-            $existingSchedule = KasKelilingSchedule::where('schedule_date', $validated['schedule_date'])
-                ->where('location', $validated['location'])
-                ->where(function($query) use ($validated) {
-                    $query->whereBetween('start_time', [$validated['start_time'], $validated['end_time']])
-                          ->orWhereBetween('end_time', [$validated['start_time'], $validated['end_time']])
-                          ->orWhere(function($q) use ($validated) {
-                              $q->where('start_time', '<=', $validated['start_time'])
-                                ->where('end_time', '>=', $validated['end_time']);
-                          });
-                })
-                ->exists();
-
-            if ($existingSchedule) {
+            if ($this->scheduleOverlapExists($validated)) {
                 return redirect()->back()
                     ->with('error', 'Sudah ada jadwal kas keliling di lokasi dan waktu yang sama.')
                     ->withInput();
@@ -108,6 +101,7 @@ class KasKelilingController extends Controller
 
     public function edit($id)
     {
+        $this->authorizeEdit('kas_keliling.manage');
         try {
             $kasKeliling = KasKelilingSchedule::findOrFail($id);
             return view('admin.kas-keliling.edit', compact('kasKeliling'));
@@ -119,6 +113,7 @@ class KasKelilingController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->authorizeEdit('kas_keliling.manage');
         try {
             $kasKeliling = KasKelilingSchedule::findOrFail($id);
             
@@ -139,18 +134,7 @@ class KasKelilingController extends Controller
             ]);
 
             // Check for duplicate schedule at same location and time (excluding current record)
-            $existingSchedule = KasKelilingSchedule::where('id', '!=', $id)
-                ->where('schedule_date', $validated['schedule_date'])
-                ->where('location', $validated['location'])
-                ->where(function($query) use ($validated) {
-                    $query->whereBetween('start_time', [$validated['start_time'], $validated['end_time']])
-                          ->orWhereBetween('end_time', [$validated['start_time'], $validated['end_time']])
-                          ->orWhere(function($q) use ($validated) {
-                              $q->where('start_time', '<=', $validated['start_time'])
-                                ->where('end_time', '>=', $validated['end_time']);
-                          });
-                })
-                ->exists();
+            $existingSchedule = $this->scheduleOverlapExists($validated, $id);
 
             if ($existingSchedule) {
                 return redirect()->back()
@@ -179,6 +163,7 @@ class KasKelilingController extends Controller
 
     public function destroy($id)
     {
+        $this->authorizeDelete('kas_keliling.manage');
         try {
             $kasKeliling = KasKelilingSchedule::findOrFail($id);
             $kasKeliling->delete();
@@ -193,6 +178,7 @@ class KasKelilingController extends Controller
 
     public function bulkDelete(Request $request)
     {
+        $this->authorizeDelete('kas_keliling.manage');
         try {
             $ids = $request->validate([
                 'ids' => 'required|array|min:1',
@@ -215,6 +201,7 @@ class KasKelilingController extends Controller
 
     public function bulkUpdateStatus(Request $request)
     {
+        $this->authorizeEdit('kas_keliling.manage');
         try {
             $validated = $request->validate([
                 'ids' => 'required|array|min:1',
@@ -239,8 +226,28 @@ class KasKelilingController extends Controller
         }
     }
 
+    protected function scheduleOverlapExists(array $data, ?int $excludeId = null): bool
+    {
+        $query = KasKelilingSchedule::where('schedule_date', $data['schedule_date'])
+            ->where('location', $data['location']);
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query->where(function ($q) use ($data) {
+            $q->whereBetween('start_time', [$data['start_time'], $data['end_time']])
+                ->orWhereBetween('end_time', [$data['start_time'], $data['end_time']])
+                ->orWhere(function ($inner) use ($data) {
+                    $inner->where('start_time', '<=', $data['start_time'])
+                        ->where('end_time', '>=', $data['end_time']);
+                });
+        })->exists();
+    }
+
     public function export(Request $request)
     {
+        $this->authorizeView('kas_keliling.view');
         try {
             $query = KasKelilingSchedule::query();
 

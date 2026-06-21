@@ -133,7 +133,7 @@ class HeroImageService
         // Mobile Small (default)
         if (isset($images['mobile_small'])) {
             $html .= '<source srcset="' . Storage::url($images['mobile_small']['webp']) . '" type="image/webp">';
-            $html .= '<img src="' . Storage::url($images['mobile_small']['jpg']) . '" alt="' . $alt . '" loading="lazy">';
+            $html .= '<img src="' . Storage::url($images['mobile_small']['jpg']) . '" alt="' . htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') . '" loading="lazy">';
         }
 
         $html .= '</picture>';

@@ -58,7 +58,9 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2 mb-3">
                     <x-admin.badge variant="info">{{ $typeLabels[$report->type] ?? $report->type }}</x-admin.badge>
-                    @if($report->is_published)
+                    @if($report->posting_status === 'scheduled')
+                        <x-admin.badge variant="info">Terjadwal</x-admin.badge>
+                    @elseif($report->is_published)
                         <x-admin.badge variant="success">Dipublikasi</x-admin.badge>
                     @else
                         <x-admin.badge variant="warning">Draft</x-admin.badge>
@@ -116,7 +118,9 @@
                         {{ $report->year }}{{ $report->quarter ? ' Q' . $report->quarter : '' }}
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">
-                        @if($report->is_published)
+                        @if($report->posting_status === 'scheduled')
+                            <x-admin.badge variant="info">Terjadwal</x-admin.badge>
+                        @elseif($report->is_published)
                             <x-admin.badge variant="success">Dipublikasi</x-admin.badge>
                         @else
                             <x-admin.badge variant="warning">Draft</x-admin.badge>

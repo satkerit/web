@@ -137,8 +137,11 @@ class CareerController extends Controller
     {
         $this->authorizeDelete('careers.delete');
 
-        $career->delete();
-
-        return redirect()->route('admin.careers.index')->with('success', 'Lowongan karir berhasil dihapus.');
+        try {
+            $career->delete();
+            return redirect()->route('admin.careers.index')->with('success', 'Lowongan karir berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.careers.index')->with('error', 'Gagal menghapus lowongan: ' . $e->getMessage());
+        }
     }
 }

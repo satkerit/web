@@ -94,9 +94,12 @@ class ProductController extends Controller
                 $validated['image'] = $imagePath;
             }
 
-            // Handle manual brochure upload
+            // Manual upload takes precedence over brochure library selection
             if ($request->hasFile('brochure')) {
                 $validated['brochure'] = $request->file('brochure')->store('products/brochures', 'public');
+                $validated['brochure_id'] = null;
+            } elseif (!empty($validated['brochure_id'])) {
+                $validated['brochure'] = null;
             }
 
             Product::create($validated);
@@ -165,12 +168,18 @@ class ProductController extends Controller
                 unset($validated['image']);
             }
 
-            // Handle manual brochure upload
+            // Manual upload takes precedence over brochure library selection
             if ($request->hasFile('brochure')) {
-                if ($product->brochure) {
-                    Storage::disk('public')->delete($product->brochure);
+                if ($product->getAttribute('brochure')) {
+                    Storage::disk('public')->delete($product->getAttribute('brochure'));
                 }
                 $validated['brochure'] = $request->file('brochure')->store('products/brochures', 'public');
+                $validated['brochure_id'] = null;
+            } elseif (!empty($validated['brochure_id'])) {
+                if ($product->getAttribute('brochure')) {
+                    Storage::disk('public')->delete($product->getAttribute('brochure'));
+                }
+                $validated['brochure'] = null;
             }
 
             $product->update($validated);
@@ -191,8 +200,8 @@ class ProductController extends Controller
                 Storage::disk('public')->delete($product->image);
             }
 
-            if ($product->brochure) {
-                Storage::disk('public')->delete($product->brochure);
+            if ($product->getAttribute('brochure')) {
+                Storage::disk('public')->delete($product->getAttribute('brochure'));
             }
 
             $product->delete();

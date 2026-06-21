@@ -70,9 +70,12 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         $validated['is_active'] = $request->boolean('is_active');
 
-        User::create($validated);
-
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil ditambahkan.');
+        try {
+            User::create($validated);
+            return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan pengguna: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function edit(User $user)
@@ -117,9 +120,12 @@ class UserController extends Controller
 
         $validated['is_active'] = $request->boolean('is_active');
 
-        $user->update($validated);
-
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil diperbarui.');
+        try {
+            $user->update($validated);
+            return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui pengguna: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy(User $user)
@@ -132,8 +138,11 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun sendiri.');
         }
 
-        $user->delete();
-
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
+        try {
+            $user->delete();
+            return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users.index')->with('error', 'Gagal menghapus pengguna: ' . $e->getMessage());
+        }
     }
 }

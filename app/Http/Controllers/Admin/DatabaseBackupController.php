@@ -27,75 +27,46 @@ class DatabaseBackupController extends Controller
 
             return view('admin.database-backup.simple', compact('backups', 'databaseInfo', 'storageInfo'));
         } catch (\Exception $e) {
-            // For web requests, show error page instead of JSON
             if (!request()->expectsJson()) {
                 return view('admin.database-backup.simple', [
                     'backups' => [],
                     'databaseInfo' => [],
                     'storageInfo' => [],
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ]);
             }
 
-            return response()->json([
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ], 500);
+            return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()], 500);
         }
     }
 
     public function create(Request $request)
     {
-        try {
-            $this->authorizeEdit('storage.manage');
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Akses ditolak: ' . $e->getMessage()
-            ], 403);
-        }
+        $this->authorizeEdit('storage.manage');
 
-        try {
-            $request->validate([
-                'backup_type' => 'required|in:full,structure_only,data_only',
-                'compression' => 'boolean',
-                'description' => 'nullable|string|max:255',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validasi gagal: ' . implode(', ', $e->validator->errors()->all())
-            ], 422);
-        }
+        $request->validate([
+            'backup_type' => 'required|in:full,structure_only,data_only',
+            'compression' => 'boolean',
+            'description' => 'nullable|string|max:255',
+        ]);
 
         try {
             $backupType = $request->input('backup_type', 'full');
             $compression = $request->boolean('compression', true);
             $description = $request->input('description', '');
 
-            $dbConfig = Config::get('database.connections.' . Config::get('database.default'));
-            $dbName = $dbConfig['database'];
-
-            // Generate filename
+            $dbName = Config::get('database.connections.' . Config::get('database.default'))['database'];
             $timestamp = now()->format('Y-m-d_H-i-s');
-            $filename = "backup_{$dbName}_{$backupType}_{$timestamp}.sql";
-            if ($compression) {
-                $filename .= '.gz';
-            }
+            $filename = "backup_{$dbName}_{$backupType}_{$timestamp}.sql" . ($compression ? '.gz' : '');
 
             $backupDir = storage_path("app/{$this->backupPath}");
-
-            // Ensure backup directory exists
             if (!File::exists($backupDir)) {
                 File::makeDirectory($backupDir, 0755, true);
             }
 
             $backupPath = $backupDir . '/' . $filename;
-
-            // Generate SQL backup using PDO (no mysqldump required)
             $sqlContent = $this->generatePdoBackup($backupType, $description);
 
-            // Save to file (with compression if enabled)
             if ($compression) {
                 File::put($backupPath, gzencode($sqlContent, 9));
             } else {
@@ -104,26 +75,22 @@ class DatabaseBackupController extends Controller
 
             $fileSize = File::size($backupPath);
 
-            // Log backup activity
             AuditTrail::log('database_backup', "Database backup created: {$filename}", null, null, [
                 'backup_type' => $backupType,
                 'compression' => $compression,
                 'file_size' => $fileSize,
-                'description' => $description
+                'description' => $description,
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Backup database berhasil dibuat.',
                 'filename' => $filename,
-                'size' => $this->formatFileSize($fileSize),
-                'download_url' => route('admin.database-backup.download', ['filename' => $filename])
+                'size' => format_file_size($fileSize),
+                'download_url' => route('admin.database-backup.download', ['filename' => $filename]),
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal membuat backup: ' . $e->getMessage()
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Gagal membuat backup: ' . $e->getMessage()], 500);
         }
     }
 
@@ -131,32 +98,24 @@ class DatabaseBackupController extends Controller
     {
         $this->authorizeView('storage.view');
 
-        // Sanitize filename
         $filename = basename($filename);
-
         $filePath = storage_path("app/{$this->backupPath}/{$filename}");
 
         if (!File::exists($filePath)) {
             abort(404, 'File backup tidak ditemukan.');
         }
 
-        // Log download activity
         AuditTrail::log('database_backup_download', "Database backup downloaded: {$filename}");
 
-        // Determine content type based on file extension
-        $contentType = 'application/octet-stream';
-        if (str_ends_with($filename, '.sql')) {
-            $contentType = 'application/sql';
-        } elseif (str_ends_with($filename, '.sql.gz')) {
-            $contentType = 'application/gzip';
-        }
+        $contentType = str_ends_with($filename, '.sql.gz') ? 'application/gzip'
+            : (str_ends_with($filename, '.sql') ? 'application/sql' : 'application/octet-stream');
 
         return response()->download($filePath, $filename, [
             'Content-Type' => $contentType,
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
             'Cache-Control' => 'no-cache, no-store, must-revalidate',
             'Pragma' => 'no-cache',
-            'Expires' => '0'
+            'Expires' => '0',
         ]);
     }
 
@@ -164,67 +123,20 @@ class DatabaseBackupController extends Controller
     {
         $this->authorizeDelete('storage.manage');
 
-        // Sanitize filename
         $filename = basename($filename);
-
         $filePath = storage_path("app/{$this->backupPath}/{$filename}");
 
         if (!File::exists($filePath)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File backup tidak ditemukan.'
-            ], 404);
+            return response()->json(['success' => false, 'message' => 'File backup tidak ditemukan.'], 404);
         }
 
         try {
             File::delete($filePath);
-
-            // Log delete activity
             AuditTrail::log('database_backup_delete', "Database backup deleted: {$filename}");
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Backup berhasil dihapus.'
-            ]);
+            return response()->json(['success' => true, 'message' => 'Backup berhasil dihapus.']);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal menghapus backup: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function restore(Request $request, $filename)
-    {
-        $this->authorizeEdit('storage.manage');
-
-        // Sanitize filename
-        $filename = basename($filename);
-
-        $filePath = storage_path("app/{$this->backupPath}/{$filename}");
-
-        if (!File::exists($filePath)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File backup tidak ditemukan.'
-            ], 404);
-        }
-
-        try {
-            $this->restoreBackup($filePath);
-
-            // Log restore activity
-            AuditTrail::log('database_backup_restore', "Database restored from backup: {$filename}");
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Database berhasil direstore dari backup.'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal restore database: ' . $e->getMessage()
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Gagal menghapus backup: ' . $e->getMessage()], 500);
         }
     }
 
@@ -232,18 +144,13 @@ class DatabaseBackupController extends Controller
     {
         $this->authorizeDelete('storage.manage');
 
-        $request->validate([
-            'days' => 'required|integer|min:1|max:365',
-        ]);
+        $request->validate(['days' => 'required|integer|min:1|max:365']);
 
-        $days = $request->input('days');
-        $cutoffDate = now()->subDays($days);
+        $cutoffDate = now()->subDays($request->input('days'));
         $deletedCount = 0;
         $deletedSize = 0;
 
-        $backups = $this->getBackupFiles();
-
-        foreach ($backups as $backup) {
+        foreach ($this->getBackupFiles() as $backup) {
             if ($backup['created_at']->lt($cutoffDate)) {
                 $filePath = storage_path("app/{$this->backupPath}/{$backup['filename']}");
                 if (File::exists($filePath)) {
@@ -254,149 +161,16 @@ class DatabaseBackupController extends Controller
             }
         }
 
-        // Log cleanup activity
         AuditTrail::log('database_backup_cleanup', "Cleaned up {$deletedCount} old backups", null, null, [
-            'days' => $days,
+            'days' => $request->input('days'),
             'deleted_count' => $deletedCount,
-            'deleted_size' => $deletedSize
+            'deleted_size' => $deletedSize,
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => "Berhasil menghapus {$deletedCount} backup lama ({$this->formatFileSize($deletedSize)})."
+            'message' => "Berhasil menghapus {$deletedCount} backup lama (" . format_file_size($deletedSize) . ').',
         ]);
-    }
-
-    protected function createBackup($type, $filename, $compression = true, $description = '')
-    {
-        $dbConfig = Config::get('database.connections.' . Config::get('database.default'));
-        $backupDir = storage_path("app/{$this->backupPath}");
-
-        // Ensure backup directory exists
-        if (!File::exists($backupDir)) {
-            File::makeDirectory($backupDir, 0755, true);
-        }
-
-        $backupPath = $backupDir . '/' . $filename;
-
-        // Build mysqldump command
-        $command = [
-            'mysqldump',
-            '--host=' . $dbConfig['host'],
-            '--port=' . $dbConfig['port'],
-            '--user=' . $dbConfig['username'],
-        ];
-
-        if (!empty($dbConfig['password'])) {
-            $command[] = '--password=' . $dbConfig['password'];
-        }
-
-        // Add backup type options
-        switch ($type) {
-            case 'structure_only':
-                $command[] = '--no-data';
-                break;
-            case 'data_only':
-                $command[] = '--no-create-info';
-                break;
-            case 'full':
-            default:
-                // Full backup (default)
-                break;
-        }
-
-        // Add additional options
-        $command = array_merge($command, [
-            '--single-transaction',
-            '--routines',
-            '--triggers',
-            '--add-drop-table',
-            '--extended-insert',
-            '--quick',
-            '--lock-tables=false',
-            $dbConfig['database']
-        ]);
-
-        // Execute mysqldump
-        $process = new Process($command);
-        $process->setTimeout(300); // 5 minutes timeout
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        $sqlContent = $process->getOutput();
-
-        // Add metadata header
-        $metadata = $this->generateBackupMetadata($type, $description);
-        $sqlContent = $metadata . "\n" . $sqlContent;
-
-        // Save to file
-        if ($compression && pathinfo($filename, PATHINFO_EXTENSION) === 'gz') {
-            File::put($backupPath, gzencode($sqlContent, 9));
-        } else {
-            File::put($backupPath, $sqlContent);
-        }
-
-        return $backupPath;
-    }
-
-    protected function restoreBackup($filePath)
-    {
-        $dbConfig = Config::get('database.connections.' . Config::get('database.default'));
-
-        // Prepare source stream
-        $isCompressed = pathinfo($filePath, PATHINFO_EXTENSION) === 'gz';
-        $sourcePath = $isCompressed ? 'compress.zlib://' . $filePath : $filePath;
-
-        // Create temporary file for mysql import
-        $tempFile = tempnam(sys_get_temp_dir(), 'db_restore_');
-
-        // Stream content to temp file to avoid memory exhaustion
-        $src = fopen($sourcePath, 'rb');
-        $dest = fopen($tempFile, 'wb');
-
-        if ($src && $dest) {
-            stream_copy_to_stream($src, $dest);
-            fclose($src);
-            fclose($dest);
-        } else {
-            if ($src) fclose($src);
-            if ($dest) fclose($dest);
-            throw new \Exception("Failed to open streams for restoration");
-        }
-
-        try {
-            // Build mysql command
-            $command = [
-                'mysql',
-                '--host=' . $dbConfig['host'],
-                '--port=' . $dbConfig['port'],
-                '--user=' . $dbConfig['username'],
-            ];
-
-            if (!empty($dbConfig['password'])) {
-                $command[] = '--password=' . $dbConfig['password'];
-            }
-
-            $command[] = $dbConfig['database'];
-
-            // Execute mysql import
-            $process = new Process($command);
-            $process->setInput(fopen($tempFile, 'r')); // Stream from temp file
-            $process->setTimeout(600); // 10 minutes timeout
-            $process->run();
-
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
-        } finally {
-            // Clean up temporary file
-            if (File::exists($tempFile)) {
-                File::delete($tempFile);
-            }
-        }
     }
 
     public function getBackupFiles()
@@ -407,79 +181,19 @@ class DatabaseBackupController extends Controller
             return collect();
         }
 
-        $files = File::files($backupDir);
-        $backups = collect();
-
-        foreach ($files as $file) {
-            $filename = $file->getFilename();
-
-            // Skip non-backup files
-            if (!preg_match('/\.(sql|sql\.gz)$/', $filename)) {
-                continue;
-            }
-
-            $backups->push([
-                'filename' => $filename,
+        return collect(File::files($backupDir))
+            ->filter(fn($file) => preg_match('/\.(sql|sql\.gz)$/', $file->getFilename()))
+            ->map(fn($file) => [
+                'filename' => $file->getFilename(),
                 'size' => $file->getSize(),
-                'size_formatted' => $this->formatFileSize($file->getSize()),
+                'size_formatted' => format_file_size($file->getSize()),
                 'created_at' => \Carbon\Carbon::createFromTimestamp($file->getMTime()),
-                'type' => $this->getBackupTypeFromFilename($filename),
-                'compressed' => str_ends_with($filename, '.gz'),
-                'metadata' => $this->getBackupMetadata($file->getPathname())
-            ]);
-        }
-
-        return $backups->sortByDesc('created_at');
-    }
-
-    protected function generateBackupFilename($type, $compression = true)
-    {
-        $timestamp = now()->format('Y-m-d_H-i-s');
-        $dbName = Config::get('database.connections.' . Config::get('database.default'))['database'];
-
-        $filename = "backup_{$dbName}_{$type}_{$timestamp}.sql";
-
-        if ($compression) {
-            $filename .= '.gz';
-        }
-
-        return $filename;
-    }
-
-    protected function generateBackupMetadata($type, $description)
-    {
-        $dbConfig = Config::get('database.connections.' . Config::get('database.default'));
-
-        return "-- Backup Metadata:\n" .
-            "-- Created: " . now()->toDateTimeString() . "\n" .
-            "-- Database: {$dbConfig['database']}\n" .
-            "-- Type: {$type}\n" .
-            "-- Laravel Version: " . app()->version() . "\n" .
-            "-- PHP Version: " . PHP_VERSION . "\n" .
-            "-- User: " . auth()->user()->name . " (" . auth()->user()->email . ")\n" .
-            "-- Description: {$description}\n" .
-            "-- End Metadata\n";
-    }
-
-    protected function getBackupMetadata($filePath)
-    {
-        $isCompressed = pathinfo($filePath, PATHINFO_EXTENSION) === 'gz';
-        $content = $isCompressed ? gzdecode(File::get($filePath)) : File::get($filePath);
-
-        if (preg_match('/-- Backup Metadata:(.*?)-- End Metadata/s', $content, $matches)) {
-            $metadata = [];
-            $lines = explode("\n", trim($matches[1]));
-
-            foreach ($lines as $line) {
-                if (preg_match('/-- (\w+): (.+)/', $line, $lineMatches)) {
-                    $metadata[strtolower($lineMatches[1])] = $lineMatches[2];
-                }
-            }
-
-            return $metadata;
-        }
-
-        return [];
+                'type' => $this->getBackupTypeFromFilename($file->getFilename()),
+                'compressed' => str_ends_with($file->getFilename(), '.gz'),
+                'metadata' => $this->getBackupMetadata($file->getPathname()),
+            ])
+            ->sortByDesc('created_at')
+            ->values();
     }
 
     protected function getBackupTypeFromFilename($filename)
@@ -490,6 +204,24 @@ class DatabaseBackupController extends Controller
         return 'unknown';
     }
 
+    protected function getBackupMetadata($filePath)
+    {
+        $isCompressed = pathinfo($filePath, PATHINFO_EXTENSION) === 'gz';
+        $content = $isCompressed ? gzdecode(File::get($filePath)) : File::get($filePath);
+
+        if (preg_match('/-- Backup Metadata:(.*?)-- End Metadata/s', $content, $matches)) {
+            $metadata = [];
+            foreach (explode("\n", trim($matches[1])) as $line) {
+                if (preg_match('/-- (\w+): (.+)/', $line, $m)) {
+                    $metadata[strtolower($m[1])] = $m[2];
+                }
+            }
+            return $metadata;
+        }
+
+        return [];
+    }
+
     public function getDatabaseInfo()
     {
         $dbConfig = Config::get('database.connections.' . Config::get('database.default'));
@@ -497,10 +229,10 @@ class DatabaseBackupController extends Controller
         try {
             $tables = DB::select('SHOW TABLES');
             $tableCount = count($tables);
+            $tableKey = 'Tables_in_' . $dbConfig['database'];
 
             $sizeQuery = DB::select("
-                SELECT
-                    ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb
+                SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb
                 FROM information_schema.tables
                 WHERE table_schema = ?
             ", [$dbConfig['database']]);
@@ -513,7 +245,7 @@ class DatabaseBackupController extends Controller
                 'port' => $dbConfig['port'],
                 'table_count' => $tableCount,
                 'size_mb' => $sizeMB,
-                'size_formatted' => $this->formatFileSize($sizeMB * 1024 * 1024)
+                'size_formatted' => format_file_size($sizeMB * 1024 * 1024),
             ];
         } catch (\Exception $e) {
             return [
@@ -522,7 +254,7 @@ class DatabaseBackupController extends Controller
                 'port' => $dbConfig['port'],
                 'table_count' => 'N/A',
                 'size_mb' => 0,
-                'size_formatted' => 'N/A'
+                'size_formatted' => 'N/A',
             ];
         }
     }
@@ -537,15 +269,14 @@ class DatabaseBackupController extends Controller
                 'total_size' => 0,
                 'total_size_formatted' => '0 B',
                 'available_space' => disk_free_space(storage_path()),
-                'available_space_formatted' => $this->formatFileSize(disk_free_space(storage_path()))
+                'available_space_formatted' => format_file_size(disk_free_space(storage_path())),
             ];
         }
 
-        $files = File::files($backupDir);
         $totalSize = 0;
         $backupCount = 0;
 
-        foreach ($files as $file) {
+        foreach (File::files($backupDir) as $file) {
             if (preg_match('/\.(sql|sql\.gz)$/', $file->getFilename())) {
                 $totalSize += $file->getSize();
                 $backupCount++;
@@ -555,37 +286,18 @@ class DatabaseBackupController extends Controller
         return [
             'total_backups' => $backupCount,
             'total_size' => $totalSize,
-            'total_size_formatted' => $this->formatFileSize($totalSize),
+            'total_size_formatted' => format_file_size($totalSize),
             'available_space' => disk_free_space(storage_path()),
-            'available_space_formatted' => $this->formatFileSize(disk_free_space(storage_path()))
+            'available_space_formatted' => format_file_size(disk_free_space(storage_path())),
         ];
     }
 
-    protected function formatFileSize($bytes)
-    {
-        if ($bytes >= 1073741824) {
-            return number_format($bytes / 1073741824, 2) . ' GB';
-        } elseif ($bytes >= 1048576) {
-            return number_format($bytes / 1048576, 2) . ' MB';
-        } elseif ($bytes >= 1024) {
-            return number_format($bytes / 1024, 2) . ' KB';
-        } else {
-            return $bytes . ' B';
-        }
-    }
-
-    /**
-     * Generate database backup using PDO (no mysqldump required)
-     */
     protected function generatePdoBackup($backupType, $description = '')
     {
         $dbConfig = Config::get('database.connections.' . Config::get('database.default'));
         $dbName = $dbConfig['database'];
 
-        $sql = "";
-
-        // Add metadata header
-        $sql .= "-- Backup Metadata:\n";
+        $sql = "-- Backup Metadata:\n";
         $sql .= "-- Created: " . now()->toDateTimeString() . "\n";
         $sql .= "-- Database: {$dbName}\n";
         $sql .= "-- Type: {$backupType}\n";
@@ -594,13 +306,11 @@ class DatabaseBackupController extends Controller
         $sql .= "-- User: " . (auth()->user()->name ?? 'System') . " (" . (auth()->user()->email ?? 'N/A') . ")\n";
         $sql .= "-- Description: {$description}\n";
         $sql .= "-- End Metadata\n\n";
-
         $sql .= "SET FOREIGN_KEY_CHECKS=0;\n";
         $sql .= "SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\n";
         $sql .= "SET AUTOCOMMIT = 0;\n";
         $sql .= "START TRANSACTION;\n\n";
 
-        // Get all tables
         $tables = DB::select('SHOW FULL TABLES');
         $tableKey = 'Tables_in_' . $dbName;
 
@@ -608,49 +318,31 @@ class DatabaseBackupController extends Controller
             $tableName = $table->$tableKey;
             $tableType = $table->Table_type;
 
-            // Get table structure
             if ($backupType !== 'data_only') {
-                $sql .= "-- --------------------------------------------------------\n";
-                $sql .= "-- Structure for `{$tableName}` ({$tableType})\n";
-                $sql .= "-- --------------------------------------------------------\n\n";
+                $sql .= "-- Structure for `{$tableName}`\n\n";
 
-                if ($tableType === 'VIEW') {
-                    $sql .= "DROP VIEW IF EXISTS `{$tableName}`;\n";
-                } else {
-                    $sql .= "DROP TABLE IF EXISTS `{$tableName}`;\n";
-                }
+                $sql .= ($tableType === 'VIEW')
+                    ? "DROP VIEW IF EXISTS `{$tableName}`;\n"
+                    : "DROP TABLE IF EXISTS `{$tableName}`;\n";
 
                 $createTable = DB::select("SHOW CREATE TABLE `{$tableName}`");
                 if (!empty($createTable)) {
                     $createRow = (array) $createTable[0];
-                    // Handle both Tables and Views, and different casing
                     $createSql = $createRow['Create Table'] ?? $createRow['Create View'] ?? null;
-
                     if ($createSql) {
                         $sql .= $createSql . ";\n\n";
                     }
                 }
             }
 
-            // Get table data
             if ($backupType !== 'structure_only' && $tableType === 'BASE TABLE') {
                 $rows = DB::table($tableName)->get();
-
                 if ($rows->count() > 0) {
-                    $sql .= "-- --------------------------------------------------------\n";
-                    $sql .= "-- Dumping data for table `{$tableName}`\n";
-                    $sql .= "-- --------------------------------------------------------\n\n";
-
+                    $sql .= "-- Dumping data for table `{$tableName}`\n\n";
                     foreach ($rows as $row) {
                         $rowArray = (array) $row;
                         $columns = array_keys($rowArray);
-                        $values = array_map(function ($value) {
-                            if (is_null($value)) {
-                                return 'NULL';
-                            }
-                            return DB::getPdo()->quote($value);
-                        }, array_values($rowArray));
-
+                        $values = array_map(fn($v) => is_null($v) ? 'NULL' : DB::getPdo()->quote($v), array_values($rowArray));
                         $sql .= "INSERT INTO `{$tableName}` (`" . implode('`, `', $columns) . "`) VALUES (" . implode(', ', $values) . ");\n";
                     }
                     $sql .= "\n";
@@ -658,8 +350,7 @@ class DatabaseBackupController extends Controller
             }
         }
 
-        $sql .= "SET FOREIGN_KEY_CHECKS=1;\n";
-        $sql .= "COMMIT;\n";
+        $sql .= "SET FOREIGN_KEY_CHECKS=1;\nCOMMIT;\n";
 
         return $sql;
     }
