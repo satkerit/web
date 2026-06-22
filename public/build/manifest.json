@@ -81,6 +81,12 @@
       "frontend-fixes.css"
     ]
   },
+  "resources/js/admin-layout-patch.js": {
+    "file": "assets/js/admin-layout-patch-DRuzlo4p.js",
+    "name": "admin-layout-patch",
+    "src": "resources/js/admin-layout-patch.js",
+    "isEntry": true
+  },
   "resources/js/admin.js": {
     "file": "assets/js/admin-krFq-uB0.js",
     "name": "admin",
@@ -103,6 +109,18 @@
       "_vendor-alpine-Bp6Fw4kV.js"
     ]
   },
+  "resources/js/alpine-components.js": {
+    "file": "assets/js/alpine-components-DR7V54Uv.js",
+    "name": "alpine-components",
+    "src": "resources/js/alpine-components.js",
+    "isEntry": true
+  },
+  "resources/js/alpine-init.js": {
+    "file": "assets/js/alpine-init-CE-iS34c.js",
+    "name": "alpine-init",
+    "src": "resources/js/alpine-init.js",
+    "isEntry": true
+  },
   "resources/js/app.js": {
     "file": "assets/js/app-B0lbLyFN.js",
     "name": "app",
@@ -118,5 +136,11 @@
       "_vendor-swiper-DsOWxDUI.js",
       "_vendor-swiper-DsOWxDUI.js"
     ]
+  },
+  "resources/js/idle-timeout.js": {
+    "file": "assets/js/idle-timeout-C3djhP5Z.js",
+    "name": "idle-timeout",
+    "src": "resources/js/idle-timeout.js",
+    "isEntry": true
   }
 }
