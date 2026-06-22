@@ -68,8 +68,8 @@ class NewsController extends Controller
             'meta_description' => 'nullable|string',
             'tags' => 'nullable|string|max:255',
             'category' => 'required|string',
-            'featured_image' => 'required|image|max:2048',
-            'slide_images.*' => 'image|max:2048',
+            'featured_image' => 'required|image|max:' . config('security.upload.max_size'),
+            'slide_images.*' => 'image|max:' . config('security.upload.max_size'),
             'published_at' => 'nullable|date',
             'is_published' => 'nullable|boolean',
         ]);
@@ -143,8 +143,8 @@ class NewsController extends Controller
             'meta_description' => 'nullable|string',
             'tags' => 'nullable|string|max:255',
             'category' => 'required|string',
-            'featured_image' => 'nullable|image|max:2048',
-            'slide_images.*' => 'image|max:2048',
+            'featured_image' => 'nullable|image|max:' . config('security.upload.max_size'),
+            'slide_images.*' => 'image|max:' . config('security.upload.max_size'),
             'published_at' => 'nullable|date',
             'is_published' => 'nullable|boolean',
         ]);

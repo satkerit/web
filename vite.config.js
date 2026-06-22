@@ -11,12 +11,6 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/admin.js",
                 "resources/js/alpine-bundle.js",
-                "resources/js/alpine-components.js",
-                "resources/js/alpine-init.js",
-                "resources/js/pagination-fix.js",
-                "resources/js/idle-timeout.js",
-                "resources/js/admin-layout-patch.js",
-                "resources/js/map-utils.js",
             ],
             refresh: true,
         }),
@@ -25,11 +19,19 @@ export default defineConfig({
         // Optimize chunk splitting
         rollupOptions: {
             output: {
-                manualChunks: {
-                    // Vendor chunks - split large libraries
-                    "vendor-alpine": ["alpinejs", "@alpinejs/collapse"],
-                    "vendor-swiper": ["swiper"],
-                    "vendor-sweetalert": ["sweetalert2"],
+                manualChunks: (id) => {
+                    if (id.includes("node_modules")) {
+                        if (id.includes("alpinejs")) {
+                            return "vendor-alpine";
+                        }
+                        if (id.includes("swiper")) {
+                            return "vendor-swiper";
+                        }
+                        if (id.includes("sweetalert")) {
+                            return "vendor-sweetalert";
+                        }
+                        return "vendor"; // General vendor chunk
+                    }
                 },
                 // Optimize asset file names
                 assetFileNames: (assetInfo) => {
@@ -50,19 +52,29 @@ export default defineConfig({
             compress: {
                 drop_console: true,
                 drop_debugger: true,
+                passes: 2, // More aggressive compression
+            },
+            format: {
+                comments: false, // Remove all comments
             },
         },
         // CSS optimization
-        cssMinify: true,
+        cssMinify: "lightningcss", // Faster CSS minification
         cssCodeSplit: true,
         // Reduce chunk size warnings threshold
         chunkSizeWarningLimit: 500,
         // Source maps for production debugging (optional)
         sourcemap: false,
+        // Target modern browsers
+        target: "es2020",
     },
     // Optimize dependencies
     optimizeDeps: {
         include: ["alpinejs", "@alpinejs/collapse"],
+        exclude: [],
+        esbuildOptions: {
+            target: "es2020",
+        },
     },
     server: {
         host: "0.0.0.0",

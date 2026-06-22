@@ -1,7 +1,7 @@
 @csrf
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8" 
-     data-edit-mode="{{ isset($news) ? 'true' : 'false' }}" 
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8"
+     data-edit-mode="{{ isset($news) ? 'true' : 'false' }}"
      data-news-id="{{ $news->id ?? 'new' }}"
      data-upload-url="{{ route('admin.storage.upload-editor-image') }}">
     <!-- Main Content -->
@@ -122,7 +122,7 @@
                 <input type="file" name="featured_image" id="featured_image_input" accept="image/*"
                        class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-blue-100 transition cursor-pointer"
                        {{ isset($news) && $news->featured_image ? '' : 'required' }}>
-                <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG, WEBP. Max: 2MB.</p>
+                <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG, WEBP. Max: {{ number_format(config('security.upload.max_size') / 1024, 0) }}MB.</p>
                 @error('featured_image') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
             </div>
         </div>
@@ -152,7 +152,7 @@
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-2">Upload Galeri</label>
                 <input type="file" name="slide_images[]" multiple accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-blue-100 transition">
-                <p class="text-xs text-slate-500 mt-1">Bisa pilih banyak gambar sekaligus.</p>
+                <p class="text-xs text-slate-500 mt-1">Bisa pilih banyak gambar sekaligus. Format: JPG, PNG, WEBP. Max: {{ number_format(config('security.upload.max_size') / 1024, 0) }}MB.</p>
                 @error('slide_images.*') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
             </div>
         </div>
