@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Office;
+use App\Services\CacheService;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Js;
 
 if (app()->environment('local')) {
@@ -25,3 +27,47 @@ if (app()->environment('local')) {
         echo "</pre>";
     });
 }
+
+// Secret cache clearing route (works on all environments with a token)
+Route::get('/secret-clear-cache/{token}', function ($token) {
+    // Replace 'YOUR_SECRET_TOKEN_HERE' with a strong secret token
+    $expectedToken = env('SECRET_CACHE_TOKEN', 'your_strong_secret_token_change_this');
+
+    if ($token !== $expectedToken) {
+        abort(403, 'Unauthorized');
+    }
+
+    $output = [];
+
+    try {
+        // Clear all application caches
+        Artisan::call('cache:clear');
+        $output[] = '✅ Application cache cleared';
+
+        Artisan::call('responsecache:clear');
+        $output[] = '✅ Response cache cleared';
+
+        Artisan::call('view:clear');
+        $output[] = '✅ View cache cleared';
+
+        Artisan::call('config:clear');
+        $output[] = '✅ Config cache cleared';
+
+        Artisan::call('route:clear');
+        $output[] = '✅ Route cache cleared';
+
+        // Clear report-specific cache
+        CacheService::clearReportCache();
+        $output[] = '✅ Report-specific cache cleared';
+    } catch (\Exception $e) {
+        $output[] = '❌ Error: ' . $e->getMessage();
+    }
+
+    echo "<h1>Cache Clearing Complete</h1>";
+    echo "<ul>";
+    foreach ($output as $line) {
+        echo "<li>{$line}</li>";
+    }
+    echo "</ul>";
+    echo "<p><strong>Important:</strong> Delete this route after use, or change the SECRET_CACHE_TOKEN in your .env file!</p>";
+})->name('secret.clear-cache');
