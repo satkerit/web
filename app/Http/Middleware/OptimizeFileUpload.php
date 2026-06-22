@@ -29,7 +29,7 @@ class OptimizeFileUpload
     {
         // Check for common file upload fields
         $fileFields = ['featured_image', 'slide_images', 'image', 'file', 'attachment'];
-        
+
         foreach ($fileFields as $field) {
             if ($request->hasFile($field)) {
                 return true;
@@ -59,8 +59,8 @@ class OptimizeFileUpload
         }
 
         // Optimize upload settings
-        ini_set('upload_max_filesize', '10M');
-        ini_set('post_max_size', '50M'); // Allow multiple files
+        ini_set('upload_max_filesize', '20M');
+        ini_set('post_max_size', '20M'); // Allow multiple files
         ini_set('max_file_uploads', '20');
 
         // Optimize for image processing

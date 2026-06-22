@@ -127,7 +127,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::resource('auctions', App\Http\Controllers\Admin\AuctionController::class);
 
     // Reports Management
-    Route::resource('reports', App\Http\Controllers\Admin\ReportController::class);
+    Route::resource('reports', App\Http\Controllers\Admin\ReportController::class)
+        ->middleware(['optimize.upload']);
 
     // Hero Slides Management
     Route::get('hero-slides/settings', [App\Http\Controllers\Admin\HeroSlideController::class, 'settings'])->name('hero-slides.settings');
