@@ -241,7 +241,7 @@ class CacheService
      */
     public static function getReportYears(string $type)
     {
-        return Cache::tags(['reports'])->remember(
+        return Cache::remember(
             "report_years_{$type}",
             self::CACHE_LONG,
             fn() => Report::where('type', $type)
@@ -380,10 +380,16 @@ class CacheService
      */
     public static function clearReportCache(?string $type = null): void
     {
-        // Clear all report tagged cache (including report lists and years)
-        if (method_exists(Cache::store(), 'tags')) {
-            Cache::tags(['reports'])->flush();
+        $types = $type ? [$type] : ['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'];
+
+        // Clear all report year cache keys
+        foreach ($types as $t) {
+            Cache::forget("report_years_{$t}");
         }
+
+        // Since we can't pattern-match all report list cache keys for all drivers,
+        // flush all application cache to ensure no stale report data is left
+        Cache::flush();
 
         // Clear response cache from Spatie (will help clear any cached pages)
         try {

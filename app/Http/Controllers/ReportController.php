@@ -15,7 +15,7 @@ class ReportController extends Controller
         $page = $request->query('page', 1);
         $cacheKey = "reports_{$type}_{$year}_{$page}";
 
-        $reports = \Illuminate\Support\Facades\Cache::tags(['reports'])->remember($cacheKey, 3600, function () use ($type, $year) {
+        $reports = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($type, $year) {
             $query = Report::where('type', $type)->published();
             if ($year) {
                 $query->where('year', $year);
