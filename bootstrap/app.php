@@ -21,6 +21,18 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Set middleware priority - optimize upload needs to run early
+        $middleware->priority([
+            \App\Http\Middleware\OptimizeFileUpload::class,
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ]);
+
         // Register middleware aliases
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
@@ -40,6 +52,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Web middleware group - Security monitoring runs early
         $middleware->web(append: [
+            \App\Http\Middleware\OptimizeFileUpload::class,
             \App\Http\Middleware\CacheStaticAssets::class,
             \App\Http\Middleware\DdosProtection::class,
             \App\Http\Middleware\DetectSuspiciousActivity::class,

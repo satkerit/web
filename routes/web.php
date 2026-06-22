@@ -7,6 +7,16 @@ use App\Http\Controllers\CspReportController;
 // CSP Violation Report (must be before other routes)
 Route::post('/api/csp-report', [CspReportController::class, 'report'])->name('csp.report');
 
+// Temporary test route to check PHP settings
+Route::get('/test-php-settings', function () {
+    return response()->json([
+        'upload_max_filesize' => ini_get('upload_max_filesize'),
+        'post_max_size' => ini_get('post_max_size'),
+        'max_execution_time' => ini_get('max_execution_time'),
+        'memory_limit' => ini_get('memory_limit'),
+    ]);
+});
+
 // Home Route
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

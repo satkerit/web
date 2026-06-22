@@ -59,9 +59,17 @@ class OptimizeFileUpload
         }
 
         // Optimize upload settings
-        ini_set('upload_max_filesize', '20M');
-        ini_set('post_max_size', '20M'); // Allow multiple files
+        ini_set('upload_max_filesize', '100M');
+        ini_set('post_max_size', '100M'); // Allow multiple files
         ini_set('max_file_uploads', '20');
+        
+        // Log the settings
+        if (function_exists('Log')) {
+            \Illuminate\Support\Facades\Log::info('Upload settings applied', [
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+                'post_max_size' => ini_get('post_max_size'),
+            ]);
+        }
 
         // Optimize for image processing
         ini_set('gd.jpeg_ignore_warning', '1');
