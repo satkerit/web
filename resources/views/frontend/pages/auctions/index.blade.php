@@ -311,7 +311,7 @@
                     <!-- Auction Grid -->
                     <div class="auction-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
                         @forelse($auctions as $auction)
-                            <div class="auction-card rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 group" x-intersect>
+                            <div class="auction-card rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 group" data-intersect>
                                 <!-- Image -->
                                 <div class="relative aspect-[4/3] overflow-hidden">
                                     @if($auction->main_image)

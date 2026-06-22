@@ -10,7 +10,7 @@
     <meta name="description" content="{{ $metaDescription ?? 'Temukan berbagai lelang agunan terpercaya dengan harga terbaik di BPRS Bangka Belitung. Rumah, tanah, ruko, dan properti komersial lainnya.' }}">
     <meta name="keywords" content="{{ $metaKeywords ?? 'lelang agunan, lelang properti, BPRS Babel, auction, property auction, rumah lelang, tanah lelang' }}">
     <meta name="author" content="BPRS Bangka Belitung">
-    
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="{{ $title ?? 'Lelang Agunan - BPRS Bangka Belitung' }}">
     <meta property="og:description" content="{{ $metaDescription ?? 'Temukan berbagai lelang agunan terpercaya dengan harga terbaik di BPRS Bangka Belitung.' }}">
@@ -34,10 +34,10 @@
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link rel="dns-prefetch" href="https://fonts.bunny.net">
-    
+
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css?family=montserrat:400,500,600,700,800|inter:400,500,600,700&display=swap" rel="stylesheet" />
-    
+
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/css/frontend-fixes.css', 'resources/js/app.js'])
     @livewireStyles
@@ -53,14 +53,14 @@
             --auction-info: #0284c7;
         }
 
-        body { 
-            font-family: 'Inter', sans-serif; 
+        body {
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fed7aa 100%);
             min-height: 100vh;
         }
-        
-        h1, h2, h3, h4, h5, h6 { 
-            font-family: 'Montserrat', sans-serif; 
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
             font-weight: 700;
         }
 
@@ -126,23 +126,23 @@
         }
 
         /* Status badges */
-        .status-active { 
+        .status-active {
             background: linear-gradient(135deg, #059669, #10b981);
             color: white;
             animation: auction-pulse 2s ease-in-out infinite;
         }
 
-        .status-upcoming { 
+        .status-upcoming {
             background: linear-gradient(135deg, #d97706, #f59e0b);
             color: white;
         }
 
-        .status-closed { 
+        .status-closed {
             background: linear-gradient(135deg, #6b7280, #9ca3af);
             color: white;
         }
 
-        .status-sold { 
+        .status-sold {
             background: linear-gradient(135deg, #dc2626, #ef4444);
             color: white;
         }
@@ -222,7 +222,7 @@
             .auction-card {
                 margin-bottom: 1rem;
             }
-            
+
             .auction-search-form {
                 padding: 1rem;
             }
@@ -260,13 +260,13 @@
         }
 
         /* Intersection observer animations */
-        [x-intersect] {
+        [data-intersect] {
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s ease-out;
         }
 
-        [x-intersect].intersected {
+        [data-intersect].intersected {
             opacity: 1;
             transform: translateY(0);
         }
@@ -307,13 +307,13 @@
     <!-- Floating Action Buttons -->
     <div class="fixed bottom-8 right-8 flex flex-col gap-3 z-40 no-print">
         <!-- Back to Top -->
-        <button x-data="{ show: false }" 
-                @scroll.window="show = window.scrollY > 500" 
-                x-show="show" 
-                x-transition:enter="transition ease-out duration-300" 
-                x-transition:enter-start="opacity-0 translate-y-4 scale-75" 
-                x-transition:enter-end="opacity-100 translate-y-0 scale-100" 
-                @click="window.scrollTo({ top: 0, behavior: 'smooth' })" 
+        <button x-data="{ show: false }"
+                @scroll.window="show = window.scrollY > 500"
+                x-show="show"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-4 scale-75"
+                x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
                 class="w-14 h-14 btn-auction-primary rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 auction-glow">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
@@ -321,7 +321,7 @@
         </button>
 
         <!-- Quick Search -->
-        <button @click="document.querySelector('#auction-search')?.focus()" 
+        <button @click="document.querySelector('#auction-search')?.focus()"
                 class="w-14 h-14 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110"
                 title="Quick Search">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -330,7 +330,7 @@
         </button>
 
         <!-- Contact Support -->
-        <a href="tel:{{ $company->phone ?? '' }}" 
+        <a href="tel:{{ $company->phone ?? '' }}"
            class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110"
            title="Hubungi Kami">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,7 +349,7 @@
 
     @livewireScripts
     @vite(['resources/js/pagination-fix.js'])
-    
+
     <!-- Auction-specific JavaScript -->
     <script nonce="{{ $nonce }}">
         // Intersection Observer for animations
@@ -367,7 +367,7 @@
                 });
             }, observerOptions);
 
-            document.querySelectorAll('[x-intersect]').forEach(el => {
+            document.querySelectorAll('[data-intersect]').forEach(el => {
                 observer.observe(el);
             });
 
