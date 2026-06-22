@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Report\StoreReportRequest;
+use App\Http\Requests\Admin\Report\UpdateReportRequest;
 use App\Models\Report;
 use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
@@ -43,27 +46,10 @@ class ReportController extends Controller
         return view('admin.reports.form');
     }
 
-    public function store(Request $request)
+    public function store(StoreReportRequest $request)
     {
         $this->authorizeCreate('reports.create');
-        $rules = [
-            'title' => 'required|string|max:255',
-            'type' => 'required|in:keuangan_publikasi,tata_kelola,tahunan,tahunan_berkelanjutan',
-            'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'quarter' => 'nullable|integer|min:1|max:4',
-            'file' => 'required|file|mimes:pdf|max:51200',
-            'description' => 'nullable|string|max:500',
-            'is_published' => 'boolean',
-            'posting_mode' => 'required|in:auto,manual',
-            'scheduled_at' => 'nullable|date',
-            'published_date' => 'required|date',
-        ];
-
-        if ($request->posting_mode === 'manual') {
-            $rules['scheduled_at'] = 'required|date';
-        }
-
-        $validated = $request->validate($rules);
+        $validated = $request->validated();
 
         try {
             $validated['is_published'] = $request->boolean('is_published');
@@ -82,17 +68,20 @@ class ReportController extends Controller
                 $validated['scheduled_at'] = null;
             }
 
-            // Set posted_at dari published_date yang diinput user
             $validated['posted_at'] = $request->published_date;
             unset($validated['published_date']);
-
             unset($validated['file']);
 
             Report::create($validated);
 
             return redirect()->route('admin.reports.index')->with('success', 'Laporan berhasil ditambahkan.');
         } catch (\Exception $e) {
-            return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            Log::error('Failed to create report', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->except('file')
+            ]);
+            return back()->withInput()->with('error', 'Terjadi kesalahan saat menyimpan laporan. Silakan coba lagi.');
         }
     }
 
@@ -110,27 +99,10 @@ class ReportController extends Controller
         return redirect()->route('admin.reports.edit', $report);
     }
 
-    public function update(Request $request, Report $report)
+    public function update(UpdateReportRequest $request, Report $report)
     {
         $this->authorizeEdit('reports.edit');
-        $rules = [
-            'title' => 'required|string|max:255',
-            'type' => 'required|in:keuangan_publikasi,tata_kelola,tahunan,tahunan_berkelanjutan',
-            'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'quarter' => 'nullable|integer|min:1|max:4',
-            'file' => 'nullable|file|mimes:pdf|max:51200',
-            'description' => 'nullable|string|max:500',
-            'is_published' => 'boolean',
-            'posting_mode' => 'required|in:auto,manual',
-            'scheduled_at' => 'nullable|date',
-            'published_date' => 'required|date',
-        ];
-
-        if ($request->posting_mode === 'manual') {
-            $rules['scheduled_at'] = 'required|date';
-        }
-
-        $validated = $request->validate($rules);
+        $validated = $request->validated();
 
         try {
             $validated['is_published'] = $request->boolean('is_published');
@@ -152,17 +124,21 @@ class ReportController extends Controller
                 $validated['scheduled_at'] = null;
             }
 
-            // Set posted_at dari published_date yang diinput user
             $validated['posted_at'] = $request->published_date;
             unset($validated['published_date']);
-
             unset($validated['file']);
 
             $report->update($validated);
 
             return redirect()->route('admin.reports.index')->with('success', 'Laporan berhasil diperbarui.');
         } catch (\Exception $e) {
-            return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            Log::error('Failed to update report', [
+                'report_id' => $report->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->except('file')
+            ]);
+            return back()->withInput()->with('error', 'Terjadi kesalahan saat memperbarui laporan. Silakan coba lagi.');
         }
     }
 
@@ -179,7 +155,12 @@ class ReportController extends Controller
 
             return redirect()->route('admin.reports.index')->with('success', 'Laporan berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.reports.index')->with('error', 'Gagal menghapus laporan: ' . $e->getMessage());
+            Log::error('Failed to delete report', [
+                'report_id' => $report->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->route('admin.reports.index')->with('error', 'Gagal menghapus laporan. Silakan coba lagi.');
         }
     }
 }

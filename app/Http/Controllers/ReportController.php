@@ -15,7 +15,7 @@ class ReportController extends Controller
         $page = $request->query('page', 1);
         $cacheKey = "reports_{$type}_{$year}_{$page}";
 
-        $reports = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function() use ($type, $year) {
+        $reports = \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($type, $year) {
             $query = Report::where('type', $type)->published();
             if ($year) {
                 $query->where('year', $year);
@@ -60,8 +60,9 @@ class ReportController extends Controller
             abort(404, 'File tidak ditemukan');
         }
 
-        // Increment preview count
+        // Increment preview count and clear cache
         $report->increment('preview_count');
+        CacheService::clearReportCache();
 
         return response()->file(
             Storage::disk('public')->path($report->file_path),
@@ -77,8 +78,9 @@ class ReportController extends Controller
             abort(404, 'File tidak ditemukan');
         }
 
-        // Increment download count
+        // Increment download count and clear cache
         $report->increment('download_count');
+        CacheService::clearReportCache();
 
         return Storage::disk('public')->download($report->file_path, $report->title . '.pdf');
     }

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Services\CacheService;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class Report extends Model
@@ -126,7 +126,7 @@ class Report extends Model
     protected static function booted(): void
     {
         $clearCache = function ($model) {
-            Cache::forget("report_years_{$model->type}");
+            CacheService::clearReportCache();
         };
 
         static::saved($clearCache);
