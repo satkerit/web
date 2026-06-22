@@ -241,7 +241,7 @@ class CacheService
      */
     public static function getReportYears(string $type)
     {
-        return Cache::remember(
+        return Cache::tags(['reports'])->remember(
             "report_years_{$type}",
             self::CACHE_LONG,
             fn() => Report::where('type', $type)
@@ -380,15 +380,12 @@ class CacheService
      */
     public static function clearReportCache(?string $type = null): void
     {
-        if ($type) {
-            Cache::forget("report_years_{$type}");
-        } else {
-            foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $t) {
-                Cache::forget("report_years_{$t}");
-            }
+        // Clear all report tagged cache (including report lists and years)
+        if (method_exists(Cache::store(), 'tags')) {
+            Cache::tags(['reports'])->flush();
         }
 
-        // Clear response cache from Spatie
+        // Clear response cache from Spatie (will help clear any cached pages)
         try {
             if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
                 ResponseCache::clear();
