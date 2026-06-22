@@ -4,6 +4,7 @@
  */
 
 import "./bootstrap";
+import "./cache";
 import collapse from "@alpinejs/collapse";
 
 // Suppress errors from browser extensions
@@ -15,13 +16,13 @@ window.addEventListener("unhandledrejection", (event) => {
     }
     // Suppress browser extension errors
     if (
-        event.reason && 
-        (
-            event.reason.message && 
-            event.reason.message.includes('message channel closed')
-        ) ||
-        event.reason.message && 
-        event.reason.message.includes('Listener indicated an asynchronous response')
+        (event.reason &&
+            event.reason.message &&
+            event.reason.message.includes("message channel closed")) ||
+        (event.reason.message &&
+            event.reason.message.includes(
+                "Listener indicated an asynchronous response",
+            ))
     ) {
         event.preventDefault();
     }

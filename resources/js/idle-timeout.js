@@ -36,13 +36,23 @@ class IdleTimeoutHandler {
             "click",
         ];
 
+        // Throttle function to limit how often updateActivity is called
+        let activityThrottle = false;
+        const throttledUpdateActivity = () => {
+            if (!activityThrottle) {
+                this.updateActivity();
+                activityThrottle = true;
+                setTimeout(() => {
+                    activityThrottle = false;
+                }, 200); // Only update once every 200ms
+            }
+        };
+
         events.forEach((event) => {
             document.addEventListener(
                 event,
-                () => {
-                    this.updateActivity();
-                },
-                true,
+                throttledUpdateActivity,
+                { passive: true, capture: true },
             );
         });
 
