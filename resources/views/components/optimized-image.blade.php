@@ -25,7 +25,8 @@
         $imagePath = str_replace('/storage/', '', parse_url($src, PHP_URL_PATH));
     }
 
-    // Get responsive WebP versions
+    // Get responsive AVIF and WebP versions
+    $avifVersions = ImageCompressionService::getExistingResponsiveAVIF($imagePath);
     $webpVersions = ImageCompressionService::getExistingResponsiveWebP($imagePath);
     $compressedSrc = ImageCompressionService::getExistingCompressed($imagePath);
 
@@ -43,9 +44,30 @@
     $styleString = !empty($styles) ? implode('; ', $styles) : '';
 @endphp
 
-@if(!empty($webpVersions))
-{{-- Use picture element for responsive WebP --}}
+@if(!empty($avifVersions) || !empty($webpVersions))
+{{-- Use picture element for responsive AVIF and WebP --}}
 <picture>
+    {{-- AVIF sources for different breakpoints (most modern, smallest size) --}}
+    @if(isset($avifVersions['mobile']))
+    <source 
+        media="(max-width: 640px)"
+        srcset="{{ StorageHelper::url($avifVersions['mobile']) }}"
+        type="image/avif">
+    @endif
+    
+    @if(isset($avifVersions['tablet']))
+    <source 
+        media="(min-width: 641px) and (max-width: 1024px)"
+        srcset="{{ StorageHelper::url($avifVersions['tablet']) }}"
+        type="image/avif">
+    @endif
+    
+    @if(isset($avifVersions['desktop']))
+    <source 
+        media="(min-width: 1025px)"
+        srcset="{{ StorageHelper::url($avifVersions['desktop']) }}"
+        type="image/avif">
+    @endif
     {{-- WebP sources for different breakpoints --}}
     @if(isset($webpVersions['mobile']))
     <source 

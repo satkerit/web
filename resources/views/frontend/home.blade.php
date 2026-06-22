@@ -5,14 +5,24 @@
     @php
         $compressedFirstImage = class_exists('\App\Services\ImageCompressionService') ? \App\Services\ImageCompressionService::getExistingCompressed($firstHeroImage) : $firstHeroImage;
         $webpFirst = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingResponsiveWebP($firstHeroImage) : [];
+        $avifFirst = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingResponsiveAVIF($firstHeroImage) : [];
         $mainWebPFirst = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingWebP($firstHeroImage) : null;
+        $mainAVIFFirst = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingAVIF($firstHeroImage) : null;
     @endphp
+    {{-- Preload AVIF for most modern browsers (smallest file size) --}}
+    @if($mainAVIFFirst)
+    <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($mainAVIFFirst) }}" fetchpriority="high" type="image/avif">
+    @endif
     {{-- Preload WebP for modern browsers --}}
     @if($mainWebPFirst)
     <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($mainWebPFirst) }}" fetchpriority="high" type="image/webp">
     @endif
     {{-- Fallback preload for older browsers --}}
     <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($compressedFirstImage) }}" fetchpriority="high" type="image/jpeg">
+    {{-- Mobile AVIF preload --}}
+    @if(isset($avifFirst['mobile']))
+    <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($avifFirst['mobile']) }}" media="(max-width: 640px)" type="image/avif">
+    @endif
     {{-- Mobile WebP preload --}}
     @if(isset($webpFirst['mobile']))
     <link rel="preload" as="image" href="{{ \App\Helpers\StorageHelper::url($webpFirst['mobile']) }}" media="(max-width: 640px)" type="image/webp">
@@ -111,8 +121,25 @@
                             @php
                                 $compressedImage = class_exists('\App\Services\ImageCompressionService') ? \App\Services\ImageCompressionService::getExistingCompressed($slide->image) : $slide->image;
                                 $webpImages = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingResponsiveWebP($slide->image) : [];
+                                $avifImages = class_exists('\App\Services\WebPConverterService') ? \App\Services\WebPConverterService::getExistingResponsiveAVIF($slide->image) : [];
                             @endphp
                             <picture>
+                                {{-- AVIF sources (most modern, smallest size) --}}
+                                @if(isset($avifImages['mobile']))
+                                <source media="(max-width: 640px)"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($avifImages['mobile']) }}"
+                                        type="image/avif">
+                                @endif
+                                @if(isset($avifImages['tablet']))
+                                <source media="(max-width: 1024px)"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($avifImages['tablet']) }}"
+                                        type="image/avif">
+                                @endif
+                                @if(isset($avifImages['desktop']))
+                                <source media="(min-width: 1025px)"
+                                        srcset="{{ \App\Helpers\StorageHelper::url($avifImages['desktop']) }}"
+                                        type="image/avif">
+                                @endif
                                 {{-- WebP sources --}}
                                 @if(isset($webpImages['mobile']))
                                 <source media="(max-width: 640px)"
@@ -942,17 +969,17 @@
                     opacity: 1;
                 }
             }
-            
+
             /* Apply pulse animation to buttons */
             .fixed > div > a > div {
                 animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             }
-            
+
             /* Stop animation on hover */
             .fixed > div > a:hover > div {
                 animation: none;
             }
-            
+
             /* Responsive adjustments for mobile */
             @media (max-width: 640px) {
                 .fixed > div > a > span {

@@ -27,7 +27,7 @@ class ImageCompressionService
 
     /**
      * Proses gambar saat upload - generate multiple variants
-     * 
+     *
      * @param string $originalPath Path gambar original di storage
      * @param array $options Opsi tambahan (quality, formats, breakpoints)
      * @return array Array berisi path semua variant yang dihasilkan
@@ -36,28 +36,29 @@ class ImageCompressionService
     {
         $originalMemoryLimit = ini_get('memory_limit');
         $originalTimeLimit = ini_get('max_execution_time');
-        
+
         ini_set('memory_limit', '512M');
         ini_set('max_execution_time', 300);
 
         try {
             $disk = Storage::disk('public');
-            
+
             if (!$disk->exists($originalPath)) {
                 throw new \Exception("Original image not found: {$originalPath}");
             }
 
             $manager = new ImageManager(new Driver());
             $image = $manager->read($disk->path($originalPath));
-            
+
             $pathInfo = pathinfo($originalPath);
             $directory = $pathInfo['dirname'];
             $filename = $pathInfo['filename'];
-            
+
             $results = [
                 'original' => $originalPath,
                 'compressed' => [],
                 'webp' => [],
+                'avif' => [],
                 'responsive' => []
             ];
 
@@ -67,11 +68,15 @@ class ImageCompressionService
                 $results['compressed'] = $compressedPath;
             }
 
-            // 2. Generate WebP versions untuk semua breakpoints
+            // 2. Generate AVIF versions untuk semua breakpoints (modern format)
+            $avifVersions = self::generateAVIFVersions($image, $directory, $filename, $options);
+            $results['avif'] = $avifVersions;
+
+            // 3. Generate WebP versions untuk semua breakpoints
             $webpVersions = self::generateWebPVersions($image, $directory, $filename, $options);
             $results['webp'] = $webpVersions;
 
-            // 3. Generate responsive JPEG versions
+            // 4. Generate responsive JPEG versions (fallback untuk browser lama)
             $responsiveVersions = self::generateResponsiveVersions($image, $directory, $filename, $options);
             $results['responsive'] = $responsiveVersions;
 
@@ -81,13 +86,12 @@ class ImageCompressionService
             ]);
 
             return $results;
-
         } catch (\Exception $e) {
             Log::error('Image processing failed: ' . $e->getMessage(), [
                 'path' => $originalPath,
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return [
                 'original' => $originalPath,
                 'compressed' => $originalPath,
@@ -116,6 +120,36 @@ class ImageCompressionService
     }
 
     /**
+     * Generate AVIF versions untuk semua breakpoints (modern format)
+     */
+    protected static function generateAVIFVersions($image, string $directory, string $filename, array $options): array
+    {
+        // Check if AVIF is supported
+        if (!self::isAVIFSupported()) {
+            Log::info('AVIF conversion skipped: GD AVIF support not available');
+            return [];
+        }
+
+        $quality = $options['avif_quality'] ?? self::QUALITY_MEDIUM;
+        $breakpoints = $options['breakpoints'] ?? self::BREAKPOINTS;
+        $avifVersions = [];
+
+        foreach ($breakpoints as $name => $width) {
+            $avifFilename = "{$filename}_{$name}.avif";
+            $avifPath = "{$directory}/{$avifFilename}";
+
+            $resized = clone $image;
+            $resized->scaleDown(width: $width);
+            $encoded = $resized->toAvif(quality: $quality);
+
+            Storage::disk('public')->put($avifPath, (string) $encoded);
+            $avifVersions[$name] = $avifPath;
+        }
+
+        return $avifVersions;
+    }
+
+    /**
      * Generate WebP versions untuk semua breakpoints
      */
     protected static function generateWebPVersions($image, string $directory, string $filename, array $options): array
@@ -131,7 +165,7 @@ class ImageCompressionService
             $resized = clone $image;
             $resized->scaleDown(width: $width);
             $encoded = $resized->toWebp(quality: $quality);
-            
+
             Storage::disk('public')->put($webpPath, (string) $encoded);
             $webpVersions[$name] = $webpPath;
         }
@@ -155,7 +189,7 @@ class ImageCompressionService
             $resized = clone $image;
             $resized->scaleDown(width: $width);
             $encoded = $resized->toJpeg(quality: $quality, progressive: true);
-            
+
             Storage::disk('public')->put($responsivePath, (string) $encoded);
             $responsiveVersions[$name] = $responsivePath;
         }
@@ -171,13 +205,13 @@ class ImageCompressionService
         $pathInfo = pathinfo($originalPath);
         $directory = $pathInfo['dirname'];
         $filename = $pathInfo['filename'];
-        
+
         $compressedPath = "{$directory}/{$filename}_compressed.jpg";
-        
+
         if (Storage::disk('public')->exists($compressedPath)) {
             return $compressedPath;
         }
-        
+
         return $originalPath;
     }
 
@@ -189,16 +223,16 @@ class ImageCompressionService
         $pathInfo = pathinfo($originalPath);
         $directory = $pathInfo['dirname'];
         $filename = $pathInfo['filename'];
-        
+
         $webpVersions = [];
-        
+
         foreach (self::BREAKPOINTS as $name => $width) {
             $webpPath = "{$directory}/{$filename}_{$name}.webp";
             if (Storage::disk('public')->exists($webpPath)) {
                 $webpVersions[$name] = $webpPath;
             }
         }
-        
+
         return $webpVersions;
     }
 
@@ -210,14 +244,66 @@ class ImageCompressionService
         $pathInfo = pathinfo($originalPath);
         $directory = $pathInfo['dirname'];
         $filename = $pathInfo['filename'];
-        
+
         $webpPath = "{$directory}/{$filename}_desktop.webp";
-        
+
         if (Storage::disk('public')->exists($webpPath)) {
             return $webpPath;
         }
-        
+
         return null;
+    }
+
+    /**
+     * Get existing responsive AVIF versions
+     */
+    public static function getExistingResponsiveAVIF(string $originalPath): array
+    {
+        $pathInfo = pathinfo($originalPath);
+        $directory = $pathInfo['dirname'];
+        $filename = $pathInfo['filename'];
+
+        $avifVersions = [];
+
+        foreach (self::BREAKPOINTS as $name => $width) {
+            $avifPath = "{$directory}/{$filename}_{$name}.avif";
+            if (Storage::disk('public')->exists($avifPath)) {
+                $avifVersions[$name] = $avifPath;
+            }
+        }
+
+        return $avifVersions;
+    }
+
+    /**
+     * Get single AVIF version (main/desktop)
+     */
+    public static function getExistingAVIF(string $originalPath): ?string
+    {
+        $pathInfo = pathinfo($originalPath);
+        $directory = $pathInfo['dirname'];
+        $filename = $pathInfo['filename'];
+
+        $avifPath = "{$directory}/{$filename}_desktop.avif";
+
+        if (Storage::disk('public')->exists($avifPath)) {
+            return $avifPath;
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if AVIF is supported by GD
+     */
+    public static function isAVIFSupported(): bool
+    {
+        if (!function_exists('gd_info')) {
+            return false;
+        }
+
+        $gdInfo = gd_info();
+        return isset($gdInfo['AVIF Support']) && $gdInfo['AVIF Support'];
     }
 
     /**
@@ -275,9 +361,13 @@ class ImageCompressionService
 
         // Delete all responsive versions
         foreach (self::BREAKPOINTS as $name => $width) {
+            $avifPath = "{$directory}/{$filename}_{$name}.avif";
             $webpPath = "{$directory}/{$filename}_{$name}.webp";
             $jpegPath = "{$directory}/{$filename}_{$name}.jpg";
-            
+
+            if ($disk->exists($avifPath)) {
+                $disk->delete($avifPath);
+            }
             if ($disk->exists($webpPath)) {
                 $disk->delete($webpPath);
             }
