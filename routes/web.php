@@ -173,6 +173,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     Route::resource('auctions', App\Http\Controllers\Admin\AuctionController::class);
 
     // Reports Management
+    Route::get('reports/clear-caches', [App\Http\Controllers\Admin\ReportController::class, 'clearAllCaches'])
+        ->name('admin.reports.clear-caches');
     Route::resource('reports', App\Http\Controllers\Admin\ReportController::class)
         ->middleware(['optimize.upload']);
 

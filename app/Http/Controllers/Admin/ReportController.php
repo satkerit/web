@@ -165,4 +165,38 @@ class ReportController extends Controller
             return redirect()->route('admin.reports.index')->with('error', 'Gagal menghapus laporan. Silakan coba lagi.');
         }
     }
+
+    public function clearAllCaches()
+    {
+        $this->authorizeView('reports.view');
+
+        $results = [];
+
+        try {
+            Artisan::call('cache:clear');
+            $results[] = 'cache:clear OK';
+
+            if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
+                \Spatie\ResponseCache\Facades\ResponseCache::clear();
+                $results[] = 'responsecache:clear OK';
+            }
+
+            Artisan::call('view:clear');
+            $results[] = 'view:clear OK';
+
+            Artisan::call('config:clear');
+            $results[] = 'config:clear OK';
+
+            Artisan::call('route:clear');
+            $results[] = 'route:clear OK';
+
+            CacheService::clearReportCache();
+            $results[] = 'Report cache cleared OK';
+        } catch (\Exception $e) {
+            $results[] = 'Error: ' . $e->getMessage();
+            Log::error('Failed to clear caches', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+        }
+
+        return redirect()->route('admin.reports.index')->with('success', 'Cache cleared: ' . implode(', ', $results));
+    }
 }
