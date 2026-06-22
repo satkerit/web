@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Report\StoreReportRequest;
 use App\Http\Requests\Admin\Report\UpdateReportRequest;
 use App\Models\Report;
+use App\Services\CacheService;
 use App\Traits\AuthorizesAdminActions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
