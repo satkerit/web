@@ -7,44 +7,50 @@ use App\Http\Controllers\CspReportController;
 // CSP Violation Report (must be before other routes)
 Route::post('/api/csp-report', [CspReportController::class, 'report'])->name('csp.report');
 
+// Storage Serve Route (CRITICAL FOR FILES)
+Route::get('/storage/{path}', [\App\Http\Controllers\StorageServeController::class, 'serve'])
+    ->where('path', '.*')
+    ->name('storage.serve');
+
 // Secret Cache Clearing Route
 Route::get('/clear-all-caches/{token}', function ($token) {
     $expectedToken = env('SECRET_CACHE_TOKEN', 'change_this_to_strong_token');
-
+    
     if ($token !== $expectedToken) {
         abort(403, 'Not allowed');
     }
 
     $results = [];
-
+    
     try {
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
         $results[] = '✅ cache:clear OK';
-
+        
         if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
             \Spatie\ResponseCache\Facades\ResponseCache::clear();
             $results[] = '✅ responsecache:clear OK';
         }
-
+        
         \Illuminate\Support\Facades\Artisan::call('view:clear');
         $results[] = '✅ view:clear OK';
-
+        
         \Illuminate\Support\Facades\Artisan::call('config:clear');
         $results[] = '✅ config:clear OK';
-
+        
         \Illuminate\Support\Facades\Artisan::call('route:clear');
         $results[] = '✅ route:clear OK';
-
+        
         // Clear report caches
         foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $type) {
             \Illuminate\Support\Facades\Cache::forget("report_years_{$type}");
         }
         \Illuminate\Support\Facades\Cache::flush();
         $results[] = '✅ All report caches cleared';
+        
     } catch (\Exception $e) {
         $results[] = '❌ Error: ' . $e->getMessage();
     }
-
+    
     return response()->json([
         'status' => 'done',
         'results' => $results
