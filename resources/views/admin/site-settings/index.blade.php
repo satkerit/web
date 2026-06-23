@@ -54,6 +54,94 @@
             </div>
         </div>
 
+        {{-- Upload Settings --}}
+        <div class="border-b border-gray-200 pb-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Pengaturan Upload File</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="upload_max_filesize" class="block text-sm font-medium text-gray-700 mb-2">
+                        Ukuran Maksimal File Upload
+                    </label>
+                    <input type="text" 
+                           name="upload_max_filesize" 
+                           id="upload_max_filesize" 
+                           value="{{ old('upload_max_filesize', $settings->upload_max_filesize ?? '100M') }}"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                           placeholder="100M">
+                    <p class="mt-1 text-sm text-gray-500">Ukuran maksimal file yang diupload (contoh: 100M, 2G)</p>
+                </div>
+
+                <div>
+                    <label for="post_max_size" class="block text-sm font-medium text-gray-700 mb-2">
+                        Ukuran Maksimal Post Data
+                    </label>
+                    <input type="text" 
+                           name="post_max_size" 
+                           id="post_max_size" 
+                           value="{{ old('post_max_size', $settings->post_max_size ?? '100M') }}"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                           placeholder="100M">
+                    <p class="mt-1 text-sm text-gray-500">Ukuran maksimal data POST (contoh: 100M, 2G)</p>
+                </div>
+
+                <div>
+                    <label for="max_execution_time" class="block text-sm font-medium text-gray-700 mb-2">
+                        Waktu Eksekusi Maksimal (detik)
+                    </label>
+                    <input type="number" 
+                           name="max_execution_time" 
+                           id="max_execution_time" 
+                           value="{{ old('max_execution_time', $settings->max_execution_time ?? 300) }}"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                           min="30" 
+                           max="3600">
+                    <p class="mt-1 text-sm text-gray-500">Waktu maksimal eksekusi script (30-3600 detik)</p>
+                </div>
+
+                <div>
+                    <label for="max_input_time" class="block text-sm font-medium text-gray-700 mb-2">
+                        Waktu Input Maksimal (detik)
+                    </label>
+                    <input type="number" 
+                           name="max_input_time" 
+                           id="max_input_time" 
+                           value="{{ old('max_input_time', $settings->max_input_time ?? 300) }}"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                           min="30" 
+                           max="3600">
+                    <p class="mt-1 text-sm text-gray-500">Waktu maksimal menerima input (30-3600 detik)</p>
+                </div>
+
+                <div>
+                    <label for="memory_limit" class="block text-sm font-medium text-gray-700 mb-2">
+                        Batas Memori
+                    </label>
+                    <input type="text" 
+                           name="memory_limit" 
+                           id="memory_limit" 
+                           value="{{ old('memory_limit', $settings->memory_limit ?? '512M') }}"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                           placeholder="512M">
+                    <p class="mt-1 text-sm text-gray-500">Batas memori script (contoh: 512M, 2G)</p>
+                </div>
+
+                <div>
+                    <label for="max_file_uploads" class="block text-sm font-medium text-gray-700 mb-2">
+                        Jumlah File Upload Maksimal
+                    </label>
+                    <input type="number" 
+                           name="max_file_uploads" 
+                           id="max_file_uploads" 
+                           value="{{ old('max_file_uploads', $settings->max_file_uploads ?? 20) }}"
+                           class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                           min="1" 
+                           max="100">
+                    <p class="mt-1 text-sm text-gray-500">Jumlah file yang bisa diupload sekaligus (1-100)</p>
+                </div>
+            </div>
+        </div>
+
         {{-- Maintenance Mode Settings --}}
         <div class="border-b border-gray-200 pb-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Pengaturan Maintenance Mode</h3>

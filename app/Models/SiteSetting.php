@@ -28,6 +28,12 @@ class SiteSetting extends Model
         'maintenance_allowed_ips',
         'maintenance_end_time',
         'maintenance_pages',
+        'upload_max_filesize',
+        'post_max_size',
+        'max_execution_time',
+        'max_input_time',
+        'memory_limit',
+        'max_file_uploads',
     ];
 
     protected $casts = [
@@ -36,6 +42,12 @@ class SiteSetting extends Model
         'maintenance_mode' => 'boolean',
         'maintenance_end_time' => 'datetime',
         'maintenance_pages' => 'array',
+        'upload_max_filesize' => 'string',
+        'post_max_size' => 'string',
+        'max_execution_time' => 'integer',
+        'max_input_time' => 'integer',
+        'memory_limit' => 'string',
+        'max_file_uploads' => 'integer',
     ];
 
     /**
@@ -99,6 +111,12 @@ class SiteSetting extends Model
                     'hero_slide_limit' => 5,
                     'maintenance_mode' => false,
                     'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
+                    'upload_max_filesize' => '100M',
+                    'post_max_size' => '100M',
+                    'max_execution_time' => 300,
+                    'max_input_time' => 300,
+                    'memory_limit' => '512M',
+                    'max_file_uploads' => 20,
                 ]);
             });
         } catch (\Exception $e) {
@@ -107,6 +125,12 @@ class SiteSetting extends Model
             $settings->hero_slider_delay = 5000;
             $settings->hero_slide_limit = 5;
             $settings->maintenance_mode = false;
+            $settings->upload_max_filesize = '100M';
+            $settings->post_max_size = '100M';
+            $settings->max_execution_time = 300;
+            $settings->max_input_time = 300;
+            $settings->memory_limit = '512M';
+            $settings->max_file_uploads = 20;
             return $settings;
         }
     }
@@ -123,6 +147,12 @@ class SiteSetting extends Model
             'maintenance_mode' => false,
             'maintenance_message' => 'Website sedang dalam pemeliharaan untuk peningkatan layanan. Silakan kembali beberapa saat lagi.',
             'maintenance_pages' => [],
+            'upload_max_filesize' => '100M',
+            'post_max_size' => '100M',
+            'max_execution_time' => 300,
+            'max_input_time' => 300,
+            'memory_limit' => '512M',
+            'max_file_uploads' => 20,
         ]);
     }
 

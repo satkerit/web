@@ -29,12 +29,27 @@ class SiteSettingController extends Controller
                 'hero_slide_limit' => 'nullable|integer|min:1|max:20',
                 'maintenance_mode' => 'nullable|boolean',
                 'maintenance_message' => 'nullable|string|max:500',
+                'upload_max_filesize' => 'nullable|string|regex:/^\d+(K|M|G)?$/i',
+                'post_max_size' => 'nullable|string|regex:/^\d+(K|M|G)?$/i',
+                'max_execution_time' => 'nullable|integer|min:30|max:3600',
+                'max_input_time' => 'nullable|integer|min:30|max:3600',
+                'memory_limit' => 'nullable|string|regex:/^\d+(K|M|G)?$/i',
+                'max_file_uploads' => 'nullable|integer|min:1|max:100',
             ], [
                 'hero_slider_delay.min' => 'Delay slider minimal 1000ms',
                 'hero_slider_delay.max' => 'Delay slider maksimal 10000ms',
                 'hero_slide_limit.min' => 'Jumlah slide hero minimal 1',
                 'hero_slide_limit.max' => 'Jumlah slide hero maksimal 20',
                 'maintenance_message.max' => 'Pesan maintenance maksimal 500 karakter',
+                'upload_max_filesize.regex' => 'Format ukuran file tidak valid (contoh: 100M, 2G)',
+                'post_max_size.regex' => 'Format ukuran post tidak valid (contoh: 100M, 2G)',
+                'max_execution_time.min' => 'Waktu eksekusi minimal 30 detik',
+                'max_execution_time.max' => 'Waktu eksekusi maksimal 3600 detik',
+                'max_input_time.min' => 'Waktu input minimal 30 detik',
+                'max_input_time.max' => 'Waktu input maksimal 3600 detik',
+                'memory_limit.regex' => 'Format batas memori tidak valid (contoh: 512M, 2G)',
+                'max_file_uploads.min' => 'Jumlah file upload minimal 1',
+                'max_file_uploads.max' => 'Jumlah file upload maksimal 100',
             ]);
 
             $settings = SiteSetting::getSettings();
@@ -48,7 +63,6 @@ class SiteSettingController extends Controller
 
             return redirect()->route('admin.site-settings.index')
                 ->with('success', 'Pengaturan website berhasil diperbarui');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->route('admin.site-settings.index')
                 ->withErrors($e->validator)
@@ -86,7 +100,6 @@ class SiteSettingController extends Controller
                 'message' => 'Jumlah slide hero berhasil diperbarui',
                 'data' => ['hero_slide_limit' => $validated['hero_slide_limit']]
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,

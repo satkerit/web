@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('why_choose_us', function (Blueprint $table) {
-            $table->string('background_image')->nullable()->after('icon');
+            if (!Schema::hasColumn('why_choose_us', 'background_image')) {
+                $table->string('background_image')->nullable()->after('icon');
+            }
         });
     }
 
