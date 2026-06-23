@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('site_settings', function (Blueprint $table) {
-            $table->integer('hero_slider_delay')->default(5000)->after('id');
+            if (!Schema::hasColumn('site_settings', 'hero_slider_delay')) {
+                $table->integer('hero_slider_delay')->default(5000)->after('id');
+            }
         });
     }
 

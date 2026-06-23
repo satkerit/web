@@ -9,7 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('site_settings', function (Blueprint $table) {
-            $table->integer('hero_slide_limit')->default(5)->after('hero_slider_delay')->comment('Maksimal jumlah slide hero yang ditampilkan');
+            if (!Schema::hasColumn('site_settings', 'hero_slide_limit')) {
+                $table->integer('hero_slide_limit')->default(5)->after('hero_slider_delay')->comment('Maksimal jumlah slide hero yang ditampilkan');
+            }
         });
     }
 

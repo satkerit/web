@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('kas_keliling', function (Blueprint $table) {
-            $table->string('contact_person')->nullable()->change();
-            $table->string('contact_phone')->nullable()->change();
-        });
+        if (Schema::hasTable('kas_keliling')) {
+            Schema::table('kas_keliling', function (Blueprint $table) {
+                if (Schema::hasColumn('kas_keliling', 'contact_person')) {
+                    $table->string('contact_person')->nullable()->change();
+                }
+                if (Schema::hasColumn('kas_keliling', 'contact_phone')) {
+                    $table->string('contact_phone')->nullable()->change();
+                }
+            });
+        }
     }
 
     /**
