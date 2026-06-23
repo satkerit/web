@@ -15,42 +15,61 @@ Route::get('/storage/{path}', [\App\Http\Controllers\StorageServeController::cla
 // Secret Cache Clearing Route
 Route::get('/clear-all-caches/{token}', function ($token) {
     $expectedToken = env('SECRET_CACHE_TOKEN', 'change_this_to_strong_token');
-    
+
     if ($token !== $expectedToken) {
         abort(403, 'Not allowed');
     }
 
     $results = [];
-    
+
     try {
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
         $results[] = '✅ cache:clear OK';
-        
+    } catch (\Exception $e) {
+        $results[] = '❌ cache:clear error: ' . $e->getMessage();
+    }
+
+    try {
         if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
             \Spatie\ResponseCache\Facades\ResponseCache::clear();
             $results[] = '✅ responsecache:clear OK';
         }
-        
+    } catch (\Exception $e) {
+        $results[] = '❌ responsecache:clear error: ' . $e->getMessage();
+    }
+
+    try {
         \Illuminate\Support\Facades\Artisan::call('view:clear');
         $results[] = '✅ view:clear OK';
-        
+    } catch (\Exception $e) {
+        $results[] = '❌ view:clear error: ' . $e->getMessage();
+    }
+
+    try {
         \Illuminate\Support\Facades\Artisan::call('config:clear');
         $results[] = '✅ config:clear OK';
-        
+    } catch (\Exception $e) {
+        $results[] = '❌ config:clear error: ' . $e->getMessage();
+    }
+
+    try {
         \Illuminate\Support\Facades\Artisan::call('route:clear');
         $results[] = '✅ route:clear OK';
-        
+    } catch (\Exception $e) {
+        $results[] = '❌ route:clear error: ' . $e->getMessage();
+    }
+
+    try {
         // Clear report caches
         foreach (['keuangan_publikasi', 'tata_kelola', 'tahunan', 'tahunan_berkelanjutan'] as $type) {
             \Illuminate\Support\Facades\Cache::forget("report_years_{$type}");
         }
         \Illuminate\Support\Facades\Cache::flush();
         $results[] = '✅ All report caches cleared';
-        
     } catch (\Exception $e) {
-        $results[] = '❌ Error: ' . $e->getMessage();
+        $results[] = '❌ Report cache error: ' . $e->getMessage();
     }
-    
+
     return response()->json([
         'status' => 'done',
         'results' => $results

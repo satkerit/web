@@ -384,19 +384,28 @@ class CacheService
 
         // Clear all report year cache keys
         foreach ($types as $t) {
-            Cache::forget("report_years_{$t}");
+            try {
+                Cache::forget("report_years_{$t}");
+            } catch (\Exception $e) {
+                // Ignore errors clearing individual keys
+            }
         }
 
         // Since we can't pattern-match all report list cache keys for all drivers,
         // flush all application cache to ensure no stale report data is left
-        Cache::flush();
+        try {
+            Cache::flush();
+        } catch (\Exception $e) {
+            // Ignore errors flushing cache
+        }
 
         // Clear response cache from Spatie (will help clear any cached pages)
         try {
             if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
-                ResponseCache::clear();
+                \Spatie\ResponseCache\Facades\ResponseCache::clear();
             }
         } catch (\Exception $e) {
+            // Ignore errors clearing response cache
         }
     }
 
