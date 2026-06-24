@@ -14,7 +14,7 @@ Route::get('/storage/{path}', [\App\Http\Controllers\StorageServeController::cla
 
 // Secret Cache Clearing Route
 Route::get('/clear-all-caches/{token}', function ($token) {
-    $expectedToken = env('SECRET_CACHE_TOKEN', 'change_this_to_strong_token');
+    $expectedToken = config('app.secret_cache_token');
 
     if ($token !== $expectedToken) {
         abort(403, 'Not allowed');
@@ -74,7 +74,7 @@ Route::get('/clear-all-caches/{token}', function ($token) {
         'status' => 'done',
         'results' => $results
     ]);
-});
+})->middleware('throttle:5,1');
 
 
 

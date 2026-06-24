@@ -126,4 +126,21 @@ return [
         'retention_days' => env('BACKUP_RETENTION_DAYS', 30),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | DDoS Protection Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure rate limits and thresholds for DDoS protection middleware
+    |
+    */
+
+    'ddos' => [
+        'rapid_fire_threshold' => env('DDOS_RAPID_FIRE_THRESHOLD', 20),
+        'same_endpoint_threshold' => env('DDOS_SAME_ENDPOINT_THRESHOLD', 30),
+        'requests_per_second' => env('DDOS_REQUESTS_PER_SECOND', 10),
+        'requests_per_minute' => env('DDOS_REQUESTS_PER_MINUTE', 120),
+        'requests_per_hour' => env('DDOS_REQUESTS_PER_HOUR', 3000),
+    ],
+
 ];

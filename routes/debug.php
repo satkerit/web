@@ -31,7 +31,7 @@ if (app()->environment('local')) {
 // Secret cache clearing route (works on all environments with a token)
 Route::get('/secret-clear-cache/{token}', function ($token) {
     // Replace 'YOUR_SECRET_TOKEN_HERE' with a strong secret token
-    $expectedToken = env('SECRET_CACHE_TOKEN', 'your_strong_secret_token_change_this');
+    $expectedToken = config('app.secret_cache_token');
 
     if ($token !== $expectedToken) {
         abort(403, 'Unauthorized');

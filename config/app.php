@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Application Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration specific to this application.
+    |
+    */
+
+    'secret_cache_token' => env('SECRET_CACHE_TOKEN', 'change_this_to_strong_token'),
+    'production_public_path' => env('PRODUCTION_PUBLIC_PATH', '/public'),
+
 ];

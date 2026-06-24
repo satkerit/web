@@ -165,7 +165,7 @@ class StorageHelper
      */
     public static function getConfig(): array
     {
-        $storageMode = env('STORAGE_MODE', 'development');
+        $storageMode = config('filesystems.storage_mode', 'development');
         $links = config('filesystems.links');
         
         return [
@@ -173,7 +173,7 @@ class StorageHelper
             'environment' => config('app.env'),
             'storage_root' => config('filesystems.disks.public.root'),
             'storage_url' => config('filesystems.disks.public.url'),
-            'production_public_path' => env('PRODUCTION_PUBLIC_PATH'),
+            'production_public_path' => config('app.production_public_path'),
             'symlink_from' => array_keys($links)[0] ?? null,
             'symlink_to' => array_values($links)[0] ?? null,
             'is_production' => $storageMode === 'production',

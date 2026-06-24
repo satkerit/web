@@ -26,8 +26,8 @@ class DdosProtection extends BaseDdosProtection
     {
         parent::__construct();
         $this->suspiciousPatterns = [
-            'rapid_fire' => (int) env('DDOS_RAPID_FIRE_THRESHOLD', 20),
-            'same_endpoint' => (int) env('DDOS_SAME_ENDPOINT_THRESHOLD', 30),
+            'rapid_fire' => config('security.ddos.rapid_fire_threshold', 20),
+            'same_endpoint' => config('security.ddos.same_endpoint_threshold', 30),
         ];
     }
 
@@ -44,9 +44,9 @@ class DdosProtection extends BaseDdosProtection
     protected function getLimits(): array
     {
         return [
-            'requests_per_second' => (int) env('DDOS_REQUESTS_PER_SECOND', 10),
-            'requests_per_minute' => (int) env('DDOS_REQUESTS_PER_MINUTE', 120),
-            'requests_per_hour' => (int) env('DDOS_REQUESTS_PER_HOUR', 3000),
+            'requests_per_second' => config('security.ddos.requests_per_second', 10),
+            'requests_per_minute' => config('security.ddos.requests_per_minute', 120),
+            'requests_per_hour' => config('security.ddos.requests_per_hour', 3000),
             'permanent_block_threshold' => 10,
         ];
     }
