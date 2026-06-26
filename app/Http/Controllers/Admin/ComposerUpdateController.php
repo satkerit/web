@@ -140,11 +140,27 @@ class ComposerUpdateController extends Controller
                 throw new ProcessFailedException($process);
             }
 
+            // Preserve user's last activity cache before clearing all caches
+            $userId = auth()->id();
+            $sessionKey = 'user_last_activity_' . $userId;
+            $lastActivity = \Illuminate\Support\Facades\Cache::get($sessionKey);
+            
             // Clear caches after update
-            Artisan::call('cache:clear');
-            Artisan::call('config:clear');
             Artisan::call('view:clear');
             Artisan::call('route:clear');
+            Artisan::call('config:clear');
+            
+            // Clear cache but preserve user's last activity
+            // Instead of clearing all cache, clear only specific cache tags or use selective clearing
+            // Since we're using file cache, let's clear cache then restore user's last activity
+            Artisan::call('cache:clear');
+            
+            // Restore user's last activity cache
+            if ($lastActivity) {
+                $idleTimeout = (int) config('session.idle_timeout', 15);
+                $cacheDuration = now()->addMinutes($idleTimeout + 10);
+                \Illuminate\Support\Facades\Cache::put($sessionKey, $lastActivity, $cacheDuration);
+            }
 
             return response()->json([
                 'success' => true,

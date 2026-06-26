@@ -25,7 +25,8 @@ class IdleTimeoutMiddleware
         // Skip for login, logout, and authentication routes
         if (
             $request->is('login') || $request->is('logout') || $request->is('register') || $request->is('password/*') ||
-            $request->is('admin/login') || $request->is('admin/logout')
+            $request->is('admin/login') || $request->is('admin/logout') ||
+            $request->is('admin/composer-update') || $request->is('admin/composer-update/*')
         ) {
             return $next($request);
         }
