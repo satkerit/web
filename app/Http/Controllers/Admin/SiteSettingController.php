@@ -29,6 +29,10 @@ class SiteSettingController extends Controller
                 'hero_slide_limit' => 'nullable|integer|min:1|max:20',
                 'maintenance_mode' => 'nullable|boolean',
                 'maintenance_message' => 'nullable|string|max:500',
+                'maintenance_allowed_ips' => 'nullable|string',
+                'maintenance_end_time' => 'nullable|date',
+                'maintenance_pages' => 'nullable|array',
+                'maintenance_pages.*' => 'string',
                 'upload_max_filesize' => 'nullable|string|regex:/^\d+(K|M|G)?$/i',
                 'post_max_size' => 'nullable|string|regex:/^\d+(K|M|G)?$/i',
                 'max_execution_time' => 'nullable|integer|min:30|max:3600',
@@ -60,18 +64,20 @@ class SiteSettingController extends Controller
                 'max_file_uploads.max' => 'Jumlah file upload maksimal 100',
             ]);
 
-            $settings = SiteSetting::getSettings();
-            $settings->update($validated);
+            // Handle maintenance_mode checkbox
+            $validated['maintenance_mode'] = $request->boolean('maintenance_mode', false);
 
-            // Clear relevant caches
-            Cache::forget('site_settings');
-            for ($i = 1; $i <= 20; $i++) {
-                Cache::forget("hero_slides_{$i}");
-            }
+            // Handle maintenance_pages - if not present, set to empty array
+            $validated['maintenance_pages'] = $request->input('maintenance_pages', []);
+
+            $settings = SiteSetting::getSettings();
+
+            // Use fill then save to ensure all attributes are set
+            $settings->fill($validated);
+            $settings->save();
 
             return redirect()->route('admin.site-settings.index')
                 ->with('success', 'Pengaturan website berhasil diperbarui');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->route('admin.site-settings.index')
                 ->withErrors($e->validator)
