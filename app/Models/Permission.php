@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Schema;
 
 class Permission extends Model
 {
@@ -37,21 +38,41 @@ class Permission extends Model
 
     public static function getGroupedPermissions()
     {
-        return static::where('is_active', true)
-            ->orderBy('group')
-            ->orderBy('display_name')
-            ->get()
-            ->groupBy('group');
+        try {
+            $query = static::query();
+
+            // Only filter by is_active if column exists
+            if (Schema::hasColumn((new static)->getTable(), 'is_active')) {
+                $query->where('is_active', true);
+            }
+
+            return $query->orderBy('group')
+                ->orderBy('display_name')
+                ->get()
+                ->groupBy('group');
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 
     public static function getGroups()
     {
-        return static::where('is_active', true)
-            ->distinct()
-            ->orderBy('group')
-            ->pluck('group')
-            ->filter()
-            ->values()
-            ->toArray();
+        try {
+            $query = static::query();
+
+            // Only filter by is_active if column exists
+            if (Schema::hasColumn((new static)->getTable(), 'is_active')) {
+                $query->where('is_active', true);
+            }
+
+            return $query->distinct()
+                ->orderBy('group')
+                ->pluck('group')
+                ->filter()
+                ->values()
+                ->toArray();
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

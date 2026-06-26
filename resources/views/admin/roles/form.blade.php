@@ -100,42 +100,48 @@
                     </div>
 
                     {{-- Permission Groups --}}
-                    @foreach($permissions as $group => $groupPermissions)
-                        <div class="border border-gray-200 rounded-xl overflow-hidden">
-                            <div class="bg-gray-50 px-4 py-3 flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <input
-                                        type="checkbox"
-                                        id="group_{{ $group }}"
-                                        @click="toggleGroup('{{ $group }}')"
-                                        :checked="isGroupChecked('{{ $group }}')"
-                                        :indeterminate="isGroupIndeterminate('{{ $group }}')"
-                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                    >
-                                    <label for="group_{{ $group }}" class="font-medium text-gray-900">
-                                        {{ $permissionGroups[$group] ?? ucfirst($group) }}
-                                    </label>
-                                </div>
-                                <span class="text-xs text-gray-500" x-text="getGroupCount('{{ $group }}')"></span>
-                            </div>
-                            <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                @foreach($groupPermissions as $permission)
-                                    <label class="flex items-center gap-2 cursor-pointer group">
+                    @if($permissions->isNotEmpty())
+                        @foreach($permissions as $group => $groupPermissions)
+                            <div class="border border-gray-200 rounded-xl overflow-hidden">
+                                <div class="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
                                         <input
                                             type="checkbox"
-                                            name="permissions[]"
-                                            value="{{ $permission->id }}"
-                                            data-group="{{ $group }}"
-                                            {{ in_array($permission->id, old('permissions', $rolePermissions ?? [])) ? 'checked' : '' }}
-                                            @change="updateGroupState('{{ $group }}')"
-                                            class="permission-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                            id="group_{{ $group }}"
+                                            @click="toggleGroup('{{ $group }}')"
+                                            :checked="isGroupChecked('{{ $group }}')"
+                                            :indeterminate="isGroupIndeterminate('{{ $group }}')"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                         >
-                                        <span class="text-sm text-gray-700 group-hover:text-gray-900">{{ $permission->display_name }}</span>
-                                    </label>
-                                @endforeach
+                                        <label for="group_{{ $group }}" class="font-medium text-gray-900">
+                                            {{ $permissionGroups[$group] ?? ucfirst($group) }}
+                                        </label>
+                                    </div>
+                                    <span class="text-xs text-gray-500" x-text="getGroupCount('{{ $group }}')"></span>
+                                </div>
+                                <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    @foreach($groupPermissions as $permission)
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                type="checkbox"
+                                                name="permissions[]"
+                                                value="{{ $permission->id }}"
+                                                data-group="{{ $group }}"
+                                                {{ in_array($permission->id, old('permissions', $rolePermissions ?? [])) ? 'checked' : '' }}
+                                                @change="updateGroupState('{{ $group }}')"
+                                                class="permission-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                            >
+                                            <span class="text-sm text-gray-700 group-hover:text-gray-900">{{ $permission->display_name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
                             </div>
+                        @endforeach
+                    @else
+                        <div class="text-center py-12 text-gray-500">
+                            Tidak ada permission yang tersedia.
                         </div>
-                    @endforeach
+                    @endif
 
                     <div class="pt-4 border-t border-gray-100">
                         <x-admin.button type="submit">

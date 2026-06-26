@@ -88,9 +88,15 @@ class RoleController extends Controller
     {
         $this->authorizeEdit('roles.edit');
 
-        $permissions = Permission::getGroupedPermissions();
-        $permissionGroups = Permission::getGroups();
-        $rolePermissions = $role->permissions->pluck('id')->toArray();
+        try {
+            $permissions = Permission::getGroupedPermissions();
+            $permissionGroups = Permission::getGroups();
+            $rolePermissions = $role->permissions->pluck('id')->toArray();
+        } catch (\Exception $e) {
+            $permissions = collect();
+            $permissionGroups = [];
+            $rolePermissions = [];
+        }
 
         return view('admin.roles.form', compact('role', 'permissions', 'permissionGroups', 'rolePermissions'));
     }
