@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             RolePermissionSeeder::class,
+            AdminMenuSeeder::class,
             CompanyInfoSeeder::class,
             BoardMemberSeeder::class,
             ProductSeeder::class,
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
             FinancingConfigSeeder::class,
             KasKelilingSeeder::class,
             BrochureSeeder::class,
+            SiteSettingSeeder::class,
         ]);
     }
 }
