@@ -35,7 +35,27 @@
         <x-admin.card>
             <h3 class="text-lg font-semibold text-slate-900 mb-4">Jalankan Composer Update</h3>
             <p class="text-sm text-slate-500 mb-4">Pastikan untuk membuat cadangan database dan file sebelum melakukan update!</p>
-
+            
+            @if(!file_exists(base_path('composer.phar')))
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-xl mb-4">
+                    <h4 class="text-yellow-800 font-semibold mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        composer.phar tidak ditemukan
+                    </h4>
+                    <p class="text-sm text-yellow-700 mb-3">
+                        Silakan upload file composer.phar ke direktori root project Anda (sama level dengan file artisan).
+                    </p>
+                    <a href="https://getcomposer.org/download/latest-stable/composer.phar" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium hover:bg-yellow-200 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Download composer.phar
+                    </a>
+                </div>
+            @endif
+            
             <form id="composerUpdateForm" class="space-y-4">
                 @csrf
 

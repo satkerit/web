@@ -36,23 +36,46 @@ class ComposerUpdateController extends Controller
         ]);
 
         try {
+            // Check if proc_open is available
+            if (!function_exists('proc_open')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Fungsi proc_open tidak tersedia di server. Anda harus menjalankan composer update secara manual via SSH atau panel hosting.',
+                    'output' => null,
+                ]);
+            }
+
             // Set timeout to 5 minutes (300 seconds)
             $timeout = 300;
+
+            // Get PHP binary path
+            $phpBinary = PHP_BINARY;
+
+            // Check if composer.phar exists in project root first
+            $composerPharPath = base_path('composer.phar');
 
             // Find composer command parts
             $composerCommand = null;
             $paths = [
-                ['composer', 'update', '--no-interaction', '--prefer-dist'],
-                ['/usr/local/bin/composer', 'update', '--no-interaction', '--prefer-dist'],
-                ['/usr/bin/composer', 'update', '--no-interaction', '--prefer-dist'],
-                ['php', base_path('composer.phar'), 'update', '--no-interaction', '--prefer-dist'],
+                [$phpBinary, '-d', 'memory_limit=-1', 'composer', 'update', '--no-interaction', '--prefer-dist'],
+                [$phpBinary, '-d', 'memory_limit=-1', '/usr/local/bin/composer', 'update', '--no-interaction', '--prefer-dist'],
+                [$phpBinary, '-d', 'memory_limit=-1', '/usr/bin/composer', 'update', '--no-interaction', '--prefer-dist'],
+                [$phpBinary, '-d', 'memory_limit=-1', '/opt/cpanel/composer/bin/composer', 'update', '--no-interaction', '--prefer-dist'], // cPanel
+                [$phpBinary, '-d', 'memory_limit=-1', '/opt/alt/php' . PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '/usr/bin/composer', 'update', '--no-interaction', '--prefer-dist'], // CloudLinux/alt-php
             ];
+
+            // Add composer.phar if it exists
+            if (file_exists($composerPharPath)) {
+                array_unshift($paths, [$phpBinary, '-d', 'memory_limit=-1', $composerPharPath, 'update', '--no-interaction', '--prefer-dist']);
+            }
 
             // Check which one works
             foreach ($paths as $cmdParts) {
                 try {
-                    $testProcess = new Process([$cmdParts[0], '--version'], base_path());
-                    $testProcess->setTimeout(10);
+                    $testCmdParts = array_slice($cmdParts, 0, count($cmdParts) - 3); // Remove update params
+                    $testCmdParts[] = '--version';
+                    $testProcess = new Process($testCmdParts, base_path());
+                    $testProcess->setTimeout(15);
                     $testProcess->run();
                     if ($testProcess->isSuccessful()) {
                         $composerCommand = $cmdParts;
@@ -64,9 +87,15 @@ class ComposerUpdateController extends Controller
             }
 
             if (!$composerCommand) {
+                $message = 'Composer tidak ditemukan di server. ';
+                if (!file_exists($composerPharPath)) {
+                    $message .= 'Silakan upload composer.phar ke direktori root project Anda. ';
+                }
+                $message .= 'Atau jalankan composer update secara manual via SSH atau panel hosting.';
+
                 return response()->json([
                     'success' => false,
-                    'message' => 'Composer tidak ditemukan di server.',
+                    'message' => $message,
                     'output' => null,
                 ]);
             }
@@ -111,17 +140,29 @@ class ComposerUpdateController extends Controller
     private function getComposerVersion(): ?string
     {
         try {
+            // Get PHP binary path
+            $phpBinary = PHP_BINARY;
+
+            // Check if composer.phar exists in project root first
+            $composerPharPath = base_path('composer.phar');
+
             $paths = [
-                ['composer', '--version'],
-                ['/usr/local/bin/composer', '--version'],
-                ['/usr/bin/composer', '--version'],
-                ['php', base_path('composer.phar'), '--version'],
+                [$phpBinary, '-d', 'memory_limit=-1', 'composer', '--version'],
+                [$phpBinary, '-d', 'memory_limit=-1', '/usr/local/bin/composer', '--version'],
+                [$phpBinary, '-d', 'memory_limit=-1', '/usr/bin/composer', '--version'],
+                [$phpBinary, '-d', 'memory_limit=-1', '/opt/cpanel/composer/bin/composer', '--version'], // cPanel
+                [$phpBinary, '-d', 'memory_limit=-1', '/opt/alt/php' . PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '/usr/bin/composer', '--version'], // CloudLinux/alt-php
             ];
+
+            // Add composer.phar if it exists
+            if (file_exists($composerPharPath)) {
+                array_unshift($paths, [$phpBinary, '-d', 'memory_limit=-1', $composerPharPath, '--version']);
+            }
 
             foreach ($paths as $cmdParts) {
                 try {
                     $process = new Process($cmdParts, base_path());
-                    $process->setTimeout(10);
+                    $process->setTimeout(15);
                     $process->run();
 
                     if ($process->isSuccessful()) {
