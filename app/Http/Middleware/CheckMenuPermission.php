@@ -24,6 +24,8 @@ class CheckMenuPermission
         'admin.storage.upload-editor-image',
         'session.extend',
         'session.status',
+        'admin.composer-update.index',
+        'admin.composer-update.run',
     ];
 
     /**
@@ -44,7 +46,7 @@ class CheckMenuPermission
         // Always accessible
         'admin.dashboard' => null,
         'admin.profile' => null,
-        
+
         // Content Management (accessible to admin and editor roles)
         'admin.hero-slides' => 'hero-slides',
         'admin.news' => 'news',
@@ -57,27 +59,27 @@ class CheckMenuPermission
         'admin.brochures' => 'brochures',
         'admin.why-choose-us' => 'why-choose-us',
         'admin.kas-keliling' => 'kas-keliling',
-        
+
         // Settings (accessible to admin roles)
         'admin.company-info.edit' => 'company-info',
         'admin.company-info.update' => 'company-info',
         'admin.company-info.storage' => 'company-info',
         'admin.settings' => 'settings',
         'admin.financing-config' => 'financing-config',
-        
+
         // Complaints (accessible to admin and editor roles)
         'admin.customer-complaints' => 'customer-complaints',
         'admin.complaints' => 'complaints',
-        
+
         // Storage (accessible to all authenticated users for image picker)
         'admin.storage' => null,
-        
+
         // Monitoring (accessible to admin roles)
         'admin.audit-trails' => 'audit-trails',
         'admin.visitor-stats' => 'visitor-stats',
         'admin.security-monitor' => 'security-monitor',
         'admin.database-backup' => 'database-backup',
-        
+
         // Super Admin Only
         'admin.menu-permissions' => 'menu-permissions',
         'admin.roles' => 'roles',
@@ -155,13 +157,13 @@ class CheckMenuPermission
 
         // Check menu-based permissions
         $menuKey = $this->findMenuKey($routeName);
-        
+
         Log::info('Menu permission check', [
             'route' => $routeName,
             'menu_key' => $menuKey,
             'user_role' => $user->getRoleName(),
         ]);
-        
+
         if ($menuKey && !$this->canAccessMenu($user, $menuKey)) {
             Log::warning('Menu access denied', [
                 'user_id' => $user->id,
@@ -243,11 +245,20 @@ class CheckMenuPermission
         // Fallback: Allow editors to access content management
         if ($user->isEditor()) {
             $editorAccessibleMenus = [
-                'news', 'products', 'auctions', 'reports', 'board-members',
-                'offices', 'careers', 'brochures', 'why-choose-us',
-                'kas-keliling', 'customer-complaints', 'complaints'
+                'news',
+                'products',
+                'auctions',
+                'reports',
+                'board-members',
+                'offices',
+                'careers',
+                'brochures',
+                'why-choose-us',
+                'kas-keliling',
+                'customer-complaints',
+                'complaints'
             ];
-            
+
             if (in_array($menuKey, $editorAccessibleMenus)) {
                 return true;
             }

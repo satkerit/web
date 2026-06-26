@@ -267,4 +267,16 @@ return [
 
     'auto_extend' => env('SESSION_AUTO_EXTEND', true),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Strict IP Check
+    |--------------------------------------------------------------------------
+    |
+    | This option determines if the session should be invalidated if the
+    | user's IP address changes. For local development, this is typically
+    | disabled to prevent issues with dynamic IPs or development environments.
+    |
+    */
+    'strict_ip_check' => env('SESSION_STRICT_IP_CHECK', false),
+
 ];
