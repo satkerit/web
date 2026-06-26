@@ -54,8 +54,8 @@ class AdminMenuSeeder extends Seeder
 
         // Default permissions per role
         $defaultPermissions = [
-            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'complaint-settings', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
-            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'complaint-settings', 'storage', 'database-backup', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
+            'super_admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'complaint-settings', 'storage', 'database-backup', 'site-settings', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats', 'menu-permissions', 'roles', 'users'],
+            'admin' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers', 'customer-complaints', 'complaints', 'complaint-settings', 'storage', 'database-backup', 'site-settings', 'settings', 'security-settings', 'email-settings', 'financing-config', 'audit-trails', 'visitor-stats'],
             'editor' => ['dashboard', 'hero-slides', 'news', 'products', 'brochures', 'auctions', 'reports', 'why-choose-us', 'company-info', 'board-members', 'offices', 'kas-keliling', 'careers'],
         ];
 

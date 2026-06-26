@@ -76,7 +76,7 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'settings.maintenance', 'display_name' => 'Mode Maintenance', 'group' => 'settings'],
             ['name' => 'settings.hero', 'display_name' => 'Kelola Hero Slides', 'group' => 'settings'],
             ['name' => 'settings.financing', 'display_name' => 'Konfigurasi Pembiayaan', 'group' => 'settings'],
-            ['name' => 'settings.financing', 'display_name' => 'Konfigurasi Pembiayaan', 'group' => 'settings'],
+            ['name' => 'settings.site', 'display_name' => 'Pengaturan Website', 'group' => 'settings'],
             ['name' => 'settings.menu', 'display_name' => 'Kelola Menu Permission', 'group' => 'settings'],
             ['name' => 'settings.complaints', 'display_name' => 'Pengaturan Pengaduan Nasabah', 'group' => 'settings'],
 

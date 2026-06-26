@@ -133,6 +133,7 @@ class AdminMenu extends Model
             'storage' => 'storage.view',
             'database-backup' => 'storage.manage',
             'settings' => 'settings.maintenance',
+            'site-settings' => 'settings.site',
             'security-settings' => 'settings.security',
             'email-settings' => 'settings.email',
             'financing-config' => 'settings.financing',
