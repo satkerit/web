@@ -35,8 +35,30 @@
         <x-admin.card>
             <h3 class="text-lg font-semibold text-slate-900 mb-4">Jalankan Composer Update</h3>
             <p class="text-sm text-slate-500 mb-4">Pastikan untuk membuat cadangan database dan file sebelum melakukan update!</p>
-            
-            @if(!file_exists(base_path('composer.phar')))
+
+            @if(!$procOpenAvailable)
+                <div class="p-4 bg-red-50 border border-red-200 rounded-xl mb-4">
+                    <h4 class="text-red-800 font-semibold mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Fungsi proc_open tidak tersedia
+                    </h4>
+                    <p class="text-sm text-red-700 mb-3">
+                        Server hosting Anda menonaktifkan fungsi <code class="bg-red-100 px-1 rounded">proc_open</code> yang diperlukan untuk menjalankan Composer secara otomatis.
+                    </p>
+                    <div class="text-sm text-slate-600 space-y-2">
+                        <p><strong>Alternatif:</strong></p>
+                        <ol class="list-decimal list-inside space-y-1">
+                            <li>Jalankan <code class="bg-slate-100 px-1 rounded">composer update</code> di komputer lokal Anda</li>
+                            <li>Upload folder <code class="bg-slate-100 px-1 rounded">vendor</code> dan file <code class="bg-slate-100 px-1 rounded">composer.lock</code> ke server</li>
+                            <li>Jalankan cache clear melalui halaman Admin &gt; Settings atau gunakan perintah artisan secara manual</li>
+                        </ol>
+                    </div>
+                </div>
+            @endif
+
+            @if(!file_exists(base_path('composer.phar')) && $procOpenAvailable)
                 <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-xl mb-4">
                     <h4 class="text-yellow-800 font-semibold mb-2 flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,7 +77,7 @@
                     </a>
                 </div>
             @endif
-            
+
             <form id="composerUpdateForm" class="space-y-4">
                 @csrf
 
@@ -75,6 +97,7 @@
                 <div class="flex items-center justify-end gap-3">
                     <button type="submit"
                             id="updateBtn"
+                            @if(!$procOpenAvailable) disabled @endif
                             class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
@@ -104,13 +127,14 @@
 </div>
 
 @push('scripts')
-<script nonce="{{ $nonce }}">
+<script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('composerUpdateForm');
     const updateBtn = document.getElementById('updateBtn');
     const outputCard = document.getElementById('outputCard');
     const outputContent = document.getElementById('outputContent');
     const copyBtn = document.getElementById('copyBtn');
+    const outputContainer = document.getElementById('outputContainer');
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();

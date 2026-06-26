@@ -23,7 +23,25 @@ class ComposerUpdateController extends Controller
         $composerVersion = $this->getComposerVersion();
         $nonce = request()->attributes->get('csp_nonce');
 
-        return view('admin.composer-update.index', compact('laravelVersion', 'phpVersion', 'composerVersion', 'nonce'));
+        // Check if proc_open is available
+        $procOpenAvailable = function_exists('proc_open');
+
+        // Get PHP binary path
+        $phpBinary = PHP_BINARY;
+
+        // Get composer command suggestions
+        $composerCommands = [];
+        $composerPharPath = base_path('composer.phar');
+
+        if (file_exists($composerPharPath)) {
+            $composerCommands[] = "$phpBinary -d memory_limit=-1 composer.phar update --no-interaction --prefer-dist" . (app()->environment('production') ? ' --no-dev' : '');
+        }
+
+        $composerCommands[] = "composer update --no-interaction --prefer-dist" . (app()->environment('production') ? ' --no-dev' : '');
+        $composerCommands[] = "/usr/local/bin/composer update --no-interaction --prefer-dist" . (app()->environment('production') ? ' --no-dev' : '');
+        $composerCommands[] = "/usr/bin/composer update --no-interaction --prefer-dist" . (app()->environment('production') ? ' --no-dev' : '');
+
+        return view('admin.composer-update.index', compact('laravelVersion', 'phpVersion', 'composerVersion', 'procOpenAvailable', 'composerCommands'));
     }
 
     public function runUpdate(Request $request)
@@ -45,8 +63,13 @@ class ComposerUpdateController extends Controller
                 ]);
             }
 
-            // Set timeout to 5 minutes (300 seconds)
-            $timeout = 300;
+            // Increase maximum execution time to 10 minutes
+            set_time_limit(600);
+            ini_set('max_execution_time', 600);
+            ini_set('memory_limit', '512M');
+
+            // Set timeout to 10 minutes (600 seconds)
+            $timeout = 600;
 
             // Get PHP binary path
             $phpBinary = PHP_BINARY;
