@@ -134,6 +134,7 @@ class AdminMenu extends Model
             'database-backup' => 'storage.manage',
             'settings' => 'settings.maintenance',
             'site-settings' => 'settings.site',
+            'composer-update' => 'settings.composer',
             'security-settings' => 'settings.security',
             'email-settings' => 'settings.email',
             'financing-config' => 'settings.financing',

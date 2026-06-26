@@ -79,6 +79,7 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'settings.site', 'display_name' => 'Pengaturan Website', 'group' => 'settings'],
             ['name' => 'settings.menu', 'display_name' => 'Kelola Menu Permission', 'group' => 'settings'],
             ['name' => 'settings.complaints', 'display_name' => 'Pengaturan Pengaduan Nasabah', 'group' => 'settings'],
+            ['name' => 'settings.composer', 'display_name' => 'Composer Update', 'group' => 'settings'],
 
             // Security Monitoring permissions
             ['name' => 'security.view', 'display_name' => 'Lihat Security Logs', 'group' => 'security'],

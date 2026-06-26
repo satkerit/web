@@ -315,6 +315,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role', 'idle.timeou
     // Menu Permissions Management
     Route::get('menu-permissions', [App\Http\Controllers\Admin\MenuPermissionController::class, 'index'])->name('menu-permissions.index');
     Route::post('menu-permissions/update', [App\Http\Controllers\Admin\MenuPermissionController::class, 'update'])->name('menu-permissions.update');
+    
+    // Composer Update
+    Route::get('composer-update', [App\Http\Controllers\Admin\ComposerUpdateController::class, 'index'])->name('composer-update.index');
+    Route::post('composer-update/run', [App\Http\Controllers\Admin\ComposerUpdateController::class, 'runUpdate'])->name('composer-update.run');
 });
 
 // API Routes
