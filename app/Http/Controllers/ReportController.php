@@ -3,14 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use App\Models\SiteSetting;
 use App\Services\CacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
-    private function getReports(Request $request, string $type, string $title, string $subtitle)
+    private function getReports(Request $request, string $type, string $defaultTitle, string $defaultSubtitle)
     {
+        $settings = SiteSetting::getSettings();
+        $titleKey = "report_{$type}_title";
+        $subtitleKey = "report_{$type}_subtitle";
+        
+        $title = $settings->$titleKey ?? $defaultTitle;
+        $subtitle = $settings->$subtitleKey ?? $defaultSubtitle;
+        
         $year = $request->query('year');
         $page = $request->query('page', 1);
         $cacheKey = "reports_{$type}_{$year}_{$page}";

@@ -35,6 +35,14 @@ class SiteSettingController extends Controller
                 'max_input_time' => 'nullable|integer|min:30|max:3600',
                 'memory_limit' => 'nullable|string|regex:/^\d+(K|M|G)?$/i',
                 'max_file_uploads' => 'nullable|integer|min:1|max:100',
+                'report_keuangan_publikasi_title' => 'nullable|string|max:255',
+                'report_keuangan_publikasi_subtitle' => 'nullable|string|max:255',
+                'report_tata_kelola_title' => 'nullable|string|max:255',
+                'report_tata_kelola_subtitle' => 'nullable|string|max:255',
+                'report_tahunan_title' => 'nullable|string|max:255',
+                'report_tahunan_subtitle' => 'nullable|string|max:255',
+                'report_tahunan_berkelanjutan_title' => 'nullable|string|max:255',
+                'report_tahunan_berkelanjutan_subtitle' => 'nullable|string|max:255',
             ], [
                 'hero_slider_delay.min' => 'Delay slider minimal 1000ms',
                 'hero_slider_delay.max' => 'Delay slider maksimal 10000ms',
@@ -63,6 +71,7 @@ class SiteSettingController extends Controller
 
             return redirect()->route('admin.site-settings.index')
                 ->with('success', 'Pengaturan website berhasil diperbarui');
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->route('admin.site-settings.index')
                 ->withErrors($e->validator)

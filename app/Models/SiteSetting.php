@@ -34,6 +34,14 @@ class SiteSetting extends Model
         'max_input_time',
         'memory_limit',
         'max_file_uploads',
+        'report_keuangan_publikasi_title',
+        'report_keuangan_publikasi_subtitle',
+        'report_tata_kelola_title',
+        'report_tata_kelola_subtitle',
+        'report_tahunan_title',
+        'report_tahunan_subtitle',
+        'report_tahunan_berkelanjutan_title',
+        'report_tahunan_berkelanjutan_subtitle',
     ];
 
     protected $casts = [
@@ -48,6 +56,14 @@ class SiteSetting extends Model
         'max_input_time' => 'integer',
         'memory_limit' => 'string',
         'max_file_uploads' => 'integer',
+        'report_keuangan_publikasi_title' => 'string',
+        'report_keuangan_publikasi_subtitle' => 'string',
+        'report_tata_kelola_title' => 'string',
+        'report_tata_kelola_subtitle' => 'string',
+        'report_tahunan_title' => 'string',
+        'report_tahunan_subtitle' => 'string',
+        'report_tahunan_berkelanjutan_title' => 'string',
+        'report_tahunan_berkelanjutan_subtitle' => 'string',
     ];
 
     /**
@@ -117,6 +133,14 @@ class SiteSetting extends Model
                     'max_input_time' => 300,
                     'memory_limit' => '512M',
                     'max_file_uploads' => 20,
+                    'report_keuangan_publikasi_title' => 'Laporan Keuangan Publikasi',
+                    'report_keuangan_publikasi_subtitle' => 'Laporan keuangan publikasi BPR Syariah',
+                    'report_tata_kelola_title' => 'Laporan Tata Kelola',
+                    'report_tata_kelola_subtitle' => 'Laporan tata kelola perusahaan',
+                    'report_tahunan_title' => 'Laporan Tahunan',
+                    'report_tahunan_subtitle' => 'Laporan tahunan BPR Syariah',
+                    'report_tahunan_berkelanjutan_title' => 'Laporan Tahunan Berkelanjutan',
+                    'report_tahunan_berkelanjutan_subtitle' => 'Laporan tahunan berkelanjutan BPR Syariah',
                 ]);
             });
         } catch (\Exception $e) {
@@ -131,6 +155,14 @@ class SiteSetting extends Model
             $settings->max_input_time = 300;
             $settings->memory_limit = '512M';
             $settings->max_file_uploads = 20;
+            $settings->report_keuangan_publikasi_title = 'Laporan Keuangan Publikasi';
+            $settings->report_keuangan_publikasi_subtitle = 'Laporan keuangan publikasi BPR Syariah';
+            $settings->report_tata_kelola_title = 'Laporan Tata Kelola';
+            $settings->report_tata_kelola_subtitle = 'Laporan tata kelola perusahaan';
+            $settings->report_tahunan_title = 'Laporan Tahunan';
+            $settings->report_tahunan_subtitle = 'Laporan tahunan BPR Syariah';
+            $settings->report_tahunan_berkelanjutan_title = 'Laporan Tahunan Berkelanjutan';
+            $settings->report_tahunan_berkelanjutan_subtitle = 'Laporan tahunan berkelanjutan BPR Syariah';
             return $settings;
         }
     }
@@ -153,6 +185,14 @@ class SiteSetting extends Model
             'max_input_time' => 300,
             'memory_limit' => '512M',
             'max_file_uploads' => 20,
+            'report_keuangan_publikasi_title' => 'Laporan Keuangan Publikasi',
+            'report_keuangan_publikasi_subtitle' => 'Laporan keuangan publikasi BPR Syariah',
+            'report_tata_kelola_title' => 'Laporan Tata Kelola',
+            'report_tata_kelola_subtitle' => 'Laporan tata kelola perusahaan',
+            'report_tahunan_title' => 'Laporan Tahunan',
+            'report_tahunan_subtitle' => 'Laporan tahunan BPR Syariah',
+            'report_tahunan_berkelanjutan_title' => 'Laporan Tahunan Berkelanjutan',
+            'report_tahunan_berkelanjutan_subtitle' => 'Laporan tahunan berkelanjutan BPR Syariah',
         ]);
     }
 
